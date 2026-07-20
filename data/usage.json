@@ -1,0 +1,117 @@
+[
+  {
+    "system": "daniels",
+    "workout": "easy-run",
+    "calls_it": "E pace run",
+    "also_known_as": ["Easy run"],
+    "note": {
+      "ko": "VDOT 표에서 유도된 E 페이스. 상한이 있다는 점이 핵심이며, 너무 빠른 E는 E가 아니다.",
+      "en": "E pace derived from the VDOT table. The point is that it has an upper bound; an E run run too fast is not an E run."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "threshold-continuous",
+    "calls_it": "Tempo run",
+    "collides": true,
+    "note": {
+      "ko": "Daniels의 tempo는 역치(T) 페이스, 약 60분 레이스 페이스다. Hansons의 tempo와 같은 단어, 다른 강도.",
+      "en": "Daniels' tempo is threshold (T) pace, roughly 60-minute race pace. Same word as Hansons' tempo, different intensity."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "vo2max-intervals",
+    "calls_it": "I pace intervals",
+    "note": {
+      "ko": "I 존은 VO2max 부근. Daniels는 세션당 볼륨 상한을 명시하는 드문 체계다.",
+      "en": "The I zone sits near VO2max. Daniels is one of the few systems that states a per-session volume cap."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "strides",
+    "calls_it": "Strides",
+    "note": {
+      "ko": "이름 충돌이 없는 드문 경우. 체계 간 합의된 몇 안 되는 용어다.",
+      "en": "A rare case with no naming collision - one of the few terms the systems agree on."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "easy-run",
+    "calls_it": "Easy run",
+    "note": {
+      "ko": "누적 피로가 전제라, 여기서의 easy는 회복이 아니라 피로 위에 얹는 볼륨이다.",
+      "en": "Because cumulative fatigue is the premise, easy here is volume stacked on fatigue, not recovery."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "marathon-pace-run",
+    "calls_it": "Tempo run",
+    "collides": true,
+    "note": {
+      "ko": "Hansons의 tempo는 목표 마라톤 페이스다. Daniels에서 넘어오면 같은 단어를 쓰면서 느려지고, 아무도 알려주지 않는다.",
+      "en": "Hansons' tempo is goal marathon pace. Arriving from Daniels you keep the word and slow down, and nobody tells you."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "threshold-continuous",
+    "calls_it": "Strength workout",
+    "note": {
+      "ko": "Hansons는 이 강도를 tempo가 아니라 strength라 부른다. tempo라는 이름을 마라톤 페이스에 이미 써버렸기 때문이다.",
+      "en": "Hansons calls this intensity strength, not tempo, because it already spent the word tempo on marathon pace."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "vo2max-intervals",
+    "calls_it": "Speed workout",
+    "note": {
+      "ko": "'speed'가 VO2max 인터벌을 가리킨다. 다른 체계에서 speed는 보통 신경근 자극(스트라이드/R 페이스)이다.",
+      "en": "Here speed means VO2max intervals. In other systems speed usually means neuromuscular work such as strides or R pace."
+    }
+  },
+  {
+    "system": "polarized-80-20",
+    "workout": "easy-run",
+    "calls_it": "Zone 1 run",
+    "also_known_as": ["Low-intensity session", "LIT"],
+    "note": {
+      "ko": "존 1은 LT1 아래. 이 체계에서 easy-run은 세션의 약 80%를 차지하는 기본값이다.",
+      "en": "Zone 1 is below LT1. In this system easy-run is the default, carrying roughly 80% of sessions."
+    }
+  },
+  {
+    "system": "polarized-80-20",
+    "workout": "vo2max-intervals",
+    "calls_it": "Zone 3 interval",
+    "also_known_as": ["High-intensity session", "HIT"],
+    "note": {
+      "ko": "20% 몫의 거의 전부가 여기로 간다. 역치 세션이 금지되므로 고강도 선택지가 좁다.",
+      "en": "Nearly the whole 20% share lands here. With threshold sessions vacated, the high-intensity options are narrow."
+    }
+  },
+  {
+    "system": null,
+    "workout": "easy-run",
+    "calls_it": "Base run",
+    "also_known_as": ["Zone 2 run", "Aerobic run"],
+    "note": {
+      "ko": "체계 밖의 일상 용어. 'Zone 2 run'의 존 번호는 어느 체계의 존인지 말하지 않는다는 점에서 이름 충돌보다 더 나쁘다.",
+      "en": "Everyday usage belonging to no system. The zone number in 'Zone 2 run' never says whose zones, which is worse than a name collision."
+    }
+  },
+  {
+    "system": null,
+    "workout": "strides",
+    "calls_it": "Pickups",
+    "also_known_as": ["Accelerations"],
+    "note": {
+      "ko": "코치에 따라 pickup은 스트라이드보다 훨씬 긴 구간을 뜻하기도 한다. 그래서 워크아웃 id에서 금지된 단어다.",
+      "en": "For some coaches a pickup means a far longer surge than a stride, which is why the word is banned from workout ids."
+    }
+  }
+]

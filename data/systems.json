@@ -1,0 +1,281 @@
+[
+  {
+    "id": "daniels",
+    "name": "Daniels' Running Formula",
+    "attribution": "Jack Daniels",
+    "status": "draft",
+    "intensity_model": "daniels-vdot",
+    "bet": {
+      "ko": "정확한 강도가 노력량보다 중요하다.",
+      "en": "Correct intensity matters more than effort."
+    },
+    "philosophy": {
+      "ko": "단일 피트니스 지표(VDOT)를 레이스 기록에서 유도하고, 모든 훈련 페이스를 거기서 파생시킨다. 각 강도 존은 특정 생리학적 목표를 가지며 존을 벗어나면 목표를 잃는다. '더 힘들게'가 아니라 '정확한 강도로'가 핵심.",
+      "en": "Derive a single fitness index (VDOT) from race performance and generate every training pace from it. Each zone has a specific physiological target and is lost if you drift out of the zone. The principle is correct intensity, not more effort."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "min": 4,
+        "max": 7
+      },
+      "min_weekly_km": 40,
+      "plan_length_weeks": {
+        "min": 18,
+        "max": 24
+      },
+      "requires_track": false,
+      "note": {
+        "ko": "트랙이 있으면 쉽지만 필수는 아니다. VDOT 재계산을 위해 주기적 레이스 또는 타임트라이얼이 필요하다.",
+        "en": "A track helps but is not required. Periodic races or time trials are needed to recompute VDOT."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "hansons",
+        "anchor_change": "race_pace_ref -> daniels-vdot",
+        "silent": true,
+        "note": {
+          "ko": "'템포'가 마라톤 페이스에서 역치로 바뀐다. 즉 같은 단어를 계속 쓰면서 더 빠르게 달리게 된다. 아무도 안 알려준다.",
+          "en": "Tempo flips from marathon pace to threshold. You keep using the same word and start running faster. Nobody tells you."
+        }
+      },
+      {
+        "from": "polarized-80-20",
+        "anchor_change": "pct_vo2max -> daniels-vdot",
+        "silent": false,
+        "note": {
+          "ko": "폴라라이즈드가 비우라고 하는 Z2가 Daniels의 T존과 거의 겹친다. 즉 이전 체계가 금지하던 구간이 새 체계의 핵심 세션이 된다. 정반대 처방이라 조용하지는 않지만, 둘 다 근거를 주장한다는 점이 진짜 문제다.",
+          "en": "The Z2 that polarized tells you to vacate overlaps Daniels' T zone. The zone your previous system banned becomes your new system's key session. Not silent, since the prescriptions are opposite, but both claim evidence and that is the real problem."
+        }
+      }
+    ],
+    "distribution": {
+      "model": "pyramidal",
+      "evidence": {
+        "tier": "plausible",
+        "cite": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."]
+      }
+    },
+    "volume_caps": [
+      {
+        "zone": "T",
+        "max_pct_weekly": 10,
+        "rule": {
+          "ko": "주간 마일리지의 10% 이내",
+          "en": "Within 10% of weekly mileage"
+        },
+        "evidence": {
+          "tier": "tradition"
+        }
+      },
+      {
+        "zone": "I",
+        "max_pct_weekly": 8,
+        "max_km": 10,
+        "rule": {
+          "ko": "주간의 8% 또는 10km 중 작은 값",
+          "en": "The lesser of 8% of weekly volume or 10km"
+        },
+        "evidence": {
+          "tier": "tradition"
+        }
+      },
+      {
+        "zone": "R",
+        "max_pct_weekly": 5,
+        "max_km": 8,
+        "rule": {
+          "ko": "주간의 5% 또는 8km 중 작은 값",
+          "en": "The lesser of 5% of weekly volume or 8km"
+        },
+        "evidence": {
+          "tier": "tradition"
+        }
+      }
+    ],
+    "phases": [
+      {
+        "name": "base",
+        "emphasis": ["easy-run", "strides"]
+      },
+      {
+        "name": "build",
+        "emphasis": ["threshold-continuous", "vo2max-intervals"]
+      },
+      {
+        "name": "peak",
+        "emphasis": ["vo2max-intervals", "threshold-continuous"]
+      }
+    ],
+    "evidence": {
+      "tier": "plausible",
+      "cite": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."]
+    },
+    "caveats": [
+      {
+        "ko": "VDOT 표 자체는 편집저작물이라 복제하면 침해다. Daniels & Gilbert (1979) Oxygen Power의 공표 방정식에서 재유도할 것. VDOT은 상표.",
+        "en": "The VDOT tables are a compiled work; copying them infringes. Re-derive from the published equations in Daniels & Gilbert (1979), Oxygen Power. VDOT is a trademark."
+      },
+      {
+        "ko": "볼륨 캡 수치는 저서 기준으로 재확인 필요. 현재 draft.",
+        "en": "Volume cap figures require verification against the source text. Currently draft."
+      }
+    ]
+  },
+  {
+    "id": "hansons",
+    "name": "Hansons Marathon Method",
+    "attribution": "Kevin & Keith Hanson",
+    "status": "draft",
+    "intensity_model": "race_pace_ref",
+    "bet": {
+      "ko": "롱런을 줄이고 주 전체를 피로하게 두는 편이 낫다.",
+      "en": "Cap the long run and keep the whole week fatigued instead."
+    },
+    "philosophy": {
+      "ko": "'누적 피로'가 핵심 서사. 롱런을 짧게(최대 16마일) 유지하는 대신 주 전체를 피로 상태로 유지해 레이스 후반을 시뮬레이션한다고 주장한다. 강도 앵커가 목표 레이스 페이스라서, 목표가 틀리면 모든 세션의 강도가 틀린다.",
+      "en": "Cumulative fatigue is the central narrative. The long run is capped (16 miles) while the whole week is kept fatigued, claimed to simulate the late race. Because the intensity anchor is goal race pace, a wrong goal makes every session the wrong intensity."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "value": 6
+      },
+      "min_weekly_km": 60,
+      "plan_length_weeks": {
+        "value": 18
+      },
+      "requires_track": false,
+      "note": {
+        "ko": "주 6일이 협상 불가에 가깝다. 누적 피로가 전제라 세션을 빼면 체계 자체가 성립하지 않는다. 진입 장벽이 가장 높다.",
+        "en": "Six days a week is close to non-negotiable. Cumulative fatigue is the premise, so dropping sessions dissolves the system. The highest barrier to entry here."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "daniels",
+        "anchor_change": "daniels-vdot -> race_pace_ref",
+        "silent": true,
+        "note": {
+          "ko": "'템포'가 역치에서 마라톤 페이스로 바뀌어 느려진다. 더 심각한 건 앵커가 측정된 피트니스(VDOT)에서 희망사항(목표 페이스)으로 바뀐다는 점이다. 목표가 비현실적이면 전 세션의 강도가 조용히 틀어진다.",
+          "en": "Tempo shifts from threshold to marathon pace and slows down. More seriously, the anchor moves from measured fitness (VDOT) to a wish (goal pace). An unrealistic goal silently corrupts every session's intensity."
+        }
+      }
+    ],
+    "distribution": {
+      "model": "threshold",
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "phases": [
+      {
+        "name": "build",
+        "emphasis": ["easy-run", "marathon-pace-run", "threshold-continuous"]
+      },
+      {
+        "name": "peak",
+        "emphasis": ["marathon-pace-run"]
+      }
+    ],
+    "evidence": {
+      "tier": "tradition",
+      "note": {
+        "ko": "'누적 피로'는 통제 연구로 검증된 적이 거의 없는 코칭 서사다. 방법론의 인기와 근거 강도는 무관하다.",
+        "en": "Cumulative fatigue is a coaching narrative with little controlled validation. The popularity of a method is independent of its evidential strength."
+      }
+    },
+    "caveats": [
+      {
+        "ko": "이 체계의 'tempo'는 역치가 아니라 마라톤 페이스다. Daniels와 정면 충돌하는 용어.",
+        "en": "In this system tempo means marathon pace, not threshold. A head-on collision with Daniels terminology."
+      }
+    ]
+  },
+  {
+    "id": "polarized-80-20",
+    "name": "Polarized (80/20) Training",
+    "attribution": "Stephen Seiler",
+    "status": "draft",
+    "intensity_model": "pct_vo2max",
+    "bet": {
+      "ko": "중간 강도는 낭비다.",
+      "en": "Moderate intensity is wasted work."
+    },
+    "philosophy": {
+      "ko": "워크아웃 목록이 아니라 분포 규칙이다. 세션의 약 80%를 1존(역치 아래), 약 20%를 3존(역치 위)에 두고 2존(중간)을 의도적으로 비운다. 엘리트 관찰 연구에서 귀납된 서술이 처방으로 굳은 케이스라, 인과 주장은 조심해야 한다.",
+      "en": "A distribution rule, not a workout list. Roughly 80% of sessions in zone 1 (below threshold), 20% in zone 3 (above), deliberately vacating zone 2. Descriptive observation of elites hardened into prescription, so causal claims warrant caution."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "min": 5,
+        "max": 10
+      },
+      "min_weekly_km": 40,
+      "requires_track": false,
+      "note": {
+        "ko": "주 5회 미만이면 80/20 비율 자체가 의미를 잃는다. 주 3회면 2.4 대 0.6이라 표현 불가능한 수다. 이 제약을 명시하는 곳이 거의 없다.",
+        "en": "Below five sessions a week the 80/20 ratio stops meaning anything. At three sessions it is 2.4 versus 0.6, an unrepresentable number. Almost nobody states this constraint."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "daniels",
+        "anchor_change": "daniels-vdot -> pct_vo2max",
+        "silent": false,
+        "note": {
+          "ko": "Daniels의 T 세션이 정확히 폴라라이즈드가 금지하는 구간이다. 가장 아끼던 세션을 버리라는 요구이며, 이 전환에서 가장 많이 이탈한다.",
+          "en": "Daniels' T session sits exactly in the zone polarized forbids. The switch demands abandoning your favourite session, and this is where most people bounce."
+        }
+      }
+    ],
+    "distribution": {
+      "model": "polarized",
+      "zones": [
+        {
+          "label": "Z1 (below LT1)",
+          "pct_sessions": 80
+        },
+        {
+          "label": "Z2 (between thresholds)",
+          "pct_sessions": 0
+        },
+        {
+          "label": "Z3 (above LT2)",
+          "pct_sessions": 20
+        }
+      ],
+      "evidence": {
+        "tier": "plausible",
+        "cite": [
+          "Seiler S (2010). What is best practice for training intensity and duration distribution? Int J Sports Physiol Perform 5(3)."
+        ]
+      }
+    },
+    "phases": [
+      {
+        "name": "base",
+        "emphasis": ["easy-run", "strides"]
+      },
+      {
+        "name": "build",
+        "emphasis": ["easy-run", "vo2max-intervals"]
+      }
+    ],
+    "evidence": {
+      "tier": "plausible",
+      "cite": [
+        "Seiler S (2010). What is best practice for training intensity and duration distribution? Int J Sports Physiol Perform 5(3)."
+      ]
+    },
+    "caveats": [
+      {
+        "ko": "80/20은 세션 수 기준이지 시간 기준이 아니다. 이 혼동이 매우 흔하다.",
+        "en": "80/20 counts sessions, not time. This confusion is extremely common."
+      },
+      {
+        "ko": "엘리트 관찰에서 유도됐다. 주 3회 달리는 런린이에게 이전된다는 근거는 별개 문제이며 훨씬 약하다.",
+        "en": "Derived from observing elites. Whether it transfers to a novice running three times a week is a separate and much weaker claim."
+      }
+    ]
+  }
+]

@@ -1,0 +1,691 @@
+[
+  {
+    "id": "easy-run",
+    "canonical_name": "Easy Aerobic Run",
+    "family": "easy",
+    "status": "draft",
+    "target_adaptation": [
+      "plasma-volume",
+      "capillarization",
+      "mitochondrial-density",
+      "stroke-volume",
+      "musculoskeletal-durability"
+    ],
+    "venue": ["any"],
+    "placement": ["base", "build", "peak", "taper", "offseason"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "work",
+          "duration": {
+            "min": 1800,
+            "max": 4800,
+            "unit": "s"
+          },
+          "intensity_ref": "self"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [2, 4],
+          "confidence": "exact",
+          "note": {
+            "ko": "대화 가능해야 함. 이게 유일하게 신뢰할 만한 현장 기준.",
+            "en": "Must be able to hold conversation. The only field test that reliably works."
+          }
+        },
+        {
+          "model": "daniels-vdot",
+          "zone": "E",
+          "confidence": "exact"
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.65, 0.78],
+          "confidence": "approx",
+          "note": {
+            "ko": "HRmax 추정식 자체가 SEE ±10bpm 이상이라 이 구간은 유도된 근사의 근사.",
+            "en": "HRmax estimators carry SEE >10bpm, so this range is an approximation of an approximation."
+          }
+        },
+        {
+          "model": "pct_vo2max",
+          "range": [0.59, 0.74],
+          "confidence": "rough"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "낮은 강도의 누적 시간이 혈장량·모세혈관·미토콘드리아 적응을 만든다. 강도가 아니라 시간이 변수다.",
+        "en": "Accumulated time at low intensity produces plasma volume, capillary, and mitochondrial adaptation. Time is the variable, not intensity."
+      },
+      "mechanism": {
+        "ko": "낮은 강도로 오래 달리면 혈장량이 팽창하고(수일~수주), 모세혈관 밀도와 미토콘드리아가 늘어난다. 심박출량 증가는 주로 이완기 충만량 증가에서 온다. 대부분의 유산소 적응은 강도가 아니라 누적 시간의 함수다.",
+        "en": "Sustained low intensity expands plasma volume within days-to-weeks, then increases capillary density and mitochondrial content. Stroke volume rises mainly via increased diastolic filling. Most aerobic adaptation is a function of accumulated time, not intensity."
+      },
+      "evidence": {
+        "tier": "consensus",
+        "cite": [
+          "Convertino VA (1991). Blood volume: its adaptation to endurance training. Med Sci Sports Exerc 23(12).",
+          "Holloszy JO, Coyle EF (1984). Adaptations of skeletal muscle to endurance exercise. J Appl Physiol 56(4)."
+        ]
+      }
+    },
+    "test": {
+      "detectable": true,
+      "what": {
+        "ko": "같은 페이스에서 평균 심박수가 5~10bpm 떨어진다. 런린이가 가장 빨리, 가장 확실하게 체감하는 변화.",
+        "en": "Average HR at the same pace drops 5-10bpm. The fastest and most reliable change a novice will actually feel."
+      },
+      "when_weeks": {
+        "min": 2,
+        "max": 4
+      },
+      "mechanism": {
+        "ko": "주로 혈장량 팽창. 심장이 좋아진 게 아니라 혈액이 늘어난 것.",
+        "en": "Mostly plasma volume expansion. Your heart did not get better; your blood volume went up."
+      },
+      "evidence": {
+        "tier": "consensus",
+        "cite": [
+          "Convertino VA (1991). Blood volume: its adaptation to endurance training. Med Sci Sports Exerc 23(12)."
+        ]
+      },
+      "confounds": [
+        {
+          "factor": "heat-acclimation",
+          "severity": "high",
+          "shares_mechanism": true,
+          "note": {
+            "ko": "열순응의 주 기전도 혈장량 팽창이다. 봄에 시작해 여름에 HR이 떨어졌다면 훈련과 계절이 같은 기전을 같은 방향으로, 같은 타임스케일에 민 것이라 관찰만으로 분리 불가.",
+            "en": "Heat acclimation also works primarily through plasma volume expansion. Start in spring, see HR drop by summer, and training and season have pushed the same mechanism the same direction on the same timescale. Not separable by observation."
+          }
+        },
+        {
+          "factor": "weight-loss",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "체중이 줄면 같은 페이스의 절대 부하가 줄어 HR이 떨어진다. 유산소 적응이 아니다.",
+            "en": "Lower body mass lowers absolute load at the same pace, lowering HR. This is not aerobic adaptation."
+          }
+        },
+        {
+          "factor": "sleep-caffeine-hydration",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "HR은 악명 높게 오염된 지표다. 단일 세션 비교는 무의미하고 4주 이동평균만 의미가 있다.",
+            "en": "HR is a notoriously contaminated metric. Single-session comparison is meaningless; only a multi-week moving average carries signal."
+          }
+        }
+      ],
+      "if_absent": {
+        "ko": "4주 무변화는 실패가 아니다. 순서대로 의심할 것: (1) 이지런이 실제로 이지가 아니었음 — 가장 흔함 (2) 이미 적응된 상태라 헤드룸이 없음 (3) 측정 노이즈. HR 하락 없음이 적응 없음을 뜻하지는 않는다.",
+        "en": "Four weeks of no change is not failure. Suspect in order: (1) the easy run was not actually easy, by far the most common (2) already adapted, no headroom (3) measurement noise. No HR drop does not mean no adaptation."
+      }
+    },
+    "safety": {
+      "injury_risk": "low"
+    },
+    "common_errors": [
+      {
+        "ko": "너무 빠르게 달림. 이지런의 실패 모드는 거의 항상 '이지가 아님'이다.",
+        "en": "Running it too fast. The failure mode of the easy run is almost always that it is not easy."
+      }
+    ],
+    "instructions": {
+      "ko": "대화가 가능한 페이스로 30~80분 연속 주행. 페이스가 목표가 아니라 강도가 목표다. 언덕에서 느려지는 것이 정상이다.",
+      "en": "Run 30-80 minutes continuously at conversational pace. The target is intensity, not pace. Slowing on hills is correct."
+    }
+  },
+  {
+    "id": "threshold-continuous",
+    "canonical_name": "Continuous Threshold Run",
+    "family": "threshold",
+    "status": "draft",
+    "target_adaptation": ["lactate-clearance", "mlss-shift"],
+    "venue": ["road-flat", "track", "treadmill"],
+    "placement": ["base", "build", "peak"],
+    "attribution": "Jack Daniels",
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "work",
+          "duration": {
+            "min": 1200,
+            "max": 1800,
+            "unit": "s"
+          },
+          "intensity_ref": "self"
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "daniels-vdot",
+      "anchors": [
+        {
+          "model": "daniels-vdot",
+          "zone": "T",
+          "confidence": "exact"
+        },
+        {
+          "model": "race_pace_ref",
+          "value": "60min race pace",
+          "confidence": "exact",
+          "note": {
+            "ko": "정의상 약 1시간 레이스 페이스. 초심자에겐 10k보다 훨씬 느리고, 엘리트에겐 하프에 가깝다.",
+            "en": "By definition roughly one-hour race pace. Far slower than 10k pace for novices; near half-marathon pace for elites."
+          }
+        },
+        {
+          "model": "rpe_10",
+          "range": [6, 7],
+          "confidence": "approx"
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.88, 0.92],
+          "confidence": "approx"
+        },
+        {
+          "model": "lactate_mmol",
+          "value": 4,
+          "confidence": "rough",
+          "note": {
+            "ko": "4mmol/L은 MLSS의 관습적 대리값일 뿐 개인 편차가 크다. 2 vs 4 논쟁은 미해결.",
+            "en": "4mmol/L is a conventional proxy for MLSS with large individual variation. The 2-vs-4 dispute is unresolved."
+          }
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "젖산 정상상태 부근의 지속 주행이 그 정상상태 강도 자체를 위로 민다.",
+        "en": "Sustained running near lactate steady state shifts the steady-state intensity itself upward."
+      },
+      "mechanism": {
+        "ko": "젖산 생성과 제거가 균형을 이루는 최대 강도 부근에서 달려 그 균형점 자체를 위로 민다. 이 강도의 요점은 '힘들게 하는 것'이 아니라 정상상태를 유지하는 것이다. 넘어가면 다른 자극이 된다.",
+        "en": "Running near the highest intensity at which lactate production and clearance balance, in order to shift that balance point upward. The point is maintaining steady state, not being hard. Exceed it and it becomes a different stimulus."
+      },
+      "evidence": {
+        "tier": "consensus",
+        "cite": [
+          "Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.",
+          "Faude O, Kindermann W, Meyer T (2009). Lactate threshold concepts. Sports Med 39(6)."
+        ]
+      }
+    },
+    "test": {
+      "detectable": true,
+      "what": {
+        "ko": "'comfortably hard'로 느껴지는 페이스가 이동한다. 같은 RPE에서 더 빨라짐. 이지런과 달리 느리고 노이즈가 크다.",
+        "en": "The pace that feels comfortably hard shifts faster at the same RPE. Unlike the easy run, this is slow and noisy."
+      },
+      "when_weeks": {
+        "min": 4,
+        "max": 8
+      },
+      "evidence": {
+        "tier": "plausible",
+        "cite": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."]
+      },
+      "confounds": [
+        {
+          "factor": "concurrent-easy-volume",
+          "severity": "high",
+          "shares_mechanism": true,
+          "note": {
+            "ko": "역치 세션을 하는 동안 이지런도 하고 있고, 이지런 역시 젖산 제거 능력을 개선한다. 같은 결과 지표를 같은 기전으로 민다. T 세션의 기여분은 관찰로 분리 불가.",
+            "en": "You are also running easy, and easy running also improves lactate clearance. Same outcome, same mechanism. The T session's contribution is not observationally separable."
+          }
+        },
+        {
+          "factor": "pacing-skill",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "'comfortably hard가 빨라졌다'는 역치 이동이 아니라 강도 감각 보정 학습일 수 있다. 특히 처음 8주.",
+            "en": "A faster comfortably-hard pace may be calibration learning rather than a threshold shift, especially in the first 8 weeks."
+          }
+        },
+        {
+          "factor": "weather-surface",
+          "severity": "low",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "이슬점 상승은 같은 강도의 페이스를 느리게 만든다. 여름 역치 페이스는 겨울과 비교 불가.",
+            "en": "Rising dew point slows pace at identical intensity. Summer threshold pace is not comparable to winter."
+          }
+        }
+      ],
+      "if_absent": {
+        "ko": "8주 무변화는 강도가 실제로 역치가 아니었을 가능성이 가장 크다. 대부분 너무 빠르게 달려서 T가 아닌 열화된 I 세션을 하고 있었다. 두 번째 의심은 이 신호가 원래 노이즈가 커서 8주로는 부족했을 가능성.",
+        "en": "Eight weeks of no change most likely means the intensity was not threshold. Most people ran too fast and were doing a degraded I session. Second suspect: this signal is noisy and 8 weeks may simply be too short."
+      }
+    },
+    "prerequisites": {
+      "min_weekly_volume_km": 30,
+      "min_training_age_months": 6,
+      "requires_workouts": ["easy-run"],
+      "evidence": {
+        "tier": "tradition"
+      },
+      "note": {
+        "ko": "구체적 문턱값은 관습이다. 근거 있는 컷오프가 아님.",
+        "en": "The specific thresholds are conventional. Not an evidence-based cutoff."
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate"
+    },
+    "common_errors": [
+      {
+        "ko": "너무 빠르게 달려 역치를 넘김. 그러면 T가 아니라 열화된 I 세션이 된다.",
+        "en": "Running above threshold, which produces a degraded I session rather than a T session."
+      }
+    ],
+    "instructions": {
+      "ko": "15분 이지 웜업 후 20~30분을 역치 강도로 연속 주행, 10분 쿨다운. 끝나고 10분 더 갈 수 있어야 정확한 강도다.",
+      "en": "15min easy warmup, then 20-30min continuous at threshold, 10min cooldown. Correct intensity means you could have continued another 10 minutes."
+    }
+  },
+  {
+    "id": "marathon-pace-run",
+    "canonical_name": "Marathon Pace Run",
+    "family": "race-pace",
+    "status": "draft",
+    "target_adaptation": ["glycogen-storage", "fat-oxidation", "running-economy", "pacing-skill"],
+    "venue": ["road-flat", "road-rolling"],
+    "placement": ["build", "peak"],
+    "attribution": "Kevin & Keith Hanson",
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "work",
+          "distance": {
+            "min": 8000,
+            "max": 16000,
+            "unit": "m"
+          },
+          "intensity_ref": "self"
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "race_pace_ref",
+      "anchors": [
+        {
+          "model": "race_pace_ref",
+          "value": "goal marathon pace",
+          "confidence": "exact"
+        },
+        {
+          "model": "daniels-vdot",
+          "zone": "M",
+          "confidence": "exact"
+        },
+        {
+          "model": "rpe_10",
+          "range": [4, 6],
+          "confidence": "approx"
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.8, 0.88],
+          "confidence": "approx"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "누적 피로 상태에서 목표 레이스 페이스로 달리면 레이스 후반부가 시뮬레이션된다.",
+        "en": "Running goal race pace under cumulative fatigue simulates the late portion of the race."
+      },
+      "mechanism": {
+        "ko": "Hansons는 이걸 '누적 피로' 상태에서 수행해 레이스 후반 30~35km 지점을 시뮬레이션한다고 주장한다. 메커니즘 서사는 그럴듯하지만 이를 검증한 통제 연구는 사실상 없다. 실제로 작동한다면 페이싱 스킬과 연료 대사 쪽 기여일 가능성이 높다.",
+        "en": "Hansons frame this as performed under cumulative fatigue to simulate the 30-35km portion of the race. The mechanistic story is plausible but essentially untested by controlled trials. If it works, the contribution is more likely pacing skill and fuel metabolism."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "인기 있는 방법론이지만 이 특정 주장은 tradition tier다. 유명함은 근거가 아니다.",
+          "en": "A popular method, but this specific claim is tradition tier. Popularity is not evidence."
+        }
+      }
+    },
+    "test": {
+      "detectable": false,
+      "mechanism": {
+        "ko": "레이스 전에는 측정 불가. 목표 페이스 자체가 가설이라 순환 논증이 된다.",
+        "en": "Not measurable before the race. The goal pace is itself a hypothesis, so the test is circular."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "prerequisites": {
+      "min_weekly_volume_km": 50,
+      "requires_workouts": ["easy-run", "threshold-continuous"],
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate"
+    },
+    "common_errors": [
+      {
+        "ko": "목표 페이스가 비현실적이면 이 세션 전체가 역치 세션이 된다. 그러면 이름만 M이고 실제로는 T다.",
+        "en": "If the goal pace is unrealistic the whole session becomes a threshold session: labelled M, physiologically T."
+      }
+    ],
+    "instructions": {
+      "ko": "웜업 후 8~16km를 목표 마라톤 페이스로 주행. Hansons 체계에서는 의도적으로 피로가 누적된 주중에 배치한다.",
+      "en": "After warmup, run 8-16km at goal marathon pace. In the Hansons system this is deliberately placed within an already-fatigued week."
+    }
+  },
+  {
+    "id": "vo2max-intervals",
+    "canonical_name": "vVO2max Intervals",
+    "family": "vo2max",
+    "status": "draft",
+    "target_adaptation": ["vo2max", "stroke-volume", "running-economy"],
+    "venue": ["track", "road-flat", "treadmill"],
+    "placement": ["build", "peak"],
+    "attribution": "Véronique Billat",
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 1200,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "min": 4,
+            "max": 6
+          },
+          "children": [
+            {
+              "kind": "work",
+              "distance": {
+                "value": 1000,
+                "unit": "m"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "min": 150,
+                "max": 240,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "daniels-vdot",
+      "anchors": [
+        {
+          "model": "daniels-vdot",
+          "zone": "I",
+          "confidence": "exact"
+        },
+        {
+          "model": "race_pace_ref",
+          "value": "3000-5000m race pace",
+          "confidence": "approx"
+        },
+        {
+          "model": "pct_vo2max",
+          "range": [0.97, 1.0],
+          "confidence": "exact"
+        },
+        {
+          "model": "rpe_10",
+          "range": [8, 9],
+          "confidence": "approx"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "VO2max 부근 체류시간(time at VO2max)의 총량이 VO2max 향상을 결정한다.",
+        "en": "Total dwell time at or near VO2max determines the magnitude of VO2max improvement."
+      },
+      "mechanism": {
+        "ko": "VO2max 부근에서 달려 심박출량이 최대에 머무는 시간(time at VO2max)을 최대화한다는 것이 핵심 주장. 반복 구간 길이와 회복 시간이 이 체류시간을 결정한다. 연구는 있으나 최적 프로토콜은 여전히 논쟁 중이고, 효과 크기의 개인차가 크다.",
+        "en": "The core claim is maximizing time spent at or near VO2max, where cardiac output is maximal. Interval length and recovery determine that dwell time. Studied, but the optimal protocol remains contested and inter-individual response variance is large."
+      },
+      "evidence": {
+        "tier": "plausible",
+        "cite": [
+          "Billat LV (2001). Interval training for performance, Part I. Sports Med 31(1).",
+          "Midgley AW, McNaughton LR (2006). Time at VO2max during intermittent treadmill running. J Sports Med Phys Fitness 46(1)."
+        ],
+        "note": {
+          "ko": "'인터벌이 VO2max를 올린다'는 컨센서스에 가깝지만, '이 프로토콜이 최적'은 plausible에 머문다.",
+          "en": "That intervals raise VO2max is near-consensus; that this protocol is optimal is only plausible."
+        }
+      }
+    },
+    "test": {
+      "detectable": true,
+      "what": {
+        "ko": "같은 반복 세트를 같은 페이스로 도는데 마지막 반복이 덜 무너진다. 페이스보다 반복 간 감쇠율(fade)이 더 예민한 지표.",
+        "en": "The last repetition degrades less at the same pace. Fade across repetitions is a more sensitive indicator than the pace itself."
+      },
+      "when_weeks": {
+        "min": 3,
+        "max": 6
+      },
+      "evidence": {
+        "tier": "plausible",
+        "cite": ["Billat LV (2001). Interval training for performance, Part I. Sports Med 31(1)."]
+      },
+      "confounds": [
+        {
+          "factor": "pacing-discipline",
+          "severity": "high",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "fade 감소는 적응이 아니라 '첫 반복을 덜 빠르게 시작하는 법'을 배운 결과일 수 있다. 이 신호의 최대 위협이며, 초심자일수록 이쪽이 지배적이다.",
+            "en": "Reduced fade may be learning not to start the first repetition too fast rather than adaptation. The primary threat to this signal, and dominant in novices."
+          }
+        },
+        {
+          "factor": "concurrent-threshold-work",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "역치 세션도 심박출량을 통해 VO2max에 기여한다. 다만 VO2max 체류시간을 쌓지는 않으므로 기전은 다르다 — 결과를 오염시키지 기전을 공유하지는 않는다.",
+            "en": "Threshold work also raises VO2max via stroke volume, but does not accumulate time at VO2max. It contaminates the outcome without sharing the mechanism."
+          }
+        }
+      ],
+      "if_absent": {
+        "ko": "6주 무변화의 후보: (1) 회복이 짧아 VO2max 도달 전에 무너짐 (2) 반복이 짧아 체류시간이 애초에 없었음 (3) 진짜 저반응자. VO2max에 대한 저반응은 실재하며 표준화된 프로그램에서도 관측된다 — 이 경우는 당신 잘못이 아니고 프로토콜 잘못도 아니다.",
+        "en": "Candidates for six weeks of no change: (1) recovery too short, collapsing before reaching VO2max (2) repetitions too short, so there was never any dwell time (3) genuine low response. Low response for VO2max is real and observed even under standardized programs. In that case it is neither your fault nor the protocol's."
+      }
+    },
+    "prerequisites": {
+      "min_weekly_volume_km": 40,
+      "min_training_age_months": 12,
+      "requires_workouts": ["easy-run", "threshold-continuous"],
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "high",
+      "note": {
+        "ko": "심폐 능력은 건/뼈보다 훨씬 빨리 적응한다. 엔진이 섀시를 앞지르는 지점이 바로 여기다.",
+        "en": "Cardiorespiratory capacity adapts far faster than tendon and bone. This is exactly where the engine outruns the chassis."
+      }
+    },
+    "common_errors": [
+      {
+        "ko": "첫 반복을 너무 빠르게. 모든 반복이 같은 페이스여야 하며, 첫 반복이 제일 빠르면 세션이 실패한 것.",
+        "en": "Starting the first repetition too fast. All repetitions should match; if the first is fastest the session failed."
+      }
+    ],
+    "instructions": {
+      "ko": "20분 웜업 후 1000m × 4~6회를 3000~5000m 레이스 페이스로, 반복 사이 2분30초~4분 조깅 회복. 10분 쿨다운.",
+      "en": "20min warmup, then 4-6 × 1000m at 3000-5000m race pace with 2:30-4:00 jog recovery. 10min cooldown."
+    }
+  },
+  {
+    "id": "strides",
+    "canonical_name": "Strides",
+    "family": "speed",
+    "status": "draft",
+    "target_adaptation": ["neuromuscular-recruitment", "running-economy"],
+    "venue": ["grass", "track", "road-flat"],
+    "placement": ["base", "build", "peak", "taper"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "repeat",
+          "count": {
+            "min": 4,
+            "max": 8
+          },
+          "children": [
+            {
+              "kind": "work",
+              "duration": {
+                "min": 15,
+                "max": 25,
+                "unit": "s"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "value": 60,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [7, 8],
+          "confidence": "rough",
+          "note": {
+            "ko": "전력질주가 아니다. 빠르되 이완된 상태.",
+            "en": "Not a sprint. Fast but relaxed."
+          }
+        },
+        {
+          "model": "race_pace_ref",
+          "value": "~1500m race pace, relaxed",
+          "confidence": "rough"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "낮은 대사 비용으로 빠른 신경근 동원 패턴에 노출되면 러닝 이코노미가 개선된다.",
+        "en": "Exposure to fast neuromuscular recruitment at low metabolic cost improves running economy."
+      },
+      "mechanism": {
+        "ko": "빠른 신경근 동원 패턴을 낮은 대사 비용으로 노출시켜 러닝 이코노미를 개선한다고 여겨진다. 널리 처방되지만 스트라이드 단독의 통제 연구는 사실상 없고, 메커니즘 설명은 대체로 사후적이다. 그럼에도 위험이 낮고 비용이 거의 없어 관습적으로 유지된다.",
+        "en": "Believed to improve running economy by exposing fast neuromuscular recruitment patterns at low metabolic cost. Widely prescribed, but controlled trials isolating strides are essentially absent and the mechanistic account is largely post hoc. It persists because the cost and risk are near zero."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "이 행이 tradition tier를 정직하게 붙일 수 있는지 테스트하는 행이다. 인용을 붙이고 싶은 유혹이 강할수록 tradition이다.",
+          "en": "This row is the test of whether the tradition tier can be applied honestly. The stronger the urge to attach a citation, the more it is tradition."
+        }
+      }
+    },
+    "test": {
+      "detectable": false,
+      "mechanism": {
+        "ko": "측정 가능한 신호가 없다. 그게 바로 tradition tier인 이유다. '느낌이 좋아진다'는 신호가 아니다.",
+        "en": "There is no measurable signal. That is precisely why it is tradition tier. Feeling better is not a signal."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate"
+    },
+    "common_errors": [
+      {
+        "ko": "전력질주로 변질. 스트라이드는 이완이 핵심이고, 힘이 들어가면 그냥 짧은 스프린트이며 부상 위험만 남는다.",
+        "en": "Turning it into a sprint. Relaxation is the point; strained strides are just short sprints with the injury risk and none of the rationale."
+      }
+    ],
+    "instructions": {
+      "ko": "이지런 후 또는 워크아웃 웜업 중, 15~25초간 점진 가속해 빠르되 이완된 상태로 달리고 완전히 회복. 4~8회.",
+      "en": "After an easy run or during a workout warmup, accelerate gradually over 15-25s to fast-but-relaxed, then recover fully. 4-8 repetitions."
+    }
+  }
+]

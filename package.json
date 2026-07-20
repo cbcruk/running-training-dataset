@@ -1,39 +1,30 @@
 {
   "name": "running-training-dataset",
   "version": "0.0.0",
-  "description": "A starter for creating a TypeScript package.",
-  "homepage": "https://github.com/author/library#readme",
+  "private": true,
+  "description": "A browsable catalog of running training systems: what each one bets, what it costs to run, and how much of it is actually known.",
+  "homepage": "https://github.com/cbcruk/running-training-dataset#readme",
   "bugs": {
-    "url": "https://github.com/author/library/issues"
+    "url": "https://github.com/cbcruk/running-training-dataset/issues"
   },
   "license": "MIT",
-  "author": "Author Name <author.name@mail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/author/library.git"
+    "url": "git+https://github.com/cbcruk/running-training-dataset.git"
   },
-  "files": [
-    "dist"
-  ],
   "type": "module",
-  "exports": {
-    ".": "./dist/index.mjs",
-    "./package.json": "./package.json"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "build": "vp pack",
-    "dev": "vp pack --watch",
+    "validate": "node scripts/validate.mjs",
+    "render": "node scripts/render.mjs",
     "test": "vp test",
     "check": "vp check",
-    "prepublishOnly": "vp run build",
     "prepare": "vp config"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
-    "bumpp": "^11.1.0",
     "typescript": "^7.0.2",
     "vite-plus": "^0.2.4"
   },
