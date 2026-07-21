@@ -113,5 +113,74 @@
       "ko": "코치에 따라 pickup은 스트라이드보다 훨씬 긴 구간을 뜻하기도 한다. 그래서 워크아웃 id에서 금지된 단어다.",
       "en": "For some coaches a pickup means a far longer surge than a stride, which is why the word is banned from workout ids."
     }
+  },
+  {
+    "system": "daniels",
+    "workout": "long-run",
+    "calls_it": "L run",
+    "also_known_as": ["Long E run"],
+    "note": {
+      "ko": "Daniels에게 롱런은 E 강도의 연장이다. 별도 '롱런 페이스'가 있는 게 아니라 그냥 긴 E다.",
+      "en": "For Daniels the long run is an extension of E intensity - not a separate 'long-run pace', just a long E."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "long-run",
+    "calls_it": "Long run",
+    "note": {
+      "ko": "Hansons의 롱런은 16마일(약 26km)로 상한이 있다. 누적 피로 전제에서 롱런을 늘리는 대신 주 전체 볼륨을 택한 결과다.",
+      "en": "The Hansons long run is capped at 16 miles (~26km). Given the cumulative-fatigue premise, they cap the long run and spend the volume across the week instead."
+    }
+  },
+  {
+    "system": null,
+    "workout": "long-run",
+    "calls_it": "LSD",
+    "also_known_as": ["Long slow distance", "Long steady run"],
+    "note": {
+      "ko": "'Long slow distance'의 slow가 강도를 지시하는 유일한 단어인데, 어느 체계의 느림인지는 말하지 않는다.",
+      "en": "In 'long slow distance' the word slow is the only intensity cue, and it never says slow by whose standard."
+    }
+  },
+  {
+    "system": null,
+    "workout": "recovery-run",
+    "calls_it": "Recovery run",
+    "also_known_as": ["Recovery jog", "Shakeout"],
+    "note": {
+      "ko": "체계 밖 일상 용어. shakeout은 레이스 전날의 아주 짧은 회복런을 따로 가리키기도 한다.",
+      "en": "Everyday usage belonging to no system. Shakeout sometimes specifically means a very short recovery run the day before a race."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "cruise-intervals",
+    "calls_it": "Cruise intervals",
+    "also_known_as": ["T intervals"],
+    "note": {
+      "ko": "Daniels가 만든 용어. threshold-continuous('Tempo')와 같은 T 페이스지만 짧은 회복으로 나눈 형태다.",
+      "en": "Daniels' own term. Same T pace as threshold-continuous ('Tempo'), but broken up with short recoveries."
+    }
+  },
+  {
+    "system": null,
+    "workout": "hill-repeats",
+    "calls_it": "Hill repeats",
+    "also_known_as": ["Hill reps"],
+    "note": {
+      "ko": "'Hill sprints'와 혼동되지만 후자는 보통 10초 이하의 순수 신경근 자극이라 다른 워크아웃이다.",
+      "en": "Often conflated with 'hill sprints', but those are usually sub-10s pure neuromuscular efforts - a different workout."
+    }
+  },
+  {
+    "system": null,
+    "workout": "fartlek",
+    "calls_it": "Fartlek",
+    "also_known_as": ["Speed play"],
+    "note": {
+      "ko": "스웨덴어로 '스피드 플레이'. 1930년대 Gösta Holmér가 고안한 이름이 그대로 종목 용어가 됐다.",
+      "en": "Swedish for 'speed play'. The name Gösta Holmér coined in the 1930s became the sport's term verbatim."
+    }
   }
 ]

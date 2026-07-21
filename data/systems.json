@@ -96,11 +96,11 @@
     "phases": [
       {
         "name": "base",
-        "emphasis": ["easy-run", "strides"]
+        "emphasis": ["easy-run", "strides", "long-run"]
       },
       {
         "name": "build",
-        "emphasis": ["threshold-continuous", "vo2max-intervals"]
+        "emphasis": ["threshold-continuous", "vo2max-intervals", "cruise-intervals"]
       },
       {
         "name": "peak",
@@ -170,7 +170,7 @@
     "phases": [
       {
         "name": "build",
-        "emphasis": ["easy-run", "marathon-pace-run", "threshold-continuous"]
+        "emphasis": ["easy-run", "marathon-pace-run", "threshold-continuous", "long-run"]
       },
       {
         "name": "peak",
@@ -254,7 +254,7 @@
     "phases": [
       {
         "name": "base",
-        "emphasis": ["easy-run", "strides"]
+        "emphasis": ["easy-run", "strides", "long-run"]
       },
       {
         "name": "build",
