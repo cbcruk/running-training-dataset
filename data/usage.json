@@ -182,5 +182,85 @@
       "ko": "스웨덴어로 '스피드 플레이'. 1930년대 Gösta Holmér가 고안한 이름이 그대로 종목 용어가 됐다.",
       "en": "Swedish for 'speed play'. The name Gösta Holmér coined in the 1930s became the sport's term verbatim."
     }
+  },
+  {
+    "system": "lydiard",
+    "workout": "easy-run",
+    "calls_it": "Aerobic run",
+    "also_known_as": ["Steady state run"],
+    "note": {
+      "ko": "Lydiard의 베이스는 '가장 좋은 유산소 노력'으로 달리는 aerobic run이다. steady state는 그 상단, 무산소 직전을 가리킨다.",
+      "en": "Lydiard's base is the aerobic run at one's 'best aerobic effort'. Steady state means its upper end, just below anaerobic."
+    }
+  },
+  {
+    "system": "lydiard",
+    "workout": "hill-repeats",
+    "calls_it": "Hill bounding",
+    "also_known_as": ["Hill springing"],
+    "note": {
+      "ko": "Lydiard의 언덕 국면은 페이스 반복이 아니라 튕겨 오르는 바운딩/스프링잉 드릴이다. 같은 'hill'이라도 다른 동작.",
+      "en": "Lydiard's hill phase is bounding and springing drills, not paced repeats. Same word 'hill', a different movement."
+    }
+  },
+  {
+    "system": "pfitzinger",
+    "workout": "threshold-continuous",
+    "calls_it": "LT run",
+    "also_known_as": ["Lactate threshold run", "Tempo run"],
+    "note": {
+      "ko": "Pfitzinger는 이를 젖산 역치(LT) 주행이라 부르고 HR 82~91%로 처방한다. Daniels의 'Tempo'와 같은 강도 영역이지만 앵커가 페이스가 아니라 HR이다.",
+      "en": "Pfitzinger calls this a lactate-threshold (LT) run, prescribed at 82-91% HRmax. Same intensity zone as Daniels' 'Tempo', but anchored on HR, not pace."
+    }
+  },
+  {
+    "system": "pfitzinger",
+    "workout": "marathon-pace-run",
+    "calls_it": "MP run",
+    "also_known_as": ["Marathon-pace run"],
+    "note": {
+      "ko": "Pfitzinger는 긴 주행 안에 마라톤 페이스 구간을 넣는다. Hansons의 'tempo=마라톤 페이스'와 같은 강도지만 이름이 충돌하지 않는다.",
+      "en": "Pfitzinger embeds marathon-pace segments inside long runs. Same intensity as Hansons' 'tempo = marathon pace', but the name does not collide here."
+    }
+  },
+  {
+    "system": "pfitzinger",
+    "workout": "long-run",
+    "calls_it": "Medium-long run",
+    "also_known_as": ["Long run"],
+    "note": {
+      "ko": "Pfitzinger는 미디엄-롱런(약 15~23km)과 롱런(23km 이상)을 명시적으로 구분한다. 대부분의 체계가 뭉뚱그리는 지점을 쪼갠다.",
+      "en": "Pfitzinger explicitly separates the medium-long run (~15-23km) from the long run (>23km), splitting a distinction most systems blur."
+    }
+  },
+  {
+    "system": "maf",
+    "workout": "easy-run",
+    "calls_it": "MAF run",
+    "also_known_as": ["Aerobic base run", "MAF test"],
+    "note": {
+      "ko": "모든 주행이 MAF HR 이하다. 매월 같은 HR에서의 페이스를 재는 것이 'MAF 테스트'이고, 그 페이스 향상이 유일한 진전 지표다.",
+      "en": "Every run sits at or below the MAF HR. The monthly 'MAF test' times pace at that same HR, and improvement in that pace is the only progress metric."
+    }
+  },
+  {
+    "system": "norwegian-singles",
+    "workout": "threshold-continuous",
+    "calls_it": "Sub-threshold",
+    "also_known_as": ["Sub-T", "Threshold run"],
+    "note": {
+      "ko": "MLSS 아래(약 2~3mmol)로 통제한다. Daniels의 T('Tempo')와 같은 워크아웃이지만 타깃 젖산이 더 낮아 더 느리다.",
+      "en": "Controlled below MLSS (about 2-3 mmol). The same workout as Daniels' T ('Tempo'), but a lower lactate target makes it slower."
+    }
+  },
+  {
+    "system": "norwegian-singles",
+    "workout": "cruise-intervals",
+    "calls_it": "Threshold intervals",
+    "also_known_as": ["Double threshold", "Sub-threshold intervals"],
+    "note": {
+      "ko": "Daniels의 'cruise intervals'와 같은 형태지만 젖산으로 통제하고, 엘리트는 이를 하루 두 번(더블 역치) 수행한다.",
+      "en": "The same form as Daniels' 'cruise intervals', but lactate-controlled, and elites run it twice a day (double threshold)."
+    }
   }
 ]
