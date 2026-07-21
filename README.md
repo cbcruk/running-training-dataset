@@ -146,7 +146,10 @@ Bilingual (ko/en) via the header toggle.
 
 ## Known open problems
 
+The near-term worklist — verification (`draft` → `verified`), `switching_cost` symmetry, and depth on shallow fields — is tracked concretely in [`docs/TODO.md`](docs/TODO.md).
+
 - ~~**The card view flattens the tier.**~~ Addressed. `index.html` puts the tier badge on every system and workout card, and `consensus` / `plausible` / `tradition` are given deliberately different visual weight — a solid fill, an outline, and a faint dashed outline respectively — so browsing cannot make `tradition` read as settled. The constraint stands for any future card added.
+- **Nothing is verified yet.** All 12 systems and 20 workouts are `status: draft`. The verification checklist — including a citation-normalization bug (three renderings of Billat 2001, with wrong initials) — is in [`docs/TODO.md`](docs/TODO.md#1-verification-draft--verified).
 - **Daniels' volume caps are from memory**, marked `tradition` + draft. Verify against the source text.
 - **VDOT tables are a compiled work.** Do not scrape. Re-derive from the published equations in Daniels & Gilbert (1979), _Oxygen Power_. VDOT is a trademark. Same trap for Purdy Points and WMA age-grading tables.
 - **Prior art unverified.** GoldenCheetah is the reference implementation for the analysis side, but it is an engine, not a knowledge base. Confirm nothing like this catalog exists.
