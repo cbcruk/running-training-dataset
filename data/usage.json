@@ -262,5 +262,95 @@
       "ko": "Daniels의 'cruise intervals'와 같은 형태지만 젖산으로 통제하고, 엘리트는 이를 하루 두 번(더블 역치) 수행한다.",
       "en": "The same form as Daniels' 'cruise intervals', but lactate-controlled, and elites run it twice a day (double threshold)."
     }
+  },
+  {
+    "system": "critical-speed",
+    "workout": "threshold-continuous",
+    "calls_it": "CS run",
+    "also_known_as": ["Critical speed effort", "At-CS run"],
+    "note": {
+      "ko": "임계속도 바로 부근의 연속 주행. Daniels의 T('Tempo')와 강도 영역이 겹치지만, 여기서는 감각이 아니라 측정된 CS로 못박힌다.",
+      "en": "A continuous run right at critical speed. Its intensity overlaps Daniels' T ('Tempo'), but here it is pinned by measured CS, not by feel."
+    }
+  },
+  {
+    "system": "critical-speed",
+    "workout": "vo2max-intervals",
+    "calls_it": "Above-CS intervals",
+    "also_known_as": ["W-prime intervals", "D-prime work"],
+    "note": {
+      "ko": "CS 위에서 유한한 여력 W′(D′)을 계획적으로 소진하는 인터벌. '얼마나 위인지'가 아니라 '얼마나 W′을 쓰는지'로 설계한다.",
+      "en": "Intervals above CS that deliberately deplete the finite reserve W' (D'). Designed by 'how much W' is spent', not by 'how far above'."
+    }
+  },
+  {
+    "system": "hrr-karvonen",
+    "workout": "easy-run",
+    "calls_it": "Zone 2",
+    "also_known_as": ["Aerobic zone (60-70% HRR)"],
+    "note": {
+      "ko": "여기서 'Zone 2'는 60~70% HRR로 명확히 정의된다. 어느 체계의 존인지 말하지 않는 일상 용어 'Zone 2 run'과 정확히 대비되는 지점이다.",
+      "en": "Here 'Zone 2' is defined precisely as 60-70% HRR. This is exactly what the everyday 'Zone 2 run' - which never says whose zones - fails to pin down."
+    }
+  },
+  {
+    "system": "canova",
+    "workout": "marathon-pace-run",
+    "calls_it": "Specific pace run",
+    "also_known_as": ["Special block", "Marathon-specific work"],
+    "note": {
+      "ko": "Canova는 목표 페이스 부근의 대량 작업을 'specific'/'special block'이라 부른다. Hansons·Pfitzinger의 마라톤 페이스 주행과 같은 강도지만 조직 원리가 다르다.",
+      "en": "Canova calls the large volume of near-goal-pace work 'specific' or a 'special block'. Same intensity as the Hansons and Pfitzinger marathon-pace runs, but a different organising principle."
+    }
+  },
+  {
+    "system": "galloway",
+    "workout": "long-run",
+    "calls_it": "Run-walk long run",
+    "also_known_as": ["Long run with walk breaks"],
+    "note": {
+      "ko": "같은 롱런이지만 계획된 걷기로 끊는다. GPS 평균 페이스가 걷기 때문에 다른 체계의 롱런과 직접 비교되지 않는다.",
+      "en": "The same long run, but broken by planned walking. Its average GPS pace does not compare directly with other systems' long runs because of the walk breaks."
+    }
+  },
+  {
+    "system": "galloway",
+    "workout": "easy-run",
+    "calls_it": "Run-walk",
+    "also_known_as": ["Walk-break run"],
+    "note": {
+      "ko": "일상 주행조차 달리기-걷기 비율(예: 4:1)로 정의된다. 걷기 구간이 워크아웃의 정의적 특징이다.",
+      "en": "Even the everyday run is defined by a run-to-walk ratio (e.g. 4:1). The walk interval is the defining feature of the workout."
+    }
+  },
+  {
+    "system": "first-furman",
+    "workout": "vo2max-intervals",
+    "calls_it": "Key Run 1",
+    "also_known_as": ["Track repeats", "Speed key run"],
+    "note": {
+      "ko": "FIRST의 세 '키 런' 중 첫째, 트랙 반복이다. 나머지 이지 볼륨은 크로스 트레이닝이 대신한다.",
+      "en": "The first of FIRST's three 'key runs', the track repeats. The remaining easy volume is taken over by cross-training."
+    }
+  },
+  {
+    "system": "first-furman",
+    "workout": "threshold-continuous",
+    "calls_it": "Key Run 2",
+    "also_known_as": ["Tempo key run"],
+    "note": {
+      "ko": "FIRST의 둘째 키 런, 템포다. threshold-continuous는 이제 다섯 번째 이름을 얻는다 — 체계마다 같은 워크아웃을 다르게 부른다.",
+      "en": "The second key run, the tempo. threshold-continuous now picks up a fifth name - each system calls the same workout something different."
+    }
+  },
+  {
+    "system": "first-furman",
+    "workout": "long-run",
+    "calls_it": "Key Run 3",
+    "also_known_as": ["Long key run"],
+    "note": {
+      "ko": "FIRST의 셋째 키 런, 롱런이다. 목표 페이스에서 유도된 페이스로 달리는 경우가 많다.",
+      "en": "The third key run, the long run, often run at a pace derived from goal race pace."
+    }
   }
 ]

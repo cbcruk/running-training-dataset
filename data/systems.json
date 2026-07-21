@@ -610,5 +610,409 @@
         "en": "The anchor is measured lactate; proxying it with pace and no meter makes the system indistinguishable from just doing frequent tempo runs."
       }
     ]
+  },
+  {
+    "id": "critical-speed",
+    "name": "Critical Speed Training",
+    "attribution": "Monod & Scherrer (critical-power model)",
+    "status": "draft",
+    "intensity_model": "pct_cs",
+    "bet": {
+      "ko": "모든 강도를 측정된 임계속도(CS)를 기준으로 고정한다.",
+      "en": "Anchor every intensity to a measured critical speed (CS)."
+    },
+    "philosophy": {
+      "ko": "CS는 2~3회의 최대 노력 기록에서 유도되는 지속 가능 속도의 상한이고, 그 위의 여력은 유한한 거리 자원 W′(D′)로 표현된다. 지구력 세션은 CS 부근에, 고강도 인터벌은 CS 위에서 W′을 계획적으로 소진하도록 설계한다. 역치 경계를 감각이 아니라 측정으로 고정한다는 것이 핵심.",
+      "en": "CS is the ceiling of sustainable speed derived from two or three maximal efforts, with the reserve above it expressed as a finite distance capacity, W' (D'). Endurance sessions sit near CS; high-intensity intervals are designed to deplete W' deliberately above CS. The point is to fix the threshold boundary by measurement, not by feel."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "min": 4,
+        "max": 6
+      },
+      "min_weekly_km": 40,
+      "requires_track": true,
+      "note": {
+        "ko": "CS와 W′을 세우려면 주기적 타임트라이얼(예: 3분·12분 또는 여러 거리)이 필요하고, 트랙이 측정 오차를 줄인다. 모델은 W′이 안정적이라 가정하지만 실제로는 컨디션에 따라 흔들린다.",
+        "en": "Setting CS and W' needs periodic time-trials (e.g. 3- and 12-minute, or several distances), and a track reduces measurement error. The model assumes W' is stable, though in practice it drifts with condition."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "daniels",
+        "anchor_change": "daniels-vdot -> pct_cs",
+        "silent": false,
+        "note": {
+          "ko": "둘 다 기록에서 페이스를 유도하지만 산출물이 다르다. VDOT은 존들의 표를, CS는 하나의 경계선과 유한한 여력(W′)을 준다. 인터벌을 '존'이 아니라 'W′ 소진'으로 계획하게 되는 사고 전환이 필요하다.",
+          "en": "Both derive paces from performances, but the output differs. VDOT gives a table of zones; CS gives a single boundary plus a finite reserve (W'). It requires rethinking intervals as 'depleting W'' rather than 'hitting a zone'."
+        }
+      },
+      {
+        "from": "polarized-80-20",
+        "anchor_change": "pct_vo2max -> pct_cs",
+        "silent": false,
+        "note": {
+          "ko": "폴라라이즈드가 감각과 %VO2max로 그리던 상한 역치 경계를 CS가 측정값으로 못박는다. 비우라던 중간 구간이 이제 '측정된 CS 바로 아래'로 명확해진다.",
+          "en": "The upper threshold boundary that polarized draws by feel and %VO2max is pinned by CS to a measured value. The middle zone it told you to vacate becomes precisely 'just below measured CS'."
+        }
+      }
+    ],
+    "distribution": {
+      "model": "pyramidal",
+      "evidence": {
+        "tier": "plausible",
+        "cite": [
+          "Jones AM, Vanhatalo A (2017). The 'Critical Power' Concept: Applications to Sports Performance. Sports Med 47(Suppl 1)."
+        ]
+      }
+    },
+    "phases": [
+      {
+        "name": "base",
+        "emphasis": ["easy-run", "long-run"]
+      },
+      {
+        "name": "build",
+        "emphasis": ["threshold-continuous", "cruise-intervals"]
+      },
+      {
+        "name": "peak",
+        "emphasis": ["vo2max-intervals"]
+      }
+    ],
+    "evidence": {
+      "tier": "plausible",
+      "cite": [
+        "Jones AM, Vanhatalo A (2017). The 'Critical Power' Concept: Applications to Sports Performance. Sports Med 47(Suppl 1)."
+      ],
+      "note": {
+        "ko": "CS/W′ 모델의 생리적 타당성은 잘 지지되지만, 이를 훈련 처방으로 옮긴 프로토콜의 우월성은 별개의 더 약한 주장이다.",
+        "en": "The physiological validity of the CS/W' model is well supported, but the superiority of any protocol built on it for prescribing training is a separate and weaker claim."
+      }
+    },
+    "caveats": [
+      {
+        "ko": "이 행은 임계속도를 앵커로 쓰는 '체계'를 카탈로그화할 뿐, CS/D′ 공식이나 페이스 예측은 다루지 않는다 — 그것은 이 데이터셋의 non-goal(함수의 프로젝트)이다.",
+        "en": "This row catalogs the 'system' of anchoring on critical speed only; it does not reproduce the CS/D' formula or predict paces - that is a non-goal of this dataset (a project of functions, not rows)."
+      },
+      {
+        "ko": "CS와 W′ 추정치는 테스트 프로토콜(선택한 거리·시간)에 민감하다. 프로토콜이 바뀌면 앵커도 바뀐다.",
+        "en": "CS and W' estimates are sensitive to the test protocol (which distances or durations you choose). Change the protocol and the anchor moves."
+      }
+    ]
+  },
+  {
+    "id": "hrr-karvonen",
+    "name": "HRR Zone Training (Karvonen)",
+    "attribution": "Martti Karvonen",
+    "status": "draft",
+    "intensity_model": "pct_hrr",
+    "bet": {
+      "ko": "강도는 최대심박수가 아니라 심박수 예비량(HRR)에 맞춘다.",
+      "en": "Anchor intensity to heart-rate reserve (HRR), not raw max HR."
+    },
+    "philosophy": {
+      "ko": "목표 심박수를 (HRmax - HRrest) × 강도% + HRrest로 계산한다. 안정시 심박수를 반영하므로 %HRmax보다 개인의 실제 여력에 더 가깝게 스케일된다. 강도의 언어는 '존'이지만, 그 존이 최대치 비율이 아니라 예비량 비율로 정의된다는 것이 이 체계의 유일한 주장이다.",
+      "en": "Target heart rate is computed as (HRmax - HRrest) x intensity% + HRrest. Because it accounts for resting HR, it scales closer to each runner's true reserve than %HRmax does. The language of intensity is still 'zones', but this system's one claim is that those zones are defined by reserve, not by a fraction of max."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "min": 3,
+        "max": 7
+      },
+      "min_weekly_km": 25,
+      "requires_track": false,
+      "note": {
+        "ko": "진짜 안정시 심박수(아침 측정)와 이상적으로는 실측 최대심박수가 필요하다. 추정 HRmax를 쓰면 예비량 계산이 그 오차를 그대로 상속한다.",
+        "en": "It needs a true resting HR (measured on waking) and ideally a measured HRmax. Using an estimated HRmax makes the reserve calculation inherit that error directly."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "pfitzinger",
+        "anchor_change": "pct_hrmax -> pct_hrr",
+        "silent": true,
+        "note": {
+          "ko": "'존'과 퍼센트 언어가 그대로 살아남지만 분모가 최대심박수에서 예비량으로 바뀐다. 같은 '70% 존'이 전혀 다른 절대 심박수를 뜻하게 되고, 아무 경고도 없다. HR 체계 간 전환에서 가장 흔한 조용한 오류.",
+          "en": "The 'zone' and percentage language survives intact, but the denominator changes from max HR to reserve. The same '70% zone' now means a quite different absolute heart rate, with no warning. The most common silent error when switching between HR systems."
+        }
+      },
+      {
+        "from": "maf",
+        "anchor_change": "pct_hrmax -> pct_hrr",
+        "silent": true,
+        "note": {
+          "ko": "MAF의 절대 상한(180-나이)에서 예비량 기반 존으로 옮기면 상한이 사라지고 고강도 존이 다시 허용된다. HR을 계속 보고 있어 안전해 보이지만 처방 논리가 통째로 바뀐다.",
+          "en": "Moving from MAF's absolute cap (180 minus age) to reserve-based zones removes the ceiling and re-admits high-intensity zones. It looks safe because you are still watching HR, but the whole prescription logic has changed."
+        }
+      }
+    ],
+    "evidence": {
+      "tier": "plausible",
+      "cite": [
+        "Karvonen MJ, Kentala E, Mustala O (1957). The effects of training on heart rate. Ann Med Exp Biol Fenn 35(3)."
+      ]
+    },
+    "phases": [
+      {
+        "name": "base",
+        "emphasis": ["easy-run", "long-run"]
+      },
+      {
+        "name": "build",
+        "emphasis": ["threshold-continuous", "vo2max-intervals"]
+      }
+    ],
+    "caveats": [
+      {
+        "ko": "엄밀히는 완결된 주기화 계획이라기보다 강도 처방 방법이다. 어떤 세션을 언제 하는지가 아니라 각 세션의 목표 심박수를 정하는 규칙이다.",
+        "en": "Strictly it is a method for prescribing intensity more than a complete periodized plan. It sets the target HR for each session, not which sessions to do when."
+      },
+      {
+        "ko": "심박수는 수면·카페인·더위·표류에 오염된다. 예비량 계산이 정밀해 보여도 입력값이 그날그날 흔들린다.",
+        "en": "Heart rate is contaminated by sleep, caffeine, heat and cardiac drift. The reserve calculation looks precise, but its inputs wobble day to day."
+      }
+    ]
+  },
+  {
+    "id": "canova",
+    "name": "Canova (Percentage of Race Pace)",
+    "attribution": "Renato Canova",
+    "status": "draft",
+    "intensity_model": "race_pace_ref",
+    "bet": {
+      "ko": "모든 세션을 목표 레이스 페이스의 비율로 정의하고 특이성을 좁혀간다.",
+      "en": "Define every session as a percentage of goal race pace, narrowing specificity."
+    },
+    "philosophy": {
+      "ko": "훈련을 목표 레이스 페이스로부터의 편차로 조직한다. 시즌 초에는 레이스 페이스에서 멀리(느리게/빠르게) 벌어진 자극으로 넓게 시작해, 시즌이 갈수록 대량의 작업을 목표 페이스 부근으로 수렴시킨다('스페셜 블록'). 앵커가 목표 페이스라서, 목표가 틀리면 전 시즌의 강도가 함께 틀린다.",
+      "en": "Organises training as deviations from goal race pace. Early in a season the stimuli sit far from race pace (slower or faster); as the season progresses, large volumes of work converge toward goal pace ('special blocks'). Because the anchor is goal pace, a wrong goal makes the whole season's intensity wrong with it."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "min": 6,
+        "max": 13
+      },
+      "min_weekly_km": 100,
+      "requires_track": false,
+      "note": {
+        "ko": "엘리트 마라토너를 위해 설계됐다. 주 2회 훈련(더블)과 매우 높은 볼륨이 전제라, 대부분의 아마추어에게는 볼륨 자체가 이전 불가능하다.",
+        "en": "Designed for elite marathoners. It assumes twice-a-day training and very high volume, so for most amateurs the volume itself is untranslatable."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "daniels",
+        "anchor_change": "daniels-vdot -> race_pace_ref",
+        "silent": true,
+        "note": {
+          "ko": "측정된 피트니스(VDOT)에서 목표 페이스(희망)로 앵커가 바뀐다. Hansons로의 전환과 같은 함정이지만 더 극단적이다. 거의 모든 세션이 목표 페이스의 비율로 재정의되므로, 목표가 낙관적이면 시즌 전체가 조용히 과부하된다.",
+          "en": "The anchor moves from measured fitness (VDOT) to goal pace (a wish). The same trap as switching to Hansons, but more extreme: nearly every session is redefined as a percentage of goal pace, so an optimistic goal silently overloads the whole season."
+        }
+      },
+      {
+        "from": "hansons",
+        "anchor_change": "race_pace_ref -> race_pace_ref",
+        "silent": false,
+        "note": {
+          "ko": "앵커는 그대로 목표 레이스 페이스다. 바뀌는 건 구조다. Hansons의 누적 피로 대신 Canova는 특이성 수렴(스페셜 블록)을 택한다. 앵커가 같아 조용한 강도 변화는 없지만, 볼륨과 세션 설계가 완전히 달라진다.",
+          "en": "The anchor stays goal race pace. What changes is the structure. Instead of Hansons' cumulative fatigue, Canova converges on specificity (special blocks). Since the anchor is the same there is no silent intensity shift, but volume and session design change completely."
+        }
+      }
+    ],
+    "distribution": {
+      "model": "pyramidal",
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "엘리트 코칭 실무에서 관찰된 구조다. 통제 시험이 아니라 결과를 낸 선수들의 사례에서 귀납됐다.",
+          "en": "A structure observed in elite coaching practice, induced from athletes who got results rather than from controlled trials."
+        }
+      }
+    },
+    "phases": [
+      {
+        "name": "base",
+        "emphasis": ["easy-run", "long-run"]
+      },
+      {
+        "name": "build",
+        "emphasis": ["marathon-pace-run", "threshold-continuous", "long-run"]
+      },
+      {
+        "name": "peak",
+        "emphasis": ["marathon-pace-run", "vo2max-intervals"]
+      }
+    ],
+    "evidence": {
+      "tier": "tradition",
+      "note": {
+        "ko": "세계적 성과를 낸 코칭이지만, 유명함은 근거가 아니다. 이 방법의 인과적 우월성은 통제 연구로 검증된 바 없다.",
+        "en": "Coaching behind world-class results, but fame is not evidence. The causal superiority of the method has never been tested in controlled trials."
+      }
+    },
+    "caveats": [
+      {
+        "ko": "특이성 수렴은 목표 페이스가 정확할 때만 의미가 있다. Hansons와 같은 '희망 앵커' 문제를 전 시즌 규모로 상속한다.",
+        "en": "Convergence on specificity only means anything if the goal pace is accurate. It inherits Hansons' 'wish anchor' problem at the scale of a whole season."
+      }
+    ]
+  },
+  {
+    "id": "galloway",
+    "name": "Galloway (Run-Walk)",
+    "attribution": "Jeff Galloway",
+    "status": "draft",
+    "intensity_model": "rpe_10",
+    "bet": {
+      "ko": "처음부터 걷기 구간을 넣어 부상 없이 완주 능력을 늘린다.",
+      "en": "Insert walk breaks from the start to build finishing ability injury-free."
+    },
+    "philosophy": {
+      "ko": "달리기를 계획된 걷기 구간으로 규칙적으로 끊는다(예: 4분 달리고 1분 걷기). 걷기를 지쳐서가 아니라 처음부터 넣어 근피로 누적과 충격 노출을 낮추고, 그 결과 더 긴 거리를 견디게 한다는 주장이다. 강도는 페이스가 아니라 편안한 노력으로 관리된다.",
+      "en": "Breaks running with regular, planned walk intervals (e.g. run 4 minutes, walk 1). Taking the walk from the start rather than when tired is claimed to lower cumulative muscular fatigue and impact exposure, and so extend the distance one can tolerate. Intensity is managed by comfortable effort, not pace."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "min": 3,
+        "max": 4
+      },
+      "min_weekly_km": 20,
+      "requires_track": false,
+      "note": {
+        "ko": "진입 장벽이 가장 낮게 설계됐다. 초보자와 부상 이력자, 완주가 목표인 주자를 위한 체계다.",
+        "en": "Designed for the lowest possible barrier. It is a system for beginners, the injury-prone, and runners whose goal is simply to finish."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "daniels",
+        "anchor_change": "daniels-vdot -> rpe_10",
+        "silent": false,
+        "note": {
+          "ko": "정밀한 VDOT 존이 사라지고 편안한 노력 + 계획된 걷기로 대체된다. 구조가 눈에 띄게 바뀌므로 조용하지 않지만, 'GPS 평균 페이스'가 걷기 구간 때문에 무의미해진다는 점은 자주 간과된다.",
+          "en": "The precise VDOT zones disappear, replaced by comfortable effort plus planned walking. The structural change is visible, so it is not silent, but it is easy to miss that average GPS pace becomes meaningless once walk breaks are included."
+        }
+      },
+      {
+        "from": "hansons",
+        "anchor_change": "race_pace_ref -> rpe_10",
+        "silent": false,
+        "note": {
+          "ko": "누적 피로를 의도적으로 쌓는 체계에서 피로를 의도적으로 더는 체계로의 정반대 전환이다. 두 전제가 충돌하므로 함께 섞을 수 없다.",
+          "en": "A direct reversal: from a system that deliberately accumulates fatigue to one that deliberately relieves it. The two premises conflict, so they cannot be blended."
+        }
+      }
+    ],
+    "distribution": {
+      "model": "unstructured",
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "강도 분포를 규정하지 않는다. 조직 원리는 강도 존이 아니라 달리기-걷기 비율이다.",
+          "en": "It does not specify an intensity distribution. Its organising principle is the run-to-walk ratio, not intensity zones."
+        }
+      }
+    },
+    "phases": [
+      {
+        "name": "base",
+        "emphasis": ["easy-run", "long-run"]
+      },
+      {
+        "name": "build",
+        "emphasis": ["long-run"]
+      }
+    ],
+    "evidence": {
+      "tier": "tradition",
+      "note": {
+        "ko": "매우 인기 있고 완주율에 대한 일화가 많지만, 부상 감소와 지속 러닝 대비 결과에 관한 통제 근거는 혼재하고 약하다.",
+        "en": "Very popular with plenty of anecdote about finishing rates, but the controlled evidence for injury reduction and for outcomes versus continuous running is mixed and weak."
+      }
+    },
+    "caveats": [
+      {
+        "ko": "걷기 구간 비율은 개인차가 크고, 평균 페이스 지표가 걷기 때문에 왜곡돼 다른 체계와 직접 비교하기 어렵다.",
+        "en": "The walk-break ratio is highly individual, and average-pace metrics are distorted by the walking, making direct comparison with other systems hard."
+      }
+    ]
+  },
+  {
+    "id": "first-furman",
+    "name": "FIRST (Run Less, Run Faster)",
+    "attribution": "Bill Pierce (Furman Institute)",
+    "status": "draft",
+    "intensity_model": "race_pace_ref",
+    "bet": {
+      "ko": "주 3회 질 높은 러닝만 하고 나머지는 크로스 트레이닝으로 채운다.",
+      "en": "Run just three quality sessions a week and cross-train the rest."
+    },
+    "philosophy": {
+      "ko": "세 개의 '키 런'(스피드/트랙, 템포, 롱)만 남기고 이지 볼륨을 크로스 트레이닝으로 대체한다. 페이스는 최근 레이스 기록에서 유도한다. 러닝 빈도를 낮춰 부상과 마모를 줄이면서, 남은 세 세션의 질을 끝까지 밀어붙인다는 주장이다.",
+      "en": "Keeps only three 'key runs' (speed/track, tempo, long) and replaces the easy volume with cross-training. Paces are derived from a recent race. The claim is that lowering running frequency cuts injury and wear while pushing the quality of the remaining three sessions to the limit."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "value": 3
+      },
+      "min_weekly_km": 40,
+      "plan_length_weeks": {
+        "min": 12,
+        "max": 16
+      },
+      "requires_track": false,
+      "note": {
+        "ko": "러닝은 주 3회지만 전제는 2회 이상의 크로스 트레이닝을 더한 총 5세션이다. '적게 달린다'가 '적게 훈련한다'는 아니다.",
+        "en": "Three runs a week, but the premise is a total of five sessions with two or more cross-training days added. 'Run less' does not mean 'train less'."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "daniels",
+        "anchor_change": "daniels-vdot -> race_pace_ref",
+        "silent": false,
+        "note": {
+          "ko": "세 키 런의 페이스는 최근 레이스에서 나온다(VDOT과 비슷한 방식). 진짜 비용은 앵커가 아니라 구조다. 매일의 이지 유산소 볼륨이 사라지고 크로스 트레이닝으로 대체되는데, 러닝 특이적 내구성은 그만큼 덜 자극된다.",
+          "en": "The three key runs take pace from a recent race (much like VDOT). The real cost is structural, not the anchor: the daily easy aerobic volume disappears, replaced by cross-training, so run-specific durability is stimulated less."
+        }
+      },
+      {
+        "from": "hansons",
+        "anchor_change": "race_pace_ref -> race_pace_ref",
+        "silent": false,
+        "note": {
+          "ko": "앵커는 레이스 페이스로 같지만 실행 조건이 정반대다. Hansons는 주 6일 고volume 누적 피로, FIRST는 주 3회 러닝 + 크로스. 같은 페이스 언어 아래 완전히 다른 주간 부하.",
+          "en": "The anchor stays race pace, but the commitment is inverted. Hansons is six high-volume days of cumulative fatigue; FIRST is three runs plus cross-training. The same pace language over a completely different weekly load."
+        }
+      }
+    ],
+    "phases": [
+      {
+        "name": "base",
+        "emphasis": ["easy-run", "long-run"]
+      },
+      {
+        "name": "build",
+        "emphasis": ["vo2max-intervals", "threshold-continuous", "long-run"]
+      },
+      {
+        "name": "peak",
+        "emphasis": ["marathon-pace-run", "vo2max-intervals"]
+      }
+    ],
+    "evidence": {
+      "tier": "tradition",
+      "note": {
+        "ko": "3-키-런 구조는 편리하고 인기 있지만, 이지 볼륨을 크로스 트레이닝으로 대체하는 것의 러닝 특이적 효과는 통제 근거가 빈약하다.",
+        "en": "The three-key-run structure is convenient and popular, but the run-specific effect of replacing easy volume with cross-training is thin on controlled evidence."
+      }
+    },
+    "caveats": [
+      {
+        "ko": "크로스 트레이닝의 강도와 질이 표준화되지 않아, 같은 'FIRST 플랜'이 사람마다 전혀 다른 총 부하가 된다. 낮은 러닝 빈도는 러닝 특이적 내구성에 불리할 수 있다.",
+        "en": "The intensity and quality of cross-training are unstandardised, so the same 'FIRST plan' becomes a very different total load per person. The low run frequency may work against run-specific durability."
+      }
+    ]
   }
 ]
