@@ -1314,5 +1314,1416 @@
       "ko": "웜업 후, 지형이나 기분에 따라 60~180초의 빠른 구간과 느슨한 회복을 4~8회 번갈아 달린다. 시계가 아니라 감각이 구간을 정한다.",
       "en": "After warmup, alternate 60-180s harder surges with loose recoveries 4-8 times, guided by terrain or mood. Feel, not the watch, sets the segments."
     }
+  },
+  {
+    "id": "progression-run",
+    "canonical_name": "Progression Run",
+    "family": "long",
+    "status": "draft",
+    "target_adaptation": ["running-economy", "fat-oxidation", "pacing-skill", "glycogen-storage"],
+    "venue": ["road-flat", "road-rolling", "any"],
+    "placement": ["build", "peak"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "work",
+          "duration": {
+            "min": 1800,
+            "max": 3600,
+            "unit": "s"
+          },
+          "intensity_ref": "self",
+          "ramp_to": "threshold-continuous"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [3, 7],
+          "confidence": "approx",
+          "note": {
+            "ko": "초반 3에서 후반 7로 올라간다. 넓은 범위가 곧 처방이다.",
+            "en": "Rises from 3 early to 7 late. The wide range is the prescription."
+          }
+        },
+        {
+          "model": "daniels-vdot",
+          "zone": "E-T",
+          "confidence": "approx"
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.65, 0.88],
+          "confidence": "approx"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "시작보다 빠르게 끝내는 주행은 누적 피로 위에서 페이스를 올리는 절제와 후반 이코노미를 훈련한다.",
+        "en": "Finishing faster than you started trains disciplined pace-lifting and late-run economy under accumulating fatigue."
+      },
+      "mechanism": {
+        "ko": "피로가 쌓인 상태에서 의도적으로 강도를 올려 후반 러닝 이코노미와 연료 대사를 자극한다고 본다. 다만 '점진'이라는 형식 자체가 효과를 낸다는 근거는 약하고, 실제 기여는 페이싱 학습일 수 있다.",
+        "en": "Deliberately lifting intensity as fatigue accumulates is thought to stimulate late-run economy and fuel metabolism. But there is little evidence that the 'progression' form itself is what helps; the real contribution may be pacing practice."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "널리 처방되지만 형식의 인과적 이점은 검증되지 않았다.",
+          "en": "Widely prescribed, but the causal benefit of the form is untested."
+        }
+      }
+    },
+    "test": {
+      "detectable": false,
+      "mechanism": {
+        "ko": "후반 이코노미 향상은 현장에서 페이스 감각 학습과 분리되지 않고, 평균 페이스 지표는 점진 구조 때문에 왜곡된다.",
+        "en": "Any late-run economy gain is inseparable in the field from learned pacing, and average-pace metrics are distorted by the progressive structure."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "low"
+    },
+    "common_errors": [
+      {
+        "ko": "초반을 너무 빠르게 시작해 점진이 아니라 그냥 빠른 주행이 된다.",
+        "en": "Starting too fast, so it becomes just a fast run rather than a progression."
+      }
+    ],
+    "instructions": {
+      "ko": "이지로 시작해 마지막 1/3을 역치 부근까지 끌어올리며 30~60분. 급격한 점프가 아니라 매끄러운 상승이 목표다.",
+      "en": "30-60 minutes, starting easy and lifting the last third toward threshold. A smooth rise, not a step change."
+    }
+  },
+  {
+    "id": "vo2max-30-30",
+    "canonical_name": "Short VO2max Intervals",
+    "family": "vo2max",
+    "status": "draft",
+    "target_adaptation": ["vo2max", "running-economy"],
+    "venue": ["track", "road-flat", "treadmill"],
+    "placement": ["build", "peak"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "min": 10,
+            "max": 20
+          },
+          "children": [
+            {
+              "kind": "work",
+              "duration": {
+                "value": 30,
+                "unit": "s"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "value": 30,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "daniels-vdot",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [8, 9],
+          "confidence": "approx"
+        },
+        {
+          "model": "daniels-vdot",
+          "zone": "I",
+          "confidence": "exact"
+        },
+        {
+          "model": "pct_vo2max",
+          "range": [0.95, 1],
+          "confidence": "rough",
+          "note": {
+            "ko": "짧은 반복은 낮은 젖산으로 VO2max 부근 시간을 쌓는 것이 목적이다.",
+            "en": "Short reps aim to accumulate time near VO2max at a lower lactate cost."
+          }
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "짧은 반복(약 30초)은 긴 반복보다 낮은 혈중 젖산으로 VO2max 부근 누적 시간을 늘린다.",
+        "en": "Short (~30s) reps accumulate more time near VO2max at a lower blood-lactate cost than long reps."
+      },
+      "mechanism": {
+        "ko": "30초 노력/30초 회복을 반복하면 VO2가 최대 부근에 머무는 동안 젖산이 완전히 축적되기 전에 회복이 온다. 총 고강도 시간을 늘리되 무산소 비용을 낮추는 것이 목적이다.",
+        "en": "Alternating 30s efforts and 30s recoveries keeps VO2 near max while recovery arrives before lactate fully accumulates. The aim is more total high-intensity time at a lower anaerobic cost."
+      },
+      "evidence": {
+        "tier": "plausible",
+        "cite": [
+          "Billat V (2001). Interval training for performance: a scientific and empirical practice. Sports Med 31(1)."
+        ]
+      }
+    },
+    "test": {
+      "detectable": false,
+      "mechanism": {
+        "ko": "VO2max 부근 시간은 호흡가스 없이는 측정 불가하고, 반복 완수 능력은 페이싱과 의욕에 오염된다.",
+        "en": "Time near VO2max is unmeasurable without gas exchange, and rep completion is contaminated by pacing and motivation."
+      },
+      "evidence": {
+        "tier": "plausible",
+        "cite": ["Billat V (2001). Sports Med 31(1)."]
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate"
+    },
+    "common_errors": [
+      {
+        "ko": "첫 반복을 전력으로 달려 후반이 무너진다. 목표는 전 반복 균일한 I 강도다.",
+        "en": "Sprinting the first reps so the later ones collapse. The target is even I intensity across all reps."
+      }
+    ],
+    "instructions": {
+      "ko": "웜업 후 30초 I 강도 / 30초 조깅 회복을 10~20회. 페이스가 아니라 균일함이 성패를 가른다.",
+      "en": "After warmup, 30s at I intensity / 30s jog recovery, 10-20 times. Evenness, not pace, decides the session."
+    }
+  },
+  {
+    "id": "rep-intervals",
+    "canonical_name": "Neuromuscular Repetitions",
+    "family": "speed",
+    "status": "draft",
+    "target_adaptation": ["running-economy", "neuromuscular-recruitment"],
+    "venue": ["track"],
+    "placement": ["base", "build", "peak"],
+    "attribution": "Jack Daniels",
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "min": 6,
+            "max": 10
+          },
+          "children": [
+            {
+              "kind": "work",
+              "distance": {
+                "min": 200,
+                "max": 400,
+                "unit": "m"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "min": 120,
+                "max": 240,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "daniels-vdot",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [7, 9],
+          "confidence": "approx",
+          "note": {
+            "ko": "빠르지만 편안하고 이완된 채로. 힘이 들어가면 R이 아니다.",
+            "en": "Fast but relaxed and smooth. If it feels forced, it is not R."
+          }
+        },
+        {
+          "model": "daniels-vdot",
+          "zone": "R",
+          "confidence": "exact"
+        },
+        {
+          "model": "pct_vo2max",
+          "range": [1, 1.1],
+          "confidence": "rough",
+          "note": {
+            "ko": "R은 대사보다 신경근을 노린다. 완전 회복이 핵심이라 젖산은 낮게 유지된다.",
+            "en": "R targets the neuromuscular system over metabolism. Full recovery keeps lactate low."
+          }
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "완전 회복을 둔 빠르고 이완된 반복은 유의한 무산소 스트레스 없이 러닝 이코노미와 신경근 동원을 개선한다.",
+        "en": "Fast, relaxed reps with full recovery improve running economy and neuromuscular recruitment without significant anaerobic stress."
+      },
+      "mechanism": {
+        "ko": "짧은 R 반복은 고역치 운동단위를 동원하고 협응과 근-건 강성을 다듬는다. 완전 회복이 젖산 축적을 막아 자극이 신경근에 국한된다는 것이 설계 의도다.",
+        "en": "Short R reps recruit high-threshold motor units and refine coordination and musculotendinous stiffness. Full recovery prevents lactate accumulation so the stimulus stays neuromuscular by design."
+      },
+      "evidence": {
+        "tier": "plausible",
+        "cite": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."]
+      }
+    },
+    "test": {
+      "detectable": false,
+      "mechanism": {
+        "ko": "러닝 이코노미는 실험실에서만 신뢰성 있게 측정되고, 현장의 '더 가벼움'은 신경 학습·플라시보와 분리되지 않는다.",
+        "en": "Economy is only reliably measured in a lab; the field sense of 'lighter' legs is inseparable from neural learning and placebo."
+      },
+      "evidence": {
+        "tier": "plausible",
+        "cite": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."]
+      }
+    },
+    "prerequisites": {
+      "requires_workouts": ["strides"],
+      "note": {
+        "ko": "스트라이드로 이완된 빠른 러닝에 먼저 익숙해진 뒤 볼륨을 늘리는 순서가 안전하다.",
+        "en": "Get comfortable with relaxed fast running via strides first, then add volume."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate"
+    },
+    "common_errors": [
+      {
+        "ko": "회복을 줄이고 무리하게 밀어붙여 R이 무산소 세션으로 변질된다.",
+        "en": "Cutting recovery and pushing, so R degenerates into an anaerobic session."
+      }
+    ],
+    "instructions": {
+      "ko": "웜업 후 200~400m를 R 페이스로 이완되게, 사이 완전 회복(2~4분) 6~10회. 속도가 아니라 이완이 목표다.",
+      "en": "After warmup, 200-400m at R pace, relaxed, with full recovery (2-4 min), 6-10 times. The target is relaxation, not speed."
+    }
+  },
+  {
+    "id": "downhill-repeats",
+    "canonical_name": "Downhill Repeats",
+    "family": "hill",
+    "status": "draft",
+    "target_adaptation": [
+      "tendon-stiffness",
+      "musculoskeletal-durability",
+      "neuromuscular-recruitment"
+    ],
+    "venue": ["hill", "road-rolling"],
+    "placement": ["base", "build"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "min": 6,
+            "max": 10
+          },
+          "children": [
+            {
+              "kind": "work",
+              "duration": {
+                "min": 30,
+                "max": 60,
+                "unit": "s"
+              },
+              "intensity_ref": "self",
+              "note": {
+                "ko": "내리막을 통제된 빠른 착지로.",
+                "en": "Downhill, with controlled fast footstrikes."
+              }
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "min": 120,
+                "max": 180,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run",
+              "note": {
+                "ko": "걸어 올라오며 회복.",
+                "en": "Walk back up to recover."
+              }
+            }
+          ]
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [5, 7],
+          "confidence": "approx",
+          "note": {
+            "ko": "심폐 노력은 중간이지만 근육 부하(신전성)는 높다. RPE가 근손상을 과소평가한다.",
+            "en": "Cardiovascular effort is moderate but muscular (eccentric) load is high. RPE understates the muscle damage."
+          }
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.7, 0.82],
+          "confidence": "rough",
+          "note": {
+            "ko": "신전성 운동은 HR/VO2를 근육 부하에서 분리시킨다. 여기서 HR은 강도를 오도한다.",
+            "en": "Eccentric work decouples HR/VO2 from muscle load. HR misleads about intensity here."
+          }
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "한 번의 내리막 주행이 보호 효과(반복-부하 효과)를 만들어, 이후의 내리막 세션은 훨씬 적은 근손상과 통증을 일으킨다.",
+        "en": "A single downhill session confers protection (the repeated-bout effect) so a later downhill session causes markedly less muscle damage and soreness."
+      },
+      "mechanism": {
+        "ko": "신전성 수축은 근섬유에 기계적 손상을 준다. 첫 노출 후 신경 동원 패턴과 세포골격이 재조직돼, 같은 자극에 대한 손상 반응이 몇 주간 감소한다. 이것이 반복-부하 효과다.",
+        "en": "Eccentric contractions cause mechanical damage to muscle fibres. After the first exposure, neural recruitment and cytoskeletal structure remodel, so the damage response to the same stimulus is reduced for weeks. This is the repeated-bout effect."
+      },
+      "evidence": {
+        "tier": "plausible",
+        "cite": [
+          "McHugh MP (2003). Recent advances in the understanding of the repeated bout effect. Scand J Med Sci Sports 13(2)."
+        ]
+      }
+    },
+    "test": {
+      "detectable": true,
+      "what": {
+        "ko": "두 번째 내리막 세션(1~3주 뒤)의 24~48시간 지연성 근통증이 첫 세션보다 뚜렷하게 적다.",
+        "en": "Delayed-onset soreness at 24-48h after a second downhill session (1-3 weeks later) is clearly less than after the first."
+      },
+      "when_weeks": {
+        "min": 1,
+        "max": 3
+      },
+      "mechanism": {
+        "ko": "반복-부하 효과. 근육이 좋아진 게 아니라 같은 손상에 덜 반응하게 된 것이다.",
+        "en": "The repeated-bout effect. The muscle did not get stronger; it became less responsive to the same damage."
+      },
+      "confounds": [
+        {
+          "factor": "soreness-subjectivity",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "통증은 주관적이고 기대에 영향받는다. 정량 지표(근력 저하) 없이는 신뢰도가 낮다.",
+            "en": "Soreness is subjective and shaped by expectation. Without a quantitative marker (strength loss) it is low-reliability."
+          }
+        },
+        {
+          "factor": "session-load-mismatch",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "두 세션의 경사·속도·거리가 다르면 손상 자극 자체가 달라 비교가 무의미해진다.",
+            "en": "If the two sessions differ in grade, speed, or distance, the damage stimulus itself differs and the comparison collapses."
+          }
+        }
+      ],
+      "if_absent": {
+        "ko": "통증 감소가 없다면 (1) 첫 세션이 보호를 유도하기엔 너무 약했거나 (2) 간격이 너무 길어 보호가 소실됐거나 (3) 두 자극이 서로 다른 것이다.",
+        "en": "No reduction: (1) the first session was too easy to induce protection, (2) the gap was too long and protection waned, or (3) the two stimuli were not the same."
+      },
+      "evidence": {
+        "tier": "plausible",
+        "cite": ["McHugh MP (2003). Scand J Med Sci Sports 13(2)."]
+      }
+    },
+    "safety": {
+      "injury_risk": "high",
+      "note": {
+        "ko": "준비 안 된 신전성 부하는 심한 근손상을 일으킨다. 볼륨을 아주 보수적으로 시작할 것.",
+        "en": "Unprepared eccentric load causes severe muscle damage. Start the volume very conservatively."
+      }
+    },
+    "common_errors": [
+      {
+        "ko": "첫 세션부터 볼륨을 크게 잡아 일주일을 통증으로 날린다.",
+        "en": "Taking too much volume on the very first session and losing a week to soreness."
+      }
+    ],
+    "instructions": {
+      "ko": "완만한 내리막에서 30~60초를 통제된 빠른 착지로, 걸어 올라와 회복, 6~10회. 첫 노출은 반드시 적게.",
+      "en": "On a gentle downhill, run 30-60s with controlled fast footstrikes, walk back up, 6-10 times. Keep the first exposure small."
+    }
+  },
+  {
+    "id": "race-pace-intervals",
+    "canonical_name": "Race-Pace Intervals",
+    "family": "race-pace",
+    "status": "draft",
+    "target_adaptation": ["running-economy", "lactate-clearance", "pacing-skill", "vo2max"],
+    "venue": ["track", "road-flat"],
+    "placement": ["build", "peak"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "min": 4,
+            "max": 8
+          },
+          "children": [
+            {
+              "kind": "work",
+              "distance": {
+                "min": 800,
+                "max": 1600,
+                "unit": "m"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "min": 120,
+                "max": 240,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "race_pace_ref",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [6, 8],
+          "confidence": "approx"
+        },
+        {
+          "model": "race_pace_ref",
+          "value": "goal 5K-10K pace",
+          "confidence": "exact"
+        },
+        {
+          "model": "daniels-vdot",
+          "zone": "T-I",
+          "confidence": "approx"
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.88, 0.95],
+          "confidence": "approx"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "목표 레이스 페이스를 인터벌로 반복하면 그 특정 페이스에 대한 내성과 페이싱 정확도가 향상된다.",
+        "en": "Repeating goal race pace in intervals improves tolerance of, and pacing accuracy at, that specific pace."
+      },
+      "mechanism": {
+        "ko": "회복을 두어 목표 페이스의 총 거리를 연속 주행보다 늘린다. 생리적 자극(젖산 제거·이코노미)과 함께 '그 페이스가 어떤 느낌인지'를 신경계에 새기는 특이성 학습이 핵심이다.",
+        "en": "Recoveries let you cover more total distance at goal pace than a continuous run. Alongside the physiological stimulus (lactate clearance, economy), the key is specificity - imprinting on the nervous system what that pace feels like."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "특이적 세션으로 널리 쓰이지만 '레이스 페이스 반복'의 인과적 우월성은 통제 검증이 없다.",
+          "en": "Widely used as a specific session, but the causal superiority of 'race-pace repetition' is untested."
+        }
+      }
+    },
+    "test": {
+      "detectable": true,
+      "what": {
+        "ko": "4~6주에 걸쳐 목표 페이스로 무너지지 않고 유지 가능한 총 거리가 늘거나, 같은 거리를 더 낮은 RPE로 수행한다.",
+        "en": "Over 4-6 weeks, more total distance holdable at goal pace without fade, or the same distance at a lower RPE."
+      },
+      "when_weeks": {
+        "min": 4,
+        "max": 6
+      },
+      "mechanism": {
+        "ko": "특이적 이코노미와 젖산 제거 개선. 단, 상당 부분은 페이스 감각 학습일 수 있다.",
+        "en": "Specific economy and lactate clearance - though much of it may be learned pace judgment."
+      },
+      "confounds": [
+        {
+          "factor": "pacing-skill",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "목표 페이스를 정확히 맞추는 학습만으로도 지속 거리가 늘어 보인다.",
+            "en": "Learning to hit goal pace accurately alone makes sustainable distance look longer."
+          }
+        },
+        {
+          "factor": "day-readiness",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "세션 당일 컨디션이 결과를 크게 흔든다. 단일 세션 비교는 무의미하다.",
+            "en": "Day-of readiness swings the result. Single-session comparison is meaningless."
+          }
+        }
+      ],
+      "if_absent": {
+        "ko": "향상이 없다면 (1) 목표 페이스가 비현실적이거나 (2) 회복이 너무 길어 자극이 약했거나 (3) 이미 그 페이스에 잘 적응된 것이다.",
+        "en": "No gain: (1) the goal pace is unrealistic, (2) recoveries were too long and the stimulus was weak, or (3) already well adapted to that pace."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate"
+    },
+    "common_errors": [
+      {
+        "ko": "목표 페이스가 비현실적이면 세션 전체가 VO2max 세션이 되어 특이성을 잃는다.",
+        "en": "If the goal pace is unrealistic the whole session becomes a VO2max session and loses its specificity."
+      }
+    ],
+    "instructions": {
+      "ko": "웜업 후 800~1600m를 목표 5K~10K 페이스로, 사이 2~4분 조깅 회복 4~8회. 페이스 정확도가 볼륨보다 중요하다.",
+      "en": "After warmup, 800-1600m at goal 5K-10K pace, 2-4 min jog recovery, 4-8 times. Pace accuracy matters more than volume."
+    }
+  },
+  {
+    "id": "hill-sprints",
+    "canonical_name": "Short Hill Sprints",
+    "family": "speed",
+    "status": "draft",
+    "target_adaptation": ["neuromuscular-recruitment", "tendon-stiffness", "running-economy"],
+    "venue": ["hill"],
+    "placement": ["base", "build"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "min": 4,
+            "max": 10
+          },
+          "children": [
+            {
+              "kind": "work",
+              "duration": {
+                "min": 8,
+                "max": 12,
+                "unit": "s"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "min": 120,
+                "max": 180,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run",
+              "note": {
+                "ko": "걸어 내려와 완전 회복.",
+                "en": "Walk down to full recovery."
+              }
+            }
+          ]
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [9, 10],
+          "confidence": "approx",
+          "note": {
+            "ko": "8~10초 최대 노력. 짧아서 무산소·심폐 스트레스는 거의 없다.",
+            "en": "8-10s maximal effort. Too short for meaningful anaerobic or cardiovascular stress."
+          }
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.7, 0.85],
+          "confidence": "rough",
+          "note": {
+            "ko": "8~10초 노력에서 HR은 무의미하다. 오직 최대 힘 발현만 본다.",
+            "en": "On 8-10s efforts HR is meaningless. Only maximal force output matters."
+          }
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "매우 짧은 최대 오르막 스프린트는 최소한의 대사 스트레스로 고역치 운동단위를 동원하고 근-건 강성을 높인다.",
+        "en": "Very short maximal uphill sprints recruit high-threshold motor units and increase musculotendinous stiffness with minimal metabolic stress."
+      },
+      "mechanism": {
+        "ko": "8~10초 최대 노력은 무산소 대사가 지배하기 전에 끝나므로 젖산 부담 없이 신경근 자극만 남는다. 경사가 속도를 제한해 평지 전력 스프린트보다 햄스트링 부상 위험이 낮다는 것이 이 워크아웃의 논거다.",
+        "en": "An 8-10s maximal effort ends before anaerobic metabolism dominates, leaving a neuromuscular stimulus without a lactate load. The gradient caps speed, so the argument is a lower hamstring-injury risk than flat all-out sprints."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "코칭에서 널리 쓰이지만 이코노미·부상 이점의 통제 근거는 빈약하다.",
+          "en": "Widely used in coaching, but thin on controlled evidence for economy or injury benefits."
+        }
+      }
+    },
+    "test": {
+      "detectable": false,
+      "mechanism": {
+        "ko": "신경근·건 강성 변화는 현장 측정이 어렵고, 체감되는 '탄력'은 학습·플라시보와 분리되지 않는다.",
+        "en": "Neuromuscular and tendon-stiffness changes are hard to measure in the field; the felt 'spring' is inseparable from learning and placebo."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate",
+      "note": {
+        "ko": "짧지만 최대 노력이라 준비운동 없이는 아킬레스·종아리 위험이 크다.",
+        "en": "Short but maximal, so without a thorough warmup the Achilles and calf risk is high."
+      }
+    },
+    "common_errors": [
+      {
+        "ko": "hill-repeats(30~90초)와 혼동해 너무 길게 달리면 신경근이 아니라 무산소 자극이 된다.",
+        "en": "Confusing it with hill-repeats (30-90s) and running too long turns it into an anaerobic stimulus, not a neuromuscular one."
+      }
+    ],
+    "instructions": {
+      "ko": "가파른 언덕에서 8~12초를 전력으로, 걸어 내려와 완전 회복, 4~10회. 지속이 아니라 폭발적 힘이 목표다.",
+      "en": "On a steep hill, 8-12s all-out, walk down to full recovery, 4-10 times. Explosive force, not duration, is the target."
+    }
+  },
+  {
+    "id": "anaerobic-intervals",
+    "canonical_name": "Anaerobic Speed-Endurance Intervals",
+    "family": "speed",
+    "status": "draft",
+    "target_adaptation": ["lactate-clearance", "neuromuscular-recruitment", "vo2max"],
+    "venue": ["track"],
+    "placement": ["peak"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "min": 5,
+            "max": 10
+          },
+          "children": [
+            {
+              "kind": "work",
+              "distance": {
+                "min": 200,
+                "max": 600,
+                "unit": "m"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "min": 180,
+                "max": 300,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [8, 10],
+          "confidence": "approx"
+        },
+        {
+          "model": "lactate_mmol",
+          "range": [8, 14],
+          "confidence": "rough",
+          "note": {
+            "ko": "의도적으로 높은 젖산을 만든다. 절대값은 개인차가 커서 rough.",
+            "en": "Deliberately drives high lactate. The absolute value varies widely, so rough."
+          }
+        },
+        {
+          "model": "pct_vo2max",
+          "range": [1.05, 1.2],
+          "confidence": "rough"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "불완전 회복을 둔 VO2max 초과 반복은 높은 혈중 젖산에 대한 내성과 제거 능력을 높인다.",
+        "en": "Repeated efforts above VO2max with incomplete recovery raise tolerance of, and clearance from, high blood lactate."
+      },
+      "mechanism": {
+        "ko": "짧고 매우 빠른 반복이 다량의 젖산과 수소이온을 생성하고, 불완전 회복이 그 상태를 누적시켜 완충·제거 기전을 자극한다고 본다. 중장거리 후반 스퍼트에 특이적인 자극이다.",
+        "en": "Short very fast reps generate large amounts of lactate and hydrogen ions, and incomplete recovery accumulates that state, thought to stimulate buffering and clearance. A stimulus specific to the late-race surge in middle and long distance."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "트랙 전통에서 왔고, 내성 향상의 통제 근거는 제한적이다.",
+          "en": "From track tradition; controlled evidence for improved tolerance is limited."
+        }
+      }
+    },
+    "test": {
+      "detectable": true,
+      "what": {
+        "ko": "3~5주에 걸쳐 페이스가 무너지기 전 완수하는 반복 수가 늘거나, 반복 간 페이스 회복이 빨라진다.",
+        "en": "Over 3-5 weeks, more reps completed before pace fades, or faster pace recovery between reps."
+      },
+      "when_weeks": {
+        "min": 3,
+        "max": 5
+      },
+      "mechanism": {
+        "ko": "완충·젖산 제거 개선으로 추정. 다만 의욕·각성의 기여가 크다.",
+        "en": "Presumed better buffering and lactate clearance - but motivation and arousal contribute heavily."
+      },
+      "confounds": [
+        {
+          "factor": "arousal-motivation",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "고강도 무산소 세션의 수행은 그날의 각성 상태에 크게 좌우된다.",
+            "en": "Performance in high-intensity anaerobic sessions depends heavily on that day's arousal."
+          }
+        },
+        {
+          "factor": "pacing-skill",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "반복 배분을 배우는 것만으로도 완수 반복 수가 늘어 보인다.",
+            "en": "Just learning to distribute effort across reps makes completed-rep count look higher."
+          }
+        }
+      ],
+      "if_absent": {
+        "ko": "무변화는 (1) 반복 수가 과부하를 주기엔 적었거나 (2) 회복이 너무 완전해 젖산이 누적되지 않았거나 (3) 이미 무산소가 발달된 것이다.",
+        "en": "No change: (1) too few reps to overload, (2) recovery too complete so lactate never accumulated, or (3) anaerobic capacity already developed."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "high",
+      "note": {
+        "ko": "가장 부상·과훈련 위험이 큰 세션이다. 시즌당 소수로 제한한다.",
+        "en": "The highest injury and overtraining risk here. Limit to a few per season."
+      }
+    },
+    "common_errors": [
+      {
+        "ko": "빈도를 높여 남용하면 회복이 밀리고 이득 없이 피로만 쌓인다.",
+        "en": "Overusing it by raising frequency defers recovery and piles up fatigue with no gain."
+      }
+    ],
+    "instructions": {
+      "ko": "웜업 후 200~600m를 VO2max보다 빠르게, 사이 3~5분 회복 5~10회. 소수 정예 세션이며 남용 금지.",
+      "en": "After warmup, 200-600m faster than VO2max pace, 3-5 min recovery, 5-10 times. A rare, select session - do not overuse."
+    }
+  },
+  {
+    "id": "pace-alternations",
+    "canonical_name": "Pace Alternations",
+    "family": "threshold",
+    "status": "draft",
+    "target_adaptation": ["lactate-clearance", "mlss-shift", "running-economy"],
+    "venue": ["road-flat", "track"],
+    "placement": ["build", "peak"],
+    "attribution": "Renato Canova",
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "min": 4,
+            "max": 8
+          },
+          "children": [
+            {
+              "kind": "work",
+              "distance": {
+                "value": 1000,
+                "unit": "m"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "distance": {
+                "value": 1000,
+                "unit": "m"
+              },
+              "intensity_ref": "marathon-pace-run",
+              "note": {
+                "ko": "이지가 아니라 마라톤 페이스 부근의 '플로트'.",
+                "en": "Not easy - a 'float' near marathon pace."
+              }
+            }
+          ]
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [6, 8],
+          "confidence": "approx",
+          "note": {
+            "ko": "빠른 구간과 플로트를 평균하면 역치 부근에 머문다.",
+            "en": "Averaging the fast segment and the float keeps it near threshold."
+          }
+        },
+        {
+          "model": "daniels-vdot",
+          "zone": "T",
+          "confidence": "approx"
+        },
+        {
+          "model": "lactate_mmol",
+          "range": [2.5, 5],
+          "confidence": "rough"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "이지 회복 없이 빠른 구간과 중간 구간을 번갈으면 역치 부근의 높은 평균 강도를 큰 볼륨으로 유지할 수 있다.",
+        "en": "Alternating fast and moderate segments without easy recovery sustains a high average intensity near threshold over a large volume."
+      },
+      "mechanism": {
+        "ko": "플로트가 이지가 아니라 마라톤 페이스라 젖산이 완전히 회복되지 않고, 세션 전체가 역치 부근에 머문다. 연속 역치주보다 더 많은 유효 볼륨을 목표로 한다. Canova 방법의 특징적 세션이다.",
+        "en": "Because the float is marathon pace rather than easy, lactate never fully recovers and the whole session stays near threshold. The aim is more effective volume than a continuous tempo. A signature session of the Canova method."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "엘리트 코칭 실무에서 왔고 통제 검증은 없다.",
+          "en": "From elite coaching practice, without controlled validation."
+        }
+      }
+    },
+    "test": {
+      "detectable": false,
+      "mechanism": {
+        "ko": "역치 부근 유효 볼륨의 이점은 현장에서 페이싱·연료·컨디션과 분리되지 않는다.",
+        "en": "The benefit of effective volume near threshold is inseparable in the field from pacing, fuelling and condition."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "prerequisites": {
+      "requires_workouts": ["threshold-continuous", "marathon-pace-run"],
+      "min_weekly_volume_km": 60,
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate"
+    },
+    "common_errors": [
+      {
+        "ko": "플로트를 이지로 떨어뜨려 세션이 그냥 인터벌이 되고 '연속 역치'라는 요점이 사라진다.",
+        "en": "Letting the float drop to easy, so it becomes ordinary intervals and loses the 'continuous threshold' point."
+      }
+    ],
+    "instructions": {
+      "ko": "웜업 후 1km 빠르게 / 1km 마라톤 페이스 플로트를 쉬지 않고 4~8회. 플로트를 이지로 떨어뜨리지 않는 것이 핵심.",
+      "en": "After warmup, alternate 1km fast / 1km marathon-pace float without stopping, 4-8 times. The key is not letting the float drop to easy."
+    }
+  },
+  {
+    "id": "time-trial",
+    "canonical_name": "Time Trial",
+    "family": "race-pace",
+    "status": "draft",
+    "target_adaptation": ["pacing-skill", "vo2max", "lactate-clearance"],
+    "venue": ["track", "road-flat"],
+    "placement": ["build", "peak", "taper"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "work",
+          "duration": {
+            "min": 600,
+            "max": 1800,
+            "unit": "s"
+          },
+          "intensity_ref": "self"
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [9, 10],
+          "confidence": "approx",
+          "note": {
+            "ko": "주어진 거리에 대한 최대 지속 노력. 정의상 현재 레이스 페이스다.",
+            "en": "The maximal sustainable effort for the distance. By definition, current race pace."
+          }
+        },
+        {
+          "model": "race_pace_ref",
+          "value": "current race pace",
+          "confidence": "exact"
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.92, 1],
+          "confidence": "approx"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "주기적 최대 노력은 자극을 주는 동시에 다른 세션들이 의존하는 피트니스 앵커(VDOT·CS·목표 페이스)를 재보정한다.",
+        "en": "A periodic maximal effort both provides a stimulus and recalibrates the fitness anchor (VDOT, CS, goal pace) that other sessions depend on."
+      },
+      "mechanism": {
+        "ko": "타임트라이얼은 고강도 자극이자 측정이다. 결과가 VDOT나 CS를 갱신하고, 그러면 그로부터 파생된 모든 훈련 페이스가 함께 이동한다. 이 이중 역할이 다른 워크아웃과 다른 점이다.",
+        "en": "A time trial is both a high-intensity stimulus and a measurement. Its result updates VDOT or CS, and every training pace derived from those then moves with it. This dual role is what sets it apart from other workouts."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "보편적으로 쓰이지만 '자극으로서의' 최적 빈도·형식은 검증되지 않았다.",
+          "en": "Universally used, but the optimal frequency and form 'as a stimulus' are untested."
+        }
+      }
+    },
+    "test": {
+      "detectable": true,
+      "what": {
+        "ko": "결과 그 자체가 관찰값이다 — 같은 거리의 기록이 향상되거나, 같은 페이스를 더 낮은 HR로 수행한다.",
+        "en": "The result itself is the observation - the time for the same distance improves, or the same pace is held at a lower HR."
+      },
+      "when_weeks": {
+        "min": 3,
+        "max": 6
+      },
+      "mechanism": {
+        "ko": "피트니스 향상. 단 이 지표는 페이싱 스킬과 그날의 신선도에 크게 오염된다.",
+        "en": "Improved fitness - but this metric is heavily contaminated by pacing skill and day-of freshness."
+      },
+      "confounds": [
+        {
+          "factor": "taper-freshness",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "테이퍼 후엔 피트니스 변화 없이도 기록이 좋아진다. 피로 상태의 TT와 신선한 TT는 비교 불가.",
+            "en": "After a taper the time improves with no fitness change. A fatigued TT and a fresh TT are not comparable."
+          }
+        },
+        {
+          "factor": "course-weather",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "바람·더위·코스가 기록을 흔든다. 피트니스가 아니라 조건의 차이.",
+            "en": "Wind, heat and course swing the time - a difference in conditions, not fitness."
+          }
+        },
+        {
+          "factor": "pacing-skill",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "페이스 배분을 배우는 것만으로 같은 피트니스에서 기록이 좋아진다.",
+            "en": "Just learning to distribute pace improves the time at the same fitness."
+          }
+        }
+      ],
+      "if_absent": {
+        "ko": "기록 정체가 곧 피트니스 정체는 아니다. 먼저 (1) 테스트 당일 신선도 (2) 조건 (3) 페이싱을 의심할 것.",
+        "en": "A stalled time is not a stalled fitness. Suspect first (1) freshness on the day, (2) conditions, (3) pacing."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate"
+    },
+    "common_errors": [
+      {
+        "ko": "피로한 상태에서 자주 반복해 측정으로도 자극으로도 의미를 잃는다.",
+        "en": "Repeating it too often while fatigued, so it loses meaning both as a measurement and as a stimulus."
+      }
+    ],
+    "instructions": {
+      "ko": "충분히 웜업하고 10~30분(또는 정해진 거리)을 통제된 최대 노력으로. 앵커 갱신이 목적이면 신선한 상태에서 수행한다.",
+      "en": "Warm up thoroughly, then run 10-30 minutes (or a set distance) as a controlled maximal effort. If the aim is to update the anchor, run it fresh."
+    }
+  },
+  {
+    "id": "mona-fartlek",
+    "canonical_name": "Structured Descending Fartlek",
+    "family": "fartlek",
+    "status": "draft",
+    "target_adaptation": ["vo2max", "lactate-clearance", "running-economy", "pacing-skill"],
+    "venue": ["road-rolling", "grass", "any"],
+    "placement": ["build", "peak"],
+    "attribution": "Steve Moneghetti",
+    "structure": {
+      "segments": [
+        {
+          "kind": "warmup",
+          "duration": {
+            "value": 900,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "value": 2
+          },
+          "children": [
+            {
+              "kind": "work",
+              "duration": {
+                "value": 90,
+                "unit": "s"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "value": 90,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "value": 4
+          },
+          "children": [
+            {
+              "kind": "work",
+              "duration": {
+                "value": 60,
+                "unit": "s"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "value": 60,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "value": 4
+          },
+          "children": [
+            {
+              "kind": "work",
+              "duration": {
+                "value": 30,
+                "unit": "s"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "value": 30,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": {
+            "value": 4
+          },
+          "children": [
+            {
+              "kind": "work",
+              "duration": {
+                "value": 15,
+                "unit": "s"
+              },
+              "intensity_ref": "self"
+            },
+            {
+              "kind": "recovery",
+              "duration": {
+                "value": 15,
+                "unit": "s"
+              },
+              "intensity_ref": "easy-run"
+            }
+          ]
+        },
+        {
+          "kind": "cooldown",
+          "duration": {
+            "value": 600,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [7, 9],
+          "confidence": "approx",
+          "note": {
+            "ko": "구간이 짧아질수록 강도가 오른다. 총 20분 고정 구조.",
+            "en": "As the reps shorten the intensity rises. A fixed 20-minute structure."
+          }
+        },
+        {
+          "model": "daniels-vdot",
+          "zone": "I",
+          "confidence": "approx"
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.85, 0.95],
+          "confidence": "rough"
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "고정된 하강 인터벌 파틀렉(2x90, 4x60, 4x30, 4x15초)은 반복 가능한 VO2max·스피드 혼합 자극을 시간 기반·지형 자유로 제공한다.",
+        "en": "A fixed descending-interval fartlek (2x90, 4x60, 4x30, 4x15s) delivers a repeatable, time-based, terrain-flexible blend of VO2max and speed stimulus."
+      },
+      "mechanism": {
+        "ko": "확률적 파틀렉과 달리 구조가 고정돼 있어 세션 간 비교가 가능하다. 구간이 짧아질수록 강도가 올라 유산소부터 신경근까지 훑는다. Moneghetti가 정형화한 20분 세션이다.",
+        "en": "Unlike a stochastic fartlek, the fixed structure makes sessions comparable. As the reps shorten, intensity climbs, sweeping from aerobic to neuromuscular. A 20-minute session formalised by Moneghetti."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "엘리트 사이에서 인기 있는 고정 세션이지만 통제 검증은 없다.",
+          "en": "A fixed session popular among elites, but without controlled validation."
+        }
+      }
+    },
+    "test": {
+      "detectable": false,
+      "mechanism": {
+        "ko": "혼합 자극이라 특정 적응을 분리해 관찰할 수 없고, 지형·컨디션이 세션 결과를 흔든다.",
+        "en": "The blended stimulus cannot be resolved into a specific adaptation by observation, and terrain and condition swing the outcome."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate"
+    },
+    "common_errors": [
+      {
+        "ko": "90초 구간을 과하게 밀어붙여 마지막 15초 구간의 스피드가 죽는다.",
+        "en": "Overcooking the 90s reps so the speed in the final 15s reps dies."
+      }
+    ],
+    "instructions": {
+      "ko": "웜업 후 90초x2, 60초x4, 30초x4, 15초x4를 각 구간과 동일한 이지 회복으로. 총 20분 고정. 뒤로 갈수록 빠르게.",
+      "en": "After warmup: 90s x2, 60s x4, 30s x4, 15s x4, each with an equal easy recovery. A fixed 20 minutes. Faster as it goes."
+    }
   }
 ]

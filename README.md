@@ -6,7 +6,7 @@ For people who like trying different methods. Light to browse, honest underneath
 
 Modeled on the shape of [exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset), but the atoms are different, so the schema is too.
 
-**Status: early.** 12 systems, 10 workouts. Every row is `status: draft` — no citation has been human-verified. All eight `intensity_model` anchors are now represented by at least one system.
+**Status: early.** 12 systems, 20 workouts. Every row is `status: draft` — no citation has been human-verified. All eight `intensity_model` anchors are now represented by at least one system, and all nine workout families are populated.
 
 ---
 
@@ -65,7 +65,7 @@ So rows are hypotheses. `claim.proposition` is one falsifiable sentence; `test` 
 | `plausible` | studied, contested             | **required**  |
 | `tradition` | everyone does it, nobody knows | **forbidden** |
 
-Current distribution: **consensus 3 / plausible 17 / tradition 29.** Tradition dominates. That is the honest shape of running knowledge; forcing the ratio the other way kills the project.
+Current distribution: **consensus 3 / plausible 23 / tradition 45.** Tradition dominates. That is the honest shape of running knowledge; forcing the ratio the other way kills the project.
 
 Enforced at the schema/CI layer, not in a contributor guideline:
 
@@ -120,8 +120,8 @@ Instead, each row carries a falsification procedure:
 ```
 data/
   systems.json       # 12 - the browsing entity. bet / commitment / switching_cost
-  workouts.json      # 10 - detail view. claim / test / structure / intensity
-  usage.json         # 36 - (system, workout) -> calls_it. The collision table.
+  workouts.json      # 20 - detail view. claim / test / structure / intensity
+  usage.json         # 48 - (system, workout) -> calls_it. The collision table.
   schema/*.json      # JSON Schema 2020-12
 scripts/
   validate.mjs       # schema + referential integrity + discipline

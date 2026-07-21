@@ -104,7 +104,7 @@
       },
       {
         "name": "peak",
-        "emphasis": ["vo2max-intervals", "threshold-continuous"]
+        "emphasis": ["vo2max-intervals", "threshold-continuous", "rep-intervals"]
       }
     ],
     "evidence": {
@@ -258,7 +258,7 @@
       },
       {
         "name": "build",
-        "emphasis": ["easy-run", "vo2max-intervals"]
+        "emphasis": ["easy-run", "vo2max-intervals", "vo2max-30-30"]
       }
     ],
     "evidence": {
@@ -349,7 +349,7 @@
       },
       {
         "name": "peak",
-        "emphasis": ["vo2max-intervals", "strides"]
+        "emphasis": ["vo2max-intervals", "strides", "rep-intervals"]
       },
       {
         "name": "taper",
@@ -837,11 +837,11 @@
       },
       {
         "name": "build",
-        "emphasis": ["marathon-pace-run", "threshold-continuous", "long-run"]
+        "emphasis": ["marathon-pace-run", "threshold-continuous", "long-run", "pace-alternations"]
       },
       {
         "name": "peak",
-        "emphasis": ["marathon-pace-run", "vo2max-intervals"]
+        "emphasis": ["marathon-pace-run", "vo2max-intervals", "race-pace-intervals"]
       }
     ],
     "evidence": {
@@ -994,7 +994,7 @@
       },
       {
         "name": "build",
-        "emphasis": ["vo2max-intervals", "threshold-continuous", "long-run"]
+        "emphasis": ["vo2max-intervals", "threshold-continuous", "long-run", "race-pace-intervals"]
       },
       {
         "name": "peak",

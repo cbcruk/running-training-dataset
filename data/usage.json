@@ -352,5 +352,124 @@
       "ko": "FIRST의 셋째 키 런, 롱런이다. 목표 페이스에서 유도된 페이스로 달리는 경우가 많다.",
       "en": "The third key run, the long run, often run at a pace derived from goal race pace."
     }
+  },
+  {
+    "system": null,
+    "workout": "progression-run",
+    "calls_it": "Progression run",
+    "also_known_as": ["Fast-finish run", "Negative-split run"],
+    "note": {
+      "ko": "체계 밖 용어. 'negative split'은 결과(후반이 빠름)를, 'progression'은 방법을 가리킨다.",
+      "en": "Everyday usage. 'Negative split' names the outcome (a faster second half); 'progression' names the method."
+    }
+  },
+  {
+    "system": null,
+    "workout": "vo2max-30-30",
+    "calls_it": "30-30s",
+    "also_known_as": ["Short intervals", "Billat intervals"],
+    "note": {
+      "ko": "30초 노력/30초 회복. Billat의 연구로 대중화돼 그의 이름이 붙기도 한다.",
+      "en": "30s on, 30s off. Popularised by Billat's research, so her name is sometimes attached."
+    }
+  },
+  {
+    "system": "polarized-80-20",
+    "workout": "vo2max-30-30",
+    "calls_it": "Zone 3 short intervals",
+    "note": {
+      "ko": "폴라라이즈드에서 20% 몫의 고강도를 짧은 반복으로 채우는 흔한 형태다.",
+      "en": "A common way to fill polarized's 20% high-intensity share with short reps."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "rep-intervals",
+    "calls_it": "R pace reps",
+    "also_known_as": ["Repetitions", "R intervals"],
+    "note": {
+      "ko": "Daniels의 R 존. VDOT에서 유도되며 대사가 아니라 신경근·이코노미를 노린다.",
+      "en": "Daniels' R zone. Derived from VDOT, targeting the neuromuscular system and economy, not metabolism."
+    }
+  },
+  {
+    "system": null,
+    "workout": "downhill-repeats",
+    "calls_it": "Downhill repeats",
+    "also_known_as": ["Eccentric hill reps", "Downhill strides"],
+    "note": {
+      "ko": "신전성 부하가 정의적 특징이다. 오르막 반복과 정반대의 근육 자극.",
+      "en": "Eccentric loading is the defining feature - the opposite muscular stimulus to uphill repeats."
+    }
+  },
+  {
+    "system": null,
+    "workout": "race-pace-intervals",
+    "calls_it": "Race-pace intervals",
+    "also_known_as": ["Goal-pace intervals", "Specific intervals"],
+    "note": {
+      "ko": "목표 페이스를 인터벌로 반복한다. 어느 거리의 레이스 페이스인지에 따라 강도가 달라진다.",
+      "en": "Repeats goal pace as intervals. The intensity depends on which distance's race pace it is."
+    }
+  },
+  {
+    "system": null,
+    "workout": "hill-sprints",
+    "calls_it": "Hill sprints",
+    "also_known_as": ["Short hill sprints", "Neuromuscular hill sprints"],
+    "note": {
+      "ko": "8~10초 최대 노력. hill-repeats(30~90초)와 자주 혼동되지만 목적과 지속이 완전히 다르다.",
+      "en": "8-10s maximal efforts. Often conflated with hill-repeats (30-90s), but the purpose and duration are entirely different."
+    }
+  },
+  {
+    "system": null,
+    "workout": "anaerobic-intervals",
+    "calls_it": "Speed endurance",
+    "also_known_as": ["Anaerobic intervals", "Lactate tolerance reps"],
+    "note": {
+      "ko": "중장거리 트랙 전통 용어. 젖산 내성을 노리는 소수 정예 세션이다.",
+      "en": "A middle-/long-distance track term. A rare, select session aimed at lactate tolerance."
+    }
+  },
+  {
+    "system": "canova",
+    "workout": "pace-alternations",
+    "calls_it": "Alternations",
+    "also_known_as": ["Canova alternations", "Alternazioni"],
+    "note": {
+      "ko": "Canova의 대표 세션. 이지 회복 없이 빠른 구간과 마라톤 페이스 플로트를 번갈은다.",
+      "en": "Canova's signature session. Alternates fast segments with marathon-pace floats and no easy recovery."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "time-trial",
+    "calls_it": "Time trial",
+    "also_known_as": ["VDOT test", "Tune-up race"],
+    "note": {
+      "ko": "Daniels에게 타임트라이얼/튠업 레이스는 VDOT를 갱신하는 측정이자 자극이다.",
+      "en": "For Daniels a time trial or tune-up race is both the measurement that updates VDOT and a stimulus."
+    }
+  },
+  {
+    "system": "critical-speed",
+    "workout": "time-trial",
+    "calls_it": "CS test",
+    "also_known_as": ["Critical speed test", "3-min / 12-min test"],
+    "note": {
+      "ko": "임계속도 체계에서는 여러 거리의 타임트라이얼이 CS와 W′을 세우는 측정 도구다.",
+      "en": "In the critical-speed system, time trials over several distances are the measurement that sets CS and W'."
+    }
+  },
+  {
+    "system": null,
+    "workout": "mona-fartlek",
+    "calls_it": "Mona fartlek",
+    "also_known_as": ["Moneghetti fartlek", "20-minute fartlek"],
+    "note": {
+      "ko": "Steve Moneghetti의 이름을 딴 고정 20분 세션. 확률적 파틀렉과 달리 구조가 정해져 있다.",
+      "en": "A fixed 20-minute session named after Steve Moneghetti. Unlike a stochastic fartlek, its structure is set."
+    }
   }
 ]
