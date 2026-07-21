@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Enforces the same discipline the data leans on: schema + referential
+# integrity + the project-specific rules in validate.mjs, plus format, lint,
+# type-check, and a production build. If it is not green, the data is not honest.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate (schema + referential integrity + discipline)
+        run: pnpm run validate
+
+      - name: Render (every workout -> schematic svg)
+        run: pnpm run render
+
+      - name: Check (format + lint + types)
+        run: pnpm run check
+
+      - name: Build (browse UI)
+        run: pnpm run build

@@ -1,0 +1,475 @@
+[
+  {
+    "system": "daniels",
+    "workout": "easy-run",
+    "calls_it": "E pace run",
+    "also_known_as": ["Easy run"],
+    "note": {
+      "ko": "VDOT 표에서 유도된 E 페이스. 상한이 있다는 점이 핵심이며, 너무 빠른 E는 E가 아니다.",
+      "en": "E pace derived from the VDOT table. The point is that it has an upper bound; an E run run too fast is not an E run."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "threshold-continuous",
+    "calls_it": "Tempo run",
+    "collides": true,
+    "note": {
+      "ko": "Daniels의 tempo는 역치(T) 페이스, 약 60분 레이스 페이스다. Hansons의 tempo와 같은 단어, 다른 강도.",
+      "en": "Daniels' tempo is threshold (T) pace, roughly 60-minute race pace. Same word as Hansons' tempo, different intensity."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "vo2max-intervals",
+    "calls_it": "I pace intervals",
+    "note": {
+      "ko": "I 존은 VO2max 부근. Daniels는 세션당 볼륨 상한을 명시하는 드문 체계다.",
+      "en": "The I zone sits near VO2max. Daniels is one of the few systems that states a per-session volume cap."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "strides",
+    "calls_it": "Strides",
+    "note": {
+      "ko": "이름 충돌이 없는 드문 경우. 체계 간 합의된 몇 안 되는 용어다.",
+      "en": "A rare case with no naming collision - one of the few terms the systems agree on."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "easy-run",
+    "calls_it": "Easy run",
+    "note": {
+      "ko": "누적 피로가 전제라, 여기서의 easy는 회복이 아니라 피로 위에 얹는 볼륨이다.",
+      "en": "Because cumulative fatigue is the premise, easy here is volume stacked on fatigue, not recovery."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "marathon-pace-run",
+    "calls_it": "Tempo run",
+    "collides": true,
+    "note": {
+      "ko": "Hansons의 tempo는 목표 마라톤 페이스다. Daniels에서 넘어오면 같은 단어를 쓰면서 느려지고, 아무도 알려주지 않는다.",
+      "en": "Hansons' tempo is goal marathon pace. Arriving from Daniels you keep the word and slow down, and nobody tells you."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "threshold-continuous",
+    "calls_it": "Strength workout",
+    "note": {
+      "ko": "Hansons는 이 강도를 tempo가 아니라 strength라 부른다. tempo라는 이름을 마라톤 페이스에 이미 써버렸기 때문이다.",
+      "en": "Hansons calls this intensity strength, not tempo, because it already spent the word tempo on marathon pace."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "vo2max-intervals",
+    "calls_it": "Speed workout",
+    "note": {
+      "ko": "'speed'가 VO2max 인터벌을 가리킨다. 다른 체계에서 speed는 보통 신경근 자극(스트라이드/R 페이스)이다.",
+      "en": "Here speed means VO2max intervals. In other systems speed usually means neuromuscular work such as strides or R pace."
+    }
+  },
+  {
+    "system": "polarized-80-20",
+    "workout": "easy-run",
+    "calls_it": "Zone 1 run",
+    "also_known_as": ["Low-intensity session", "LIT"],
+    "note": {
+      "ko": "존 1은 LT1 아래. 이 체계에서 easy-run은 세션의 약 80%를 차지하는 기본값이다.",
+      "en": "Zone 1 is below LT1. In this system easy-run is the default, carrying roughly 80% of sessions."
+    }
+  },
+  {
+    "system": "polarized-80-20",
+    "workout": "vo2max-intervals",
+    "calls_it": "Zone 3 interval",
+    "also_known_as": ["High-intensity session", "HIT"],
+    "note": {
+      "ko": "20% 몫의 거의 전부가 여기로 간다. 역치 세션이 금지되므로 고강도 선택지가 좁다.",
+      "en": "Nearly the whole 20% share lands here. With threshold sessions vacated, the high-intensity options are narrow."
+    }
+  },
+  {
+    "system": null,
+    "workout": "easy-run",
+    "calls_it": "Base run",
+    "also_known_as": ["Zone 2 run", "Aerobic run"],
+    "note": {
+      "ko": "체계 밖의 일상 용어. 'Zone 2 run'의 존 번호는 어느 체계의 존인지 말하지 않는다는 점에서 이름 충돌보다 더 나쁘다.",
+      "en": "Everyday usage belonging to no system. The zone number in 'Zone 2 run' never says whose zones, which is worse than a name collision."
+    }
+  },
+  {
+    "system": null,
+    "workout": "strides",
+    "calls_it": "Pickups",
+    "also_known_as": ["Accelerations"],
+    "note": {
+      "ko": "코치에 따라 pickup은 스트라이드보다 훨씬 긴 구간을 뜻하기도 한다. 그래서 워크아웃 id에서 금지된 단어다.",
+      "en": "For some coaches a pickup means a far longer surge than a stride, which is why the word is banned from workout ids."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "long-run",
+    "calls_it": "L run",
+    "also_known_as": ["Long E run"],
+    "note": {
+      "ko": "Daniels에게 롱런은 E 강도의 연장이다. 별도 '롱런 페이스'가 있는 게 아니라 그냥 긴 E다.",
+      "en": "For Daniels the long run is an extension of E intensity - not a separate 'long-run pace', just a long E."
+    }
+  },
+  {
+    "system": "hansons",
+    "workout": "long-run",
+    "calls_it": "Long run",
+    "note": {
+      "ko": "Hansons의 롱런은 16마일(약 26km)로 상한이 있다. 누적 피로 전제에서 롱런을 늘리는 대신 주 전체 볼륨을 택한 결과다.",
+      "en": "The Hansons long run is capped at 16 miles (~26km). Given the cumulative-fatigue premise, they cap the long run and spend the volume across the week instead."
+    }
+  },
+  {
+    "system": null,
+    "workout": "long-run",
+    "calls_it": "LSD",
+    "also_known_as": ["Long slow distance", "Long steady run"],
+    "note": {
+      "ko": "'Long slow distance'의 slow가 강도를 지시하는 유일한 단어인데, 어느 체계의 느림인지는 말하지 않는다.",
+      "en": "In 'long slow distance' the word slow is the only intensity cue, and it never says slow by whose standard."
+    }
+  },
+  {
+    "system": null,
+    "workout": "recovery-run",
+    "calls_it": "Recovery run",
+    "also_known_as": ["Recovery jog", "Shakeout"],
+    "note": {
+      "ko": "체계 밖 일상 용어. shakeout은 레이스 전날의 아주 짧은 회복런을 따로 가리키기도 한다.",
+      "en": "Everyday usage belonging to no system. Shakeout sometimes specifically means a very short recovery run the day before a race."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "cruise-intervals",
+    "calls_it": "Cruise intervals",
+    "also_known_as": ["T intervals"],
+    "note": {
+      "ko": "Daniels가 만든 용어. threshold-continuous('Tempo')와 같은 T 페이스지만 짧은 회복으로 나눈 형태다.",
+      "en": "Daniels' own term. Same T pace as threshold-continuous ('Tempo'), but broken up with short recoveries."
+    }
+  },
+  {
+    "system": null,
+    "workout": "hill-repeats",
+    "calls_it": "Hill repeats",
+    "also_known_as": ["Hill reps"],
+    "note": {
+      "ko": "'Hill sprints'와 혼동되지만 후자는 보통 10초 이하의 순수 신경근 자극이라 다른 워크아웃이다.",
+      "en": "Often conflated with 'hill sprints', but those are usually sub-10s pure neuromuscular efforts - a different workout."
+    }
+  },
+  {
+    "system": null,
+    "workout": "fartlek",
+    "calls_it": "Fartlek",
+    "also_known_as": ["Speed play"],
+    "note": {
+      "ko": "스웨덴어로 '스피드 플레이'. 1930년대 Gösta Holmér가 고안한 이름이 그대로 종목 용어가 됐다.",
+      "en": "Swedish for 'speed play'. The name Gösta Holmér coined in the 1930s became the sport's term verbatim."
+    }
+  },
+  {
+    "system": "lydiard",
+    "workout": "easy-run",
+    "calls_it": "Aerobic run",
+    "also_known_as": ["Steady state run"],
+    "note": {
+      "ko": "Lydiard의 베이스는 '가장 좋은 유산소 노력'으로 달리는 aerobic run이다. steady state는 그 상단, 무산소 직전을 가리킨다.",
+      "en": "Lydiard's base is the aerobic run at one's 'best aerobic effort'. Steady state means its upper end, just below anaerobic."
+    }
+  },
+  {
+    "system": "lydiard",
+    "workout": "hill-repeats",
+    "calls_it": "Hill bounding",
+    "also_known_as": ["Hill springing"],
+    "note": {
+      "ko": "Lydiard의 언덕 국면은 페이스 반복이 아니라 튕겨 오르는 바운딩/스프링잉 드릴이다. 같은 'hill'이라도 다른 동작.",
+      "en": "Lydiard's hill phase is bounding and springing drills, not paced repeats. Same word 'hill', a different movement."
+    }
+  },
+  {
+    "system": "pfitzinger",
+    "workout": "threshold-continuous",
+    "calls_it": "LT run",
+    "also_known_as": ["Lactate threshold run", "Tempo run"],
+    "note": {
+      "ko": "Pfitzinger는 이를 젖산 역치(LT) 주행이라 부르고 HR 82~91%로 처방한다. Daniels의 'Tempo'와 같은 강도 영역이지만 앵커가 페이스가 아니라 HR이다.",
+      "en": "Pfitzinger calls this a lactate-threshold (LT) run, prescribed at 82-91% HRmax. Same intensity zone as Daniels' 'Tempo', but anchored on HR, not pace."
+    }
+  },
+  {
+    "system": "pfitzinger",
+    "workout": "marathon-pace-run",
+    "calls_it": "MP run",
+    "also_known_as": ["Marathon-pace run"],
+    "note": {
+      "ko": "Pfitzinger는 긴 주행 안에 마라톤 페이스 구간을 넣는다. Hansons의 'tempo=마라톤 페이스'와 같은 강도지만 이름이 충돌하지 않는다.",
+      "en": "Pfitzinger embeds marathon-pace segments inside long runs. Same intensity as Hansons' 'tempo = marathon pace', but the name does not collide here."
+    }
+  },
+  {
+    "system": "pfitzinger",
+    "workout": "long-run",
+    "calls_it": "Medium-long run",
+    "also_known_as": ["Long run"],
+    "note": {
+      "ko": "Pfitzinger는 미디엄-롱런(약 15~23km)과 롱런(23km 이상)을 명시적으로 구분한다. 대부분의 체계가 뭉뚱그리는 지점을 쪼갠다.",
+      "en": "Pfitzinger explicitly separates the medium-long run (~15-23km) from the long run (>23km), splitting a distinction most systems blur."
+    }
+  },
+  {
+    "system": "maf",
+    "workout": "easy-run",
+    "calls_it": "MAF run",
+    "also_known_as": ["Aerobic base run", "MAF test"],
+    "note": {
+      "ko": "모든 주행이 MAF HR 이하다. 매월 같은 HR에서의 페이스를 재는 것이 'MAF 테스트'이고, 그 페이스 향상이 유일한 진전 지표다.",
+      "en": "Every run sits at or below the MAF HR. The monthly 'MAF test' times pace at that same HR, and improvement in that pace is the only progress metric."
+    }
+  },
+  {
+    "system": "norwegian-singles",
+    "workout": "threshold-continuous",
+    "calls_it": "Sub-threshold",
+    "also_known_as": ["Sub-T", "Threshold run"],
+    "note": {
+      "ko": "MLSS 아래(약 2~3mmol)로 통제한다. Daniels의 T('Tempo')와 같은 워크아웃이지만 타깃 젖산이 더 낮아 더 느리다.",
+      "en": "Controlled below MLSS (about 2-3 mmol). The same workout as Daniels' T ('Tempo'), but a lower lactate target makes it slower."
+    }
+  },
+  {
+    "system": "norwegian-singles",
+    "workout": "cruise-intervals",
+    "calls_it": "Threshold intervals",
+    "also_known_as": ["Double threshold", "Sub-threshold intervals"],
+    "note": {
+      "ko": "Daniels의 'cruise intervals'와 같은 형태지만 젖산으로 통제하고, 엘리트는 이를 하루 두 번(더블 역치) 수행한다.",
+      "en": "The same form as Daniels' 'cruise intervals', but lactate-controlled, and elites run it twice a day (double threshold)."
+    }
+  },
+  {
+    "system": "critical-speed",
+    "workout": "threshold-continuous",
+    "calls_it": "CS run",
+    "also_known_as": ["Critical speed effort", "At-CS run"],
+    "note": {
+      "ko": "임계속도 바로 부근의 연속 주행. Daniels의 T('Tempo')와 강도 영역이 겹치지만, 여기서는 감각이 아니라 측정된 CS로 못박힌다.",
+      "en": "A continuous run right at critical speed. Its intensity overlaps Daniels' T ('Tempo'), but here it is pinned by measured CS, not by feel."
+    }
+  },
+  {
+    "system": "critical-speed",
+    "workout": "vo2max-intervals",
+    "calls_it": "Above-CS intervals",
+    "also_known_as": ["W-prime intervals", "D-prime work"],
+    "note": {
+      "ko": "CS 위에서 유한한 여력 W′(D′)을 계획적으로 소진하는 인터벌. '얼마나 위인지'가 아니라 '얼마나 W′을 쓰는지'로 설계한다.",
+      "en": "Intervals above CS that deliberately deplete the finite reserve W' (D'). Designed by 'how much W' is spent', not by 'how far above'."
+    }
+  },
+  {
+    "system": "hrr-karvonen",
+    "workout": "easy-run",
+    "calls_it": "Zone 2",
+    "also_known_as": ["Aerobic zone (60-70% HRR)"],
+    "note": {
+      "ko": "여기서 'Zone 2'는 60~70% HRR로 명확히 정의된다. 어느 체계의 존인지 말하지 않는 일상 용어 'Zone 2 run'과 정확히 대비되는 지점이다.",
+      "en": "Here 'Zone 2' is defined precisely as 60-70% HRR. This is exactly what the everyday 'Zone 2 run' - which never says whose zones - fails to pin down."
+    }
+  },
+  {
+    "system": "canova",
+    "workout": "marathon-pace-run",
+    "calls_it": "Specific pace run",
+    "also_known_as": ["Special block", "Marathon-specific work"],
+    "note": {
+      "ko": "Canova는 목표 페이스 부근의 대량 작업을 'specific'/'special block'이라 부른다. Hansons·Pfitzinger의 마라톤 페이스 주행과 같은 강도지만 조직 원리가 다르다.",
+      "en": "Canova calls the large volume of near-goal-pace work 'specific' or a 'special block'. Same intensity as the Hansons and Pfitzinger marathon-pace runs, but a different organising principle."
+    }
+  },
+  {
+    "system": "galloway",
+    "workout": "long-run",
+    "calls_it": "Run-walk long run",
+    "also_known_as": ["Long run with walk breaks"],
+    "note": {
+      "ko": "같은 롱런이지만 계획된 걷기로 끊는다. GPS 평균 페이스가 걷기 때문에 다른 체계의 롱런과 직접 비교되지 않는다.",
+      "en": "The same long run, but broken by planned walking. Its average GPS pace does not compare directly with other systems' long runs because of the walk breaks."
+    }
+  },
+  {
+    "system": "galloway",
+    "workout": "easy-run",
+    "calls_it": "Run-walk",
+    "also_known_as": ["Walk-break run"],
+    "note": {
+      "ko": "일상 주행조차 달리기-걷기 비율(예: 4:1)로 정의된다. 걷기 구간이 워크아웃의 정의적 특징이다.",
+      "en": "Even the everyday run is defined by a run-to-walk ratio (e.g. 4:1). The walk interval is the defining feature of the workout."
+    }
+  },
+  {
+    "system": "first-furman",
+    "workout": "vo2max-intervals",
+    "calls_it": "Key Run 1",
+    "also_known_as": ["Track repeats", "Speed key run"],
+    "note": {
+      "ko": "FIRST의 세 '키 런' 중 첫째, 트랙 반복이다. 나머지 이지 볼륨은 크로스 트레이닝이 대신한다.",
+      "en": "The first of FIRST's three 'key runs', the track repeats. The remaining easy volume is taken over by cross-training."
+    }
+  },
+  {
+    "system": "first-furman",
+    "workout": "threshold-continuous",
+    "calls_it": "Key Run 2",
+    "also_known_as": ["Tempo key run"],
+    "note": {
+      "ko": "FIRST의 둘째 키 런, 템포다. threshold-continuous는 이제 다섯 번째 이름을 얻는다 — 체계마다 같은 워크아웃을 다르게 부른다.",
+      "en": "The second key run, the tempo. threshold-continuous now picks up a fifth name - each system calls the same workout something different."
+    }
+  },
+  {
+    "system": "first-furman",
+    "workout": "long-run",
+    "calls_it": "Key Run 3",
+    "also_known_as": ["Long key run"],
+    "note": {
+      "ko": "FIRST의 셋째 키 런, 롱런이다. 목표 페이스에서 유도된 페이스로 달리는 경우가 많다.",
+      "en": "The third key run, the long run, often run at a pace derived from goal race pace."
+    }
+  },
+  {
+    "system": null,
+    "workout": "progression-run",
+    "calls_it": "Progression run",
+    "also_known_as": ["Fast-finish run", "Negative-split run"],
+    "note": {
+      "ko": "체계 밖 용어. 'negative split'은 결과(후반이 빠름)를, 'progression'은 방법을 가리킨다.",
+      "en": "Everyday usage. 'Negative split' names the outcome (a faster second half); 'progression' names the method."
+    }
+  },
+  {
+    "system": null,
+    "workout": "vo2max-30-30",
+    "calls_it": "30-30s",
+    "also_known_as": ["Short intervals", "Billat intervals"],
+    "note": {
+      "ko": "30초 노력/30초 회복. Billat의 연구로 대중화돼 그의 이름이 붙기도 한다.",
+      "en": "30s on, 30s off. Popularised by Billat's research, so her name is sometimes attached."
+    }
+  },
+  {
+    "system": "polarized-80-20",
+    "workout": "vo2max-30-30",
+    "calls_it": "Zone 3 short intervals",
+    "note": {
+      "ko": "폴라라이즈드에서 20% 몫의 고강도를 짧은 반복으로 채우는 흔한 형태다.",
+      "en": "A common way to fill polarized's 20% high-intensity share with short reps."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "rep-intervals",
+    "calls_it": "R pace reps",
+    "also_known_as": ["Repetitions", "R intervals"],
+    "note": {
+      "ko": "Daniels의 R 존. VDOT에서 유도되며 대사가 아니라 신경근·이코노미를 노린다.",
+      "en": "Daniels' R zone. Derived from VDOT, targeting the neuromuscular system and economy, not metabolism."
+    }
+  },
+  {
+    "system": null,
+    "workout": "downhill-repeats",
+    "calls_it": "Downhill repeats",
+    "also_known_as": ["Eccentric hill reps", "Downhill strides"],
+    "note": {
+      "ko": "신전성 부하가 정의적 특징이다. 오르막 반복과 정반대의 근육 자극.",
+      "en": "Eccentric loading is the defining feature - the opposite muscular stimulus to uphill repeats."
+    }
+  },
+  {
+    "system": null,
+    "workout": "race-pace-intervals",
+    "calls_it": "Race-pace intervals",
+    "also_known_as": ["Goal-pace intervals", "Specific intervals"],
+    "note": {
+      "ko": "목표 페이스를 인터벌로 반복한다. 어느 거리의 레이스 페이스인지에 따라 강도가 달라진다.",
+      "en": "Repeats goal pace as intervals. The intensity depends on which distance's race pace it is."
+    }
+  },
+  {
+    "system": null,
+    "workout": "hill-sprints",
+    "calls_it": "Hill sprints",
+    "also_known_as": ["Short hill sprints", "Neuromuscular hill sprints"],
+    "note": {
+      "ko": "8~10초 최대 노력. hill-repeats(30~90초)와 자주 혼동되지만 목적과 지속이 완전히 다르다.",
+      "en": "8-10s maximal efforts. Often conflated with hill-repeats (30-90s), but the purpose and duration are entirely different."
+    }
+  },
+  {
+    "system": null,
+    "workout": "anaerobic-intervals",
+    "calls_it": "Speed endurance",
+    "also_known_as": ["Anaerobic intervals", "Lactate tolerance reps"],
+    "note": {
+      "ko": "중장거리 트랙 전통 용어. 젖산 내성을 노리는 소수 정예 세션이다.",
+      "en": "A middle-/long-distance track term. A rare, select session aimed at lactate tolerance."
+    }
+  },
+  {
+    "system": "canova",
+    "workout": "pace-alternations",
+    "calls_it": "Alternations",
+    "also_known_as": ["Canova alternations", "Alternazioni"],
+    "note": {
+      "ko": "Canova의 대표 세션. 이지 회복 없이 빠른 구간과 마라톤 페이스 플로트를 번갈은다.",
+      "en": "Canova's signature session. Alternates fast segments with marathon-pace floats and no easy recovery."
+    }
+  },
+  {
+    "system": "daniels",
+    "workout": "time-trial",
+    "calls_it": "Time trial",
+    "also_known_as": ["VDOT test", "Tune-up race"],
+    "note": {
+      "ko": "Daniels에게 타임트라이얼/튠업 레이스는 VDOT를 갱신하는 측정이자 자극이다.",
+      "en": "For Daniels a time trial or tune-up race is both the measurement that updates VDOT and a stimulus."
+    }
+  },
+  {
+    "system": "critical-speed",
+    "workout": "time-trial",
+    "calls_it": "CS test",
+    "also_known_as": ["Critical speed test", "3-min / 12-min test"],
+    "note": {
+      "ko": "임계속도 체계에서는 여러 거리의 타임트라이얼이 CS와 W′을 세우는 측정 도구다.",
+      "en": "In the critical-speed system, time trials over several distances are the measurement that sets CS and W'."
+    }
+  },
+  {
+    "system": null,
+    "workout": "mona-fartlek",
+    "calls_it": "Mona fartlek",
+    "also_known_as": ["Moneghetti fartlek", "20-minute fartlek"],
+    "note": {
+      "ko": "Steve Moneghetti의 이름을 딴 고정 20분 세션. 확률적 파틀렉과 달리 구조가 정해져 있다.",
+      "en": "A fixed 20-minute session named after Steve Moneghetti. Unlike a stochastic fartlek, its structure is set."
+    }
+  }
+]
