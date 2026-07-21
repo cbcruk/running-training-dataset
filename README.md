@@ -125,16 +125,28 @@ data/
   schema/*.json      # JSON Schema 2020-12
 scripts/
   validate.mjs       # schema + referential integrity + discipline
-  render.mjs         # structure -> schematic SVG
+  svg.mjs            # structure -> schematic SVG (pure; the single source of the visual)
+  render.mjs         # writes the SVGs to out/ using svg.mjs
+index.html           # the browse UI shell
+src/
+  main.js            # systems-as-cards, detail views, collision search. Imports svg.mjs.
+  style.css          # tier badges carry visual weight; tradition must not read as consensus
 ```
 
 ```
-vp install && vp run validate && vp run render
+vp install
+vp run validate && vp run render   # check + write SVGs
+vp dev                             # browse UI (systems -> workout detail, "tempo run" collision search)
+vp build                           # static bundle in dist/
 ```
+
+The browse UI reads the JSON directly and renders the schematic chart through the
+same `scripts/svg.mjs` the CLI uses, so the visual can never drift from the data.
+Bilingual (ko/en) via the header toggle.
 
 ## Known open problems
 
-- **The card view flattens the tier.** Browse ten cards and a `tradition` system looks as pretty as a `consensus` one. Presentation re-imports the problem the schema blocks. Non-negotiable constraint for `index.html`: **tier goes on the card, not the detail view.**
+- ~~**The card view flattens the tier.**~~ Addressed. `index.html` puts the tier badge on every system and workout card, and `consensus` / `plausible` / `tradition` are given deliberately different visual weight — a solid fill, an outline, and a faint dashed outline respectively — so browsing cannot make `tradition` read as settled. The constraint stands for any future card added.
 - **Daniels' volume caps are from memory**, marked `tradition` + draft. Verify against the source text.
 - **VDOT tables are a compiled work.** Do not scrape. Re-derive from the published equations in Daniels & Gilbert (1979), _Oxygen Power_. VDOT is a trademark. Same trap for Purdy Points and WMA age-grading tables.
 - **Prior art unverified.** GoldenCheetah is the reference implementation for the analysis side, but it is an engine, not a knowledge base. Confirm nothing like this catalog exists.

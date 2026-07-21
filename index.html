@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Running Training Dataset</title>
+    <meta
+      name="description"
+      content="A browsable catalog of running training systems: what each bets, what it costs to run, and how much is actually known."
+    />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#/">
+        <span class="brand-mark">▮▮▮</span>
+        <span class="brand-name">Running Training Dataset</span>
+      </a>
+      <nav class="nav">
+        <a href="#/" data-nav="systems">Systems</a>
+        <a href="#/workouts" data-nav="workouts">Workouts</a>
+        <button
+          id="lang-toggle"
+          class="lang-toggle"
+          type="button"
+          aria-label="Toggle language"
+        ></button>
+      </nav>
+    </header>
+    <div class="searchwrap">
+      <input id="search" class="search" type="search" autocomplete="off" spellcheck="false" />
+    </div>
+    <main id="app"></main>
+    <footer class="foot">
+      <p>
+        Every row is <code>status: draft</code>. No citation has been human-verified. Data is
+        hypothesis; this UI is a lookup — never a guide.
+      </p>
+      <p class="foot-meta">
+        <a href="https://github.com/cbcruk/running-training-dataset">source</a>
+        · MIT · schematic charts, both axes nominal
+      </p>
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

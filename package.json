@@ -14,6 +14,9 @@
   },
   "type": "module",
   "scripts": {
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview",
     "validate": "node scripts/validate.mjs",
     "render": "node scripts/render.mjs",
     "test": "vp test",
