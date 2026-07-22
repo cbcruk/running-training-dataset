@@ -1,8 +1,11 @@
 # Running Training Dataset
 
 [![CI](https://github.com/cbcruk/running-training-dataset/actions/workflows/ci.yml/badge.svg)](https://github.com/cbcruk/running-training-dataset/actions/workflows/ci.yml)
+[![Pages](https://github.com/cbcruk/running-training-dataset/actions/workflows/pages.yml/badge.svg)](https://github.com/cbcruk/running-training-dataset/actions/workflows/pages.yml)
 
 A browsable catalog of running training **systems** — what each one bets, what it costs to run, what happens when you switch, and how much of it is actually known.
+
+**Browse it live: [cbcruk.github.io/running-training-dataset](https://cbcruk.github.io/running-training-dataset/)**
 
 For people who like trying different methods. Light to browse, honest underneath.
 
