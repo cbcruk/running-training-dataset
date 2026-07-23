@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/rtd/anchor-model.schema.json",
+  "title": "Intensity Anchor Model",
+  "description": "The measurement layer. One row per intensity_model: what it takes to measure, and the honest degraded path when you cannot. NOT a conversion - anchors do not convert cleanly, so the fallback points at the equipment-free floor (rpe_10) and names what is lost, never a numeric substitution.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["model", "label", "requires", "equipment_free"],
+  "properties": {
+    "model": {
+      "enum": [
+        "daniels-vdot",
+        "pct_hrmax",
+        "pct_hrr",
+        "pct_vo2max",
+        "pct_cs",
+        "rpe_10",
+        "lactate_mmol",
+        "race_pace_ref"
+      ],
+      "description": "Matches intensity_model on systems and anchor.model on workouts."
+    },
+    "label": { "$ref": "#/$defs/i18n" },
+    "requires": {
+      "$ref": "#/$defs/i18n",
+      "description": "What a runner needs to actually use this anchor - equipment and/or a test."
+    },
+    "equipment_free": {
+      "type": "boolean",
+      "description": "true only for the universal floor (rpe_10). Enforced in validate.mjs."
+    },
+    "fallback": {
+      "$ref": "#/$defs/i18n",
+      "description": "The honest degraded path when the requirement is unmet: drop toward rpe_10 and what you lose. Required unless equipment_free."
+    },
+    "note": { "$ref": "#/$defs/i18n" }
+  },
+
+  "allOf": [
+    {
+      "if": {
+        "required": ["equipment_free"],
+        "properties": { "equipment_free": { "const": false } }
+      },
+      "then": {
+        "required": ["fallback"],
+        "description": "A non-free anchor MUST state where you fall to and what you lose."
+      }
+    },
+    {
+      "if": {
+        "required": ["equipment_free"],
+        "properties": { "equipment_free": { "const": true } }
+      },
+      "then": {
+        "not": { "required": ["fallback"] },
+        "description": "The equipment-free floor has nothing to fall back to - it IS the fallback."
+      }
+    }
+  ],
+
+  "$defs": {
+    "i18n": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ko", "en"],
+      "properties": { "ko": { "type": "string" }, "en": { "type": "string" } }
+    }
+  }
+}

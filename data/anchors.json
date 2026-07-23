@@ -1,0 +1,130 @@
+[
+  {
+    "model": "rpe_10",
+    "label": {
+      "ko": "주관적 운동강도 (RPE 0–10)",
+      "en": "Rating of perceived exertion (0–10)"
+    },
+    "requires": {
+      "ko": "없음. 감각만 있으면 된다.",
+      "en": "Nothing - perceived effort alone."
+    },
+    "equipment_free": true,
+    "note": {
+      "ko": "장비·검사·모델·체계 소속이 모두 필요 없는 유일한 앵커. 그래서 모든 행의 보편 대체 바닥이자 렌더의 y축이다. 대신 가장 부정확하다.",
+      "en": "The only anchor needing no equipment, test, model, or system membership - hence the universal fallback floor and the render y-axis. It is also the least precise."
+    }
+  },
+  {
+    "model": "daniels-vdot",
+    "label": {
+      "ko": "Daniels VDOT 존/페이스",
+      "en": "Daniels VDOT zone/pace"
+    },
+    "requires": {
+      "ko": "최근 레이스 또는 타임트라이얼로 VDOT를 얻고, 페이스를 잴 GPS나 트랙이 필요하다.",
+      "en": "A recent race or time trial to obtain a VDOT, plus GPS or a track to measure pace."
+    },
+    "equipment_free": false,
+    "fallback": {
+      "ko": "VDOT가 없으면 rpe_10으로 떨어진다. 잃는 것: 존별 목표 페이스의 정밀도.",
+      "en": "Without a VDOT, drop to rpe_10. What you lose: the precision of zone-specific target paces."
+    }
+  },
+  {
+    "model": "pct_hrmax",
+    "label": {
+      "ko": "최대심박수 비율",
+      "en": "% of maximum heart rate"
+    },
+    "requires": {
+      "ko": "심박계, 그리고 이상적으로는 추정이 아닌 실측 최대심박수.",
+      "en": "A heart-rate monitor and, ideally, a measured (not estimated) HRmax."
+    },
+    "equipment_free": false,
+    "fallback": {
+      "ko": "심박계가 없으면 rpe_10으로 떨어진다. 잃는 것: 생리적 부하 기준점. 추정 HRmax는 SEE ±10bpm 이상이라 이 앵커 자체도 흔들린다.",
+      "en": "Without a monitor, drop to rpe_10. What you lose: a physiological-load reference. An estimated HRmax carries SEE >10bpm, so the anchor itself is shaky."
+    }
+  },
+  {
+    "model": "pct_hrr",
+    "label": {
+      "ko": "심박수 예비량 비율 (Karvonen)",
+      "en": "% of heart-rate reserve (Karvonen)"
+    },
+    "requires": {
+      "ko": "심박계, 실측 안정시 심박수, 그리고 이상적으로 실측 최대심박수.",
+      "en": "A heart-rate monitor, a measured resting HR, and ideally a measured HRmax."
+    },
+    "equipment_free": false,
+    "fallback": {
+      "ko": "심박계가 없으면 rpe_10으로 떨어진다. 잃는 것: 개인 예비량에 맞춘 스케일링. 입력값(안정·최대 HR)이 흔들리면 예비량 계산도 흔들린다.",
+      "en": "Without a monitor, drop to rpe_10. What you lose: scaling to your personal reserve. If the inputs (resting/max HR) wobble, so does the reserve calculation."
+    }
+  },
+  {
+    "model": "pct_vo2max",
+    "label": {
+      "ko": "VO2max 비율",
+      "en": "% of VO2max"
+    },
+    "requires": {
+      "ko": "실험실 검사(호흡가스). 현장에서는 추정에 의존한다.",
+      "en": "A lab test (gas exchange). In the field it relies on estimation."
+    },
+    "equipment_free": false,
+    "fallback": {
+      "ko": "실험실이 없으면 rpe_10 또는 다른 대체 앵커로 떨어진다. 잃는 것: VO2 기준점 — 어차피 현장에서 직접 잴 수 없는 값이다.",
+      "en": "Without a lab, drop to rpe_10 or another proxy anchor. What you lose: the VO2 reference - which is not field-measurable directly anyway."
+    }
+  },
+  {
+    "model": "pct_cs",
+    "label": {
+      "ko": "임계속도 비율",
+      "en": "% of critical speed"
+    },
+    "requires": {
+      "ko": "CS와 W′을 적합할 2~3회의 최대 노력 타임트라이얼, 그리고 페이스 측정.",
+      "en": "Two or three maximal time trials to fit CS and W', plus pace measurement."
+    },
+    "equipment_free": false,
+    "fallback": {
+      "ko": "타임트라이얼·페이스가 없으면 rpe_10으로 떨어진다. 잃는 것: 측정된 역치 경계와 유한한 여력(W′) 모델.",
+      "en": "Without the trials or pace, drop to rpe_10. What you lose: the measured threshold boundary and the finite-reserve (W') model."
+    }
+  },
+  {
+    "model": "lactate_mmol",
+    "label": {
+      "ko": "혈중 젖산 농도 (mmol/L)",
+      "en": "Blood lactate concentration (mmol/L)"
+    },
+    "requires": {
+      "ko": "휴대용 젖산 측정기와 손끝 채혈 스트립.",
+      "en": "A portable lactate meter and finger-prick strips."
+    },
+    "equipment_free": false,
+    "fallback": {
+      "ko": "젖산 측정기가 없으면 페이스·심박수로 대리하거나 rpe_10으로 떨어진다. 잃는 것: 강도 상한을 직접 통제하는 능력 — 젖산 기반 체계의 정의적 통제 그 자체다. 대리하면 '그냥 잦은 역치주'와 구분되지 않는다.",
+      "en": "Without a meter, proxy it with pace/HR or drop to rpe_10. What you lose: the ability to cap intensity directly - the defining control of a lactate-based system. Proxied, it is indistinguishable from just doing frequent tempo runs."
+    }
+  },
+  {
+    "model": "race_pace_ref",
+    "label": {
+      "ko": "목표·기준 레이스 페이스",
+      "en": "Goal or reference race pace"
+    },
+    "requires": {
+      "ko": "목표 또는 최근 레이스 기록과, 그것을 잴 GPS/트랙.",
+      "en": "A goal or recent race time, plus GPS/track to hit it."
+    },
+    "equipment_free": false,
+    "fallback": {
+      "ko": "페이스 측정이 없으면 rpe_10으로 떨어진다. 잃는 것: 특이적 페이스 목표. 목표 기반이면 그 앵커는 측정값이 아니라 '희망'이라는 점도 유의.",
+      "en": "Without pace measurement, drop to rpe_10. What you lose: the specific pace target. Note that if it is goal-based, the anchor is a wish, not a measurement."
+    }
+  }
+]
