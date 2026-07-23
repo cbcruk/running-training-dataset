@@ -47,6 +47,33 @@
           "ko": "폴라라이즈드가 비우라고 하는 Z2가 Daniels의 T존과 거의 겹친다. 즉 이전 체계가 금지하던 구간이 새 체계의 핵심 세션이 된다. 정반대 처방이라 조용하지는 않지만, 둘 다 근거를 주장한다는 점이 진짜 문제다.",
           "en": "The Z2 that polarized tells you to vacate overlaps Daniels' T zone. The zone your previous system banned becomes your new system's key session. Not silent, since the prescriptions are opposite, but both claim evidence and that is the real problem."
         }
+      },
+      {
+        "from": "pfitzinger",
+        "anchor_change": "pct_hrmax -> daniels-vdot",
+        "silent": true,
+        "note": {
+          "ko": "앵커가 HR 존에서 측정된 VDOT 페이스로 바뀐다. '역치'라는 단어는 살아남지만, Pfitzinger에서 %HRmax로 관리하던 강도가 이제 고정된 페이스가 된다. 언덕·더위에서 HR 기준으로 느리게 달리던 세션이 페이스 기준으로 고정되며 조용히 빨라질 수 있다.",
+          "en": "The anchor moves from HR zones to a measured VDOT pace. The word 'threshold' survives, but the intensity you managed by %HRmax under Pfitzinger becomes a fixed pace. A session you ran slower by HR on hills or in heat can quietly speed up once it is pinned to pace."
+        }
+      },
+      {
+        "from": "norwegian-singles",
+        "anchor_change": "lactate_mmol -> daniels-vdot",
+        "silent": true,
+        "note": {
+          "ko": "'역치'는 살아남지만 타깃이 올라간다. Norwegian은 약 2~3mmol의 서브역치를 자주 반복하는데, Daniels의 T는 약 60분 레이스 페이스(대략 4mmol)라 더 빠르다. 같은 이름 아래 세션이 조용히 빨라지고, 대신 빈도는 낮아진다.",
+          "en": "'Threshold' survives but the target rises. Norwegian repeats a sub-threshold near 2-3 mmol often, whereas Daniels' T is roughly 60-minute race pace (around 4 mmol) and faster. The session quietly speeds up under the same name, and frequency drops in exchange."
+        }
+      },
+      {
+        "from": "critical-speed",
+        "anchor_change": "pct_cs -> daniels-vdot",
+        "silent": false,
+        "note": {
+          "ko": "측정된 경계선 + 유한한 여력(W′) 모델에서 VDOT 존 표로 바뀐다. 둘 다 기록에서 페이스를 유도하지만, 인터벌을 'W′ 소진'이 아니라 'I 존 시간'으로 계획하게 되는 명시적 사고 전환이라 조용하지 않다.",
+          "en": "From a measured boundary plus a finite reserve (W') to a table of VDOT zones. Both derive paces from performances, but it is an explicit shift in thinking - planning intervals as 'time in the I zone' rather than 'depleting W'' - so it is not silent."
+        }
       }
     ],
     "distribution": {
@@ -159,6 +186,24 @@
           "ko": "'템포'가 역치에서 마라톤 페이스로 바뀌어 느려진다. 더 심각한 건 앵커가 측정된 피트니스(VDOT)에서 희망사항(목표 페이스)으로 바뀐다는 점이다. 목표가 비현실적이면 전 세션의 강도가 조용히 틀어진다.",
           "en": "Tempo shifts from threshold to marathon pace and slows down. More seriously, the anchor moves from measured fitness (VDOT) to a wish (goal pace). An unrealistic goal silently corrupts every session's intensity."
         }
+      },
+      {
+        "from": "canova",
+        "anchor_change": "race_pace_ref -> race_pace_ref",
+        "silent": false,
+        "note": {
+          "ko": "앵커는 목표 레이스 페이스 그대로다. 바뀌는 건 구조다. Canova의 특이성 수렴(스페셜 블록)과 매우 높은 볼륨이 Hansons의 누적 피로 + 16마일 롱런 상한으로 바뀐다. 앵커가 같아 조용한 강도 변화는 없지만, '희망 앵커'(목표가 틀리면 전 세션이 틀림) 위험은 그대로 상속된다.",
+          "en": "The anchor stays goal race pace. What changes is the structure. Canova's convergence on specificity (special blocks) and very high volume give way to Hansons' cumulative fatigue and 16-mile long-run cap. Since the anchor is the same there is no silent intensity shift, but the 'wish anchor' risk - a wrong goal corrupts every session - is inherited intact."
+        }
+      },
+      {
+        "from": "pfitzinger",
+        "anchor_change": "pct_hrmax -> race_pace_ref",
+        "silent": true,
+        "note": {
+          "ko": "'템포'가 조용히 뒤집힌다. Pfitzinger의 tempo/LT 주행은 역치(HR 82~91%)인데 Hansons의 tempo는 목표 마라톤 페이스라 느리다. 게다가 앵커가 측정된 HR 부하에서 목표 페이스(희망)로 바뀐다. 같은 단어를 계속 쓰면서 강도가 내려가고, 아무도 안 알려준다.",
+          "en": "'Tempo' flips silently. Pfitzinger's tempo/LT run is threshold (82-91% HRmax), while Hansons' tempo is goal marathon pace and slower. On top of that the anchor moves from a measured HR load to goal pace (a wish). You keep the same word while the intensity drops, and nobody tells you."
+        }
       }
     ],
     "distribution": {
@@ -225,6 +270,33 @@
         "note": {
           "ko": "Daniels의 T 세션이 정확히 폴라라이즈드가 금지하는 구간이다. 가장 아끼던 세션을 버리라는 요구이며, 이 전환에서 가장 많이 이탈한다.",
           "en": "Daniels' T session sits exactly in the zone polarized forbids. The switch demands abandoning your favourite session, and this is where most people bounce."
+        }
+      },
+      {
+        "from": "norwegian-singles",
+        "anchor_change": "lactate_mmol -> pct_vo2max",
+        "silent": false,
+        "note": {
+          "ko": "정면 충돌이라 조용하지 않다. Norwegian이 사는 서브역치 구간(약 2~3mmol)이 바로 폴라라이즈드가 의도적으로 비우라는 Z2다. 이 체계의 주력 세션이 새 체계에서는 피해야 할 구간이 된다.",
+          "en": "A head-on collision, so not silent. The sub-threshold band Norwegian lives in (about 2-3 mmol) is exactly the zone 2 that polarized deliberately vacates. The workhorse session of one system becomes the zone to avoid in the other."
+        }
+      },
+      {
+        "from": "maf",
+        "anchor_change": "pct_hrmax -> pct_vo2max",
+        "silent": false,
+        "note": {
+          "ko": "MAF의 절대 HR 상한(180-나이)이 사라지고, 금지됐던 20%의 고강도(Z3)가 다시 허용된다. 강도를 명시적으로 되살리는 전환이라 조용하지 않다. MAF에 오래 머문 주자에게는 Z3 세션 자체가 낯설게 느껴질 수 있다.",
+          "en": "MAF's absolute HR cap (180 minus age) disappears, and the forbidden 20% of high intensity (zone 3) is re-admitted. It explicitly reintroduces intensity, so it is not silent. A runner long settled in MAF may find the zone 3 sessions themselves unfamiliar."
+        }
+      },
+      {
+        "from": "lydiard",
+        "anchor_change": "rpe_10 -> pct_vo2max",
+        "silent": false,
+        "note": {
+          "ko": "감각 기반 국면 주기화에서 매주 지켜야 하는 세션 분포 규칙으로 바뀐다. 둘 다 유산소를 중시하지만 조직 원리가 다르다. 주의할 점: Lydiard의 '스테디 스테이트'(무산소 직전 상단 유산소)가 정확히 폴라라이즈드가 비우라는 Z2라, 익숙한 세션을 줄이라는 요구가 된다.",
+          "en": "From effort-based phase periodization to a session-distribution rule enforced every week. Both prize aerobic work, but the organising principle differs. Watch out: Lydiard's 'steady state' (upper aerobic, just below anaerobic) is exactly the zone 2 polarized tells you to vacate, so a familiar staple must be cut back."
         }
       }
     ],
