@@ -491,6 +491,15 @@
           "ko": "목표 레이스 페이스 앵커에서 HR 존 앵커로 바뀐다. 롱런 상한이 사라지고 미디엄-롱런과 긴 MP 주행이 들어온다.",
           "en": "The anchor moves from goal race pace to HR zones. The long-run cap disappears, replaced by medium-long runs and long marathon-pace runs."
         }
+      },
+      {
+        "from": "maf",
+        "anchor_change": "pct_hrmax -> pct_hrmax",
+        "silent": false,
+        "note": {
+          "ko": "둘 다 HR 기반이지만, MAF의 절대 상한(180-나이)이 %HRmax 존으로 바뀌며 금지됐던 역치·VO2max가 다시 들어온다. 강도를 명시적으로 되살리는 전환이라 조용하지 않다. 다만 MAF로 쌓은 두꺼운 유산소 베이스는 Pfitzinger의 고volume 플랜이 요구하는 바로 그 토대다.",
+          "en": "Both are HR-based, but MAF's absolute cap (180 minus age) gives way to %HRmax zones that re-admit the threshold and VO2max work MAF forbade. It explicitly restores intensity, so it is not silent. That said, the thick aerobic base MAF built is exactly the foundation Pfitzinger's high-volume plan needs."
+        }
       }
     ],
     "distribution": {
@@ -573,6 +582,15 @@
           "ko": "VDOT의 T·I·R 세션이 전부 상한을 넘겨 금지된다. 측정된 피트니스 앵커에서 절대 HR 상한으로 바뀌는데, 이 상한은 생리학적으로 유도된 값이 아니라 경험식이다.",
           "en": "All of VDOT's T, I, and R sessions exceed the cap and are forbidden. The anchor moves from measured fitness to an absolute HR cap that is an empirical rule of thumb, not a physiologically derived value."
         }
+      },
+      {
+        "from": "hrr-karvonen",
+        "anchor_change": "pct_hrr -> pct_hrmax",
+        "silent": true,
+        "note": {
+          "ko": "HR 언어는 그대로 살아남지만 천장이 조용히 내려간다. Karvonen의 예비량 기반 '존 2'는 보통 MAF의 절대 상한(180-나이)보다 높아서, 같은 'HR 보고 달리기'인데도 실제로는 더 느리게 달리도록 강제된다. 지표는 같아 보이는데 처방이 더 보수적으로 바뀐다.",
+          "en": "The HR language survives intact, but the ceiling quietly drops. Karvonen's reserve-based 'zone 2' usually sits above MAF's absolute cap (180 minus age), so the same 'run by HR' forces you slower in practice. The metric looks the same while the prescription turns more conservative."
+        }
       }
     ],
     "evidence": {
@@ -642,6 +660,15 @@
         "note": {
           "ko": "폴라라이즈드가 의도적으로 비우라는 Z2가 바로 이 체계가 사는 구간이다. 정면 충돌이라 조용하지 않지만, 둘 다 엘리트 관찰에서 근거를 주장한다는 점이 문제다.",
           "en": "The zone 2 that polarized deliberately vacates is exactly where this system lives. It is a head-on collision, so not silent, but both claim their evidence from observing elites."
+        }
+      },
+      {
+        "from": "lydiard",
+        "anchor_change": "rpe_10 -> lactate_mmol",
+        "silent": false,
+        "note": {
+          "ko": "감각(RPE)으로 관리하던 강도가 실측 젖산(약 2~3mmol)으로 못박힌다. Lydiard의 '스테디 스테이트'(무산소 직전 상단 유산소)가 정확히 측정된 서브역치가 되는 셈이라, 명시적 측정 전환이라 조용하지 않다. 젖산 측정기 없이 페이스로 대리하면 그냥 잦은 역치주와 구분되지 않는다.",
+          "en": "Intensity managed by feel (RPE) is pinned to measured blood lactate (about 2-3 mmol). Lydiard's 'steady state' (upper aerobic, just below anaerobic) becomes precisely measured sub-threshold - an explicit move to measurement, so not silent. Without a lactate meter, proxying by pace makes it indistinguishable from just doing frequent tempo runs."
         }
       }
     ],
@@ -726,6 +753,15 @@
         "note": {
           "ko": "폴라라이즈드가 감각과 %VO2max로 그리던 상한 역치 경계를 CS가 측정값으로 못박는다. 비우라던 중간 구간이 이제 '측정된 CS 바로 아래'로 명확해진다.",
           "en": "The upper threshold boundary that polarized draws by feel and %VO2max is pinned by CS to a measured value. The middle zone it told you to vacate becomes precisely 'just below measured CS'."
+        }
+      },
+      {
+        "from": "hrr-karvonen",
+        "anchor_change": "pct_hrr -> pct_cs",
+        "silent": false,
+        "note": {
+          "ko": "앵커가 심박수 예비량(HRR) 존에서 측정된 임계속도(CS) 경계로 바뀐다. 둘 다 '측정 기반'이지만 생리 축이 다르다 — 심박 반응 대 속도/파워 지속 능력. HR 존이 사라지고 하나의 경계선 + 유한한 여력(W′)이 그 자리를 대신하므로 조용하지 않다.",
+          "en": "The anchor moves from heart-rate reserve (HRR) zones to a measured critical-speed (CS) boundary. Both are 'measured', but on different physiological axes - cardiac response versus sustainable speed/power. HR zones disappear, replaced by a single boundary plus a finite reserve (W'), so it is not silent."
         }
       }
     ],
@@ -889,6 +925,15 @@
         "note": {
           "ko": "앵커는 그대로 목표 레이스 페이스다. 바뀌는 건 구조다. Hansons의 누적 피로 대신 Canova는 특이성 수렴(스페셜 블록)을 택한다. 앵커가 같아 조용한 강도 변화는 없지만, 볼륨과 세션 설계가 완전히 달라진다.",
           "en": "The anchor stays goal race pace. What changes is the structure. Instead of Hansons' cumulative fatigue, Canova converges on specificity (special blocks). Since the anchor is the same there is no silent intensity shift, but volume and session design change completely."
+        }
+      },
+      {
+        "from": "pfitzinger",
+        "anchor_change": "pct_hrmax -> race_pace_ref",
+        "silent": true,
+        "note": {
+          "ko": "마라톤 페이스 주행은 양쪽에 다 있어 이어지는 것처럼 보이지만, 앵커가 측정된 HR 부하에서 목표 레이스 페이스(희망)로 조용히 바뀐다. Canova는 거의 모든 세션을 목표 페이스의 비율로 재정의하므로, 목표가 낙관적이면 시즌 전체가 조용히 과부하된다.",
+          "en": "Marathon-pace runs exist in both, so it looks continuous, but the anchor quietly shifts from a measured HR load to goal race pace (a wish). Canova redefines nearly every session as a percentage of goal pace, so an optimistic goal silently overloads the whole season."
         }
       }
     ],
@@ -1056,6 +1101,15 @@
         "note": {
           "ko": "앵커는 레이스 페이스로 같지만 실행 조건이 정반대다. Hansons는 주 6일 고volume 누적 피로, FIRST는 주 3회 러닝 + 크로스. 같은 페이스 언어 아래 완전히 다른 주간 부하.",
           "en": "The anchor stays race pace, but the commitment is inverted. Hansons is six high-volume days of cumulative fatigue; FIRST is three runs plus cross-training. The same pace language over a completely different weekly load."
+        }
+      },
+      {
+        "from": "pfitzinger",
+        "anchor_change": "pct_hrmax -> race_pace_ref",
+        "silent": false,
+        "note": {
+          "ko": "앵커가 HR 존에서 최근 레이스에서 유도한 페이스로 바뀐다. 진짜 변화는 볼륨의 반전이다 — Pfitzinger의 매일 이지 유산소 볼륨이 사라지고 주 3회 키 런 + 크로스 트레이닝으로 대체된다. 러닝 특이적 내구성 자극이 그만큼 줄어드는 명백한 구조 변화라 조용하지 않다.",
+          "en": "The anchor moves from HR zones to a pace derived from a recent race. The real change is the inversion of volume - Pfitzinger's daily easy aerobic volume disappears, replaced by three key runs plus cross-training. It is an obvious structural change that reduces run-specific durability stimulus, so not silent."
         }
       }
     ],

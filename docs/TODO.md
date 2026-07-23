@@ -86,16 +86,24 @@ so each entry has exactly one correct string:
 - [x] `polarized-80-20` <- `maf` → `pct_hrmax -> pct_vo2max`
 - [x] `polarized-80-20` <- `lydiard` → `rpe_10 -> pct_vo2max`
 
-**Still open — cross-links among the newer systems.** The 9 newer systems still
-rarely point at each other (each has ~2 inbound, mostly from the original 3). Add
-only truthful migration paths (not the full 12×12 = 132, which would be noise);
-candidates: `pfitzinger` <- `maf`, `canova` <- `pfitzinger`,
-`norwegian-singles` <- `lydiard`, `critical-speed` <- `hrr-karvonen`.
+**Done — cross-links among the newer systems.** Six truthful newer-to-newer
+migration paths have been added, so every one of the 12 systems now has at least
+2 inbound entries:
 
-Guidance: add an entry only where a real person would actually switch between the
-two. Every entry needs a `silent` flag and a bilingual `note`; set `silent: true`
-only when a **term survives the switch while its meaning changes** (the dangerous
-case), not merely when the anchor differs.
+- [x] `pfitzinger` <- `maf` → `pct_hrmax -> pct_hrmax` (loud: re-admits the banned intensity)
+- [x] `canova` <- `pfitzinger` → `pct_hrmax -> race_pace_ref` (silent: anchor slips to a goal-pace wish)
+- [x] `norwegian-singles` <- `lydiard` → `rpe_10 -> lactate_mmol` (loud: feel → measured lactate)
+- [x] `critical-speed` <- `hrr-karvonen` → `pct_hrr -> pct_cs` (loud: HR reserve → pace boundary)
+- [x] `maf` <- `hrr-karvonen` → `pct_hrr -> pct_hrmax` (silent: HR language survives, the ceiling drops)
+- [x] `first-furman` <- `pfitzinger` → `pct_hrmax -> race_pace_ref` (loud: volume inversion)
+
+Not exhaustive by design (the full 12×12 = 132 would be noise). `lydiard`,
+`hrr-karvonen`, and `galloway` are left at 2 inbound because they are uncommon
+migration _destinations_; add more only where a real person would actually switch.
+
+Guidance for any future entry: it needs a `silent` flag and a bilingual `note`;
+set `silent: true` only when a **term survives the switch while its meaning
+changes** (the dangerous case), not merely when the anchor differs.
 
 ---
 
