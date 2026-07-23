@@ -69,38 +69,41 @@ collecting user results, or building a CS/D′ prediction engine.
 
 ## 2. `switching_cost` symmetry
 
-The matrix is currently **one-directional**: the 9 newer systems point back at the
-original 3, but the original 3 do not point at the newer ones, and the newer
-systems rarely point at each other.
-
-Inbound `switching_cost` counts at time of writing:
-
-```
-daniels          <- hansons, polarized-80-20            (2)
-hansons          <- daniels                             (1)
-polarized-80-20  <- daniels                             (1)
-lydiard, pfitzinger, maf, norwegian-singles,
-critical-speed, hrr-karvonen, canova, galloway,
-first-furman     <- (2 each, all pointing at old systems)
-```
+**Done for the original 3.** The matrix used to be one-directional (the 9 newer
+systems pointed back at the original 3, but not the reverse). The eight
+high-value inbound entries below have been added, so the original 3 now carry a
+balanced set: `daniels` (5), `hansons` (3), `polarized-80-20` (4).
 
 `anchor_change` is machine-verified as `<from>.intensity_model -> <this>.intensity_model`,
-so each new entry has exactly one correct string. High-value, **truthful migration
-paths** to add (not the full 12×12 = 132, which would be noise):
+so each entry has exactly one correct string:
 
-- [ ] `daniels` <- `pfitzinger` → `pct_hrmax -> daniels-vdot`
-- [ ] `daniels` <- `norwegian-singles` → `lactate_mmol -> daniels-vdot`
-- [ ] `daniels` <- `critical-speed` → `pct_cs -> daniels-vdot`
-- [ ] `hansons` <- `canova` → `race_pace_ref -> race_pace_ref` (same-anchor; cost is structural)
-- [ ] `hansons` <- `pfitzinger` → `pct_hrmax -> race_pace_ref`
-- [ ] `polarized-80-20` <- `norwegian-singles` → `lactate_mmol -> pct_vo2max` (the Z2 collision, seen from the other side)
-- [ ] `polarized-80-20` <- `maf` → `pct_hrmax -> pct_vo2max`
-- [ ] `polarized-80-20` <- `lydiard` → `rpe_10 -> pct_vo2max`
+- [x] `daniels` <- `pfitzinger` → `pct_hrmax -> daniels-vdot` (silent: threshold survives, anchor flips HR→pace)
+- [x] `daniels` <- `norwegian-singles` → `lactate_mmol -> daniels-vdot` (silent: threshold survives, target rises)
+- [x] `daniels` <- `critical-speed` → `pct_cs -> daniels-vdot`
+- [x] `hansons` <- `canova` → `race_pace_ref -> race_pace_ref` (same-anchor; cost is structural)
+- [x] `hansons` <- `pfitzinger` → `pct_hrmax -> race_pace_ref` (silent: "tempo" flips threshold→marathon pace)
+- [x] `polarized-80-20` <- `norwegian-singles` → `lactate_mmol -> pct_vo2max` (the Z2 collision, seen from the other side)
+- [x] `polarized-80-20` <- `maf` → `pct_hrmax -> pct_vo2max`
+- [x] `polarized-80-20` <- `lydiard` → `rpe_10 -> pct_vo2max`
 
-Guidance: add an entry only where a real person would actually switch between the
-two. Every entry needs a `silent` flag and a bilingual `note`; set `silent: true`
-only when a **term survives the switch while its meaning changes** (the dangerous
-case), not merely when the anchor differs.
+**Done — cross-links among the newer systems.** Six truthful newer-to-newer
+migration paths have been added, so every one of the 12 systems now has at least
+2 inbound entries:
+
+- [x] `pfitzinger` <- `maf` → `pct_hrmax -> pct_hrmax` (loud: re-admits the banned intensity)
+- [x] `canova` <- `pfitzinger` → `pct_hrmax -> race_pace_ref` (silent: anchor slips to a goal-pace wish)
+- [x] `norwegian-singles` <- `lydiard` → `rpe_10 -> lactate_mmol` (loud: feel → measured lactate)
+- [x] `critical-speed` <- `hrr-karvonen` → `pct_hrr -> pct_cs` (loud: HR reserve → pace boundary)
+- [x] `maf` <- `hrr-karvonen` → `pct_hrr -> pct_hrmax` (silent: HR language survives, the ceiling drops)
+- [x] `first-furman` <- `pfitzinger` → `pct_hrmax -> race_pace_ref` (loud: volume inversion)
+
+Not exhaustive by design (the full 12×12 = 132 would be noise). `lydiard`,
+`hrr-karvonen`, and `galloway` are left at 2 inbound because they are uncommon
+migration _destinations_; add more only where a real person would actually switch.
+
+Guidance for any future entry: it needs a `silent` flag and a bilingual `note`;
+set `silent: true` only when a **term survives the switch while its meaning
+changes** (the dangerous case), not merely when the anchor differs.
 
 ---
 
