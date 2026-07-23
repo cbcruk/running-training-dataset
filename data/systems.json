@@ -620,7 +620,7 @@
   {
     "id": "norwegian-singles",
     "name": "Norwegian Singles (Threshold)",
-    "attribution": "Marius Bakken",
+    "attribution": null,
     "status": "draft",
     "intensity_model": "lactate_mmol",
     "bet": {
@@ -628,19 +628,19 @@
       "en": "Repeat threshold sessions often, holding blood lactate near 2-3 mmol."
     },
     "philosophy": {
-      "ko": "강도의 상한을 젖산 농도로 직접 통제한다. MLSS 아래(약 2~3mmol)의 '서브역치' 인터벌을 높은 빈도로 반복해, 무너지지 않으면서 역치 자극의 총량을 극대화한다. 엘리트는 하루 두 번(더블 역치)까지 하고, 아마추어용 'singles' 변형은 이를 하루 한 번으로 낮춘 것이다.",
-      "en": "Controls the intensity ceiling directly by lactate concentration. High-frequency 'sub-threshold' intervals below MLSS (about 2-3 mmol) maximise total threshold stimulus without blowing up. Elites go as far as twice a day (double threshold); the amateur 'singles' variant lowers this to once a day."
+      "ko": "Bakken의 더블 역치 방법(bakken-doubles)을 아마추어가 하루 한 번으로 줄여 형식화한 대중 변형이다. 강도 상한을 젖산(약 2~3mmol)으로 통제하는 핵심은 유지하되, 하루 두 세션을 한 세션으로 낮춰 접근성을 높였다. 실측 젖산 대신 페이스·감각으로 대리하는 경우가 많고, 그 대리가 원본과의 결정적 차이다.",
+      "en": "The amateur, once-a-day derivative of Bakken's double-threshold method (bakken-doubles), formalised in the running community. It keeps the core - capping intensity by lactate (about 2-3 mmol) - but lowers two daily sessions to one for accessibility. It is often proxied by pace and feel rather than measured lactate, and that proxy is the decisive difference from the original."
     },
     "commitment": {
       "sessions_per_week": {
-        "min": 6,
-        "max": 10
+        "min": 5,
+        "max": 7
       },
-      "min_weekly_km": 60,
+      "min_weekly_km": 50,
       "requires_track": false,
       "note": {
-        "ko": "앵커가 실측 혈중 젖산이라 원칙적으로 젖산 측정기가 필요하다. 대부분의 아마추어는 페이스·감각으로 대리하는데, 이 대리 자체가 체계의 핵심 통제를 흐린다.",
-        "en": "Because the anchor is measured blood lactate, it strictly needs a lactate meter. Most amateurs proxy it with pace and feel, and that proxy itself blurs the system's central control."
+        "ko": "하루 한 세션이라 더블 대비 접근성이 높지만, 앵커가 실측 젖산이라 원칙적으로 젖산 측정기가 필요하다. 대부분은 페이스·감각으로 대리하며, 이 대리가 체계의 핵심 통제를 흐린다.",
+        "en": "One session a day makes it more accessible than the doubles, but the anchor is measured blood lactate, so it strictly needs a lactate meter. Most proxy it with pace and feel, and that proxy blurs the system's central control."
       }
     },
     "switching_cost": [
@@ -669,6 +669,15 @@
         "note": {
           "ko": "감각(RPE)으로 관리하던 강도가 실측 젖산(약 2~3mmol)으로 못박힌다. Lydiard의 '스테디 스테이트'(무산소 직전 상단 유산소)가 정확히 측정된 서브역치가 되는 셈이라, 명시적 측정 전환이라 조용하지 않다. 젖산 측정기 없이 페이스로 대리하면 그냥 잦은 역치주와 구분되지 않는다.",
           "en": "Intensity managed by feel (RPE) is pinned to measured blood lactate (about 2-3 mmol). Lydiard's 'steady state' (upper aerobic, just below anaerobic) becomes precisely measured sub-threshold - an explicit move to measurement, so not silent. Without a lactate meter, proxying by pace makes it indistinguishable from just doing frequent tempo runs."
+        }
+      },
+      {
+        "from": "bakken-doubles",
+        "anchor_change": "lactate_mmol -> lactate_mmol",
+        "silent": false,
+        "note": {
+          "ko": "젖산 타깃(2~3mmol)은 그대로다. 바뀌는 건 빈도다. 하루 두 번째 역치 세션을 버리므로 주간 역치 총량이 대략 절반이 된다. 앵커가 같아 조용한 강도 변화는 없지만, 자극량이 크게 줄어드는 구조적 하향이다.",
+          "en": "The lactate target (2-3 mmol) is unchanged; what changes is frequency. Dropping the second daily threshold session roughly halves weekly threshold volume. Since the anchor is the same there is no silent intensity shift - it is a structural step down in stimulus."
         }
       }
     ],
@@ -707,6 +716,94 @@
       {
         "ko": "앵커가 실측 젖산이라, 측정기 없이 페이스로 대리하면 이 체계를 그냥 잦은 역치주와 구분할 수 없게 된다.",
         "en": "The anchor is measured lactate; proxying it with pace and no meter makes the system indistinguishable from just doing frequent tempo runs."
+      }
+    ]
+  },
+  {
+    "id": "bakken-doubles",
+    "name": "Bakken Double Threshold",
+    "attribution": "Marius Bakken",
+    "status": "draft",
+    "intensity_model": "lactate_mmol",
+    "bet": {
+      "ko": "역치 세션을 하루 두 번 젖산 통제로 반복해 주간 역치량을 극대화한다.",
+      "en": "Maximise weekly threshold volume with two lactate-controlled sessions a day."
+    },
+    "philosophy": {
+      "ko": "Marius Bakken이 자신의 훈련과 젖산 측정에서 확립하고 Ingebrigtsen 형제로 대표되는 원본 '노르웨이 방법'이다. 역치 날 하루 두 번(더블 역치)까지 서브역치(약 2~3mmol)를 반복해, 무너지지 않으면서 주간 역치 자극의 총량을 최대화한다. norwegian-singles는 이를 하루 한 번으로 줄인 아마추어 파생이다.",
+      "en": "The original 'Norwegian method', established by Marius Bakken from his own training and lactate testing and exemplified by the Ingebrigtsen brothers. On threshold days it repeats sub-threshold work (about 2-3 mmol) up to twice a day (double threshold) to maximise total weekly threshold stimulus without blowing up. norwegian-singles is the amateur derivative that lowers this to once a day."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "min": 9,
+        "max": 13
+      },
+      "min_weekly_km": 120,
+      "requires_track": false,
+      "note": {
+        "ko": "역치 날의 하루 두 세션이 정의적 특징이자 협상 불가 요소다. 실측 젖산 측정기, 높은 볼륨, 두 세션을 회복할 시간이 전제라 사실상 엘리트/고몰입 전용이다.",
+        "en": "Two sessions on a threshold day are the defining, non-negotiable feature. A real lactate meter, high volume, and the time to recover two daily sessions are assumed - effectively for elites and the highly committed only."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "norwegian-singles",
+        "anchor_change": "lactate_mmol -> lactate_mmol",
+        "silent": false,
+        "note": {
+          "ko": "젖산 타깃(2~3mmol)은 그대로지만 역치 날 두 번째 세션을 추가한다. 주간 역치 총량이 크게 늘어 회복·시간·측정 부담이 급증하는, 사실상 엘리트 전용의 실행 조건 도약이다.",
+          "en": "The lactate target (2-3 mmol) is unchanged, but a second session is added on threshold days. Weekly threshold volume rises sharply and the recovery, time, and measurement demands jump - effectively an elite-only step up in commitment."
+        }
+      },
+      {
+        "from": "daniels",
+        "anchor_change": "daniels-vdot -> lactate_mmol",
+        "silent": true,
+        "note": {
+          "ko": "'역치'는 살아남지만 타깃이 내려가고 빈도가 오른다. Daniels의 T는 약 60분 레이스 페이스(대략 4mmol)인데, 여기서는 더 낮은 2~3mmol을 노리고 하루 두 번까지 반복한다. 같은 단어 아래 세션이 조용히 느려지고 훨씬 잦아진다.",
+          "en": "'Threshold' survives but the target drops and frequency rises. Daniels' T is roughly 60-minute race pace (around 4 mmol), while here you aim lower at 2-3 mmol and repeat up to twice a day. Under the same word the session quietly slows and becomes far more frequent."
+        }
+      }
+    ],
+    "distribution": {
+      "model": "pyramidal",
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "많은 쉬운 볼륨 위에 잦은 서브역치를 얹고 VO2max는 적다. 엘리트 실무에서 관찰된 구조다.",
+          "en": "Frequent sub-threshold stacked on a large easy base, with little VO2max - a structure observed in elite practice."
+        }
+      }
+    },
+    "phases": [
+      {
+        "name": "base",
+        "emphasis": ["easy-run", "long-run"]
+      },
+      {
+        "name": "build",
+        "emphasis": ["threshold-continuous", "cruise-intervals", "easy-run"]
+      },
+      {
+        "name": "peak",
+        "emphasis": ["cruise-intervals", "vo2max-intervals"]
+      }
+    ],
+    "evidence": {
+      "tier": "tradition",
+      "note": {
+        "ko": "젖산 통제의 생리적 논리와 엘리트 성과는 설득력 있으나, 이 특정 더블 역치 프로토콜의 인과적 우월성을 검증한 통제 시험은 빈약하다. 그래서 tradition.",
+        "en": "The physiology of lactate control and the elite results are compelling, but controlled trials testing the causal superiority of this specific double-threshold protocol are thin. Hence tradition."
+      }
+    },
+    "caveats": [
+      {
+        "ko": "엘리트 볼륨과 하루 두 세션은 대부분의 주자에게 이전 불가능하다. 이 실행 조건을 감당 못하면 norwegian-singles가 맞는 선택이다.",
+        "en": "The elite volume and twice-a-day sessions are untranslatable for most runners. If you cannot meet this commitment, norwegian-singles is the right choice."
+      },
+      {
+        "ko": "'더블'이 정의적 특징이다. 하루 한 번으로 줄이면 그것은 이미 다른 체계(norwegian-singles)다.",
+        "en": "The 'double' is the defining feature. Lower it to once a day and it is already a different system (norwegian-singles)."
       }
     ]
   },

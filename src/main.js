@@ -211,7 +211,7 @@ function renderSystemDetail(id) {
       <div class="detail-head">
         <div>
           <h1>${esc(s.name)}</h1>
-          <p class="attribution">${esc(s.attribution || "")} · <code>${esc(s.intensity_model)}</code></p>
+          <p class="attribution">${s.attribution ? `${esc(s.attribution)} · ` : ""}<code>${esc(s.intensity_model)}</code></p>
         </div>
         ${tierBadge(s.evidence?.tier)}
       </div>
