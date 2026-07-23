@@ -7,10 +7,12 @@ import "./style.css";
 import systems from "../data/systems.json";
 import workouts from "../data/workouts.json";
 import usage from "../data/usage.json";
+import anchors from "../data/anchors.json";
 import { renderWorkout } from "../scripts/svg.mjs";
 
 const byWorkout = Object.fromEntries(workouts.map((w) => [w.id, w]));
 const bySystem = Object.fromEntries(systems.map((s) => [s.id, s]));
+const byAnchor = Object.fromEntries(anchors.map((a) => [a.model, a]));
 
 // ---- language ---------------------------------------------------------------
 let lang = localStorage.getItem("lang") || "ko";
@@ -233,6 +235,8 @@ function renderSystemDetail(id) {
         ${c.note ? `<p class="note">${esc(t(c.note))}</p>` : ""}
       </section>
 
+      ${measurementBlock([s.intensity_model], { fallbackFor: s.intensity_model })}
+
       ${
         sc
           ? `<section class="block">
@@ -346,6 +350,39 @@ function citeList(ev) {
   return `<ul class="cites">${ev.cite.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`;
 }
 
+// The measurement layer (data/anchors.json): what each anchor takes to measure,
+// and the honest floor when you cannot. It points down to RPE and names what is
+// lost - never a numeric conversion, because anchors do not convert cleanly.
+function measurementBlock(models, { fallbackFor = null } = {}) {
+  const seen = new Set();
+  const rows = models
+    .filter((m) => byAnchor[m] && !seen.has(m) && seen.add(m))
+    .map((m) => {
+      const a = byAnchor[m];
+      const floor = a.equipment_free
+        ? `<span class="floor-badge">${lang === "ko" ? "무장비 바닥" : "no-equipment floor"}</span>`
+        : "";
+      return `<li><code>${esc(m)}</code><span class="req">${esc(t(a.requires))}</span>${floor}</li>`;
+    })
+    .join("");
+  const fa = fallbackFor && byAnchor[fallbackFor];
+  const fb =
+    fa && !fa.equipment_free
+      ? `<p class="note fallback-note">${lang === "ko" ? "없으면 → " : "if unavailable → "}${esc(t(fa.fallback))}</p>`
+      : "";
+  return `
+      <section class="block">
+        <h3>${lang === "ko" ? "측정 요건" : "Measurement"}</h3>
+        <p class="sub">${
+          lang === "ko"
+            ? "각 앵커가 요구하는 장비·검사. 없으면 더 낮은 confidence의 앵커로, 결국 RPE(무장비 바닥)로 떨어진다 — 변환이 아니라 하강이다."
+            : "What each anchor requires. Without it you drop to a lower-confidence anchor, ultimately RPE (the no-equipment floor) - a descent, not a conversion."
+        }</p>
+        <ul class="measure">${rows}</ul>
+        ${fb}
+      </section>`;
+}
+
 function renderWorkoutDetail(id) {
   const w = byWorkout[id];
   if (!w) return notFound(id);
@@ -443,6 +480,11 @@ function renderWorkoutDetail(id) {
         }</p>
         <table class="anchors"><thead><tr><th>model</th><th>value</th><th>conf.</th><th></th></tr></thead><tbody>${anchors}</tbody></table>
       </section>
+
+      ${measurementBlock(
+        w.intensity.anchors.map((a) => a.model),
+        { fallbackFor: w.intensity.primary_anchor },
+      )}
 
       <section class="block claim">
         <h3>${lang === "ko" ? "주장" : "Claim"} ${tierBadge(w.claim?.evidence?.tier)}</h3>

@@ -10,15 +10,18 @@ const j = (p) => JSON.parse(readFileSync(resolve(root, p), "utf8"));
 const workoutSchema = j("data/schema/workout.schema.json");
 const systemSchema = j("data/schema/system.schema.json");
 const usageSchema = j("data/schema/usage.schema.json");
+const anchorSchema = j("data/schema/anchor-model.schema.json");
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 ajv.addSchema(workoutSchema, "workout.schema.json");
 ajv.addSchema(systemSchema, "system.schema.json");
 ajv.addSchema(usageSchema, "usage.schema.json");
+ajv.addSchema(anchorSchema, "anchor-model.schema.json");
 
 const workouts = j("data/workouts.json");
 const systems = j("data/systems.json");
 const usage = j("data/usage.json");
+const anchors = j("data/anchors.json");
 
 const errors = [];
 const fail = (m) => errors.push(m);
@@ -28,6 +31,7 @@ for (const [name, list, key] of [
   ["workout", workouts, "workout.schema.json"],
   ["system", systems, "system.schema.json"],
   ["usage", usage, "usage.schema.json"],
+  ["anchor", anchors, "anchor-model.schema.json"],
 ]) {
   const validate = ajv.getSchema(key);
   list.forEach((row, i) => {
@@ -37,7 +41,7 @@ for (const [name, list, key] of [
       const errs = validate.errors.filter((e) => !/\/contains\//.test(e.schemaPath));
       for (const e of errs) {
         fail(
-          `[schema] ${name}[${i}] ${row.id ?? row.calls_it ?? ""} ${e.instancePath} ${e.message}`,
+          `[schema] ${name}[${i}] ${row.id ?? row.model ?? row.calls_it ?? ""} ${e.instancePath} ${e.message}`,
         );
       }
     }
@@ -51,6 +55,27 @@ const sIds = new Set(systems.map((s) => s.id));
 const dupes = (arr) => arr.filter((v, i) => arr.indexOf(v) !== i);
 for (const d of dupes(workouts.map((w) => w.id))) fail(`[ref] duplicate workout id: ${d}`);
 for (const d of dupes(systems.map((s) => s.id))) fail(`[ref] duplicate system id: ${d}`);
+
+// The measurement layer must cover every anchor the data actually uses, so a
+// system's intensity_model or a workout's anchor can never lack a "what does it
+// take to measure this" answer.
+const anchorModels = new Set(anchors.map((a) => a.model));
+for (const d of dupes(anchors.map((a) => a.model))) fail(`[ref] duplicate anchor model: ${d}`);
+for (const s of systems)
+  if (!anchorModels.has(s.intensity_model))
+    fail(`[ref] system ${s.id}: intensity_model "${s.intensity_model}" has no anchors.json entry`);
+for (const w of workouts)
+  for (const a of w.intensity.anchors)
+    if (!anchorModels.has(a.model))
+      fail(`[ref] ${w.id}: anchor model "${a.model}" has no anchors.json entry`);
+// Exactly one equipment-free anchor, and it must be rpe_10 - the same principle
+// the workout schema enforces per row (exactly one rpe_10). The universal floor
+// is singular by definition; two would mean the fallback is ambiguous.
+const free = anchors.filter((a) => a.equipment_free).map((a) => a.model);
+if (free.length !== 1 || free[0] !== "rpe_10")
+  fail(
+    `[discipline] anchors.json: the sole equipment_free anchor must be rpe_10, got [${free.join(", ")}]`,
+  );
 
 const walk = (segs, cb) =>
   segs.forEach((s) => {
@@ -164,7 +189,9 @@ const tiers = {};
 for (const w of [...workouts, ...systems])
   for (const [, ev] of collectEvidence(w)) tiers[ev.tier] = (tiers[ev.tier] ?? 0) + 1;
 
-console.log(`workouts: ${workouts.length}  systems: ${systems.length}  usage: ${usage.length}`);
+console.log(
+  `workouts: ${workouts.length}  systems: ${systems.length}  usage: ${usage.length}  anchors: ${anchors.length}`,
+);
 console.log(`evidence tiers:`, tiers);
 const collisions = {};
 for (const u of usage) (collisions[u.calls_it] ??= new Set()).add(u.workout);
