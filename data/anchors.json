@@ -12,8 +12,8 @@
     },
     "equipment_free": true,
     "note": {
-      "ko": "장비·검사·모델·체계 소속이 모두 필요 없는 유일한 앵커. 그래서 모든 행의 보편 대체 바닥이자 렌더의 y축이다. 대신 가장 부정확하다.",
-      "en": "The only anchor needing no equipment, test, model, or system membership - hence the universal fallback floor and the render y-axis. It is also the least precise."
+      "ko": "느끼는 힘듦을 0(완전 휴식)에서 10(최대 노력)까지 스스로 매기는 척도다. 장비·검사·모델·체계 소속이 전혀 필요 없는 유일한 앵커라, 모든 행이 공유하는 최후의 공통 기준이자 렌더의 y축이 된다. 대신 가장 주관적이고 부정확하다.",
+      "en": "A scale on which you rate how hard it feels, from 0 (complete rest) to 10 (maximal effort). The only anchor needing no equipment, test, model, or system membership, so it is the last common standard every row shares and the render's y-axis. It is also the most subjective and least precise."
     }
   },
   {

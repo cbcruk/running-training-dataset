@@ -461,9 +461,10 @@ function measurementBlock(models, { fallbackFor = null } = {}) {
       .map((m) => {
         const a = byAnchor[m];
         const floor = a.equipment_free
-          ? `<span class="floor-badge">${lang === "ko" ? "무장비 바닥" : "no-equipment floor"}</span>`
+          ? `<span class="floor-badge">${lang === "ko" ? "장비 불필요" : "no equipment"}</span>`
           : "";
-        return `<li><code>${esc(m)}</code><span class="req">${esc(t(a.requires))}</span>${floor}</li>`;
+        const note = a.note ? `<span class="measure-note">${esc(t(a.note))}</span>` : "";
+        return `<li><code>${esc(m)}</code><span class="req">${esc(t(a.requires))}</span>${floor}${note}</li>`;
       })
       .join("");
     return `<div class="measure-group"><span class="measure-construct" title="${esc(t(c.note))}">${esc(t(c.label))}</span><ul class="measure">${rows}</ul></div>`;
@@ -478,8 +479,8 @@ function measurementBlock(models, { fallbackFor = null } = {}) {
         <h3>${lang === "ko" ? "측정 요건" : "Measurement"}</h3>
         <p class="sub">${
           lang === "ko"
-            ? "앵커는 읽는 구성개념(지각·페이스·심박·대사)으로 묶인다. 같은 구성개념이라도 서로 변환되지 않으며, 장비가 없으면 결국 RPE(무장비 바닥)로 떨어진다 — 변환이 아니라 하강이다."
-            : "Anchors are grouped by the construct they read (perception, pace, heart rate, metabolic). Even within a construct they do not interconvert, and without the equipment you ultimately drop to RPE (the no-equipment floor) - a descent, not a conversion."
+            ? "앵커는 읽는 구성개념(지각·페이스·심박·대사)으로 묶인다. 같은 구성개념이라도 서로 변환되지 않으며, 장비가 없으면 결국 장비 없이 누구나 쓸 수 있는 유일한 기준인 RPE로 떨어진다 — 변환이 아니라 하강이다."
+            : "Anchors are grouped by the construct they read (perception, pace, heart rate, metabolic). Even within a construct they do not interconvert, and without the equipment you ultimately drop to RPE - the one standard anyone can use with no equipment - a descent, not a conversion."
         }</p>
         <div class="measure-groups">${groups}</div>
         ${fb}
