@@ -1,0 +1,137 @@
+[
+  {
+    "id": "plasma-volume",
+    "category": "central-cardiovascular",
+    "label": { "ko": "혈장량", "en": "Plasma volume" },
+    "definition": {
+      "ko": "혈액의 액체 성분(혈장) 양의 증가. 지구력 훈련에 대한 가장 빠른 적응 중 하나다.",
+      "en": "An increase in blood plasma (the liquid component) - among the fastest adaptations to endurance training."
+    }
+  },
+  {
+    "id": "stroke-volume",
+    "category": "central-cardiovascular",
+    "label": { "ko": "1회 박출량", "en": "Stroke volume" },
+    "definition": {
+      "ko": "심장이 한 번 박동에 내보내는 혈액량의 증가. 주로 이완기 충만 증가에서 온다.",
+      "en": "An increase in the blood ejected per heartbeat, mainly via greater diastolic filling."
+    }
+  },
+  {
+    "id": "capillarization",
+    "category": "peripheral-aerobic",
+    "label": { "ko": "모세혈관 증식", "en": "Capillarization" },
+    "definition": {
+      "ko": "근육 모세혈관 밀도의 증가로 산소·연료 전달과 대사산물 제거가 개선된다.",
+      "en": "An increase in muscle capillary density, improving oxygen and fuel delivery and metabolite removal."
+    }
+  },
+  {
+    "id": "mitochondrial-density",
+    "category": "peripheral-aerobic",
+    "label": { "ko": "미토콘드리아 밀도", "en": "Mitochondrial density" },
+    "definition": {
+      "ko": "근섬유 내 미토콘드리아 수·크기의 증가로 유산소 에너지 생산 용량이 커진다.",
+      "en": "More and larger mitochondria in muscle fibres, raising aerobic energy-production capacity."
+    }
+  },
+  {
+    "id": "lactate-clearance",
+    "category": "metabolic",
+    "label": { "ko": "젖산 제거", "en": "Lactate clearance" },
+    "definition": {
+      "ko": "생성된 젖산을 제거·재활용하는 능력의 향상.",
+      "en": "An improved ability to clear and recycle the lactate that is produced."
+    }
+  },
+  {
+    "id": "mlss-shift",
+    "category": "metabolic",
+    "label": { "ko": "MLSS 상향", "en": "MLSS shift" },
+    "definition": {
+      "ko": "최대 젖산 정상상태(MLSS) 경계가 더 높은 강도로 이동하는 것 — 역치의 상향.",
+      "en": "A shift of the maximal lactate steady state (MLSS) boundary to a higher intensity - the threshold moving up."
+    }
+  },
+  {
+    "id": "vo2max",
+    "category": "metabolic",
+    "label": { "ko": "최대산소섭취량", "en": "VO2max" },
+    "definition": {
+      "ko": "최대 산소 섭취량 — 유산소 파워의 천장. 중심·말초 요인 모두에 좌우된다.",
+      "en": "Maximal oxygen uptake - the ceiling of aerobic power, set by both central and peripheral factors."
+    }
+  },
+  {
+    "id": "glycogen-storage",
+    "category": "metabolic",
+    "label": { "ko": "글리코겐 저장", "en": "Glycogen storage" },
+    "definition": {
+      "ko": "근육·간의 글리코겐 저장 용량 증가.",
+      "en": "An increase in muscle and liver glycogen storage capacity."
+    }
+  },
+  {
+    "id": "fat-oxidation",
+    "category": "metabolic",
+    "label": { "ko": "지방 산화", "en": "Fat oxidation" },
+    "definition": {
+      "ko": "주어진 강도에서 지방을 연료로 쓰는 비율의 증가로 글리코겐을 아낀다.",
+      "en": "A greater reliance on fat as fuel at a given intensity, sparing glycogen."
+    }
+  },
+  {
+    "id": "running-economy",
+    "category": "neuromuscular",
+    "label": { "ko": "러닝 이코노미", "en": "Running economy" },
+    "definition": {
+      "ko": "주어진 페이스에서의 산소·에너지 소비 감소 — 같은 속도를 더 싸게.",
+      "en": "Lower oxygen and energy cost at a given pace - the same speed for less."
+    }
+  },
+  {
+    "id": "neuromuscular-recruitment",
+    "category": "neuromuscular",
+    "label": { "ko": "신경근 동원", "en": "Neuromuscular recruitment" },
+    "definition": {
+      "ko": "고역치 운동단위 동원과 근수축 협응의 개선.",
+      "en": "Improved recruitment of high-threshold motor units and coordination of muscle contraction."
+    }
+  },
+  {
+    "id": "tendon-stiffness",
+    "category": "neuromuscular",
+    "label": { "ko": "건 강성", "en": "Tendon stiffness" },
+    "definition": {
+      "ko": "근-건 강성 증가로 탄성 에너지 반환이 개선된다.",
+      "en": "Increased musculotendinous stiffness, improving elastic energy return."
+    }
+  },
+  {
+    "id": "musculoskeletal-durability",
+    "category": "structural",
+    "label": { "ko": "근골격 내구성", "en": "Musculoskeletal durability" },
+    "definition": {
+      "ko": "반복 충격에 대한 근·건·인대의 내성 증가 — 부상 저항.",
+      "en": "Greater tolerance of muscles, tendons, and ligaments to repeated impact - injury resistance."
+    }
+  },
+  {
+    "id": "bone-density",
+    "category": "structural",
+    "label": { "ko": "골밀도", "en": "Bone density" },
+    "definition": {
+      "ko": "역학적 부하에 대한 반응으로 뼈 무기질 밀도가 증가하는 것.",
+      "en": "An increase in bone mineral density in response to mechanical loading."
+    }
+  },
+  {
+    "id": "pacing-skill",
+    "category": "skill",
+    "label": { "ko": "페이싱 기술", "en": "Pacing skill" },
+    "definition": {
+      "ko": "레이스·세션에서 노력을 배분하는 학습된 기술. 생리적 적응이 아니라 신경·인지적 능력이라는 점에 유의.",
+      "en": "The learned skill of distributing effort over a race or session - note it is a neural/cognitive ability, not a physiological adaptation."
+    }
+  }
+]

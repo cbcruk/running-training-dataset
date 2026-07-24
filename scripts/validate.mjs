@@ -11,17 +11,20 @@ const workoutSchema = j("data/schema/workout.schema.json");
 const systemSchema = j("data/schema/system.schema.json");
 const usageSchema = j("data/schema/usage.schema.json");
 const anchorSchema = j("data/schema/anchor-model.schema.json");
+const adaptationSchema = j("data/schema/adaptation.schema.json");
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 ajv.addSchema(workoutSchema, "workout.schema.json");
 ajv.addSchema(systemSchema, "system.schema.json");
 ajv.addSchema(usageSchema, "usage.schema.json");
 ajv.addSchema(anchorSchema, "anchor-model.schema.json");
+ajv.addSchema(adaptationSchema, "adaptation.schema.json");
 
 const workouts = j("data/workouts.json");
 const systems = j("data/systems.json");
 const usage = j("data/usage.json");
 const anchors = j("data/anchors.json");
+const adaptations = j("data/adaptations.json");
 
 const errors = [];
 const fail = (m) => errors.push(m);
@@ -32,6 +35,7 @@ for (const [name, list, key] of [
   ["system", systems, "system.schema.json"],
   ["usage", usage, "usage.schema.json"],
   ["anchor", anchors, "anchor-model.schema.json"],
+  ["adaptation", adaptations, "adaptation.schema.json"],
 ]) {
   const validate = ajv.getSchema(key);
   list.forEach((row, i) => {
@@ -76,6 +80,15 @@ if (free.length !== 1 || free[0] !== "rpe_10")
   fail(
     `[discipline] anchors.json: the sole equipment_free anchor must be rpe_10, got [${free.join(", ")}]`,
   );
+
+// The adaptation taxonomy must cover every target_adaptation the data uses, so a
+// workout can never target an adaptation the taxonomy does not define/group.
+const adaptationIds = new Set(adaptations.map((a) => a.id));
+for (const d of dupes(adaptations.map((a) => a.id))) fail(`[ref] duplicate adaptation id: ${d}`);
+for (const w of workouts)
+  for (const t of w.target_adaptation)
+    if (!adaptationIds.has(t))
+      fail(`[ref] ${w.id}: target_adaptation "${t}" has no adaptations.json entry`);
 
 const walk = (segs, cb) =>
   segs.forEach((s) => {
@@ -190,7 +203,7 @@ for (const w of [...workouts, ...systems])
   for (const [, ev] of collectEvidence(w)) tiers[ev.tier] = (tiers[ev.tier] ?? 0) + 1;
 
 console.log(
-  `workouts: ${workouts.length}  systems: ${systems.length}  usage: ${usage.length}  anchors: ${anchors.length}`,
+  `workouts: ${workouts.length}  systems: ${systems.length}  usage: ${usage.length}  anchors: ${anchors.length}  adaptations: ${adaptations.length}`,
 );
 console.log(`evidence tiers:`, tiers);
 const collisions = {};
