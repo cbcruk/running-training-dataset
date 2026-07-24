@@ -212,6 +212,24 @@
         "tier": "tradition"
       }
     },
+    "volume_caps": [
+      {
+        "zone": "long-run",
+        "max_km": 26,
+        "max_pct_weekly": 30,
+        "rule": {
+          "ko": "롱런을 16마일(약 26km)과 주간 볼륨의 약 25~30% 중 더 작은 값으로 제한한다. 롱런을 늘리는 대신 주 전체를 피로하게 두는 누적 피로 전제의 직접적 귀결이다.",
+          "en": "Cap the long run at the lesser of 16 miles (~26 km) or about 25-30% of weekly volume. A direct consequence of the cumulative-fatigue premise: cap the long run and keep the whole week fatigued instead."
+        },
+        "evidence": {
+          "tier": "tradition",
+          "note": {
+            "ko": "Hansons 방법의 정의적 규칙으로 저서에 문서화돼 있지만(Daniels의 기억 기반 캡과 달리), 상한 없는 롱런 대비 이 캡의 우월성은 통제 연구로 검증된 바 없다. 그래서 tradition.",
+            "en": "A defining rule of the Hansons method, documented in its book (unlike Daniels' from-memory caps), but the cap's superiority over an uncapped long run is untested in controlled trials. Hence tradition."
+          }
+        }
+      }
+    ],
     "phases": [
       {
         "name": "build",

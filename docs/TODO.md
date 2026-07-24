@@ -112,12 +112,12 @@ changes** (the dangerous case), not merely when the anchor differs.
 Fill only where a source genuinely specifies the value. Inventing numbers to make
 the fields look full is the exact failure the tier system exists to prevent.
 
-### 3a. `volume_caps` — currently only on `daniels`
+### 3a. `volume_caps` — on `daniels` and `hansons`
 
-That is _mostly correct_: most systems do not state per-session volume caps, and a
-blank field is honest. Add only the documented ones:
+Most systems do not state per-session volume caps, and a blank field is honest.
+Add only the documented ones:
 
-- [ ] **`hansons`**: the **16-mile (~26 km) long-run cap** is a defining, documented rule. Formalize it as a `volume_cap` (`max_km`, with a `rule` note) instead of leaving it only in prose/usage.
+- [x] **`hansons`**: the **16-mile (~26 km) long-run cap** is formalized as a `volume_cap` — `zone: long-run`, `max_km: 26`, `max_pct_weekly: 30` (the rule is the lesser of the two), `tier: tradition` with a note that it is documented in the method's book but its superiority over an uncapped long run is untested. No longer only in prose/usage.
 - [ ] **`pfitzinger`**: if the source states LT-run duration limits, add them; otherwise leave blank.
 
 ### 3b. `distribution.zones` — currently only on `polarized-80-20`
