@@ -117,6 +117,19 @@ function tierBadge(tier) {
   return `<span class="tier tier-${tier}" title="evidence tier: ${tier}">${esc(t(l))}</span>`;
 }
 
+// A raw intensity_model / anchor.model code, made hoverable: the tooltip pulls
+// label + construct + what-it-takes-to-measure from anchors.json so a slug like
+// "lactate_mmol" explains itself in place.
+const CONSTRUCT_LABEL = Object.fromEntries(ANCHOR_CONSTRUCTS.map((c) => [c.id, c.label]));
+function anchorCode(model) {
+  const a = byAnchor[model];
+  if (!a) return `<code>${esc(model)}</code>`;
+  const tip = [t(a.label), t(CONSTRUCT_LABEL[a.construct]), t(a.requires)]
+    .filter(Boolean)
+    .join(" · ");
+  return `<code class="anchor-code" title="${esc(tip)}">${esc(model)}</code>`;
+}
+
 const KM = (n) => (n == null ? "" : `${n}km`);
 function sessionsText(sp) {
   if (!sp) return "";
@@ -262,7 +275,7 @@ function renderSystemDetail(id) {
       <div class="detail-head">
         <div>
           <h1>${esc(s.name)}</h1>
-          <p class="attribution">${s.attribution ? `${esc(s.attribution)} · ` : ""}<code>${esc(s.intensity_model)}</code></p>
+          <p class="attribution">${s.attribution ? `${esc(s.attribution)} · ` : ""}${anchorCode(s.intensity_model)}</p>
         </div>
         ${tierBadge(s.evidence?.tier)}
       </div>
@@ -376,7 +389,7 @@ function renderWorkoutList() {
 function anchorRow(a) {
   const val = a.range ? `${a.range[0]}–${a.range[1]}` : a.zone != null ? a.zone : a.value;
   return `<tr>
-    <td><code>${esc(a.model)}</code></td>
+    <td>${anchorCode(a.model)}</td>
     <td>${esc(val)}</td>
     <td><span class="conf conf-${esc(a.confidence)}">${esc(a.confidence)}</span></td>
     <td class="anchor-note">${a.note ? esc(t(a.note)) : ""}</td>
