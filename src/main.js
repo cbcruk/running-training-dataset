@@ -8,11 +8,23 @@ import systems from "../data/systems.json";
 import workouts from "../data/workouts.json";
 import usage from "../data/usage.json";
 import anchors from "../data/anchors.json";
+import adaptations from "../data/adaptations.json";
 import { renderWorkout } from "../scripts/svg.mjs";
 
 const byWorkout = Object.fromEntries(workouts.map((w) => [w.id, w]));
 const bySystem = Object.fromEntries(systems.map((s) => [s.id, s]));
 const byAnchor = Object.fromEntries(anchors.map((a) => [a.model, a]));
+const byAdaptation = Object.fromEntries(adaptations.map((a) => [a.id, a]));
+
+// Fixed display order for the adaptation taxonomy's coarse categories.
+const ADAPT_CATEGORIES = [
+  { id: "central-cardiovascular", label: { ko: "중심 심혈관", en: "Central cardiovascular" } },
+  { id: "peripheral-aerobic", label: { ko: "말초 유산소", en: "Peripheral aerobic" } },
+  { id: "metabolic", label: { ko: "대사", en: "Metabolic" } },
+  { id: "neuromuscular", label: { ko: "신경근", en: "Neuromuscular" } },
+  { id: "structural", label: { ko: "구조·내구", en: "Structural" } },
+  { id: "skill", label: { ko: "기술", en: "Skill" } },
+];
 
 // ---- language ---------------------------------------------------------------
 let lang = localStorage.getItem("lang") || "ko";
@@ -383,6 +395,32 @@ function measurementBlock(models, { fallbackFor = null } = {}) {
       </section>`;
 }
 
+// The adaptation taxonomy (data/adaptations.json): group a workout's flat
+// target_adaptation slugs under their coarse physiological category, with the
+// definition on hover. Descriptive - it names what the workout targets, not what
+// it produces.
+function adaptationsBlock(ids) {
+  const present = ADAPT_CATEGORIES.map((cat) => {
+    const items = ids.map((id) => byAdaptation[id]).filter((a) => a && a.category === cat.id);
+    if (!items.length) return "";
+    const chips = items
+      .map((a) => `<span class="adapt" title="${esc(t(a.definition))}">${esc(t(a.label))}</span>`)
+      .join("");
+    return `<div class="adapt-group"><span class="adapt-cat">${esc(t(cat.label))}</span><div class="adapt-chips">${chips}</div></div>`;
+  }).join("");
+  if (!present) return "";
+  return `
+      <section class="block">
+        <h3>${lang === "ko" ? "표적 적응" : "Target adaptations"}</h3>
+        <p class="sub">${
+          lang === "ko"
+            ? "이 워크아웃이 노린다고 주장하는 생리적 적응 — 결과가 아니라 표적이다. 정의는 마우스를 올려서."
+            : "The physiological adaptations this workout is claimed to target - a target, not an outcome. Hover for the definition."
+        }</p>
+        <div class="adapt-groups">${present}</div>
+      </section>`;
+}
+
 function renderWorkoutDetail(id) {
   const w = byWorkout[id];
   if (!w) return notFound(id);
@@ -465,6 +503,8 @@ function renderWorkoutDetail(id) {
       <div class="chips">${meta}</div>
 
       <figure class="chart">${svg}</figure>
+
+      ${adaptationsBlock(w.target_adaptation)}
 
       <section class="block">
         <h3>${lang === "ko" ? "지시" : "Instructions"}</h3>

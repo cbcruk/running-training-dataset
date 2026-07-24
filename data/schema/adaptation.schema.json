@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/rtd/adaptation.schema.json",
+  "title": "Target Adaptation",
+  "description": "A taxonomy over target_adaptation - the flat enum grouped into coarse physiological categories with a definition. Descriptive only: it names and groups what a workout is claimed to target, and never asserts that a workout produces an outcome (that would reopen the expected_improvement trap). The categories are broad groupings, not claims of mechanistic isolation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "category", "label", "definition"],
+  "properties": {
+    "id": {
+      "enum": [
+        "plasma-volume",
+        "capillarization",
+        "mitochondrial-density",
+        "stroke-volume",
+        "lactate-clearance",
+        "mlss-shift",
+        "vo2max",
+        "running-economy",
+        "neuromuscular-recruitment",
+        "glycogen-storage",
+        "fat-oxidation",
+        "tendon-stiffness",
+        "bone-density",
+        "musculoskeletal-durability",
+        "pacing-skill"
+      ],
+      "description": "Matches the target_adaptation enum on workouts."
+    },
+    "category": {
+      "enum": [
+        "central-cardiovascular",
+        "peripheral-aerobic",
+        "metabolic",
+        "neuromuscular",
+        "structural",
+        "skill"
+      ],
+      "description": "A coarse physiological grouping (the taxonomy's broader term). Deliberately broad, not a claim of mechanistic isolation."
+    },
+    "label": { "$ref": "#/$defs/i18n" },
+    "definition": {
+      "$ref": "#/$defs/i18n",
+      "description": "What the adaptation is - descriptive, not an efficacy claim."
+    }
+  },
+
+  "$defs": {
+    "i18n": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ko", "en"],
+      "properties": { "ko": { "type": "string" }, "en": { "type": "string" } }
+    }
+  }
+}
