@@ -5,7 +5,7 @@
   "description": "The measurement layer. One row per intensity_model: what it takes to measure, and the honest degraded path when you cannot. NOT a conversion - anchors do not convert cleanly, so the fallback points at the equipment-free floor (rpe_10) and names what is lost, never a numeric substitution.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["model", "label", "requires", "equipment_free"],
+  "required": ["model", "construct", "label", "requires", "equipment_free"],
   "properties": {
     "model": {
       "enum": [
@@ -19,6 +19,10 @@
         "race_pace_ref"
       ],
       "description": "Matches intensity_model on systems and anchor.model on workouts."
+    },
+    "construct": {
+      "enum": ["perception", "pace", "heart-rate", "metabolic"],
+      "description": "The physical quantity the anchor reads. Anchors sharing a construct are NOT interconvertible - two heart-rate anchors (max vs reserve) mean different bpm for the same %; grouping shows the axes, it does not bridge them. Only rpe_10 is 'perception'."
     },
     "label": { "$ref": "#/$defs/i18n" },
     "requires": {
