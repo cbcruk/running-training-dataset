@@ -1,6 +1,7 @@
 [
   {
     "model": "rpe_10",
+    "construct": "perception",
     "label": {
       "ko": "주관적 운동강도 (RPE 0–10)",
       "en": "Rating of perceived exertion (0–10)"
@@ -17,6 +18,7 @@
   },
   {
     "model": "daniels-vdot",
+    "construct": "pace",
     "label": {
       "ko": "Daniels VDOT 존/페이스",
       "en": "Daniels VDOT zone/pace"
@@ -33,6 +35,7 @@
   },
   {
     "model": "pct_hrmax",
+    "construct": "heart-rate",
     "label": {
       "ko": "최대심박수 비율",
       "en": "% of maximum heart rate"
@@ -49,6 +52,7 @@
   },
   {
     "model": "pct_hrr",
+    "construct": "heart-rate",
     "label": {
       "ko": "심박수 예비량 비율 (Karvonen)",
       "en": "% of heart-rate reserve (Karvonen)"
@@ -65,6 +69,7 @@
   },
   {
     "model": "pct_vo2max",
+    "construct": "metabolic",
     "label": {
       "ko": "VO2max 비율",
       "en": "% of VO2max"
@@ -81,6 +86,7 @@
   },
   {
     "model": "pct_cs",
+    "construct": "pace",
     "label": {
       "ko": "임계속도 비율",
       "en": "% of critical speed"
@@ -97,6 +103,7 @@
   },
   {
     "model": "lactate_mmol",
+    "construct": "metabolic",
     "label": {
       "ko": "혈중 젖산 농도 (mmol/L)",
       "en": "Blood lactate concentration (mmol/L)"
@@ -113,6 +120,7 @@
   },
   {
     "model": "race_pace_ref",
+    "construct": "pace",
     "label": {
       "ko": "목표·기준 레이스 페이스",
       "en": "Goal or reference race pace"

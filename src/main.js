@@ -16,6 +16,43 @@ const bySystem = Object.fromEntries(systems.map((s) => [s.id, s]));
 const byAnchor = Object.fromEntries(anchors.map((a) => [a.model, a]));
 const byAdaptation = Object.fromEntries(adaptations.map((a) => [a.id, a]));
 
+// Anchor constructs: the physical quantity each anchor reads. Grouping shows the
+// axes; the notes state that sharing a construct does NOT make anchors convert.
+const ANCHOR_CONSTRUCTS = [
+  {
+    id: "perception",
+    label: { ko: "지각", en: "Perception" },
+    note: {
+      ko: "장비 없는 주관 축 — 유일한 보편 교환 축.",
+      en: "The subjective, no-equipment axis - the only universal exchange axis.",
+    },
+  },
+  {
+    id: "pace",
+    label: { ko: "페이스(속도)", en: "Pace (velocity)" },
+    note: {
+      ko: "같은 속도를 읽어도 서로 변환되지 않는다: VDOT는 측정된 피트니스, 목표 페이스는 희망.",
+      en: "Reads velocity, but they do not interconvert: VDOT is measured fitness, goal pace is a wish.",
+    },
+  },
+  {
+    id: "heart-rate",
+    label: { ko: "심박수", en: "Heart rate" },
+    note: {
+      ko: "같은 '70%'라도 최대(HRmax)와 예비량(HRR) 기준이면 다른 bpm이다.",
+      en: "The same '70%' means different bpm under max (HRmax) vs reserve (HRR).",
+    },
+  },
+  {
+    id: "metabolic",
+    label: { ko: "대사 측정", en: "Metabolic assay" },
+    note: {
+      ko: "실험실·측정기 필요. VO2와 젖산은 서로 다른 생리 축이다.",
+      en: "Needs a lab or meter. VO2 and lactate are different physiological axes.",
+    },
+  },
+];
+
 // Fixed display order for the adaptation taxonomy's coarse categories.
 const ADAPT_CATEGORIES = [
   { id: "central-cardiovascular", label: { ko: "중심 심혈관", en: "Central cardiovascular" } },
@@ -366,17 +403,21 @@ function citeList(ev) {
 // and the honest floor when you cannot. It points down to RPE and names what is
 // lost - never a numeric conversion, because anchors do not convert cleanly.
 function measurementBlock(models, { fallbackFor = null } = {}) {
-  const seen = new Set();
-  const rows = models
-    .filter((m) => byAnchor[m] && !seen.has(m) && seen.add(m))
-    .map((m) => {
-      const a = byAnchor[m];
-      const floor = a.equipment_free
-        ? `<span class="floor-badge">${lang === "ko" ? "무장비 바닥" : "no-equipment floor"}</span>`
-        : "";
-      return `<li><code>${esc(m)}</code><span class="req">${esc(t(a.requires))}</span>${floor}</li>`;
-    })
-    .join("");
+  const uniq = [...new Set(models.filter((m) => byAnchor[m]))];
+  const groups = ANCHOR_CONSTRUCTS.map((c) => {
+    const items = uniq.filter((m) => byAnchor[m].construct === c.id);
+    if (!items.length) return "";
+    const rows = items
+      .map((m) => {
+        const a = byAnchor[m];
+        const floor = a.equipment_free
+          ? `<span class="floor-badge">${lang === "ko" ? "무장비 바닥" : "no-equipment floor"}</span>`
+          : "";
+        return `<li><code>${esc(m)}</code><span class="req">${esc(t(a.requires))}</span>${floor}</li>`;
+      })
+      .join("");
+    return `<div class="measure-group"><span class="measure-construct" title="${esc(t(c.note))}">${esc(t(c.label))}</span><ul class="measure">${rows}</ul></div>`;
+  }).join("");
   const fa = fallbackFor && byAnchor[fallbackFor];
   const fb =
     fa && !fa.equipment_free
@@ -387,10 +428,10 @@ function measurementBlock(models, { fallbackFor = null } = {}) {
         <h3>${lang === "ko" ? "측정 요건" : "Measurement"}</h3>
         <p class="sub">${
           lang === "ko"
-            ? "각 앵커가 요구하는 장비·검사. 없으면 더 낮은 confidence의 앵커로, 결국 RPE(무장비 바닥)로 떨어진다 — 변환이 아니라 하강이다."
-            : "What each anchor requires. Without it you drop to a lower-confidence anchor, ultimately RPE (the no-equipment floor) - a descent, not a conversion."
+            ? "앵커는 읽는 구성개념(지각·페이스·심박·대사)으로 묶인다. 같은 구성개념이라도 서로 변환되지 않으며, 장비가 없으면 결국 RPE(무장비 바닥)로 떨어진다 — 변환이 아니라 하강이다."
+            : "Anchors are grouped by the construct they read (perception, pace, heart rate, metabolic). Even within a construct they do not interconvert, and without the equipment you ultimately drop to RPE (the no-equipment floor) - a descent, not a conversion."
         }</p>
-        <ul class="measure">${rows}</ul>
+        <div class="measure-groups">${groups}</div>
         ${fb}
       </section>`;
 }

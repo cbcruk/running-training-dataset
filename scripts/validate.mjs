@@ -80,6 +80,13 @@ if (free.length !== 1 || free[0] !== "rpe_10")
   fail(
     `[discipline] anchors.json: the sole equipment_free anchor must be rpe_10, got [${free.join(", ")}]`,
   );
+// The perception construct is the subjective axis - the same one that is the
+// equipment-free floor. Exactly rpe_10, and nothing else, may claim it.
+const perception = anchors.filter((a) => a.construct === "perception").map((a) => a.model);
+if (perception.length !== 1 || perception[0] !== "rpe_10")
+  fail(
+    `[discipline] anchors.json: the sole 'perception' construct must be rpe_10, got [${perception.join(", ")}]`,
+  );
 
 // The adaptation taxonomy must cover every target_adaptation the data uses, so a
 // workout can never target an adaptation the taxonomy does not define/group.
