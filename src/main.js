@@ -130,6 +130,30 @@ function anchorCode(model) {
   return `<code class="anchor-code" title="${esc(tip)}">${esc(model)}</code>`;
 }
 
+// A commitment chip that explains its dimension on hover - the terse
+// "9-13x/wk" / "≥120km" say what, the tooltip says what it means.
+function infoChip(text, tip) {
+  return `<span class="chip chip-info" title="${esc(t(tip))}">${esc(text)}</span>`;
+}
+const COMMIT_TIPS = {
+  sessions: {
+    ko: "주당 훈련 세션 수 — 이 체계를 실행하는 데 필요한 주간 빈도다. 더블(하루 2회)이면 세션 수가 훈련일 수보다 많다.",
+    en: "Training sessions per week - the frequency the system needs. With doubles (twice a day) the session count exceeds the number of training days.",
+  },
+  volume: {
+    ko: "권장 최소 주간 주행거리(km). 이 밑으로 내려가면 체계의 전제가 약해진다.",
+    en: "Minimum recommended weekly volume (km). Below this the system's premise weakens.",
+  },
+  weeks: {
+    ko: "권장 계획 길이(주).",
+    en: "Recommended plan length, in weeks.",
+  },
+  track: {
+    ko: "트랙이 필요한지 여부. 필요하면 정밀한 반복 구간 측정을 위해서다.",
+    en: "Whether a track is required - if so, for precise interval measurement.",
+  },
+};
+
 const KM = (n) => (n == null ? "" : `${n}km`);
 function sessionsText(sp) {
   if (!sp) return "";
@@ -289,10 +313,23 @@ function renderSystemDetail(id) {
       <section class="block">
         <h3>${lang === "ko" ? "실행 조건" : "Commitment"}</h3>
         <div class="chips">
-          ${sessionsText(c.sessions_per_week) ? `<span class="chip">${esc(sessionsText(c.sessions_per_week))}/wk</span>` : ""}
-          ${c.min_weekly_km ? `<span class="chip">≥ ${esc(KM(c.min_weekly_km))}</span>` : ""}
-          ${weeksText(c.plan_length_weeks) ? `<span class="chip">${esc(weeksText(c.plan_length_weeks))}</span>` : ""}
-          ${c.requires_track != null ? `<span class="chip">${c.requires_track ? (lang === "ko" ? "트랙 필요" : "track") : lang === "ko" ? "트랙 불필요" : "no track"}</span>` : ""}
+          ${sessionsText(c.sessions_per_week) ? infoChip(`${sessionsText(c.sessions_per_week)}/wk`, COMMIT_TIPS.sessions) : ""}
+          ${c.min_weekly_km ? infoChip(`≥ ${KM(c.min_weekly_km)}`, COMMIT_TIPS.volume) : ""}
+          ${weeksText(c.plan_length_weeks) ? infoChip(weeksText(c.plan_length_weeks), COMMIT_TIPS.weeks) : ""}
+          ${
+            c.requires_track != null
+              ? infoChip(
+                  c.requires_track
+                    ? lang === "ko"
+                      ? "트랙 필요"
+                      : "track"
+                    : lang === "ko"
+                      ? "트랙 불필요"
+                      : "no track",
+                  COMMIT_TIPS.track,
+                )
+              : ""
+          }
         </div>
         ${c.note ? `<p class="note">${esc(t(c.note))}</p>` : ""}
       </section>
