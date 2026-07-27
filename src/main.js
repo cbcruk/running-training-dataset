@@ -247,13 +247,7 @@ function renderSystemDetail(id) {
             lang === "ko" ? "전환 출발" : "coming from"
           }: <a href="#/system/${esc(x.from)}">${esc(fromName)}</a></span>
           <span class="switch-flag ${x.silent ? "silent" : "loud"}">${
-            x.silent
-              ? lang === "ko"
-                ? "조용함"
-                : "silent"
-              : lang === "ko"
-                ? "드러남"
-                : "not silent"
+            x.silent ? (lang === "ko" ? "조용함" : "silent") : lang === "ko" ? "드러남" : "overt"
           }</span>
         </div>
         <code class="anchor">${esc(x.anchor_change)}</code>
