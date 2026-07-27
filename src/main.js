@@ -117,6 +117,43 @@ function tierBadge(tier) {
   return `<span class="tier tier-${tier}" title="evidence tier: ${tier}">${esc(t(l))}</span>`;
 }
 
+// A raw intensity_model / anchor.model code, made hoverable: the tooltip pulls
+// label + construct + what-it-takes-to-measure from anchors.json so a slug like
+// "lactate_mmol" explains itself in place.
+const CONSTRUCT_LABEL = Object.fromEntries(ANCHOR_CONSTRUCTS.map((c) => [c.id, c.label]));
+function anchorCode(model) {
+  const a = byAnchor[model];
+  if (!a) return `<code>${esc(model)}</code>`;
+  const tip = [t(a.label), t(CONSTRUCT_LABEL[a.construct]), t(a.requires)]
+    .filter(Boolean)
+    .join(" · ");
+  return `<code class="anchor-code" title="${esc(tip)}">${esc(model)}</code>`;
+}
+
+// A commitment chip that explains its dimension on hover - the terse
+// "9-13x/wk" / "≥120km" say what, the tooltip says what it means.
+function infoChip(text, tip) {
+  return `<span class="chip chip-info" title="${esc(t(tip))}">${esc(text)}</span>`;
+}
+const COMMIT_TIPS = {
+  sessions: {
+    ko: "주당 훈련 세션 수 — 이 체계를 실행하는 데 필요한 주간 빈도다. 더블(하루 2회)이면 세션 수가 훈련일 수보다 많다.",
+    en: "Training sessions per week - the frequency the system needs. With doubles (twice a day) the session count exceeds the number of training days.",
+  },
+  volume: {
+    ko: "권장 최소 주간 주행거리(km). 이 밑으로 내려가면 체계의 전제가 약해진다.",
+    en: "Minimum recommended weekly volume (km). Below this the system's premise weakens.",
+  },
+  weeks: {
+    ko: "권장 계획 길이(주).",
+    en: "Recommended plan length, in weeks.",
+  },
+  track: {
+    ko: "트랙이 필요한지 여부. 필요하면 정밀한 반복 구간 측정을 위해서다.",
+    en: "Whether a track is required - if so, for precise interval measurement.",
+  },
+};
+
 const KM = (n) => (n == null ? "" : `${n}km`);
 function sessionsText(sp) {
   if (!sp) return "";
@@ -210,13 +247,7 @@ function renderSystemDetail(id) {
             lang === "ko" ? "전환 출발" : "coming from"
           }: <a href="#/system/${esc(x.from)}">${esc(fromName)}</a></span>
           <span class="switch-flag ${x.silent ? "silent" : "loud"}">${
-            x.silent
-              ? lang === "ko"
-                ? "조용함"
-                : "silent"
-              : lang === "ko"
-                ? "드러남"
-                : "not silent"
+            x.silent ? (lang === "ko" ? "조용함" : "silent") : lang === "ko" ? "드러남" : "overt"
           }</span>
         </div>
         <code class="anchor">${esc(x.anchor_change)}</code>
@@ -262,7 +293,7 @@ function renderSystemDetail(id) {
       <div class="detail-head">
         <div>
           <h1>${esc(s.name)}</h1>
-          <p class="attribution">${s.attribution ? `${esc(s.attribution)} · ` : ""}<code>${esc(s.intensity_model)}</code></p>
+          <p class="attribution">${s.attribution ? `${esc(s.attribution)} · ` : ""}${anchorCode(s.intensity_model)}</p>
         </div>
         ${tierBadge(s.evidence?.tier)}
       </div>
@@ -276,10 +307,23 @@ function renderSystemDetail(id) {
       <section class="block">
         <h3>${lang === "ko" ? "실행 조건" : "Commitment"}</h3>
         <div class="chips">
-          ${sessionsText(c.sessions_per_week) ? `<span class="chip">${esc(sessionsText(c.sessions_per_week))}/wk</span>` : ""}
-          ${c.min_weekly_km ? `<span class="chip">≥ ${esc(KM(c.min_weekly_km))}</span>` : ""}
-          ${weeksText(c.plan_length_weeks) ? `<span class="chip">${esc(weeksText(c.plan_length_weeks))}</span>` : ""}
-          ${c.requires_track != null ? `<span class="chip">${c.requires_track ? (lang === "ko" ? "트랙 필요" : "track") : lang === "ko" ? "트랙 불필요" : "no track"}</span>` : ""}
+          ${sessionsText(c.sessions_per_week) ? infoChip(`${sessionsText(c.sessions_per_week)}/wk`, COMMIT_TIPS.sessions) : ""}
+          ${c.min_weekly_km ? infoChip(`≥ ${KM(c.min_weekly_km)}`, COMMIT_TIPS.volume) : ""}
+          ${weeksText(c.plan_length_weeks) ? infoChip(weeksText(c.plan_length_weeks), COMMIT_TIPS.weeks) : ""}
+          ${
+            c.requires_track != null
+              ? infoChip(
+                  c.requires_track
+                    ? lang === "ko"
+                      ? "트랙 필요"
+                      : "track"
+                    : lang === "ko"
+                      ? "트랙 불필요"
+                      : "no track",
+                  COMMIT_TIPS.track,
+                )
+              : ""
+          }
         </div>
         ${c.note ? `<p class="note">${esc(t(c.note))}</p>` : ""}
       </section>
@@ -376,7 +420,7 @@ function renderWorkoutList() {
 function anchorRow(a) {
   const val = a.range ? `${a.range[0]}–${a.range[1]}` : a.zone != null ? a.zone : a.value;
   return `<tr>
-    <td><code>${esc(a.model)}</code></td>
+    <td>${anchorCode(a.model)}</td>
     <td>${esc(val)}</td>
     <td><span class="conf conf-${esc(a.confidence)}">${esc(a.confidence)}</span></td>
     <td class="anchor-note">${a.note ? esc(t(a.note)) : ""}</td>
@@ -411,9 +455,10 @@ function measurementBlock(models, { fallbackFor = null } = {}) {
       .map((m) => {
         const a = byAnchor[m];
         const floor = a.equipment_free
-          ? `<span class="floor-badge">${lang === "ko" ? "무장비 바닥" : "no-equipment floor"}</span>`
+          ? `<span class="floor-badge">${lang === "ko" ? "장비 불필요" : "no equipment"}</span>`
           : "";
-        return `<li><code>${esc(m)}</code><span class="req">${esc(t(a.requires))}</span>${floor}</li>`;
+        const note = a.note ? `<span class="measure-note">${esc(t(a.note))}</span>` : "";
+        return `<li><code>${esc(m)}</code><span class="req">${esc(t(a.requires))}</span>${floor}${note}</li>`;
       })
       .join("");
     return `<div class="measure-group"><span class="measure-construct" title="${esc(t(c.note))}">${esc(t(c.label))}</span><ul class="measure">${rows}</ul></div>`;
@@ -428,8 +473,8 @@ function measurementBlock(models, { fallbackFor = null } = {}) {
         <h3>${lang === "ko" ? "측정 요건" : "Measurement"}</h3>
         <p class="sub">${
           lang === "ko"
-            ? "앵커는 읽는 구성개념(지각·페이스·심박·대사)으로 묶인다. 같은 구성개념이라도 서로 변환되지 않으며, 장비가 없으면 결국 RPE(무장비 바닥)로 떨어진다 — 변환이 아니라 하강이다."
-            : "Anchors are grouped by the construct they read (perception, pace, heart rate, metabolic). Even within a construct they do not interconvert, and without the equipment you ultimately drop to RPE (the no-equipment floor) - a descent, not a conversion."
+            ? "앵커는 읽는 구성개념(지각·페이스·심박·대사)으로 묶인다. 같은 구성개념이라도 서로 변환되지 않으며, 장비가 없으면 결국 장비 없이 누구나 쓸 수 있는 유일한 기준인 RPE로 떨어진다 — 변환이 아니라 하강이다."
+            : "Anchors are grouped by the construct they read (perception, pace, heart rate, metabolic). Even within a construct they do not interconvert, and without the equipment you ultimately drop to RPE - the one standard anyone can use with no equipment - a descent, not a conversion."
         }</p>
         <div class="measure-groups">${groups}</div>
         ${fb}

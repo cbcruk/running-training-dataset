@@ -52,6 +52,22 @@ code {
   border-radius: 4px;
 }
 
+/* A hoverable anchor/intensity_model code - the dotted underline signals the
+   tooltip (label + construct + measurement requirement, from anchors.json). */
+.anchor-code {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+
+/* A commitment chip whose tooltip explains the dimension. Same dotted-underline
+   affordance as .anchor-code. */
+.chip-info {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -502,6 +518,13 @@ td {
   background: var(--accent-soft);
   padding: 0.05rem 0.45rem;
   border-radius: 5px;
+}
+.measure-note {
+  flex-basis: 100%;
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
 }
 .fallback-note {
   margin-top: 0.7rem;
