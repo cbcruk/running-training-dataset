@@ -16,6 +16,28 @@ const bySystem = Object.fromEntries(systems.map((s) => [s.id, s]));
 const byAnchor = Object.fromEntries(anchors.map((a) => [a.model, a]));
 const byAdaptation = Object.fromEntries(adaptations.map((a) => [a.id, a]));
 
+// Reverse indexes so an anchor page can show everything that references it:
+// which systems anchor on it, which workouts list it (and where it is primary),
+// and every switching_cost whose anchor_change touches it on either side.
+const systemsByAnchor = {};
+for (const s of systems) (systemsByAnchor[s.intensity_model] ??= []).push(s);
+const workoutsByAnchor = {};
+for (const w of workouts)
+  for (const a of w.intensity.anchors)
+    (workoutsByAnchor[a.model] ??= []).push({
+      w,
+      primary: w.intensity.primary_anchor === a.model,
+    });
+const switchesByAnchor = {};
+for (const s of systems)
+  for (const x of s.switching_cost || []) {
+    const [from, to] = (x.anchor_change || "").split("->").map((v) => v.trim());
+    const entry = { to: s.id, from: x.from, silent: x.silent, note: x.note, from_anchor: from };
+    for (const m of new Set([from, to]))
+      if (byAnchor[m])
+        (switchesByAnchor[m] ??= []).push({ ...entry, side: m === to ? "in" : "out" });
+  }
+
 // Anchor constructs: the physical quantity each anchor reads. Grouping shows the
 // axes; the notes state that sharing a construct does NOT make anchors convert.
 const ANCHOR_CONSTRUCTS = [
@@ -127,7 +149,7 @@ function anchorCode(model) {
   const tip = [t(a.label), t(CONSTRUCT_LABEL[a.construct]), t(a.requires)]
     .filter(Boolean)
     .join(" · ");
-  return `<code class="anchor-code" title="${esc(tip)}">${esc(model)}</code>`;
+  return `<a class="anchor-code" href="#/anchor/${esc(model)}" title="${esc(tip)}"><code>${esc(model)}</code></a>`;
 }
 
 // A commitment chip that explains its dimension on hover - the terse
@@ -169,6 +191,7 @@ function weeksText(pl) {
 // ---- routing ----------------------------------------------------------------
 function currentView() {
   const h = location.hash;
+  if (h.startsWith("#/anchor")) return "anchors";
   if (h.startsWith("#/workout")) return "workouts";
   if (h.startsWith("#/system")) return "systems";
   if (h.startsWith("#/workouts")) return "workouts";
@@ -184,6 +207,8 @@ function route() {
   if (searchInput.value !== q) searchInput.value = q;
 
   if (q) return renderSearch(q);
+  if (parts[0] === "anchors") return renderAnchorList();
+  if (parts[0] === "anchor" && parts[1]) return renderAnchorDetail(parts[1]);
   if (parts[0] === "workouts") return renderWorkoutList();
   if (parts[0] === "workout" && parts[1]) return renderWorkoutDetail(parts[1]);
   if (parts[0] === "system" && parts[1]) return renderSystemDetail(parts[1]);
@@ -380,6 +405,195 @@ function renderSystemDetail(id) {
       </section>`
           : ""
       }
+    </article>`;
+  finishRender();
+}
+
+// ---- anchor (measurement model) list ----------------------------------------
+// Anchors are first-class: the axis every workout and system is pinned to. The
+// list groups them by construct so the "same construct != interconvertible"
+// point is visible at a glance, and each card counts its real references.
+function anchorCard(a) {
+  const sys = systemsByAnchor[a.model]?.length || 0;
+  const wk = workoutsByAnchor[a.model]?.length || 0;
+  const floor = a.equipment_free
+    ? `<span class="floor-badge">${lang === "ko" ? "장비 불필요" : "no equipment"}</span>`
+    : "";
+  return `
+    <a class="card anchor-card" href="#/anchor/${esc(a.model)}">
+      <div class="card-head">
+        <h2><code>${esc(a.model)}</code></h2>
+        ${floor}
+      </div>
+      <p class="anchor-label">${esc(t(a.label))}</p>
+      <p class="req">${esc(t(a.requires))}</p>
+      <div class="chips">
+        <span class="chip">${lang === "ko" ? "체계" : "systems"} ${sys}</span>
+        <span class="chip">${lang === "ko" ? "워크아웃" : "workouts"} ${wk}</span>
+      </div>
+    </a>`;
+}
+
+function renderAnchorList() {
+  const groups = ANCHOR_CONSTRUCTS.map((c) => {
+    const items = anchors.filter((a) => a.construct === c.id);
+    if (!items.length) return "";
+    return `
+      <section class="anchor-construct-group">
+        <h3 class="construct-h" title="${esc(t(c.note))}">${esc(t(c.label))}</h3>
+        <div class="grid">${items.map(anchorCard).join("")}</div>
+      </section>`;
+  }).join("");
+  app.innerHTML = `
+    <section class="intro">
+      <p>${
+        lang === "ko"
+          ? "앵커(강도 모델)는 모든 워크아웃·체계가 매달리는 축이다. 읽는 <b>구성개념</b>으로 묶여 있지만, 같은 구성개념이라도 서로 변환되지 않는다. 장비가 없으면 결국 <code>rpe_10</code> 하나로 떨어진다 — 변환이 아니라 하강."
+          : "Anchors (intensity models) are the axis every workout and system hangs on. They are grouped by the <b>construct</b> they read, but sharing a construct does not make them interconvert. Without equipment they all drop to a single <code>rpe_10</code> — a descent, not a conversion."
+      }</p>
+    </section>
+    ${groups}`;
+  finishRender();
+}
+
+// ---- anchor detail ----------------------------------------------------------
+function renderAnchorDetail(model) {
+  const a = byAnchor[model];
+  if (!a) return notFound(model);
+
+  const sys = systemsByAnchor[model] || [];
+  const wk = workoutsByAnchor[model] || [];
+  const switches = switchesByAnchor[model] || [];
+  const siblings = anchors.filter((x) => x.construct === a.construct && x.model !== model);
+  const construct = ANCHOR_CONSTRUCTS.find((c) => c.id === a.construct);
+
+  const floor = a.equipment_free
+    ? `<span class="floor-badge">${lang === "ko" ? "장비 불필요" : "no equipment"}</span>`
+    : "";
+
+  // rpe_10 carries `note` (why it is the floor); every other anchor carries
+  // `fallback` (what you lose when the equipment is gone).
+  const descent = a.equipment_free
+    ? a.note
+      ? `<section class="block">
+          <h3>${lang === "ko" ? "왜 바닥인가" : "Why it is the floor"}</h3>
+          <p>${esc(t(a.note))}</p>
+        </section>`
+      : ""
+    : a.fallback
+      ? `<section class="block fallback-block">
+          <h3>${lang === "ko" ? "장비가 없으면" : "Without the equipment"}</h3>
+          <p>${esc(t(a.fallback))}</p>
+        </section>`
+      : "";
+
+  const siblingHtml = siblings.length
+    ? `<section class="block">
+        <h3>${lang === "ko" ? "같은 구성개념" : "Same construct"}</h3>
+        <p class="sub">${
+          lang === "ko"
+            ? "같은 것을 읽지만 서로 변환되지 않는다."
+            : "They read the same thing but do not interconvert."
+        }</p>
+        <div class="anchor-siblings">${siblings
+          .map((s) => `<a class="wchip" href="#/anchor/${esc(s.model)}">${esc(s.model)}</a>`)
+          .join("")}</div>
+      </section>`
+    : "";
+
+  const sysHtml = sys.length
+    ? `<section class="block">
+        <h3>${lang === "ko" ? "이 앵커를 쓰는 체계" : "Systems anchored on it"}</h3>
+        <div class="grid">${sys
+          .map(
+            (s) => `<a class="card sys-card" href="#/system/${esc(s.id)}">
+              <div class="card-head"><h2>${esc(s.name)}</h2>${tierBadge(s.evidence?.tier)}</div>
+              <p class="bet">${esc(t(s.bet))}</p></a>`,
+          )
+          .join("")}</div>
+      </section>`
+    : "";
+
+  const wkHtml = wk.length
+    ? `<section class="block">
+        <h3>${lang === "ko" ? "이 앵커를 쓰는 워크아웃" : "Workouts using it"}</h3>
+        <div class="anchor-workouts">${wk
+          .map(
+            ({ w, primary }) =>
+              `<a class="wchip" href="#/workout/${esc(w.id)}">${esc(w.canonical_name)}${
+                primary
+                  ? ` <span class="primary-flag">${lang === "ko" ? "주앵커" : "primary"}</span>`
+                  : ""
+              }</a>`,
+          )
+          .join("")}</div>
+      </section>`
+    : "";
+
+  const switchHtml = switches.length
+    ? `<section class="block">
+        <h3>${lang === "ko" ? "전환에서의 이 앵커" : "This anchor in switches"}</h3>
+        <p class="sub">${
+          lang === "ko"
+            ? "이 앵커가 나가거나 들어오는 체계 전환. 조용함은 용어는 살아남고 뜻만 바뀌는 위험한 경우."
+            : "System switches where this anchor leaves or arrives. Silent = the term survives while its meaning changes — the dangerous case."
+        }</p>
+        <div class="switch-list">${switches
+          .map((x) => {
+            const toName = bySystem[x.to]?.name || x.to;
+            const fromName = bySystem[x.from]?.name || x.from;
+            const dir =
+              x.side === "in"
+                ? `${lang === "ko" ? "유입" : "in"}`
+                : `${lang === "ko" ? "유출" : "out"}`;
+            return `<div class="switch">
+              <div class="switch-head">
+                <span class="switch-from"><a href="#/system/${esc(x.from)}">${esc(fromName)}</a> → <a href="#/system/${esc(x.to)}">${esc(toName)}</a></span>
+                <span class="switch-flag ${x.side === "in" ? "in" : "out"}">${dir}</span>
+                <span class="switch-flag ${x.silent ? "silent" : "loud"}">${
+                  x.silent
+                    ? lang === "ko"
+                      ? "조용함"
+                      : "silent"
+                    : lang === "ko"
+                      ? "드러남"
+                      : "overt"
+                }</span>
+              </div>
+              <p>${esc(t(x.note))}</p>
+            </div>`;
+          })
+          .join("")}</div>
+      </section>`
+    : "";
+
+  app.innerHTML = `
+    <a class="back" href="#/anchors">← ${lang === "ko" ? "앵커 목록" : "anchors"}</a>
+    <article class="detail">
+      <div class="detail-head">
+        <h1><code>${esc(a.model)}</code></h1>
+        ${floor}
+      </div>
+      <p class="bet big">${esc(t(a.label))}</p>
+      <div class="chips">
+        <span class="chip" title="${esc(t(construct?.note))}">${esc(t(construct?.label))}</span>
+      </div>
+
+      <section class="block">
+        <h3>${lang === "ko" ? "무엇을 읽나" : "What it reads"}</h3>
+        <p>${esc(t(construct?.note))}</p>
+      </section>
+
+      <section class="block">
+        <h3>${lang === "ko" ? "측정 요건" : "Requirements"}</h3>
+        <p>${esc(t(a.requires))}</p>
+      </section>
+
+      ${descent}
+      ${siblingHtml}
+      ${sysHtml}
+      ${wkHtml}
+      ${switchHtml}
     </article>`;
   finishRender();
 }
@@ -671,6 +885,12 @@ function renderSearch(rawQ) {
       w.family.toLowerCase().includes(q) ||
       t(w.claim?.proposition).toLowerCase().includes(q),
   );
+  const anchorHits = anchors.filter(
+    (a) =>
+      a.model.toLowerCase().includes(q) ||
+      a.construct.includes(q) ||
+      t(a.label).toLowerCase().includes(q),
+  );
 
   let html = "";
 
@@ -714,6 +934,12 @@ function renderSearch(rawQ) {
           <div class="card-head"><h2>${esc(w.canonical_name)}</h2>${tierBadge(w.claim?.evidence?.tier)}</div>
           <p class="bet">${esc(t(w.claim?.proposition))}</p></a>`,
       )
+      .join("")}</div>`;
+  }
+
+  if (anchorHits.length) {
+    html += `<h3 class="search-h">${lang === "ko" ? "앵커" : "Anchors"}</h3><div class="grid">${anchorHits
+      .map(anchorCard)
       .join("")}</div>`;
   }
 
