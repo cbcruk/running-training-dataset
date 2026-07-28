@@ -55,9 +55,12 @@ code {
 /* A hoverable anchor/intensity_model code - the dotted underline signals the
    tooltip (label + construct + measurement requirement, from anchors.json). */
 .anchor-code {
-  cursor: help;
+  cursor: pointer;
   text-decoration: underline dotted;
   text-underline-offset: 2px;
+}
+.anchor-code:hover {
+  text-decoration-color: var(--accent);
 }
 
 /* A commitment chip whose tooltip explains the dimension. Same dotted-underline
@@ -371,6 +374,62 @@ main {
 .switch-flag.loud {
   border: 1px solid var(--border);
   color: var(--muted);
+}
+.switch-flag.in {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.switch-flag.out {
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* ---- anchor pages ---- */
+.anchor-construct-group {
+  margin-bottom: 2rem;
+}
+.construct-h {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  cursor: help;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+  margin: 0 0 0.9rem;
+}
+.anchor-card h2 code {
+  font-size: 0.95rem;
+}
+.anchor-label {
+  margin: 0.5rem 0 0.2rem;
+  font-weight: 500;
+}
+.anchor-card .req {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.anchor-siblings,
+.anchor-workouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.primary-flag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.fallback-block {
+  background: var(--accent-soft);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+}
+.fallback-block h3 {
+  margin-top: 0;
 }
 .anchor {
   display: inline-block;
