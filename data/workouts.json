@@ -515,7 +515,7 @@
       "evidence": {
         "tier": "plausible",
         "cite": [
-          "Billat LV (2001). Interval training for performance, Part I. Sports Med 31(1).",
+          "Billat LV (2001). Interval training for performance: a scientific and empirical practice. Part I: aerobic interval training. Sports Med 31(1).",
           "Midgley AW, McNaughton LR (2006). Time at VO2max during intermittent treadmill running. J Sports Med Phys Fitness 46(1)."
         ],
         "note": {
@@ -536,7 +536,9 @@
       },
       "evidence": {
         "tier": "plausible",
-        "cite": ["Billat LV (2001). Interval training for performance, Part I. Sports Med 31(1)."]
+        "cite": [
+          "Billat LV (2001). Interval training for performance: a scientific and empirical practice. Part I: aerobic interval training. Sports Med 31(1)."
+        ]
       },
       "confounds": [
         {
@@ -773,7 +775,9 @@
       },
       "evidence": {
         "tier": "plausible",
-        "cite": ["Egan B, Zierath JR (2013). Cell Metab 17(2)."]
+        "cite": [
+          "Egan B, Zierath JR (2013). Exercise metabolism and the molecular regulation of skeletal muscle adaptation. Cell Metab 17(2)."
+        ]
       }
     },
     "prerequisites": {
@@ -1493,7 +1497,7 @@
       "evidence": {
         "tier": "plausible",
         "cite": [
-          "Billat V (2001). Interval training for performance: a scientific and empirical practice. Sports Med 31(1)."
+          "Billat LV (2001). Interval training for performance: a scientific and empirical practice. Part I: aerobic interval training. Sports Med 31(1)."
         ]
       }
     },
@@ -1505,7 +1509,9 @@
       },
       "evidence": {
         "tier": "plausible",
-        "cite": ["Billat V (2001). Sports Med 31(1)."]
+        "cite": [
+          "Billat LV (2001). Interval training for performance: a scientific and empirical practice. Part I: aerobic interval training. Sports Med 31(1)."
+        ]
       }
     },
     "safety": {
@@ -1802,7 +1808,9 @@
       },
       "evidence": {
         "tier": "plausible",
-        "cite": ["McHugh MP (2003). Scand J Med Sci Sports 13(2)."]
+        "cite": [
+          "McHugh MP (2003). Recent advances in the understanding of the repeated bout effect. Scand J Med Sci Sports 13(2)."
+        ]
       }
     },
     "safety": {

@@ -199,6 +199,27 @@ for (const w of [...workouts, ...systems])
       if (!/\(\d{4}\)/.test(c))
         fail(`[discipline] ${w.id}${path}: cite lacks a (year): "${c.slice(0, 50)}"`);
 
+// One reference, one string. The verification pass (docs/TODO.md #1) asks a human
+// to check each source once - which only works if a source reads the same
+// everywhere. Two renderings of one reference (a short form in a test, the full
+// form in a claim) look like two sources and cannot be grepped as one. Billat 2001
+// had drifted into three forms, one with the wrong initials, before this ran.
+const citeForms = {};
+for (const w of [...workouts, ...systems])
+  for (const [, ev] of collectEvidence(w))
+    for (const c of ev.cite ?? []) {
+      const m = c.match(/^([A-Za-z][^(]*?)\s*\((\d{4})\)/);
+      if (!m) continue;
+      const key = `${m[1].trim().split(/[\s,&]+/)[0]} ${m[2]}`;
+      (citeForms[key] ??= new Set()).add(c);
+    }
+for (const [key, forms] of Object.entries(citeForms))
+  if (forms.size > 1)
+    fail(
+      `[discipline] citation "${key}" appears in ${forms.size} renderings - pick one canonical string:\n` +
+        [...forms].map((f) => `      - ${f}`).join("\n"),
+    );
+
 // Nothing ships verified while its citations are unchecked.
 for (const w of [...workouts, ...systems])
   if (w.status === "verified")
