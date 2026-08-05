@@ -138,7 +138,7 @@ Eight systems carry a `distribution.model` but no explicit `zones` breakdown.
 [ADR 0001](adr/0001-dictionary-shape.md) settles that this is a dictionary:
 prerendered entries for **discovery** (arriving from a search engine or a shared
 link) wrapped in a client-side index for **use** (looking up, cross-referencing,
-comparing). Both modes matter; only one is currently served.
+comparing). **Both modes are now served — this section is done.**
 
 - [x] **Real URLs (prerender + History API routing).** Done. Routing moved from
       hash to the History API, and `scripts/prerender.mjs` writes one HTML file per
@@ -148,12 +148,18 @@ comparing). Both modes matter; only one is currently served.
       browser renders from, so prerendered and client-rendered output cannot drift
       (the arrangement `svg.mjs` already uses for charts). CI asserts the route
       count against the data, so a silent regression cannot ship.
-- [ ] **Keyboard-first search** (`/` to focus, arrows to move, Enter to open, Esc to
-      dismiss). Dictionaries live on this and it is missing. ~40 lines.
-- [ ] **Offline via a service worker.** The corpus is already resident; making it
-      consultable without a network is mostly caching the shell. ~30 lines.
-- [ ] **Recently viewed.** Cheap, and it is what readers of reference works reach
-      for. ~30 lines.
+- [x] **Keyboard-first search.** Done. `/` (or `s`) focuses the box, `↑`/`↓` walk
+      the hits, `Enter` opens the highlighted one, `Esc` clears then blurs. The
+      shortcuts are printed under the search box so they are discoverable.
+- [x] **Offline via a service worker.** Done. `public/sw.js` caches the shell and
+      the content-hashed assets: navigations are network-first (a fresh prerendered
+      entry wins when online), assets cache-first. Because the whole corpus ships in
+      the bundle, an entry that was **never visited** still renders offline through
+      the shell fallback — the payoff of the resident-corpus decision.
+- [x] **Recently viewed.** Done. Kept in `localStorage`, capped at 8, most recent
+      first, shown on the home route only. Injected by the browser shell after
+      render and never prerendered: the files on disk have to read the same for
+      everyone.
 
 Note what is **not** on this list: shrinking the bundle by splitting data per route.
 Holding the whole corpus client-side is what powers the collision search — it is the
