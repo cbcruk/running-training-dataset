@@ -1,6 +1,9 @@
 # ADR 0001 — The catalog is a dictionary: prerendered entries, client-side index
 
-**Status:** accepted · 2026-08-05
+**Status:** accepted · 2026-08-05 — amended by [ADR 0002](0002-component-model.md),
+which adopts a component model for the view layer on an axis this ADR did not weigh
+(how it is to work in the code). Everything below still holds; the framework
+rejection was about problem fit, and Astro/TanStack remain rejected.
 **Decides:** whether to keep the dataset in JSON; whether to adopt a web framework
 (Astro, TanStack). Both reduce to one prior judgment — what kind of thing this is —
 recorded here.

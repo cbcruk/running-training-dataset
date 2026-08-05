@@ -6,8 +6,13 @@
 // disk, so GitHub Pages serves it with no rewrite rules and the client bundle
 // upgrades it to instant navigation on load.
 //
-// Markup comes from src/views.mjs - the same pure module the browser renders from,
-// so a prerendered page and a client-rendered one cannot drift.
+// Markup comes from the views the browser renders from, so a prerendered page and
+// a client-rendered one cannot drift.
+//
+// It imports the SSR *build* (.ssr/views.js), not src/views.jsx directly: the
+// views are components now, and Node cannot parse JSX. `vp run pages` runs the
+// SSR build first. That extra step is the price of the component model - see
+// ADR 0002.
 //
 // Run it as `vp run pages`, not `prerender`: pnpm matches script names as
 // substrings, so a script called `prerender` would also fire on `vp run render`
@@ -15,7 +20,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { allRoutes, metaFor, renderPath, setBase, setLang, currentView } from "../src/views.mjs";
+import { allRoutes, metaFor, renderPath, setBase, setLang, currentView } from "../.ssr/views.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = resolve(root, "dist");

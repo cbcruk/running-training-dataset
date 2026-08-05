@@ -1,6 +1,6 @@
 // Browser shell for the running-training-dataset.
 //
-// The views live in views.mjs, which is pure and DOM-free so scripts/prerender.mjs
+// The views live in views.jsx, which is pure and DOM-free so scripts/prerender.mjs
 // produces byte-identical markup - the same arrangement svg.mjs already uses for the
 // charts. This file is only the browser half: History-API routing, link
 // interception, search, and the language toggle.
@@ -20,7 +20,7 @@ import {
   setBase,
   setLang,
   currentLang,
-} from "./views.mjs";
+} from "./views.jsx";
 
 const BASE = import.meta.env.BASE_URL || "/";
 setBase(BASE);
@@ -30,7 +30,7 @@ const app = document.getElementById("app");
 const searchInput = document.getElementById("search");
 const langToggle = document.getElementById("lang-toggle");
 
-// location.pathname -> the base-relative path views.mjs routes on.
+// location.pathname -> the base-relative path views.jsx routes on.
 function currentPath() {
   let p = location.pathname;
   if (BASE !== "/" && p.startsWith(BASE)) p = p.slice(BASE.length - 1);

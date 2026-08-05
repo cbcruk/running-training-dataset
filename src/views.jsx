@@ -9,6 +9,8 @@ import usage from "../data/usage.json" with { type: "json" };
 import anchors from "../data/anchors.json" with { type: "json" };
 import adaptations from "../data/adaptations.json" with { type: "json" };
 import { renderWorkout } from "../scripts/svg.mjs";
+import { render } from "preact-render-to-string";
+import { AnchorDetail } from "./components/AnchorDetail.jsx";
 
 const byWorkout = Object.fromEntries(workouts.map((w) => [w.id, w]));
 const bySystem = Object.fromEntries(systems.map((s) => [s.id, s]));
@@ -531,144 +533,32 @@ function renderAnchorList() {
 }
 
 // ---- anchor detail ----------------------------------------------------------
+// Migrated to components (src/components/AnchorDetail.jsx). It still returns a
+// string, so the router, the browser shell, and the prerenderer are unchanged -
+// which is what lets the migration run one view at a time instead of as a
+// big-bang rewrite. `ctx` carries what the module-level closure used to supply.
+function viewContext() {
+  return {
+    t,
+    lang,
+    url: (path) => `${BASE}${path}`,
+    byWorkout,
+    bySystem,
+    byAnchor,
+    byAdaptation,
+    systems,
+    workouts,
+    anchors,
+    adaptations,
+    usage,
+    constructs: ANCHOR_CONSTRUCTS,
+    indexes: { systemsByAnchor, workoutsByAnchor, switchesByAnchor },
+  };
+}
+
 function renderAnchorDetail(model) {
-  const a = byAnchor[model];
-  if (!a) return notFound(model);
-
-  const sys = systemsByAnchor[model] || [];
-  const wk = workoutsByAnchor[model] || [];
-  const switches = switchesByAnchor[model] || [];
-  const siblings = anchors.filter((x) => x.construct === a.construct && x.model !== model);
-  const construct = ANCHOR_CONSTRUCTS.find((c) => c.id === a.construct);
-
-  const floor = a.equipment_free
-    ? `<span class="floor-badge">${lang === "ko" ? "장비 불필요" : "no equipment"}</span>`
-    : "";
-
-  // rpe_10 carries `note` (why it is the floor); every other anchor carries
-  // `fallback` (what you lose when the equipment is gone).
-  const descent = a.equipment_free
-    ? a.note
-      ? `<section class="block">
-          <h3>${lang === "ko" ? "왜 바닥인가" : "Why it is the floor"}</h3>
-          <p>${esc(t(a.note))}</p>
-        </section>`
-      : ""
-    : a.fallback
-      ? `<section class="block fallback-block">
-          <h3>${lang === "ko" ? "장비가 없으면" : "Without the equipment"}</h3>
-          <p>${esc(t(a.fallback))}</p>
-        </section>`
-      : "";
-
-  const siblingHtml = siblings.length
-    ? `<section class="block">
-        <h3>${lang === "ko" ? "같은 구성개념" : "Same construct"}</h3>
-        <p class="sub">${
-          lang === "ko"
-            ? "같은 것을 읽지만 서로 변환되지 않는다."
-            : "They read the same thing but do not interconvert."
-        }</p>
-        <div class="anchor-siblings">${siblings
-          .map((s) => `<a class="wchip" href="${BASE}anchor/${esc(s.model)}">${esc(s.model)}</a>`)
-          .join("")}</div>
-      </section>`
-    : "";
-
-  const sysHtml = sys.length
-    ? `<section class="block">
-        <h3>${lang === "ko" ? "이 앵커를 쓰는 체계" : "Systems anchored on it"}</h3>
-        <div class="grid">${sys
-          .map(
-            (s) => `<a class="card sys-card" href="${BASE}system/${esc(s.id)}">
-              <div class="card-head"><h2>${esc(s.name)}</h2>${tierBadge(s.evidence?.tier)}</div>
-              <p class="bet">${esc(t(s.bet))}</p></a>`,
-          )
-          .join("")}</div>
-      </section>`
-    : "";
-
-  const wkHtml = wk.length
-    ? `<section class="block">
-        <h3>${lang === "ko" ? "이 앵커를 쓰는 워크아웃" : "Workouts using it"}</h3>
-        <div class="anchor-workouts">${wk
-          .map(
-            ({ w, primary }) =>
-              `<a class="wchip" href="${BASE}workout/${esc(w.id)}">${esc(w.canonical_name)}${
-                primary
-                  ? ` <span class="primary-flag">${lang === "ko" ? "주앵커" : "primary"}</span>`
-                  : ""
-              }</a>`,
-          )
-          .join("")}</div>
-      </section>`
-    : "";
-
-  const switchHtml = switches.length
-    ? `<section class="block">
-        <h3>${lang === "ko" ? "전환에서의 이 앵커" : "This anchor in switches"}</h3>
-        <p class="sub">${
-          lang === "ko"
-            ? "이 앵커가 나가거나 들어오는 체계 전환. 조용함은 용어는 살아남고 뜻만 바뀌는 위험한 경우."
-            : "System switches where this anchor leaves or arrives. Silent = the term survives while its meaning changes — the dangerous case."
-        }</p>
-        <div class="switch-list">${switches
-          .map((x) => {
-            const toName = bySystem[x.to]?.name || x.to;
-            const fromName = bySystem[x.from]?.name || x.from;
-            const dir =
-              x.side === "in"
-                ? `${lang === "ko" ? "유입" : "in"}`
-                : `${lang === "ko" ? "유출" : "out"}`;
-            return `<div class="switch">
-              <div class="switch-head">
-                <span class="switch-from"><a href="${BASE}system/${esc(x.from)}">${esc(fromName)}</a> → <a href="${BASE}system/${esc(x.to)}">${esc(toName)}</a></span>
-                <span class="switch-flag ${x.side === "in" ? "in" : "out"}">${dir}</span>
-                <span class="switch-flag ${x.silent ? "silent" : "loud"}">${
-                  x.silent
-                    ? lang === "ko"
-                      ? "조용함"
-                      : "silent"
-                    : lang === "ko"
-                      ? "드러남"
-                      : "overt"
-                }</span>
-              </div>
-              <p>${esc(t(x.note))}</p>
-            </div>`;
-          })
-          .join("")}</div>
-      </section>`
-    : "";
-
-  return `
-    <a class="back" href="${BASE}anchors">← ${lang === "ko" ? "앵커 목록" : "anchors"}</a>
-    <article class="detail">
-      <div class="detail-head">
-        <h1><code>${esc(a.model)}</code></h1>
-        ${floor}
-      </div>
-      <p class="bet big">${esc(t(a.label))}</p>
-      <div class="chips">
-        <span class="chip" title="${esc(t(construct?.note))}">${esc(t(construct?.label))}</span>
-      </div>
-
-      <section class="block">
-        <h3>${lang === "ko" ? "무엇을 읽나" : "What it reads"}</h3>
-        <p>${esc(t(construct?.note))}</p>
-      </section>
-
-      <section class="block">
-        <h3>${lang === "ko" ? "측정 요건" : "Requirements"}</h3>
-        <p>${esc(t(a.requires))}</p>
-      </section>
-
-      ${descent}
-      ${siblingHtml}
-      ${sysHtml}
-      ${wkHtml}
-      ${switchHtml}
-    </article>`;
+  if (!byAnchor[model]) return notFound(model);
+  return render(<AnchorDetail ctx={viewContext()} model={model} />);
 }
 
 // ---- workout list -----------------------------------------------------------

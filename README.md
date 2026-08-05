@@ -144,7 +144,8 @@ index.html           # the browse UI shell
 public/
   sw.js              # service worker: the catalog stays consultable offline
 src/
-  views.mjs          # pure, DOM-free views: the single source of the markup
+  views.jsx          # pure, DOM-free views: the single source of the markup
+  components/        # Preact components (ADR 0002); render to a string in Node too
   main.js            # browser shell: History routing, keyboard lookup, recently viewed
   style.css          # tier badges carry visual weight; tradition must not read as consensus
 docs/
@@ -183,6 +184,7 @@ device.
 The near-term worklist — verification (`draft` → `verified`), `switching_cost` symmetry, and depth on shallow fields — is tracked concretely in [`docs/TODO.md`](docs/TODO.md).
 
 Architecture decisions and the reasoning behind them live in [`docs/adr/`](docs/adr/).
+[ADR 0002](docs/adr/0002-component-model.md) records the move to Preact components.
 [ADR 0001](docs/adr/0001-dictionary-shape.md) records why this is treated as a
 dictionary — prerendered entries wrapped in a client-side index — and therefore why
 the data stays JSON, why the whole corpus is loaded up front on purpose, and why no

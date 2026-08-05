@@ -15,17 +15,19 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "vp build && node scripts/prerender.mjs",
+    "build": "vp build && vp build --ssr src/views.jsx --outDir .ssr && node scripts/prerender.mjs",
     "preview": "vp preview",
     "validate": "node scripts/validate.mjs",
     "render": "node scripts/render.mjs",
-    "pages": "node scripts/prerender.mjs",
+    "pages": "vp build --ssr src/views.jsx --outDir .ssr && node scripts/prerender.mjs",
     "test": "vp test",
     "check": "vp check",
     "prepare": "vp config"
   },
   "dependencies": {
-    "ajv": "^8.20.0"
+    "ajv": "^8.20.0",
+    "preact": "^10.29.8",
+    "preact-render-to-string": "^6.7.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
