@@ -18,20 +18,42 @@ written; re-run the extraction (see the end) before trusting them.
 human-sign-off gate). So this is **human work by design** — this section is the
 checklist a human works through, not something a script can close.
 
-### 1a. Normalize citations (blocking, mechanical)
+### 1a. Normalize citations (blocking, mechanical) — **done**
 
-The same reference appears in inconsistent forms, and one is wrong. Fix before
-verifying anything else, because a verifier should check each source once, not
-three spellings of it.
+The same reference appeared in inconsistent forms, and one was wrong. This had to
+be fixed before verifying anything else, because a verifier should check each
+source once, not three spellings of it.
 
-- [ ] **Billat, three forms / wrong initials.** Currently present:
-  - `Billat LV (2001). Interval training for performance, Part I. Sports Med 31(1).` — `vo2max-intervals` (seed data)
-  - `Billat V (2001). Interval training for performance: a scientific and empirical practice. Sports Med 31(1).` — `vo2max-30-30` claim
-  - `Billat V (2001). Sports Med 31(1).` — `vo2max-30-30` test
-  - The initials should be **`LV`** (Véronique Billat). Pick one canonical string and use it in all three places.
-- [ ] **Egan & Zierath (2013)** appears full in `long-run` claim but abbreviated (`Cell Metab 17(2).`) in its test. Same reference — make them identical.
-- [ ] **McHugh (2003)** appears full in `downhill-repeats` claim, abbreviated in its test. Same.
-- [ ] **Decide a policy:** is an abbreviated short-form cite in `test.evidence.cite` acceptable, or must every `cite` be the full reference? The validator only enforces a `(year)`. If the policy is "full everywhere," the abbreviated forms above are all violations to expand.
+An audit over every `cite` in `systems.json` and `workouts.json` found exactly the
+three inconsistencies below and no others. All are normalized, and `validate.mjs`
+now enforces the policy so they cannot re-fragment.
+
+- [x] **Policy: one reference, one string — the full form, everywhere.** Short forms
+      in `test.evidence.cite` are **not** acceptable. The reason is the purpose of
+      §1b: a human checks each source once, which only works if a source reads the
+      same in every row. Two renderings look like two sources and cannot be grepped
+      as one.
+- [x] **Machine-enforced.** `validate.mjs` groups every cite by first author +
+      year and fails if a group has more than one distinct string, printing the
+      variants. Verified against a deliberately reintroduced variant.
+- [x] **Billat, three forms / wrong initials.** Initials corrected to **`LV`**
+      (Véronique L. Billat) and the two partial titles merged into one canonical
+      string, now used in all four places (`vo2max-intervals`, and the
+      `vo2max-30-30` claim and test):
+      `Billat LV (2001). Interval training for performance: a scientific and empirical practice. Part I: aerobic interval training. Sports Med 31(1).`
+- [x] **Egan & Zierath (2013).** The abbreviated form in the `long-run` test
+      expanded to the full reference already used in its claim.
+- [x] **McHugh (2003).** Same, in `downhill-repeats`.
+
+Note that normalizing the _string_ says nothing about whether the source supports
+the claim — that is §1b below, and it is still entirely open. Billat 2001 in
+particular still needs checking against the 30/30 protocol specifically.
+
+A stronger version of this fix would extract citations into a reference file keyed
+by id (the pattern `anchors.json` and `adaptations.json` already use) so rows point
+at a reference rather than repeating a string. Worth doing if the corpus grows
+enough that the same source appears in many rows; the validator guard covers the
+current size.
 
 ### 1b. Verify each source against the claim it supports
 
@@ -44,7 +66,7 @@ verification pass. Go reference by reference:
 | Convertino (1991)               | `easy-run`                                                             | supports plasma-volume adaptation + the HR-drop test                                                                                                                                                          |
 | Holloszy & Coyle (1984)         | `easy-run`                                                             | supports mitochondrial/capillary adaptation to endurance                                                                                                                                                      |
 | Faude, Kindermann, Meyer (2009) | `threshold-continuous`                                                 | supports the lactate-threshold / MLSS framing                                                                                                                                                                 |
-| Billat (2001)                   | `vo2max-intervals`, `vo2max-30-30`                                     | supports short-interval time-at-VO2max claim (check it actually covers 30/30)                                                                                                                                 |
+| Billat LV (2001)                | `vo2max-intervals`, `vo2max-30-30`                                     | supports short-interval time-at-VO2max claim (check it actually covers 30/30)                                                                                                                                 |
 | Midgley & McNaughton (2006)     | `vo2max-intervals`                                                     | supports time-at-VO2max during intermittent running                                                                                                                                                           |
 | Daniels (2013)                  | `daniels`, `threshold-continuous`, `cruise-intervals`, `rep-intervals` | textbook source; confirm each specific prescription                                                                                                                                                           |
 | Egan & Zierath (2013)           | `long-run`                                                             | supports the **mechanism** (substrate/mitochondrial). ⚠ does **not** establish that a single long run beats equal split volume — that framing is why the tier is `plausible`, not `consensus`. Keep it there. |
