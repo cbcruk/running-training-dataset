@@ -140,9 +140,11 @@ scripts/
   render.mjs         # writes the SVGs to out/ using svg.mjs
   prerender.mjs      # writes one real HTML file per entry into dist/, using views.mjs
 index.html           # the browse UI shell
+public/
+  sw.js              # service worker: the catalog stays consultable offline
 src/
   views.mjs          # pure, DOM-free views: the single source of the markup
-  main.js            # browser shell: History routing, link interception, search
+  main.js            # browser shell: History routing, keyboard lookup, recently viewed
   style.css          # tier badges carry visual weight; tradition must not read as consensus
 docs/
   TODO.md            # the worklist: verification, symmetry, depth
@@ -167,6 +169,13 @@ browser renders. So a cold hit on `/anchor/rpe_10` is readable with no JavaScrip
 and needs no server rewrites, while the client bundle upgrades navigation to
 instant, no-reload lookups. That split is the subject of
 [ADR 0001](docs/adr/0001-dictionary-shape.md).
+
+It reads like a dictionary once loaded: `/` (or `s`) jumps to the search box,
+`↑`/`↓` walk the hits, `Enter` opens one, `Esc` clears. The last eight entries you
+opened sit on the home page. And because the whole corpus ships in the bundle, a
+service worker makes the catalog consultable offline — including entries you have
+never opened, since the client can render any of them from data already on the
+device.
 
 ## Known open problems
 

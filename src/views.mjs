@@ -262,6 +262,25 @@ export function metaFor(path) {
   };
 }
 
+// Name an entry from its path. Used by the browser shell's recently-viewed strip,
+// which is per-reader and therefore never prerendered - the files on disk have to
+// stay identical for everyone.
+export function entryLabel(path) {
+  const parts = (path || "/").split("/").filter(Boolean);
+  if (parts[0] === "system" && bySystem[parts[1]])
+    return { kind: "system", label: bySystem[parts[1]].name };
+  if (parts[0] === "workout" && byWorkout[parts[1]])
+    return { kind: "workout", label: byWorkout[parts[1]].canonical_name };
+  if (parts[0] === "anchor" && byAnchor[parts[1]])
+    return { kind: "anchor", label: byAnchor[parts[1]].model };
+  return null;
+}
+
+export const RECENT_LABEL = {
+  ko: "최근 본 항목",
+  en: "Recently viewed",
+};
+
 // Every route the prerenderer emits - one file per dictionary entry.
 export function allRoutes() {
   return [
