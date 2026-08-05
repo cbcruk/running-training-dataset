@@ -142,6 +142,9 @@ index.html           # the browse UI shell
 src/
   main.js            # systems-as-cards, detail views, collision search. Imports svg.mjs.
   style.css          # tier badges carry visual weight; tradition must not read as consensus
+docs/
+  TODO.md            # the worklist: verification, symmetry, depth
+  adr/               # architecture decisions, with the reasoning that produced them
 ```
 
 ```
@@ -158,6 +161,12 @@ Bilingual (ko/en) via the header toggle.
 ## Known open problems
 
 The near-term worklist — verification (`draft` → `verified`), `switching_cost` symmetry, and depth on shallow fields — is tracked concretely in [`docs/TODO.md`](docs/TODO.md).
+
+Architecture decisions and the reasoning behind them live in [`docs/adr/`](docs/adr/).
+[ADR 0001](docs/adr/0001-dictionary-shape.md) records why this is treated as a
+dictionary — prerendered entries wrapped in a client-side index — and therefore why
+the data stays JSON, why the whole corpus is loaded up front on purpose, and why no
+web framework is adopted.
 
 - ~~**The card view flattens the tier.**~~ Addressed. `index.html` puts the tier badge on every system and workout card, and `consensus` / `plausible` / `tradition` are given deliberately different visual weight — a solid fill, an outline, and a faint dashed outline respectively — so browsing cannot make `tradition` read as settled. The constraint stands for any future card added.
 - **Nothing is verified yet.** All 13 systems and 20 workouts are `status: draft`. The verification checklist — including a citation-normalization bug (three renderings of Billat 2001, with wrong initials) — is in [`docs/TODO.md`](docs/TODO.md#1-verification-draft--verified).
