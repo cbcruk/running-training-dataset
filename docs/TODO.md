@@ -133,6 +133,33 @@ Eight systems carry a `distribution.model` but no explicit `zones` breakdown.
 
 ---
 
+## 4. Finish the dictionary shape
+
+[ADR 0001](adr/0001-dictionary-shape.md) settles that this is a dictionary:
+prerendered entries for **discovery** (arriving from a search engine or a shared
+link) wrapped in a client-side index for **use** (looking up, cross-referencing,
+comparing). Both modes matter; only one is currently served.
+
+- [ ] **Real URLs (prerender + History API routing).** The one genuine defect.
+      `#/anchor/rpe_10` does not exist to a crawler or a link preview, so the
+      catalog is invisible to search. `scripts/render.mjs` already walks the data; a
+      sibling script emitting one HTML file per entry (systems, workouts, anchors)
+      gives crawlable, shareable URLs inside the current stack. The client index
+      takes over on load.
+- [ ] **Keyboard-first search** (`/` to focus, arrows to move, Enter to open, Esc to
+      dismiss). Dictionaries live on this and it is missing. ~40 lines.
+- [ ] **Offline via a service worker.** The corpus is already resident; making it
+      consultable without a network is mostly caching the shell. ~30 lines.
+- [ ] **Recently viewed.** Cheap, and it is what readers of reference works reach
+      for. ~30 lines.
+
+Note what is **not** on this list: shrinking the bundle by splitting data per route.
+Holding the whole corpus client-side is what powers the collision search — it is the
+feature, not the cost. And do not adopt a framework for any of the above; see the
+ADR's "Do not do" list.
+
+---
+
 ## Re-running the extraction
 
 The counts and lists above were generated with a throwaway script over
