@@ -8,6 +8,10 @@
 //
 // Markup comes from src/views.mjs - the same pure module the browser renders from,
 // so a prerendered page and a client-rendered one cannot drift.
+//
+// Run it as `vp run pages`, not `prerender`: pnpm matches script names as
+// substrings, so a script called `prerender` would also fire on `vp run render`
+// (which writes the SVGs) and run this before dist/ exists.
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
