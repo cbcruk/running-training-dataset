@@ -33,5 +33,23 @@ jobs:
       - name: Check (format + lint + types)
         run: pnpm run check
 
-      - name: Build (browse UI)
+      - name: Build (browse UI + prerender every entry)
         run: pnpm run build
+
+      # The discovery half of the dictionary (ADR 0001): every entry must exist as
+      # a real file with its own title, or the catalog is invisible to crawlers
+      # again. Assert the count matches the data rather than trusting the build.
+      - name: Verify prerendered entries
+        run: |
+          expected=$(node -e "
+            const r = ['/', '/workouts', '/anchors'].length;
+            const n = ['systems','workouts','anchors'].reduce((a,f) =>
+              a + JSON.parse(require('fs').readFileSync('data/'+f+'.json','utf8')).length, 0);
+            console.log(r + n);
+          ")
+          actual=$(find dist -name index.html | wc -l)
+          echo "expected $expected prerendered routes, found $actual"
+          test "$expected" -eq "$actual"
+          test -f dist/404.html
+          grep -q '<title>rpe_10' dist/anchor/rpe_10/index.html
+          grep -q 'RPE' dist/anchor/rpe_10/index.html

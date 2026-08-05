@@ -140,12 +140,14 @@ prerendered entries for **discovery** (arriving from a search engine or a shared
 link) wrapped in a client-side index for **use** (looking up, cross-referencing,
 comparing). Both modes matter; only one is currently served.
 
-- [ ] **Real URLs (prerender + History API routing).** The one genuine defect.
-      `#/anchor/rpe_10` does not exist to a crawler or a link preview, so the
-      catalog is invisible to search. `scripts/render.mjs` already walks the data; a
-      sibling script emitting one HTML file per entry (systems, workouts, anchors)
-      gives crawlable, shareable URLs inside the current stack. The client index
-      takes over on load.
+- [x] **Real URLs (prerender + History API routing).** Done. Routing moved from
+      hash to the History API, and `scripts/prerender.mjs` writes one HTML file per
+      entry (44 routes + `404.html`) into `dist/`, each with its own title,
+      description, canonical URL, OG tags, and the entry's content in the markup.
+      Markup comes from `src/views.mjs` — pure and DOM-free, the same module the
+      browser renders from, so prerendered and client-rendered output cannot drift
+      (the arrangement `svg.mjs` already uses for charts). CI asserts the route
+      count against the data, so a silent regression cannot ship.
 - [ ] **Keyboard-first search** (`/` to focus, arrows to move, Enter to open, Esc to
       dismiss). Dictionaries live on this and it is missing. ~40 lines.
 - [ ] **Offline via a service worker.** The corpus is already resident; making it

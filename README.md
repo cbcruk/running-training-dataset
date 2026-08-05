@@ -138,9 +138,11 @@ scripts/
   validate.mjs       # schema + referential integrity + discipline
   svg.mjs            # structure -> schematic SVG (pure; the single source of the visual)
   render.mjs         # writes the SVGs to out/ using svg.mjs
+  prerender.mjs      # writes one real HTML file per entry into dist/, using views.mjs
 index.html           # the browse UI shell
 src/
-  main.js            # systems-as-cards, detail views, collision search. Imports svg.mjs.
+  views.mjs          # pure, DOM-free views: the single source of the markup
+  main.js            # browser shell: History routing, link interception, search
   style.css          # tier badges carry visual weight; tradition must not read as consensus
 docs/
   TODO.md            # the worklist: verification, symmetry, depth
@@ -151,12 +153,20 @@ docs/
 vp install
 vp run validate && vp run render   # check + write SVGs
 vp dev                             # browse UI (systems -> workout detail, "tempo run" collision search)
-vp build                           # static bundle in dist/
+vp run build                       # static bundle in dist/, one HTML file per entry
 ```
 
 The browse UI reads the JSON directly and renders the schematic chart through the
 same `scripts/svg.mjs` the CLI uses, so the visual can never drift from the data.
 Bilingual (ko/en) via the header toggle.
+
+Every entry is also a real document. `scripts/prerender.mjs` writes one HTML file
+per system, workout, and anchor — with its own `<title>`, description, canonical
+URL, and the entry's content in the markup — from the same `src/views.mjs` the
+browser renders. So a cold hit on `/anchor/rpe_10` is readable with no JavaScript
+and needs no server rewrites, while the client bundle upgrades navigation to
+instant, no-reload lookups. That split is the subject of
+[ADR 0001](docs/adr/0001-dictionary-shape.md).
 
 ## Known open problems
 

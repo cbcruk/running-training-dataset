@@ -15,13 +15,14 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "vp build",
+    "build": "vp build && node scripts/prerender.mjs",
     "preview": "vp preview",
     "validate": "node scripts/validate.mjs",
     "render": "node scripts/render.mjs",
     "test": "vp test",
     "check": "vp check",
-    "prepare": "vp config"
+    "prepare": "vp config",
+    "prerender": "node scripts/prerender.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0"
