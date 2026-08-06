@@ -25,9 +25,12 @@
     "prepare": "vp config"
   },
   "dependencies": {
+    "@astryxdesign/core": "^0.2.0",
+    "@astryxdesign/theme-neutral": "^0.2.0",
+    "@stylexjs/stylex": "^0.19.0",
     "ajv": "^8.20.0",
-    "preact": "^10.29.8",
-    "preact-render-to-string": "^6.7.0"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",

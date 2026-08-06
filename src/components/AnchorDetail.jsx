@@ -1,7 +1,7 @@
 // The anchor entry, as components.
 //
 // Spike for the component-model migration. Two things to notice against the
-// template-literal original in views.mjs:
+// template-literal original in views.jsx:
 //
 //   1. No esc(). JSX escapes text children and attribute values itself, so the
 //      manual-escaping footgun - one forgotten call is a hole - is gone
@@ -11,8 +11,8 @@
 //      components that either render or return null.
 //
 // The hard constraint from ADR 0001 still holds: these render to a string in
-// Node via preact-render-to-string, so the prerenderer and the browser keep
-// producing the same markup from one source.
+// Node via react-dom/server, so the prerenderer and the browser keep producing
+// the same markup from one source.
 import { Block, Chip, TierBadge, WChip } from "./primitives.jsx";
 
 export function AnchorDetail({ ctx, model }) {
@@ -28,20 +28,20 @@ export function AnchorDetail({ ctx, model }) {
 
   return (
     <>
-      <a class="back" href={url("anchors")}>
+      <a className="back" href={url("anchors")}>
         ← {lang === "ko" ? "앵커 목록" : "anchors"}
       </a>
-      <article class="detail">
-        <div class="detail-head">
+      <article className="detail">
+        <div className="detail-head">
           <h1>
             <code>{a.model}</code>
           </h1>
           {a.equipment_free && (
-            <span class="floor-badge">{lang === "ko" ? "장비 불필요" : "no equipment"}</span>
+            <span className="floor-badge">{lang === "ko" ? "장비 불필요" : "no equipment"}</span>
           )}
         </div>
-        <p class="bet big">{t(a.label)}</p>
-        <div class="chips">
+        <p className="bet big">{t(a.label)}</p>
+        <div className="chips">
           <Chip title={t(construct?.note)}>{t(construct?.label)}</Chip>
         </div>
 
@@ -77,7 +77,10 @@ function Descent({ ctx, anchor }) {
   }
   if (!anchor.fallback) return null;
   return (
-    <Block class="fallback-block" title={lang === "ko" ? "장비가 없으면" : "Without the equipment"}>
+    <Block
+      className="fallback-block"
+      title={lang === "ko" ? "장비가 없으면" : "Without the equipment"}
+    >
       <p>{t(anchor.fallback)}</p>
     </Block>
   );
@@ -95,7 +98,7 @@ function Siblings({ ctx, siblings }) {
           : "They read the same thing but do not interconvert."
       }
     >
-      <div class="anchor-siblings">
+      <div className="anchor-siblings">
         {siblings.map((s) => (
           <WChip key={s.model} href={url(`anchor/${s.model}`)}>
             {s.model}
@@ -111,14 +114,14 @@ function AnchoredSystems({ ctx, systems }) {
   if (!systems.length) return null;
   return (
     <Block title={lang === "ko" ? "이 앵커를 쓰는 체계" : "Systems anchored on it"}>
-      <div class="grid">
+      <div className="grid">
         {systems.map((s) => (
-          <a key={s.id} class="card sys-card" href={url(`system/${s.id}`)}>
-            <div class="card-head">
+          <a key={s.id} className="card sys-card" href={url(`system/${s.id}`)}>
+            <div className="card-head">
               <h2>{s.name}</h2>
               <TierBadge ctx={ctx} tier={s.evidence?.tier} />
             </div>
-            <p class="bet">{t(s.bet)}</p>
+            <p className="bet">{t(s.bet)}</p>
           </a>
         ))}
       </div>
@@ -131,14 +134,14 @@ function UsingWorkouts({ ctx, workouts }) {
   if (!workouts.length) return null;
   return (
     <Block title={lang === "ko" ? "이 앵커를 쓰는 워크아웃" : "Workouts using it"}>
-      <div class="anchor-workouts">
+      <div className="anchor-workouts">
         {workouts.map(({ w, primary }) => (
           <WChip key={w.id} href={url(`workout/${w.id}`)}>
             {w.canonical_name}
             {primary && (
               <>
                 {" "}
-                <span class="primary-flag">{lang === "ko" ? "주앵커" : "primary"}</span>
+                <span className="primary-flag">{lang === "ko" ? "주앵커" : "primary"}</span>
               </>
             )}
           </WChip>
@@ -160,18 +163,18 @@ function InSwitches({ ctx, switches, bySystem }) {
           : "System switches where this anchor leaves or arrives. Silent = the term survives while its meaning changes — the dangerous case."
       }
     >
-      <div class="switch-list">
+      <div className="switch-list">
         {switches.map((x, i) => (
-          <div class="switch" key={`${x.from}-${x.to}-${i}`}>
-            <div class="switch-head">
-              <span class="switch-from">
+          <div className="switch" key={`${x.from}-${x.to}-${i}`}>
+            <div className="switch-head">
+              <span className="switch-from">
                 <a href={url(`system/${x.from}`)}>{bySystem[x.from]?.name || x.from}</a> →{" "}
                 <a href={url(`system/${x.to}`)}>{bySystem[x.to]?.name || x.to}</a>
               </span>
-              <span class={`switch-flag ${x.side === "in" ? "in" : "out"}`}>
+              <span className={`switch-flag ${x.side === "in" ? "in" : "out"}`}>
                 {x.side === "in" ? (lang === "ko" ? "유입" : "in") : lang === "ko" ? "유출" : "out"}
               </span>
-              <span class={`switch-flag ${x.silent ? "silent" : "loud"}`}>
+              <span className={`switch-flag ${x.silent ? "silent" : "loud"}`}>
                 {x.silent
                   ? lang === "ko"
                     ? "조용함"

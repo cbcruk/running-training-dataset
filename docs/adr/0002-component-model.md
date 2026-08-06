@@ -1,4 +1,4 @@
-# ADR 0002 — Move the view layer to a component model (Preact)
+# ADR 0002 — Move the view layer to a component model (React + Astryx)
 
 **Status:** accepted · 2026-08-05
 **Amends:** [ADR 0001](0001-dictionary-shape.md), which rejected adopting a web
@@ -31,8 +31,8 @@ splitting on its own merits as affordances land."_
 
 ## Decision
 
-**Move the view layer to Preact components, incrementally, preserving the property
-that makes the prerenderer trustworthy.**
+**Move the view layer to React components with the Astryx design system,
+incrementally, preserving the property that makes the prerenderer trustworthy.**
 
 ### The constraint that picks the framework
 
@@ -41,15 +41,29 @@ prerenderer render from one source**, so a prerendered page and a client-rendere
 one cannot drift. Any component model here must therefore render to a **string in
 Node**. That, plus the resident-corpus decision, rules out most of the field:
 
-- **Preact — chosen.** `preact-render-to-string` renders to a string in Node.
-  Runtime is ~4kB where React's is ~45kB, which matters precisely because the
-  bundle is ~85% data: a large view runtime would be a visible regression against
-  a corpus that is the point of the download. JSX auto-escapes, retiring the manual
-  `esc()` footgun structurally rather than by discipline.
-- **React** — same model, ~10× the runtime for no benefit at this size.
+- **React — chosen.** `react-dom/server`'s `renderToStaticMarkup` renders to a
+  string in Node, which satisfies the constraint. It is the conventional choice:
+  the largest ecosystem, the most transferable knowledge, and the prerequisite for
+  Astryx below.
+- **Preact** was the first spike, at roughly a tenth of React's runtime. It was
+  set aside deliberately: the measured saving is real but the conventional stack
+  was judged worth more than the bytes. The cost is recorded below rather than
+  waved away.
 - **Astro / TanStack Start** — still rejected, for ADR 0001's reasons. Neither the
   per-page data splitting nor the server-runtime machinery fits a static dictionary
   whose search needs the whole corpus client-side.
+
+### Astryx as the design system
+
+[Astryx](https://github.com/facebook/astryx) is Meta's open-source design system -
+a React component library, **not** a framework. That distinction matters here: it
+layers on top of the existing architecture and touches neither the router, the
+build model, nor the prerenderer, so nothing in ADR 0001 is disturbed by it.
+
+Compatibility was verified rather than assumed: Astryx components render to a
+string in Node through `react-dom/server`, and `variant` props survive into the
+prerendered markup as `data-variant` attributes plus StyleX atomic classes. The
+package ships a prebuilt `astryx.css` (127 kB), so no build plugin is needed.
 
 ### Migration shape
 
@@ -68,14 +82,22 @@ is the price of the component model and it is worth naming rather than hiding.
 
 Two smaller costs:
 
-- **Bundle: 60.8kB → 69.4kB gzipped (+8.6kB).** About half of that is
-  `preact-render-to-string`, which is currently in the _client_ bundle too, because
-  the browser still renders to a string and assigns `innerHTML`. Switching the
-  shell to Preact's DOM render (`render(<App/>, container)`) drops it and recovers
-  roughly half. That is the natural next step, not part of this decision.
+- **Bundle: 60.8kB → 122.9kB gzipped (+62kB, roughly double).** Measured, not
+  estimated. Preact came in at 69.4kB (+8.6kB) for the same views, so the
+  conventional stack costs about 53kB gzipped over the small one. Astryx adds a
+  127 kB stylesheet on top. This is a real regression against a bundle whose whole
+  point is the corpus, and it is accepted knowingly rather than overlooked.
+- **`preact-render-to-string` is gone; `react-dom/server` rides along in the
+  client bundle** for the same reason - the browser still renders to a string and
+  assigns `innerHTML`. Moving the shell to React DOM rendering removes it.
 - **JSX must be configured on `oxc`, not `esbuild`.** Vite+ transforms with oxc;
-  without `importSource` there, JSX resolves to `react/jsx-runtime` and the build
-  fails. `tsconfig.json`'s `jsx` settings inform only the type checker.
+  `tsconfig.json`'s `jsx` settings inform only the type checker, not the bundler.
+- **Astryx needs a build-script allowlist.** pnpm blocks postinstall scripts by
+  default and _fails the install_, which breaks `vp build`. `pnpm-workspace.yaml`
+  now carries `allowBuilds: {"@astryxdesign/core": true}`. The script itself only
+  prints a setup nudge, but note that it reads agent-doc files (`CLAUDE.md`,
+  `AGENTS.md`, `.cursorrules`) and that `astryx init` _writes_ into them — worth
+  knowing before running init on a repo whose `CLAUDE.md` carries project rules.
 
 **What is gained:**
 
@@ -104,10 +126,32 @@ prerendered `<main>` against a baseline captured from `main` before the change:
   language toggle re-render all produce the same 6 blocks and 6 switch entries,
   with no console errors.
 
+### The tier badge does not map onto a generic variant scale
+
+Astryx's `Badge` offers `neutral / success / warning / danger / info`. The tier
+badge is **not** a status indicator on that scale, and forcing it onto one would be
+a category error the README explicitly bans:
+
+| tier        | means                          | not     |
+| ----------- | ------------------------------ | ------- |
+| `consensus` | textbook, settled              | success |
+| `plausible` | studied, contested             | warning |
+| `tradition` | everyone does it, nobody knows | danger  |
+
+`tradition` is not a failure state; it is an honest admission. Rendering it as
+`danger` would say something false, and rendering all three as `neutral` would
+flatten exactly the distinction the project exists to preserve — _"browsing ten
+systems can never make a `tradition` system look as settled as a `consensus` one."_
+
+**So the tier badge keeps its bespoke styling** even as the rest of the views adopt
+Astryx. Cards, text, and layout map cleanly; this one does not, and it is the one
+that carries the epistemics.
+
 ## Do not do
 
 - Do not convert views without checking prerender parity against a baseline. It is
   the cheap proof that the one-source property still holds.
+- Do not replace the tier badge with a generic status variant. See above.
 - Do not let a converted view reach for browser globals. `views.jsx` stays pure;
   DOM work belongs in `src/main.js`.
 - Do not add a router, a state library, or a data-fetching layer along with the
@@ -117,7 +161,7 @@ prerendered `<main>` against a baseline captured from `main` before the change:
 
 1. Convert the other views (`system` detail, `workout` detail, lists, search) the
    same way, one at a time, each with a parity check.
-2. Switch the browser shell from `innerHTML` to Preact DOM rendering, which drops
-   `preact-render-to-string` from the client bundle.
+2. Switch the browser shell from `innerHTML` to React DOM rendering, which drops
+   `react-dom/server` from the client bundle.
 3. Get `vp test` running and put component render tests behind it in CI — the gap
    this ADR names and does not itself close.

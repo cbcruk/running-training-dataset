@@ -9,7 +9,7 @@ import usage from "../data/usage.json" with { type: "json" };
 import anchors from "../data/anchors.json" with { type: "json" };
 import adaptations from "../data/adaptations.json" with { type: "json" };
 import { renderWorkout } from "../scripts/svg.mjs";
-import { render } from "preact-render-to-string";
+import { renderToStaticMarkup } from "react-dom/server";
 import { AnchorDetail } from "./components/AnchorDetail.jsx";
 
 const byWorkout = Object.fromEntries(workouts.map((w) => [w.id, w]));
@@ -558,7 +558,7 @@ function viewContext() {
 
 function renderAnchorDetail(model) {
   if (!byAnchor[model]) return notFound(model);
-  return render(<AnchorDetail ctx={viewContext()} model={model} />);
+  return renderToStaticMarkup(<AnchorDetail ctx={viewContext()} model={model} />);
 }
 
 // ---- workout list -----------------------------------------------------------

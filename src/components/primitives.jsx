@@ -1,20 +1,20 @@
 // Shared primitives. These are the repeated shapes the template-literal views
-// open-coded at every call site - a `<section class="block">` with an uppercase
+// open-coded at every call site - a `<section className="block">` with an uppercase
 // h3 and an optional sub-line appeared a dozen times.
 
-export function Block({ title, sub, class: cls, children }) {
+export function Block({ title, sub, className: cls, children }) {
   return (
-    <section class={cls ? `block ${cls}` : "block"}>
+    <section className={cls ? `block ${cls}` : "block"}>
       <h3>{title}</h3>
-      {sub && <p class="sub">{sub}</p>}
+      {sub && <p className="sub">{sub}</p>}
       {children}
     </section>
   );
 }
 
-export function Chip({ title, class: cls, children }) {
+export function Chip({ title, className: cls, children }) {
   return (
-    <span class={cls ? `chip ${cls}` : "chip"} title={title}>
+    <span className={cls ? `chip ${cls}` : "chip"} title={title}>
       {children}
     </span>
   );
@@ -22,7 +22,7 @@ export function Chip({ title, class: cls, children }) {
 
 export function WChip({ href, children }) {
   return (
-    <a class="wchip" href={href}>
+    <a className="wchip" href={href}>
       {children}
     </a>
   );
@@ -40,7 +40,7 @@ export function TierBadge({ ctx, tier }) {
   if (!tier) return null;
   const label = TIER_LABEL[tier] || { ko: tier, en: tier };
   return (
-    <span class={`tier tier-${tier}`} title={`evidence tier: ${tier}`}>
+    <span className={`tier tier-${tier}`} title={`evidence tier: ${tier}`}>
       {ctx.t(label)}
     </span>
   );
