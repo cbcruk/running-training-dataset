@@ -9,21 +9,22 @@ import {
   CiteList,
   MeasurementBlock,
   TierBadge,
+  EntryLink,
 } from "./primitives.tsx";
 import type { Usage, Workout } from "../types/index.d.ts";
 import type { Anchor as WorkoutAnchor, Confound } from "../types/workout.d.ts";
 import type { Translatable, WithCtx } from "../types/view.ts";
 
 export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
-  const { t, lang, url, byWorkout } = ctx;
+  const { t, lang, byWorkout } = ctx;
   const w = byWorkout[id];
   if (!w) return null;
 
   return (
     <>
-      <a className="back" href={url("workouts")}>
+      <EntryLink className="back" to="workouts">
         ← {lang === "ko" ? "워크아웃 목록" : "workouts"}
-      </a>
+      </EntryLink>
       <article className="detail">
         <div className="detail-head">
           <h1>{w.canonical_name}</h1>
@@ -207,7 +208,7 @@ function FalsificationTest({ ctx, test }: WithCtx & { test: Workout["test"] }) {
 // The collision table, from the workout's side: naming is a join, not a field,
 // so one colloquial term can point at several rows.
 function CollisionTable({ ctx, id }: WithCtx & { id: string }) {
-  const { t, lang, url, bySystem, usage } = ctx;
+  const { t, lang, bySystem, usage } = ctx;
   const uses = usage.filter((u) => u.workout === id);
   if (!uses.length) return null;
 
@@ -227,7 +228,7 @@ function CollisionTable({ ctx, id }: WithCtx & { id: string }) {
               <tr className={u.collides ? "collides" : ""} key={`${u.system ?? "none"}-${i}`}>
                 <td>
                   {u.system ? (
-                    <a href={url(`system/${u.system}`)}>{sysName}</a>
+                    <EntryLink to={`system/${u.system}`}>{sysName}</EntryLink>
                   ) : (
                     <span className="nosys">{sysName}</span>
                   )}

@@ -13,12 +13,12 @@
 // The hard constraint from ADR 0001 still holds: these render to a string in
 // Node via react-dom/server, so the prerenderer and the browser keep producing
 // the same markup from one source.
-import { Block, Chip, TierBadge, WChip } from "./primitives.tsx";
+import { Block, Chip, EntryLink, TierBadge, WChip } from "./primitives.tsx";
 import type { Anchor, System } from "../types/index.d.ts";
 import type { AnchorSwitch, AnchorUse, WithCtx } from "../types/view.ts";
 
 export function AnchorDetail({ ctx, model }: WithCtx & { model: string }) {
-  const { t, lang, url, byAnchor, anchors, bySystem, constructs, indexes } = ctx;
+  const { t, lang, byAnchor, anchors, bySystem, constructs, indexes } = ctx;
   const a = byAnchor[model];
   if (!a) return null;
 
@@ -30,9 +30,9 @@ export function AnchorDetail({ ctx, model }: WithCtx & { model: string }) {
 
   return (
     <>
-      <a className="back" href={url("anchors")}>
+      <EntryLink className="back" to="anchors">
         ← {lang === "ko" ? "앵커 목록" : "anchors"}
-      </a>
+      </EntryLink>
       <article className="detail">
         <div className="detail-head">
           <h1>
@@ -89,7 +89,7 @@ function Descent({ ctx, anchor }: WithCtx & { anchor: Anchor }) {
 }
 
 function Siblings({ ctx, siblings }: WithCtx & { siblings: Anchor[] }) {
-  const { lang, url } = ctx;
+  const { lang } = ctx;
   if (!siblings.length) return null;
   return (
     <Block
@@ -102,7 +102,7 @@ function Siblings({ ctx, siblings }: WithCtx & { siblings: Anchor[] }) {
     >
       <div className="anchor-siblings">
         {siblings.map((s) => (
-          <WChip key={s.model} href={url(`anchor/${s.model}`)}>
+          <WChip key={s.model} to={`anchor/${s.model}`}>
             {s.model}
           </WChip>
         ))}
@@ -112,19 +112,19 @@ function Siblings({ ctx, siblings }: WithCtx & { siblings: Anchor[] }) {
 }
 
 function AnchoredSystems({ ctx, systems }: WithCtx & { systems: System[] }) {
-  const { t, lang, url } = ctx;
+  const { t, lang } = ctx;
   if (!systems.length) return null;
   return (
     <Block title={lang === "ko" ? "이 앵커를 쓰는 체계" : "Systems anchored on it"}>
       <div className="grid">
         {systems.map((s) => (
-          <a key={s.id} className="card sys-card" href={url(`system/${s.id}`)}>
+          <EntryLink key={s.id} className="card sys-card" to={`system/${s.id}`}>
             <div className="card-head">
               <h2>{s.name}</h2>
               <TierBadge ctx={ctx} tier={s.evidence?.tier} />
             </div>
             <p className="bet">{t(s.bet)}</p>
-          </a>
+          </EntryLink>
         ))}
       </div>
     </Block>
@@ -132,13 +132,13 @@ function AnchoredSystems({ ctx, systems }: WithCtx & { systems: System[] }) {
 }
 
 function UsingWorkouts({ ctx, workouts }: WithCtx & { workouts: AnchorUse[] }) {
-  const { lang, url } = ctx;
+  const { lang } = ctx;
   if (!workouts.length) return null;
   return (
     <Block title={lang === "ko" ? "이 앵커를 쓰는 워크아웃" : "Workouts using it"}>
       <div className="anchor-workouts">
         {workouts.map(({ w, primary }) => (
-          <WChip key={w.id} href={url(`workout/${w.id}`)}>
+          <WChip key={w.id} to={`workout/${w.id}`}>
             {w.canonical_name}
             {primary && (
               <>
@@ -158,7 +158,7 @@ function InSwitches({
   switches,
   bySystem,
 }: WithCtx & { switches: AnchorSwitch[]; bySystem: Record<string, System> }) {
-  const { t, lang, url } = ctx;
+  const { t, lang } = ctx;
   if (!switches.length) return null;
   return (
     <Block
@@ -174,8 +174,8 @@ function InSwitches({
           <div className="switch" key={`${x.from}-${x.to}-${i}`}>
             <div className="switch-head">
               <span className="switch-from">
-                <a href={url(`system/${x.from}`)}>{bySystem[x.from]?.name || x.from}</a> →{" "}
-                <a href={url(`system/${x.to}`)}>{bySystem[x.to]?.name || x.to}</a>
+                <EntryLink to={`system/${x.from}`}>{bySystem[x.from]?.name || x.from}</EntryLink> →{" "}
+                <EntryLink to={`system/${x.to}`}>{bySystem[x.to]?.name || x.to}</EntryLink>
               </span>
               <span className={`switch-flag ${x.side === "in" ? "in" : "out"}`}>
                 {x.side === "in" ? (lang === "ko" ? "유입" : "in") : lang === "ko" ? "유출" : "out"}

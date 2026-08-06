@@ -140,15 +140,16 @@ scripts/
   types.ts           # data/schema/*.json -> src/types/ (generated, committed, CI-verified)
   svg.ts             # structure -> schematic SVG (pure; the single source of the visual)
   render.ts          # writes the SVGs to out/ using svg.ts
-  prerender.ts       # writes one real HTML file per entry into dist/, from views.tsx
+  prerender.tsx      # writes one real HTML file per entry into dist/, via the router
 index.html           # the browse UI shell
 public/
   sw.js              # service worker: the catalog stays consultable offline
 src/
   types/             # GENERATED from the schemas + the hand-written view contract
-  views.tsx          # pure, DOM-free views: the single source of the markup
+  data.tsx           # JSON -> typed rows, reverse indexes, per-entry page metadata
+  router.tsx         # the route tree, driven by both the browser and the prerenderer
   components/        # React components (ADR 0002); render to a string in Node too
-  main.ts            # browser shell: History routing, keyboard lookup, recently viewed
+  main.tsx           # browser shell: chrome, keyboard lookup, recently viewed, SW
   style.css          # tier badges carry visual weight; tradition must not read as consensus
 docs/
   TODO.md            # the worklist: verification, symmetry, depth
@@ -186,6 +187,8 @@ device.
 The near-term worklist — verification (`draft` → `verified`), `switching_cost` symmetry, and depth on shallow fields — is tracked concretely in [`docs/TODO.md`](docs/TODO.md).
 
 Architecture decisions and the reasoning behind them live in [`docs/adr/`](docs/adr/).
+[ADR 0004](docs/adr/0004-tanstack-router.md) settles the browse layer on TanStack
+Router and closes the toolchain question.
 [ADR 0003](docs/adr/0003-nub-runtime.md) records running the scripts under nub, which
 removed the intermediate SSR build.
 [ADR 0002](docs/adr/0002-component-model.md) records the move to React components.

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import type { Translatable, WithCtx } from "../types/view.ts";
 
 // Shared primitives. These are the repeated shapes the template-literal views
@@ -34,11 +35,38 @@ export function Chip({ title, className: cls, children }: ChipProps) {
   );
 }
 
-export function WChip({ href, children }: { href: string; children?: ReactNode }) {
+/**
+ * An internal link.
+ *
+ * The one adapter between the components and the router: it takes the same
+ * base-relative path the views already speak (`anchor/rpe_10`) and hands it to
+ * TanStack's Link, which owns navigation and the basepath. Without this the
+ * components would render plain anchors and every click would be a full page
+ * load - the "app for use" half of ADR 0001, lost.
+ */
+export function EntryLink({
+  to,
+  className,
+  title,
+  children,
+}: {
+  to: string;
+  className?: string;
+  title?: string;
+  children?: ReactNode;
+}) {
   return (
-    <a className="wchip" href={href}>
+    <Link to={`/${to}`} className={className} title={title}>
       {children}
-    </a>
+    </Link>
+  );
+}
+
+export function WChip({ to, children }: { to: string; children?: ReactNode }) {
+  return (
+    <EntryLink className="wchip" to={to}>
+      {children}
+    </EntryLink>
   );
 }
 
@@ -66,16 +94,16 @@ export function TierBadge({ ctx, tier }: WithCtx & { tier?: string }) {
 // tooltip pulls label + construct + what-it-takes-to-measure from anchors.json so
 // a slug like "lactate_mmol" explains itself in place.
 export function AnchorCode({ ctx, model }: WithCtx & { model: string }) {
-  const { t, url, byAnchor, constructLabel } = ctx;
+  const { t, byAnchor, constructLabel } = ctx;
   const a = byAnchor[model];
   if (!a) return <code>{model}</code>;
   const tip = [t(a.label), t(constructLabel[a.construct]), t(a.requires)]
     .filter(Boolean)
     .join(" · ");
   return (
-    <a className="anchor-code" href={url(`anchor/${model}`)} title={tip}>
+    <EntryLink className="anchor-code" to={`anchor/${model}`} title={tip}>
       <code>{model}</code>
-    </a>
+    </EntryLink>
   );
 }
 

@@ -20,7 +20,10 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { allRoutes, metaFor, renderPath, setBase, setLang, currentView } from "../src/views.tsx";
+import { renderToStaticMarkup } from "react-dom/server";
+import { RouterProvider } from "@tanstack/react-router";
+import { allRoutes, currentView, metaFor, setBase, setLang } from "../src/data.tsx";
+import { makeRouter } from "../src/router.tsx";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = resolve(root, "dist");
@@ -57,10 +60,12 @@ const esc = (s: string) =>
 
 const SITE_URL = process.env.SITE_URL || "https://cbcruk.github.io/running-training-dataset";
 
-function pageFor(path: string): string {
+async function pageFor(path: string): Promise<string> {
   const { title, description } = metaFor(path);
   const canonical = SITE_URL.replace(/\/$/, "") + (path === "/" ? "/" : path);
-  const body = renderPath(path);
+  const router = makeRouter(BASE, path);
+  await router.load();
+  const body = renderToStaticMarkup(<RouterProvider router={router} />);
   const view = currentView(path);
 
   let html = absolutizeAssets(shell);
@@ -96,11 +101,11 @@ const routes = allRoutes();
 for (const path of routes) {
   const out = path === "/" ? resolve(dist, "index.html") : resolve(dist, `.${path}/index.html`);
   mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, pageFor(path));
+  writeFileSync(out, await pageFor(path));
 }
 
 // GitHub Pages serves 404.html for any path it has no file for. Point it at the
 // shell so a mistyped or newly-added URL still boots the client router.
-writeFileSync(resolve(dist, "404.html"), pageFor("/"));
+writeFileSync(resolve(dist, "404.html"), await pageFor("/"));
 
 console.log(`prerendered ${routes.length} routes + 404.html into dist/ (base ${BASE})`);

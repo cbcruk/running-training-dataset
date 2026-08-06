@@ -21,7 +21,7 @@ become concrete rather than aesthetic:
 
 |                 |                                                                                                                                                                                      |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/views.tsx` | 1,028 lines, single file, no component boundaries                                                                                                                                    |
+| `src/views.mjs` | 1,028 lines, single file, no component boundaries                                                                                                                                    |
 | Markup          | template literals; structure is not checkable, only readable                                                                                                                         |
 | Escaping        | manual `esc()` at every interpolation — one omission is a hole                                                                                                                       |
 | View tests      | none. `tests/dataset.test.ts` covers the data scripts only, and `vp test` cannot run in this environment (missing vitest bin) — CI runs validate/render/check/build and never `test` |
@@ -78,8 +78,8 @@ used to supply (`t`, `lang`, `url`, the lookup maps, the reverse indexes).
 this decision noted that the prerenderer could no longer `import` the views
 directly - Node cannot parse JSX - so `vp run pages` ran an SSR build and
 `scripts/prerender.mjs` imported the built module. That intermediate build is gone;
-see [ADR 0003](0003-nub-runtime.md). `scripts/prerender.ts` now imports
-`src/views.tsx` at source.
+see [ADR 0003](0003-nub-runtime.md). `scripts/prerender.tsx` now imports
+`src/data.tsx` at source.
 
 Remaining costs:
 
@@ -182,7 +182,7 @@ have nothing to say about.
 
 ## Migration status
 
-**All views are converted.** `src/views.tsx` went from 1,028 lines of template
+**All views are converted.** `src/data.tsx` went from 1,028 lines of template
 literals to 358 lines of routing, metadata, and context assembly; the markup lives
 in `src/components/` as five files. Every step was checked against a 44-route
 prerender snapshot, and every step came back **44/44 identical** - including the
