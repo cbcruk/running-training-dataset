@@ -21,6 +21,12 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      # nub runs the scripts/ TypeScript directly - no build step between the
+      # prerenderer and src/views.tsx. Installed from npm rather than the
+      # setup-nub action so the version comes from one place.
+      - name: Install nub
+        run: npm install -g @nubjs/nub
+
       - name: Install
         run: pnpm install --frozen-lockfile
 

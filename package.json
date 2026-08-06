@@ -15,12 +15,12 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "vp build && vp build --ssr src/views.tsx --outDir .ssr && node scripts/prerender.mjs",
+    "build": "vp build && nub scripts/prerender.ts",
     "preview": "vp preview",
-    "validate": "node scripts/validate.mjs",
-    "render": "node scripts/render.mjs",
-    "types": "node scripts/types.mjs",
-    "pages": "vp build --ssr src/views.tsx --outDir .ssr && node scripts/prerender.mjs",
+    "validate": "nub scripts/validate.ts",
+    "render": "nub scripts/render.ts",
+    "types": "nub scripts/types.ts",
+    "pages": "nub scripts/prerender.ts",
     "test": "vp test",
     "check": "vp check",
     "prepare": "vp config"

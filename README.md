@@ -50,11 +50,11 @@ One sentence, clickable, and honest — because a bet is not a fact claim. Enfor
 
 The cost is real and worth stating: **RPE is the least precise anchor**, so mandating it as the universal axis means the chart's y-axis is subjective by construction. Both axes of the rendered SVG are schematic — x fakes a nominal pace, y is perceived effort. The label says so.
 
-**Vocabularies are taxonomies, not flat lists.** The reference files (`anchors.json`, `adaptations.json`) are the project's answer to "should this be an ontology?" — yes, but a lightweight, descriptive one, not RDF/OWL. `data/adaptations.json` groups the flat `target_adaptation` enum under coarse physiological categories (central-cardiovascular, peripheral-aerobic, metabolic, neuromuscular, structural, skill) with a definition each. It is **descriptive only**: it names and groups what a workout is claimed to _target_, never asserts that the workout _produces_ an outcome — inference of that kind would reopen the `expected_improvement` trap. `validate.mjs` requires every `target_adaptation` a workout uses to have an entry.
+**Vocabularies are taxonomies, not flat lists.** The reference files (`anchors.json`, `adaptations.json`) are the project's answer to "should this be an ontology?" — yes, but a lightweight, descriptive one, not RDF/OWL. `data/adaptations.json` groups the flat `target_adaptation` enum under coarse physiological categories (central-cardiovascular, peripheral-aerobic, metabolic, neuromuscular, structural, skill) with a definition each. It is **descriptive only**: it names and groups what a workout is claimed to _target_, never asserts that the workout _produces_ an outcome — inference of that kind would reopen the `expected_improvement` trap. `validate.ts` requires every `target_adaptation` a workout uses to have an entry.
 
-**The measurement layer is a descent, not a conversion.** `data/anchors.json` records, per `intensity_model`, what it takes to measure (`daniels-vdot` → a race/TT + pace; `lactate_mmol` → a lactate meter) and the honest `fallback` when you cannot — which drops toward `rpe_10` and _names what is lost_, never a numeric substitution. That the anchors don't convert is the reason there is no lactate→HR table: a runner without a meter falls to RPE and loses the lactate-based system's defining control (its own row says so). Each anchor also carries a `construct` — the physical quantity it reads (`perception` / `pace` / `heart-rate` / `metabolic`) — which groups the anchors _and makes the non-convertibility legible_: two `pace` anchors (`daniels-vdot` = measured fitness, `race_pace_ref` = a goal) don't interconvert, and the same "70%" on the two `heart-rate` anchors (max vs reserve) is different bpm. Grouping shows the axes; it does not bridge them. `validate.mjs` requires every anchor a system or workout uses to have an entry, and enforces that exactly one entry — `rpe_10` — is both `equipment_free` and the sole `perception` construct. This is the equipment axis exercises-dataset draws with `equipment`.
+**The measurement layer is a descent, not a conversion.** `data/anchors.json` records, per `intensity_model`, what it takes to measure (`daniels-vdot` → a race/TT + pace; `lactate_mmol` → a lactate meter) and the honest `fallback` when you cannot — which drops toward `rpe_10` and _names what is lost_, never a numeric substitution. That the anchors don't convert is the reason there is no lactate→HR table: a runner without a meter falls to RPE and loses the lactate-based system's defining control (its own row says so). Each anchor also carries a `construct` — the physical quantity it reads (`perception` / `pace` / `heart-rate` / `metabolic`) — which groups the anchors _and makes the non-convertibility legible_: two `pace` anchors (`daniels-vdot` = measured fitness, `race_pace_ref` = a goal) don't interconvert, and the same "70%" on the two `heart-rate` anchors (max vs reserve) is different bpm. Grouping shows the axes; it does not bridge them. `validate.ts` requires every anchor a system or workout uses to have an entry, and enforces that exactly one entry — `rpe_10` — is both `equipment_free` and the sole `perception` construct. This is the equipment axis exercises-dataset draws with `equipment`.
 
-**Media is free here.** exercises-dataset's real asset is 1,324 GIFs licensed from Gym visual; the license debt is central. Running has no animation to show. The visual is the pace/intensity profile, a pure function of `structure`. `scripts/render.mjs` generates it.
+**Media is free here.** exercises-dataset's real asset is 1,324 GIFs licensed from Gym visual; the license debt is central. Running has no animation to show. The visual is the pace/intensity profile, a pure function of `structure`. `scripts/render.ts` generates it.
 
 **~20 workouts and ~12 systems, not 1,324 rows.** Lifting has combinatorial explosion (movement × equipment × angle × grip). Running does not. Deep rows beat shallow rows.
 
@@ -136,11 +136,11 @@ data/
   adaptations.json   # 15 - taxonomy over target_adaptation: coarse category + definition
   schema/*.json      # JSON Schema 2020-12
 scripts/
-  validate.mjs       # schema + referential integrity + discipline
-  types.mjs          # data/schema/*.json -> src/types/ (generated, committed, CI-verified)
-  svg.mjs            # structure -> schematic SVG (pure; the single source of the visual)
-  render.mjs         # writes the SVGs to out/ using svg.mjs
-  prerender.mjs      # writes one real HTML file per entry into dist/, using views.mjs
+  validate.ts        # schema + referential integrity + discipline
+  types.ts           # data/schema/*.json -> src/types/ (generated, committed, CI-verified)
+  svg.ts             # structure -> schematic SVG (pure; the single source of the visual)
+  render.ts          # writes the SVGs to out/ using svg.ts
+  prerender.ts       # writes one real HTML file per entry into dist/, from views.tsx
 index.html           # the browse UI shell
 public/
   sw.js              # service worker: the catalog stays consultable offline
@@ -186,7 +186,9 @@ device.
 The near-term worklist — verification (`draft` → `verified`), `switching_cost` symmetry, and depth on shallow fields — is tracked concretely in [`docs/TODO.md`](docs/TODO.md).
 
 Architecture decisions and the reasoning behind them live in [`docs/adr/`](docs/adr/).
-[ADR 0002](docs/adr/0002-component-model.md) records the move to Preact components.
+[ADR 0003](docs/adr/0003-nub-runtime.md) records running the scripts under nub, which
+removed the intermediate SSR build.
+[ADR 0002](docs/adr/0002-component-model.md) records the move to React components.
 [ADR 0001](docs/adr/0001-dictionary-shape.md) records why this is treated as a
 dictionary — prerendered entries wrapped in a client-side index — and therefore why
 the data stays JSON, why the whole corpus is loaded up front on purpose, and why no

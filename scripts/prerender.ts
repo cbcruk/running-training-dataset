@@ -20,7 +20,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { allRoutes, metaFor, renderPath, setBase, setLang, currentView } from "../.ssr/views.js";
+import { allRoutes, metaFor, renderPath, setBase, setLang, currentView } from "../src/views.tsx";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = resolve(root, "dist");
@@ -32,7 +32,7 @@ setLang("ko");
 // The built shell: Vite has already injected the hashed asset tags into it. Reuse
 // it verbatim so prerendered pages load exactly the same bundle.
 const shellPath = resolve(dist, "index.html");
-let shell;
+let shell: string;
 try {
   shell = readFileSync(shellPath, "utf8");
 } catch {
@@ -42,19 +42,22 @@ try {
 
 // Vite is configured with a relative base, so asset URLs come out as "./assets/…".
 // A page at /anchor/rpe_10/ needs them resolved from the site root instead.
-function absolutizeAssets(html) {
-  return html.replace(/(src|href)="\.\/([^"]*)"/g, (_, attr, path) => `${attr}="${BASE}${path}"`);
+function absolutizeAssets(html: string): string {
+  return html.replace(
+    /(src|href)="\.\/([^"]*)"/g,
+    (_: string, attr: string, path: string) => `${attr}="${BASE}${path}"`,
+  );
 }
 
-const esc = (s) =>
+const esc = (s: string) =>
   String(s).replace(
     /[&<>"']/g,
-    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string,
   );
 
 const SITE_URL = process.env.SITE_URL || "https://cbcruk.github.io/running-training-dataset";
 
-function pageFor(path) {
+function pageFor(path: string): string {
   const { title, description } = metaFor(path);
   const canonical = SITE_URL.replace(/\/$/, "") + (path === "/" ? "/" : path);
   const body = renderPath(path);

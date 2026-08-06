@@ -74,13 +74,14 @@ used to supply (`t`, `lang`, `url`, the lookup maps, the reverse indexes).
 
 ## Consequences
 
-**The real cost, stated plainly:** the prerenderer can no longer `import` the views
-directly, because Node cannot parse JSX. `vp run pages` now runs an SSR build
-(`vp build --ssr src/views.tsx --outDir .ssr`) and `scripts/prerender.mjs` imports
-the built module. One extra build step, and a `.ssr/` artifact to gitignore. This
-is the price of the component model and it is worth naming rather than hiding.
+**The cost this originally carried has since been removed.** The first version of
+this decision noted that the prerenderer could no longer `import` the views
+directly - Node cannot parse JSX - so `vp run pages` ran an SSR build and
+`scripts/prerender.mjs` imported the built module. That intermediate build is gone;
+see [ADR 0003](0003-nub-runtime.md). `scripts/prerender.ts` now imports
+`src/views.tsx` at source.
 
-Two smaller costs:
+Remaining costs:
 
 - **Bundle: 60.8kB → 122.9kB gzipped (+62kB, roughly double).** Measured, not
   estimated. Preact came in at 69.4kB (+8.6kB) for the same views, so the
