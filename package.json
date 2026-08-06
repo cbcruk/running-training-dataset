@@ -20,6 +20,7 @@
     "validate": "nub scripts/validate.ts",
     "render": "nub scripts/render.ts",
     "types": "nub scripts/types.ts",
+    "verify": "nub scripts/verify.ts",
     "pages": "nub scripts/prerender.tsx",
     "test": "vp test",
     "check": "vp check",
