@@ -31,6 +31,9 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      - name: Install nub
+        run: npm install -g @nubjs/nub
+
       - name: Install
         run: pnpm install --frozen-lockfile
 

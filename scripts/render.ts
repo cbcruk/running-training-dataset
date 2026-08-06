@@ -4,10 +4,11 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { renderWorkout } from "./svg.mjs";
+import { renderWorkout } from "./svg.ts";
+import type { Workout } from "../src/types/index.d.ts";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const workouts = JSON.parse(readFileSync(resolve(root, "data/workouts.json"), "utf8"));
+const workouts = JSON.parse(readFileSync(resolve(root, "data/workouts.json"), "utf8")) as Workout[];
 const byId = Object.fromEntries(workouts.map((w) => [w.id, w]));
 
 mkdirSync(resolve(root, "out"), { recursive: true });

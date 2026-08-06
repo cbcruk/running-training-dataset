@@ -1,6 +1,6 @@
 // Browser shell for the running-training-dataset.
 //
-// The views live in views.mjs, which is pure and DOM-free so scripts/prerender.mjs
+// The views live in views.jsx, which is pure and DOM-free so scripts/prerender.mjs
 // produces byte-identical markup - the same arrangement svg.mjs already uses for the
 // charts. This file is only the browser half: History-API routing, link
 // interception, search, and the language toggle.
@@ -20,28 +20,36 @@ import {
   setBase,
   setLang,
   currentLang,
-} from "./views.mjs";
+} from "./views.tsx";
+import type { Lang } from "./types/view.ts";
 
 const BASE = import.meta.env.BASE_URL || "/";
 setBase(BASE);
-setLang(localStorage.getItem("lang") || "ko");
+setLang((localStorage.getItem("lang") as Lang) || "ko");
 
-const app = document.getElementById("app");
-const searchInput = document.getElementById("search");
-const langToggle = document.getElementById("lang-toggle");
+// index.html always ships these three; the shell cannot run without them, so a
+// hard failure here is more useful than a null check at every call site.
+function required<T extends HTMLElement>(id: string): T {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`missing #${id} - index.html and main.ts disagree`);
+  return el as T;
+}
+const app = required<HTMLElement>("app");
+const searchInput = required<HTMLInputElement>("search");
+const langToggle = required<HTMLButtonElement>("lang-toggle");
 
-// location.pathname -> the base-relative path views.mjs routes on.
-function currentPath() {
+// location.pathname -> the base-relative path views.jsx routes on.
+function currentPath(): string {
   let p = location.pathname;
   if (BASE !== "/" && p.startsWith(BASE)) p = p.slice(BASE.length - 1);
   return p.replace(/\/+$/, "") || "/";
 }
 
-function currentQuery() {
+function currentQuery(): string {
   return new URLSearchParams(location.search).get("q") || "";
 }
 
-function navigate(path, q) {
+function navigate(path: string, q: string) {
   const url =
     BASE.replace(/\/$/, "") +
     (path === "/" ? "/" : path) +
@@ -68,19 +76,24 @@ function route() {
 // ---- recently viewed --------------------------------------------------------
 // Per-reader, so it is injected after render and never prerendered: the files on
 // disk must read the same for everyone.
+interface RecentItem {
+  path: string;
+  kind: string;
+  label: string;
+}
 const RECENT_KEY = "recent";
 const RECENT_MAX = 8;
 
-function readRecent() {
+function readRecent(): RecentItem[] {
   try {
     const v = JSON.parse(localStorage.getItem(RECENT_KEY) || "[]");
-    return Array.isArray(v) ? v.filter((x) => x && typeof x.path === "string") : [];
+    return Array.isArray(v) ? v.filter((x: RecentItem) => x && typeof x.path === "string") : [];
   } catch {
     return [];
   }
 }
 
-function recordVisit(path) {
+function recordVisit(path: string) {
   const entry = entryLabel(path);
   if (!entry) return;
   const next = [{ path, ...entry }, ...readRecent().filter((x) => x.path !== path)].slice(
@@ -97,10 +110,10 @@ function recordVisit(path) {
 function showRecent() {
   const items = readRecent();
   if (!items.length) return;
-  const esc = (s) =>
+  const esc = (s: string) =>
     String(s).replace(
       /[&<>"']/g,
-      (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+      (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string,
     );
   const el = document.createElement("section");
   el.className = "recent";
@@ -120,18 +133,18 @@ function showRecent() {
 // resolve wrong, so pin them to the base once at boot. prerender.mjs does the same
 // rewrite when it writes each file.
 function pinChromeLinks() {
-  for (const a of document.querySelectorAll('.topbar a[href^="./"]')) {
-    a.setAttribute("href", BASE + a.getAttribute("href").slice(2));
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('.topbar a[href^="./"]')) {
+    a.setAttribute("href", BASE + (a.getAttribute("href") ?? "").slice(2));
   }
 }
 
-function syncChrome(path = currentPath()) {
+function syncChrome(path: string = currentPath()) {
   const l = currentLang();
   langToggle.textContent = l === "ko" ? "EN" : "한국어";
   searchInput.placeholder = PLACEHOLDER[l];
   document.documentElement.lang = l;
   const view = currentView(path);
-  for (const a of document.querySelectorAll("[data-nav]")) {
+  for (const a of document.querySelectorAll<HTMLElement>("[data-nav]")) {
     a.classList.toggle("active", a.dataset.nav === view);
   }
 }
@@ -141,7 +154,7 @@ function syncChrome(path = currentPath()) {
 document.addEventListener("click", (e) => {
   if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
     return;
-  const a = e.target.closest?.("a");
+  const a = (e.target as Element | null)?.closest?.("a");
   if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
   const href = a.getAttribute("href");
   if (!href || href.startsWith("http") || href.startsWith("#") || href.startsWith("mailto:"))
@@ -153,7 +166,7 @@ document.addEventListener("click", (e) => {
   route();
 });
 
-let searchTimer;
+let searchTimer: ReturnType<typeof setTimeout>;
 searchInput.addEventListener("input", () => {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(() => {
@@ -177,8 +190,8 @@ langToggle.addEventListener("click", () => {
 //   Enter      open the highlighted hit    Esc            clear, then blur
 let kbdIndex = -1;
 
-function kbdResults() {
-  return [...app.querySelectorAll("a.card, a.collision-item")];
+function kbdResults(): HTMLElement[] {
+  return [...app.querySelectorAll<HTMLElement>("a.card, a.collision-item")];
 }
 
 function kbdReset() {
@@ -186,7 +199,7 @@ function kbdReset() {
   for (const el of app.querySelectorAll(".kbd-active")) el.classList.remove("kbd-active");
 }
 
-function kbdMove(delta) {
+function kbdMove(delta: number) {
   const items = kbdResults();
   if (!items.length) return;
   items[kbdIndex]?.classList.remove("kbd-active");
@@ -196,8 +209,11 @@ function kbdMove(delta) {
   el.scrollIntoView({ block: "nearest" });
 }
 
-function isTyping(el) {
-  return el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
+function isTyping(el: Element | null): boolean {
+  return (
+    !!el &&
+    (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || (el as HTMLElement).isContentEditable)
+  );
 }
 
 document.addEventListener("keydown", (e) => {

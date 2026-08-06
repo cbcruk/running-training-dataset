@@ -15,20 +15,29 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "vp build && node scripts/prerender.mjs",
+    "build": "vp build && nub scripts/prerender.ts",
     "preview": "vp preview",
-    "validate": "node scripts/validate.mjs",
-    "render": "node scripts/render.mjs",
-    "pages": "node scripts/prerender.mjs",
+    "validate": "nub scripts/validate.ts",
+    "render": "nub scripts/render.ts",
+    "types": "nub scripts/types.ts",
+    "pages": "nub scripts/prerender.ts",
     "test": "vp test",
     "check": "vp check",
     "prepare": "vp config"
   },
   "dependencies": {
-    "ajv": "^8.20.0"
+    "@astryxdesign/core": "^0.2.0",
+    "@astryxdesign/theme-neutral": "^0.2.0",
+    "@stylexjs/stylex": "^0.19.0",
+    "ajv": "^8.20.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "json-schema-to-typescript": "^15.0.4",
     "typescript": "^7.0.2",
     "vite-plus": "^0.2.4"
   },

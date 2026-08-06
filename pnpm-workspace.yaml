@@ -12,3 +12,10 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
     vitest: "*"
+
+# Astryx ships a postinstall that only prints a "run astryx init" nudge; it reads
+# agent-doc files (CLAUDE.md, AGENTS.md, .cursorrules) to check for a marker first.
+# Reviewed before allowlisting - pnpm blocks build scripts by default and fails the
+# install otherwise, which breaks `vp build`.
+allowBuilds:
+  "@astryxdesign/core": true

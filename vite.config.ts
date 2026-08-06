@@ -7,6 +7,11 @@ export default defineConfig({
   // route, so Pages needs no rewrite rules to serve them. Override with BASE_PATH
   // when hosting elsewhere.
   base: process.env.BASE_PATH || "/running-training-dataset/",
+  // JSX is transformed by oxc - Vite+ uses oxc, not esbuild, and tsconfig's jsx
+  // settings inform only the type checker, not the bundler.
+  oxc: {
+    jsx: { runtime: "automatic" },
+  },
   staged: {
     "*": "vp check --fix",
   },
