@@ -1,22 +1,30 @@
 // The system entry - the browsing unit. Leads with the bet and the evidence
 // tier, because the README's one hard UI rule is that browsing ten systems must
 // never make a `tradition` system look as settled as a `consensus` one.
-import { AnchorCode, Block, InfoChip, MeasurementBlock, TierBadge } from "./primitives.tsx";
+import {
+  AnchorCode,
+  Block,
+  EntryLink,
+  InfoChip,
+  MeasurementBlock,
+  TierBadge,
+  WChip,
+} from "./primitives.tsx";
 import type { System } from "../types/index.d.ts";
 import type { Distribution, Phase, SwitchingCost, VolumeCap } from "../types/system.d.ts";
 import type { Translatable, WithCtx } from "../types/view.ts";
 
 export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
-  const { t, lang, url, bySystem, fmt } = ctx;
+  const { t, lang, bySystem, fmt } = ctx;
   const s = bySystem[id];
   if (!s) return null;
   const c = s.commitment || {};
 
   return (
     <>
-      <a className="back" href={url("")}>
+      <EntryLink className="back" to="">
         ← {lang === "ko" ? "체계 목록" : "systems"}
-      </a>
+      </EntryLink>
       <article className="detail">
         <div className="detail-head">
           <div>
@@ -81,7 +89,7 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
 // `silent` marks the dangerous case: a term survives the switch while its meaning
 // changes. `anchor_change` is derived from intensity_model, so it is machine-verified.
 function SwitchingCost({ ctx, system }: WithCtx & { system: System }) {
-  const { t, lang, url, bySystem } = ctx;
+  const { t, lang, bySystem } = ctx;
   const entries = system.switching_cost || [];
   if (!entries.length) return null;
   return (
@@ -98,7 +106,7 @@ function SwitchingCost({ ctx, system }: WithCtx & { system: System }) {
           <div className="switch-head">
             <span className="switch-from">
               {lang === "ko" ? "전환 출발" : "coming from"}:{" "}
-              <a href={url(`system/${x.from}`)}>{bySystem[x.from]?.name || x.from}</a>
+              <EntryLink to={`system/${x.from}`}>{bySystem[x.from]?.name || x.from}</EntryLink>
             </span>
             <span className={`switch-flag ${x.silent ? "silent" : "loud"}`}>
               {x.silent
@@ -141,7 +149,7 @@ function Distribution({ ctx, distribution }: WithCtx & { distribution?: Distribu
 }
 
 function Phases({ ctx, phases }: WithCtx & { phases?: Phase[] }) {
-  const { lang, url, byWorkout } = ctx;
+  const { lang, byWorkout } = ctx;
   if (!phases?.length) return null;
   return (
     <Block title={lang === "ko" ? "주기별 강조 워크아웃" : "Phase emphasis"}>
@@ -151,9 +159,9 @@ function Phases({ ctx, phases }: WithCtx & { phases?: Phase[] }) {
             <span className="phase-name">{p.name}</span>
             <div className="wchips">
               {(p.emphasis || []).map((wid: string) => (
-                <a className="wchip" href={url(`workout/${wid}`)} key={wid}>
+                <WChip key={wid} to={`workout/${wid}`}>
                   {byWorkout[wid]?.canonical_name || wid}
-                </a>
+                </WChip>
               ))}
             </div>
           </div>

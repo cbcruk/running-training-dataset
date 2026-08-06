@@ -11,8 +11,8 @@ ADR 0002 moved the views to React components and paid for it in two places, both
 recorded there at the time:
 
 1. **An intermediate build.** Node cannot parse JSX, so `scripts/prerender.mjs`
-   could not import `src/views.tsx`. `vp run pages` first ran
-   `vp build --ssr src/views.tsx --outDir .ssr`, and the prerenderer imported the
+   could not import `src/data.tsx`. `vp run pages` first ran
+   `vp build --ssr src/data.tsx --outDir .ssr`, and the prerenderer imported the
    built module. One more build step, one more artifact to gitignore, and a copy of
    the views sitting between the source and the output.
 2. **`scripts/` stayed JavaScript.** Converting them to TypeScript would have meant
@@ -35,7 +35,7 @@ protocol - the mechanism Vite+ uses to pin itself - on the line for no benefit.
 
 ### What it removes
 
-- **The SSR build is gone.** `scripts/prerender.ts` imports `src/views.tsx`
+- **The SSR build is gone.** `scripts/prerender.tsx` imports `src/data.tsx`
   directly. No `.ssr/` artifact, no generated copy between source and output. The
   ADR 0001 property that the prerenderer and the browser render from one source is
   now literally true rather than true-via-a-build.

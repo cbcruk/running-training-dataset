@@ -2,7 +2,7 @@
 //
 // The cards are shared between a list and the search results, which is exactly
 // the duplication the template-literal version had to open-code twice.
-import { TierBadge } from "./primitives.tsx";
+import { EntryLink, TierBadge } from "./primitives.tsx";
 import type { Anchor, System, Workout } from "../types/index.d.ts";
 import type { WithCtx } from "../types/view.ts";
 
@@ -13,7 +13,7 @@ export function SystemCard({
   system: s,
   brief = false,
 }: WithCtx & { system: System; brief?: boolean }) {
-  const { t, url, fmt } = ctx;
+  const { t, fmt } = ctx;
   const c = s.commitment || {};
   const chips = [
     fmt.sessions(c.sessions_per_week) && `${fmt.sessions(c.sessions_per_week)}/wk`,
@@ -23,7 +23,7 @@ export function SystemCard({
   ].filter(Boolean);
 
   return (
-    <a className="card sys-card" href={url(`system/${s.id}`)}>
+    <EntryLink className="card sys-card" to={`system/${s.id}`}>
       <div className="card-head">
         <h2>{s.name}</h2>
         <TierBadge ctx={ctx} tier={s.evidence?.tier} />
@@ -39,7 +39,7 @@ export function SystemCard({
           ))}
         </div>
       )}
-    </a>
+    </EntryLink>
   );
 }
 
@@ -48,9 +48,9 @@ export function WorkoutCard({
   workout: w,
   brief = false,
 }: WithCtx & { workout: Workout; brief?: boolean }) {
-  const { t, lang, url } = ctx;
+  const { t, lang } = ctx;
   return (
-    <a className="card wk-card" href={url(`workout/${w.id}`)}>
+    <EntryLink className="card wk-card" to={`workout/${w.id}`}>
       <div className="card-head">
         <h2>{w.canonical_name}</h2>
         <TierBadge ctx={ctx} tier={w.claim?.evidence?.tier} />
@@ -67,16 +67,16 @@ export function WorkoutCard({
         </p>
       )}
       <p className="bet">{t(w.claim?.proposition)}</p>
-    </a>
+    </EntryLink>
   );
 }
 
 export function AnchorCard({ ctx, anchor: a }: WithCtx & { anchor: Anchor }) {
-  const { t, lang, url, indexes } = ctx;
+  const { t, lang, indexes } = ctx;
   const sys = indexes.systemsByAnchor[a.model]?.length || 0;
   const wk = indexes.workoutsByAnchor[a.model]?.length || 0;
   return (
-    <a className="card anchor-card" href={url(`anchor/${a.model}`)}>
+    <EntryLink className="card anchor-card" to={`anchor/${a.model}`}>
       <div className="card-head">
         <h2>
           <code>{a.model}</code>
@@ -91,7 +91,7 @@ export function AnchorCard({ ctx, anchor: a }: WithCtx & { anchor: Anchor }) {
         <span className="chip">{`${lang === "ko" ? "체계" : "systems"} ${sys}`}</span>
         <span className="chip">{`${lang === "ko" ? "워크아웃" : "workouts"} ${wk}`}</span>
       </div>
-    </a>
+    </EntryLink>
   );
 }
 
@@ -198,7 +198,7 @@ export function AnchorList({ ctx }: WithCtx) {
 // The naming-join headline: one colloquial term ("tempo run") resolving to more
 // than one workout is the collision the dataset exists to make visible.
 export function SearchResults({ ctx, rawQ }: WithCtx & { rawQ: string }) {
-  const { t, lang, url, systems, workouts, anchors, usage, byWorkout, bySystem } = ctx;
+  const { t, lang, systems, workouts, anchors, usage, byWorkout, bySystem } = ctx;
   const q = rawQ.trim().toLowerCase();
 
   const termHits = usage.filter(
@@ -244,7 +244,7 @@ export function SearchResults({ ctx, rawQ }: WithCtx & { rawQ: string }) {
             : `maps to ${termWorkouts.length} different workouts — naming is a join, not a field.`}
           <div className="collision-list">
             {termWorkouts.map((id: string) => (
-              <a href={url(`workout/${id}`)} className="collision-item" key={id}>
+              <EntryLink to={`workout/${id}`} className="collision-item" key={id}>
                 <b>{byWorkout[id]?.canonical_name || id}</b>
                 <span>
                   {termHits
@@ -252,7 +252,7 @@ export function SearchResults({ ctx, rawQ }: WithCtx & { rawQ: string }) {
                     .map((u) => (u.system ? bySystem[u.system]?.name || u.system : "—"))
                     .join(", ")}
                 </span>
-              </a>
+              </EntryLink>
             ))}
           </div>
         </div>
@@ -295,16 +295,16 @@ export function SearchResults({ ctx, rawQ }: WithCtx & { rawQ: string }) {
 }
 
 export function NotFound({ ctx, id }: WithCtx & { id: string }) {
-  const { lang, url } = ctx;
+  const { lang } = ctx;
   return (
     <>
       <p className="empty">
         {`${lang === "ko" ? "없음" : "Not found"}: `}
         <code>{id}</code>
       </p>
-      <a className="back" href={url("")}>
+      <EntryLink className="back" to="">
         ← {lang === "ko" ? "홈" : "home"}
-      </a>
+      </EntryLink>
     </>
   );
 }

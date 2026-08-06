@@ -1,4 +1,10 @@
-// Browse layer for the running-training-dataset.
+// Data access and route metadata.
+//
+// The markup lives in src/components/, the route tree in src/router.tsx. What is
+// here is what both need and neither owns: the JSON loaded and asserted into the
+// generated schema types, the reverse indexes, the bilingual helper, and the
+// per-entry <title>/description the prerenderer writes.
+//
 // Epistemics live in the JSON; this file is convenience only. The one hard rule
 // it must honour (README "Known open problems"): the evidence tier goes on the
 // browse card, not buried in the detail view — so browsing ten systems can never
@@ -8,7 +14,6 @@ import workoutsRaw from "../data/workouts.json" with { type: "json" };
 import usageRaw from "../data/usage.json" with { type: "json" };
 import anchorsRaw from "../data/anchors.json" with { type: "json" };
 import adaptationsRaw from "../data/adaptations.json" with { type: "json" };
-import { renderToStaticMarkup } from "react-dom/server";
 import type { Adaptation, Anchor, System, Usage, Workout } from "./types/index.d.ts";
 import type {
   AdaptCategory,
@@ -19,16 +24,6 @@ import type {
   Translatable,
   ViewContext,
 } from "./types/view.ts";
-import { AnchorDetail } from "./components/AnchorDetail.tsx";
-import { SystemDetail } from "./components/SystemDetail.tsx";
-import { WorkoutDetail } from "./components/WorkoutDetail.tsx";
-import {
-  AnchorList,
-  NotFound,
-  SearchResults,
-  SystemList,
-  WorkoutList,
-} from "./components/Lists.tsx";
 
 // The schemas are the source of truth for these shapes; the types next to this
 // file are generated from them (scripts/types.mjs). The JSON is asserted into
@@ -182,27 +177,16 @@ function weeksText(pl?: { value?: number; min?: number; max?: number }) {
   return `${pl.min}–${pl.max}w`;
 }
 
-// ---- routing ----------------------------------------------------------------
-// Paths are base-relative and base-stripped by the caller: "/", "/workouts",
-// "/anchor/rpe_10". Every view function returns an HTML string, so the same call
-// serves the browser (assigned to #app) and the prerenderer (written to a file).
+// ---- route metadata ---------------------------------------------------------
+// The route tree lives in src/router.tsx now. What stays here is what the router
+// does not own: which nav tab a path belongs to, the per-entry <title> and
+// description the prerenderer writes, and the list of routes to emit.
 export function currentView(path: string): string {
   const p = path || "/";
   if (p.startsWith("/anchor")) return "anchors";
   if (p.startsWith("/workout")) return "workouts";
   if (p.startsWith("/system")) return "systems";
   return "systems";
-}
-
-export function renderPath(path: string, q = ""): string {
-  const parts = (path || "/").split("/").filter(Boolean);
-  if (q) return renderSearch(q);
-  if (parts[0] === "anchors") return renderAnchorList();
-  if (parts[0] === "anchor" && parts[1]) return renderAnchorDetail(parts[1]);
-  if (parts[0] === "workouts") return renderWorkoutList();
-  if (parts[0] === "workout" && parts[1]) return renderWorkoutDetail(parts[1]);
-  if (parts[0] === "system" && parts[1]) return renderSystemDetail(parts[1]);
-  return renderSystemList();
 }
 
 // Per-entry <title> and description. This is the half of the dictionary that hash
@@ -294,32 +278,20 @@ export function allRoutes() {
 }
 
 // ---- system list (the browse entry point) -----------------------------------
-function renderSystemList() {
-  return renderToStaticMarkup(<SystemList ctx={viewContext()} />);
-}
 
 // ---- system detail ----------------------------------------------------------
-
-function renderSystemDetail(id: string): string {
-  if (!bySystem[id]) return notFound(id);
-  return renderToStaticMarkup(<SystemDetail ctx={viewContext()} id={id} />);
-}
 
 // ---- anchor (measurement model) list ----------------------------------------
 // Anchors are first-class: the axis every workout and system is pinned to. The
 // list groups them by construct so the "same construct != interconvertible"
 // point is visible at a glance, and each card counts its real references.
 
-function renderAnchorList() {
-  return renderToStaticMarkup(<AnchorList ctx={viewContext()} />);
-}
-
 // ---- anchor detail ----------------------------------------------------------
 // Migrated to components (src/components/AnchorDetail.jsx). It still returns a
 // string, so the router, the browser shell, and the prerenderer are unchanged -
 // which is what lets the migration run one view at a time instead of as a
 // big-bang rewrite. `ctx` carries what the module-level closure used to supply.
-function viewContext(): ViewContext {
+export function viewContext(): ViewContext {
   return {
     t,
     lang,
@@ -342,15 +314,7 @@ function viewContext(): ViewContext {
   };
 }
 
-function renderAnchorDetail(model: string): string {
-  if (!byAnchor[model]) return notFound(model);
-  return renderToStaticMarkup(<AnchorDetail ctx={viewContext()} model={model} />);
-}
-
 // ---- workout list -----------------------------------------------------------
-function renderWorkoutList() {
-  return renderToStaticMarkup(<WorkoutList ctx={viewContext()} />);
-}
 
 // ---- workout detail ---------------------------------------------------------
 
@@ -363,17 +327,6 @@ function renderWorkoutList() {
 // definition on hover. Descriptive - it names what the workout targets, not what
 // it produces.
 
-function renderWorkoutDetail(id: string): string {
-  if (!byWorkout[id]) return notFound(id);
-  return renderToStaticMarkup(<WorkoutDetail ctx={viewContext()} id={id} />);
-}
-
 // ---- search (the naming-join headline: "tempo run" -> two workouts) ---------
-function renderSearch(rawQ: string): string {
-  return renderToStaticMarkup(<SearchResults ctx={viewContext()} rawQ={rawQ} />);
-}
 
 // ---- misc -------------------------------------------------------------------
-function notFound(id: string): string {
-  return renderToStaticMarkup(<NotFound ctx={viewContext()} id={id} />);
-}
