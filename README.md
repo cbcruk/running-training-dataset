@@ -138,6 +138,7 @@ data/
 scripts/
   validate.ts        # schema + referential integrity + discipline
   types.ts           # data/schema/*.json -> src/types/ (generated, committed, CI-verified)
+  verify.ts          # data -> docs/verification.md, the §1b source-checking worksheet
   svg.ts             # structure -> schematic SVG (pure; the single source of the visual)
   render.ts          # writes the SVGs to out/ using svg.ts
   prerender.tsx      # writes one real HTML file per entry into dist/, via the router
@@ -153,6 +154,7 @@ src/
   style.css          # tier badges carry visual weight; tradition must not read as consensus
 docs/
   TODO.md            # the worklist: verification, symmetry, depth
+  verification.md    # GENERATED - what each source has to support, per row
   adr/               # architecture decisions, with the reasoning that produced them
 ```
 

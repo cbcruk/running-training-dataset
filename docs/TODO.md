@@ -14,7 +14,7 @@ written; re-run the extraction (see the end) before trusting them.
 
 ## 1. Verification: `draft` → `verified`
 
-`validate.mjs` forbids a generator setting `status: verified` (it is an L4
+`validate.ts` forbids a generator setting `status: verified` (it is an L4
 human-sign-off gate). So this is **human work by design** — this section is the
 checklist a human works through, not something a script can close.
 
@@ -33,7 +33,7 @@ now enforces the policy so they cannot re-fragment.
       §1b: a human checks each source once, which only works if a source reads the
       same in every row. Two renderings look like two sources and cannot be grepped
       as one.
-- [x] **Machine-enforced.** `validate.mjs` groups every cite by first author +
+- [x] **Machine-enforced.** `validate.ts` groups every cite by first author +
       year and fails if a group has more than one distinct string, printing the
       variants. Verified against a deliberately reintroduced variant.
 - [x] **Billat, three forms / wrong initials.** Initials corrected to **`LV`**
@@ -57,29 +57,45 @@ current size.
 
 ### 1b. Verify each source against the claim it supports
 
-The validator checks that a `cite` _looks_ like a citation (has a year). It cannot
-check that the source _says what the row claims_. That is the whole point of the
-verification pass. Go reference by reference:
+The validator checks that a `cite` _looks_ like a citation (has a year) and that a
+reference reads the same everywhere (§1a). It cannot check that the source _says
+what the row claims_. That is the whole point of the verification pass, and it is
+**human work by design** — `validate.ts` forbids a generator from setting
+`status: verified`, because a machine asserting that a source supports a claim is
+the failure this dataset exists to avoid.
 
-| citation                        | used in                                                                | what to confirm                                                                                                                                                                                               |
-| ------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Convertino (1991)               | `easy-run`                                                             | supports plasma-volume adaptation + the HR-drop test                                                                                                                                                          |
-| Holloszy & Coyle (1984)         | `easy-run`                                                             | supports mitochondrial/capillary adaptation to endurance                                                                                                                                                      |
-| Faude, Kindermann, Meyer (2009) | `threshold-continuous`                                                 | supports the lactate-threshold / MLSS framing                                                                                                                                                                 |
-| Billat LV (2001)                | `vo2max-intervals`, `vo2max-30-30`                                     | supports short-interval time-at-VO2max claim (check it actually covers 30/30)                                                                                                                                 |
-| Midgley & McNaughton (2006)     | `vo2max-intervals`                                                     | supports time-at-VO2max during intermittent running                                                                                                                                                           |
-| Daniels (2013)                  | `daniels`, `threshold-continuous`, `cruise-intervals`, `rep-intervals` | textbook source; confirm each specific prescription                                                                                                                                                           |
-| Egan & Zierath (2013)           | `long-run`                                                             | supports the **mechanism** (substrate/mitochondrial). ⚠ does **not** establish that a single long run beats equal split volume — that framing is why the tier is `plausible`, not `consensus`. Keep it there. |
-| Seiler (2010)                   | `polarized-80-20`                                                      | supports the 80/20 distribution observation                                                                                                                                                                   |
-| Lydiard & Gilmour (2000)        | `lydiard`                                                              | canonical text; it is the _source of the method_, not efficacy evidence — confirm this is the intended use of the tier convention                                                                             |
-| Pfitzinger & Douglas (2009)     | `pfitzinger`                                                           | canonical text; same caveat                                                                                                                                                                                   |
-| Karvonen (1957)                 | `hrr-karvonen`                                                         | supports the HRR method; confirm year/journal                                                                                                                                                                 |
-| Jones & Vanhatalo (2017)        | `critical-speed`                                                       | supports the **CS/W′ model**. ⚠ it is a review of the _concept_, not of CS-anchored _training prescription_ — the caveat already says so; confirm the tier is honest                                          |
-| McHugh (2003)                   | `downhill-repeats`                                                     | supports the repeated-bout effect                                                                                                                                                                             |
+**The checklist is [`docs/verification.md`](verification.md)**, generated from the
+data by `vp run verify` so it cannot drift from the rows it describes. It maps each
+of the 13 sources to every assertion hanging off it, quoting the exact sentence to
+check, so a verifier reads one source and settles all its rows at once.
 
-- [ ] Work the table top to bottom; for each, either confirm or downgrade the tier (a `plausible`/`consensus` row whose source does not actually support it must drop to `tradition`, which means **removing** the cite).
-- [ ] **Daniels volume caps** (`daniels.volume_caps`) are marked `tradition` + "from memory" (README already flags this). Verify the T/I/R cap figures against the source text before promoting.
-- [ ] Only after a human confirms a row's citations may its `status` flip to `verified`. Do it per-row, never in bulk.
+The worksheet opens with three questions answerable **without** opening a source,
+because they are the ones most likely to move a tier:
+
+1. **Sources never attached to a falsifiable sentence — 5 of 13.** They sit on
+   system rows and distributions only, so nothing states what they are supposed to
+   have shown. Canonical texts (`lydiard`, `pfitzinger`) are a method describing
+   itself, which is not evidence it works; review papers (`polarized-80-20`,
+   `critical-speed`, `hrr-karvonen`) may support something, but the row never says
+   what. Either the README documents that the tier convention admits these, or the
+   rows get a `claim.proposition` to check against, or they drop to `tradition`
+   and the cites come off.
+2. **The `consensus` rows** — the highest bar in the tier table, so the strongest
+   claims and the fewest of them.
+3. **Unobservable tests carrying a tier above `tradition`** — confirm the tier is
+   about the mechanism rather than the test.
+
+- [ ] Settle question 1. It is the largest single item here and it is a policy
+      decision, not a reading task.
+- [ ] Work the worksheet source by source, ticking rows as each is confirmed.
+- [ ] Downgrade rather than stretch: a `plausible`/`consensus` row whose source
+      does not actually support it must drop to `tradition`, which means
+      **removing** the cite.
+- [ ] Only after a human confirms a row's citations may its `status` flip to
+      `verified`. Per row, never in bulk.
+- [ ] **Daniels volume caps** (`daniels.volume_caps`) are marked `tradition` +
+      "from memory" (README already flags this). Verify the T/I/R cap figures
+      against the source text before promoting.
 
 ### 1c. Non-goal guard (do **not** do)
 

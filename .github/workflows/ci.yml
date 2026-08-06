@@ -53,6 +53,18 @@ jobs:
             exit 1
           fi
 
+      # Same contract as the generated types: committed so a reader sees it without
+      # running anything, and re-generated here so it cannot describe rows that
+      # have since changed.
+      - name: Verify the source worksheet matches the data
+        run: |
+          pnpm run verify
+          if [ -n "$(git status --porcelain -- docs/verification.md)" ]; then
+            echo "docs/verification.md is stale - run 'vp run verify' and commit the result"
+            git diff -- docs/verification.md
+            exit 1
+          fi
+
       - name: Check (format + lint + types)
         run: pnpm run check
 
