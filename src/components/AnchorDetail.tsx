@@ -13,9 +13,11 @@
 // The hard constraint from ADR 0001 still holds: these render to a string in
 // Node via react-dom/server, so the prerenderer and the browser keep producing
 // the same markup from one source.
-import { Block, Chip, TierBadge, WChip } from "./primitives.jsx";
+import { Block, Chip, TierBadge, WChip } from "./primitives.tsx";
+import type { Anchor, System } from "../types/index.d.ts";
+import type { AnchorSwitch, AnchorUse, WithCtx } from "../types/view.ts";
 
-export function AnchorDetail({ ctx, model }) {
+export function AnchorDetail({ ctx, model }: WithCtx & { model: string }) {
   const { t, lang, url, byAnchor, anchors, bySystem, constructs, indexes } = ctx;
   const a = byAnchor[model];
   if (!a) return null;
@@ -65,7 +67,7 @@ export function AnchorDetail({ ctx, model }) {
 
 // rpe_10 carries `note` (why it is the floor); every other anchor carries
 // `fallback` (what you lose when the equipment is gone).
-function Descent({ ctx, anchor }) {
+function Descent({ ctx, anchor }: WithCtx & { anchor: Anchor }) {
   const { t, lang } = ctx;
   if (anchor.equipment_free) {
     if (!anchor.note) return null;
@@ -86,7 +88,7 @@ function Descent({ ctx, anchor }) {
   );
 }
 
-function Siblings({ ctx, siblings }) {
+function Siblings({ ctx, siblings }: WithCtx & { siblings: Anchor[] }) {
   const { lang, url } = ctx;
   if (!siblings.length) return null;
   return (
@@ -109,7 +111,7 @@ function Siblings({ ctx, siblings }) {
   );
 }
 
-function AnchoredSystems({ ctx, systems }) {
+function AnchoredSystems({ ctx, systems }: WithCtx & { systems: System[] }) {
   const { t, lang, url } = ctx;
   if (!systems.length) return null;
   return (
@@ -129,7 +131,7 @@ function AnchoredSystems({ ctx, systems }) {
   );
 }
 
-function UsingWorkouts({ ctx, workouts }) {
+function UsingWorkouts({ ctx, workouts }: WithCtx & { workouts: AnchorUse[] }) {
   const { lang, url } = ctx;
   if (!workouts.length) return null;
   return (
@@ -151,7 +153,11 @@ function UsingWorkouts({ ctx, workouts }) {
   );
 }
 
-function InSwitches({ ctx, switches, bySystem }) {
+function InSwitches({
+  ctx,
+  switches,
+  bySystem,
+}: WithCtx & { switches: AnchorSwitch[]; bySystem: Record<string, System> }) {
   const { t, lang, url } = ctx;
   if (!switches.length) return null;
   return (

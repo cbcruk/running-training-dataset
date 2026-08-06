@@ -1,4 +1,4 @@
-# ADR 0002 — Move the view layer to a component model (React + Astryx)
+# ADR 0002 — Move the view layer to a component model (React + TypeScript + Astryx)
 
 **Status:** accepted · 2026-08-05
 **Amends:** [ADR 0001](0001-dictionary-shape.md), which rejected adopting a web
@@ -21,7 +21,7 @@ become concrete rather than aesthetic:
 
 |                 |                                                                                                                                                                                      |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/views.jsx` | 1,028 lines, single file, no component boundaries                                                                                                                                    |
+| `src/views.tsx` | 1,028 lines, single file, no component boundaries                                                                                                                                    |
 | Markup          | template literals; structure is not checkable, only readable                                                                                                                         |
 | Escaping        | manual `esc()` at every interpolation — one omission is a hole                                                                                                                       |
 | View tests      | none. `tests/dataset.test.ts` covers the data scripts only, and `vp test` cannot run in this environment (missing vitest bin) — CI runs validate/render/check/build and never `test` |
@@ -76,7 +76,7 @@ used to supply (`t`, `lang`, `url`, the lookup maps, the reverse indexes).
 
 **The real cost, stated plainly:** the prerenderer can no longer `import` the views
 directly, because Node cannot parse JSX. `vp run pages` now runs an SSR build
-(`vp build --ssr src/views.jsx --outDir .ssr`) and `scripts/prerender.mjs` imports
+(`vp build --ssr src/views.tsx --outDir .ssr`) and `scripts/prerender.mjs` imports
 the built module. One extra build step, and a `.ssr/` artifact to gitignore. This
 is the price of the component model and it is worth naming rather than hiding.
 
@@ -157,9 +157,31 @@ that carries the epistemics.
 - Do not add a router, a state library, or a data-fetching layer along with the
   component model. Nothing in ADR 0001's analysis of those changed.
 
+### TypeScript, with data types generated from the schemas
+
+The view layer is TypeScript. The decision worth recording is not _that_ but
+**where the data types come from**: they are **generated from `data/schema/*.json`**
+by `scripts/types.mjs`, not hand-written.
+
+Hand-written interfaces would be a second description of the same shapes, free to
+drift from the schemas `validate.mjs` actually enforces. That is the failure the
+citation policy exists to prevent (`docs/TODO.md` #1a), applied to types. Generated
+output is committed so a fresh clone type-checks immediately, and CI regenerates it
+and fails if anything moved - using `git status --porcelain` rather than `git diff`,
+so generated files that were never committed cannot pass the check vacuously.
+
+One module per schema: every schema declares its own `$defs/i18n`, so compiling
+them into a single file collides on the generated name.
+
+Two things stay plain JS deliberately. `scripts/*.mjs` are Node entry points -
+converting them would mean a build step for `scripts/` too - so `svg.mjs`, which
+components import, carries a hand-written `svg.d.mts` instead. And `src/types/view.ts`
+is hand-written, because it describes how views are _called_, which the schemas
+have nothing to say about.
+
 ## Migration status
 
-**All views are converted.** `src/views.jsx` went from 1,028 lines of template
+**All views are converted.** `src/views.tsx` went from 1,028 lines of template
 literals to 358 lines of routing, metadata, and context assembly; the markup lives
 in `src/components/` as five files. Every step was checked against a 44-route
 prerender snapshot, and every step came back **44/44 identical** - including the
@@ -170,6 +192,9 @@ system and workout cards were open-coded twice, once for a list and once for
 search, and are now one component with a `brief` prop.
 
 `esc()` is deleted. There is no manual escaping left in the view layer.
+
+The whole conversion - components _and_ TypeScript - held 44/44 prerender parity at
+every step. Type errors went 209 → 0.
 
 ## Remaining work
 

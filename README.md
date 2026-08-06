@@ -137,6 +137,7 @@ data/
   schema/*.json      # JSON Schema 2020-12
 scripts/
   validate.mjs       # schema + referential integrity + discipline
+  types.mjs          # data/schema/*.json -> src/types/ (generated, committed, CI-verified)
   svg.mjs            # structure -> schematic SVG (pure; the single source of the visual)
   render.mjs         # writes the SVGs to out/ using svg.mjs
   prerender.mjs      # writes one real HTML file per entry into dist/, using views.mjs
@@ -144,9 +145,10 @@ index.html           # the browse UI shell
 public/
   sw.js              # service worker: the catalog stays consultable offline
 src/
-  views.jsx          # pure, DOM-free views: the single source of the markup
-  components/        # Preact components (ADR 0002); render to a string in Node too
-  main.js            # browser shell: History routing, keyboard lookup, recently viewed
+  types/             # GENERATED from the schemas + the hand-written view contract
+  views.tsx          # pure, DOM-free views: the single source of the markup
+  components/        # React components (ADR 0002); render to a string in Node too
+  main.ts            # browser shell: History routing, keyboard lookup, recently viewed
   style.css          # tier badges carry visual weight; tradition must not read as consensus
 docs/
   TODO.md            # the worklist: verification, symmetry, depth

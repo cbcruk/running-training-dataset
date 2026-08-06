@@ -3,44 +3,65 @@
 // it must honour (README "Known open problems"): the evidence tier goes on the
 // browse card, not buried in the detail view — so browsing ten systems can never
 // make a `tradition` system look as settled as a `consensus` one.
-import systems from "../data/systems.json" with { type: "json" };
-import workouts from "../data/workouts.json" with { type: "json" };
-import usage from "../data/usage.json" with { type: "json" };
-import anchors from "../data/anchors.json" with { type: "json" };
-import adaptations from "../data/adaptations.json" with { type: "json" };
+import systemsRaw from "../data/systems.json" with { type: "json" };
+import workoutsRaw from "../data/workouts.json" with { type: "json" };
+import usageRaw from "../data/usage.json" with { type: "json" };
+import anchorsRaw from "../data/anchors.json" with { type: "json" };
+import adaptationsRaw from "../data/adaptations.json" with { type: "json" };
 import { renderToStaticMarkup } from "react-dom/server";
-import { AnchorDetail } from "./components/AnchorDetail.jsx";
-import { SystemDetail } from "./components/SystemDetail.jsx";
-import { WorkoutDetail } from "./components/WorkoutDetail.jsx";
+import type { Adaptation, Anchor, System, Usage, Workout } from "./types/index.d.ts";
+import type {
+  AdaptCategory,
+  AnchorSwitch,
+  AnchorUse,
+  Construct,
+  Lang,
+  Translatable,
+  ViewContext,
+} from "./types/view.ts";
+import { AnchorDetail } from "./components/AnchorDetail.tsx";
+import { SystemDetail } from "./components/SystemDetail.tsx";
+import { WorkoutDetail } from "./components/WorkoutDetail.tsx";
 import {
   AnchorList,
   NotFound,
   SearchResults,
   SystemList,
   WorkoutList,
-} from "./components/Lists.jsx";
+} from "./components/Lists.tsx";
 
-const byWorkout = Object.fromEntries(workouts.map((w) => [w.id, w]));
-const bySystem = Object.fromEntries(systems.map((s) => [s.id, s]));
-const byAnchor = Object.fromEntries(anchors.map((a) => [a.model, a]));
-const byAdaptation = Object.fromEntries(adaptations.map((a) => [a.id, a]));
+// The schemas are the source of truth for these shapes; the types next to this
+// file are generated from them (scripts/types.mjs). The JSON is asserted into
+// them rather than inferred, so a schema change surfaces here as a type error.
+const systems = systemsRaw as unknown as System[];
+const workouts = workoutsRaw as unknown as Workout[];
+const usage = usageRaw as unknown as Usage[];
+const anchors = anchorsRaw as unknown as Anchor[];
+const adaptations = adaptationsRaw as unknown as Adaptation[];
+
+const byWorkout: Record<string, Workout> = Object.fromEntries(workouts.map((w) => [w.id, w]));
+const bySystem: Record<string, System> = Object.fromEntries(systems.map((s) => [s.id, s]));
+const byAnchor: Record<string, Anchor> = Object.fromEntries(anchors.map((a) => [a.model, a]));
+const byAdaptation: Record<string, Adaptation> = Object.fromEntries(
+  adaptations.map((a) => [a.id, a]),
+);
 
 // Reverse indexes so an anchor page can show everything that references it:
 // which systems anchor on it, which workouts list it (and where it is primary),
 // and every switching_cost whose anchor_change touches it on either side.
-const systemsByAnchor = {};
+const systemsByAnchor: Record<string, System[]> = {};
 for (const s of systems) (systemsByAnchor[s.intensity_model] ??= []).push(s);
-const workoutsByAnchor = {};
+const workoutsByAnchor: Record<string, AnchorUse[]> = {};
 for (const w of workouts)
   for (const a of w.intensity.anchors)
     (workoutsByAnchor[a.model] ??= []).push({
       w,
       primary: w.intensity.primary_anchor === a.model,
     });
-const switchesByAnchor = {};
+const switchesByAnchor: Record<string, AnchorSwitch[]> = {};
 for (const s of systems)
   for (const x of s.switching_cost || []) {
-    const [from, to] = (x.anchor_change || "").split("->").map((v) => v.trim());
+    const [from, to] = (x.anchor_change || "").split("->").map((v: string) => v.trim());
     const entry = { to: s.id, from: x.from, silent: x.silent, note: x.note, from_anchor: from };
     for (const m of new Set([from, to]))
       if (byAnchor[m])
@@ -49,7 +70,7 @@ for (const s of systems)
 
 // Anchor constructs: the physical quantity each anchor reads. Grouping shows the
 // axes; the notes state that sharing a construct does NOT make anchors convert.
-const ANCHOR_CONSTRUCTS = [
+const ANCHOR_CONSTRUCTS: Construct[] = [
   {
     id: "perception",
     label: { ko: "지각", en: "Perception" },
@@ -85,7 +106,7 @@ const ANCHOR_CONSTRUCTS = [
 ];
 
 // Fixed display order for the adaptation taxonomy's coarse categories.
-const ADAPT_CATEGORIES = [
+const ADAPT_CATEGORIES: AdaptCategory[] = [
   { id: "central-cardiovascular", label: { ko: "중심 심혈관", en: "Central cardiovascular" } },
   { id: "peripheral-aerobic", label: { ko: "말초 유산소", en: "Peripheral aerobic" } },
   { id: "metabolic", label: { ko: "대사", en: "Metabolic" } },
@@ -98,21 +119,21 @@ const ADAPT_CATEGORIES = [
 // Module state, set by whichever host is driving: the browser shell (main.js) or
 // the prerenderer (scripts/prerender.mjs). Rendering one language at a time keeps
 // every view function below unchanged from when they lived in the browser.
-let lang = "ko";
+let lang: Lang = "ko";
 let BASE = "/";
 
-export function setLang(next) {
+export function setLang(next: Lang) {
   lang = next;
 }
-export function setBase(next) {
+export function setBase(next: string) {
   BASE = next.endsWith("/") ? next : next + "/";
 }
-export function currentLang() {
+export function currentLang(): Lang {
   return lang;
 }
 
 // bilingual field -> current-language string, falling back to the other language.
-function t(obj) {
+function t(obj: Translatable): string {
   if (obj == null) return "";
   if (typeof obj === "string") return obj;
   return obj[lang] || obj.en || obj.ko || "";
@@ -149,13 +170,13 @@ const COMMIT_TIPS = {
   },
 };
 
-const KM = (n) => (n == null ? "" : `${n}km`);
-function sessionsText(sp) {
+const KM = (n: number | null | undefined) => (n == null ? "" : `${n}km`);
+function sessionsText(sp?: { value?: number; min?: number; max?: number }) {
   if (!sp) return "";
   if (sp.value != null) return `${sp.value}×`;
   return `${sp.min}–${sp.max}×`;
 }
-function weeksText(pl) {
+function weeksText(pl?: { value?: number; min?: number; max?: number }) {
   if (!pl) return "";
   if (pl.value != null) return `${pl.value}w`;
   return `${pl.min}–${pl.max}w`;
@@ -165,7 +186,7 @@ function weeksText(pl) {
 // Paths are base-relative and base-stripped by the caller: "/", "/workouts",
 // "/anchor/rpe_10". Every view function returns an HTML string, so the same call
 // serves the browser (assigned to #app) and the prerenderer (written to a file).
-export function currentView(path) {
+export function currentView(path: string): string {
   const p = path || "/";
   if (p.startsWith("/anchor")) return "anchors";
   if (p.startsWith("/workout")) return "workouts";
@@ -173,7 +194,7 @@ export function currentView(path) {
   return "systems";
 }
 
-export function renderPath(path, q = "") {
+export function renderPath(path: string, q = ""): string {
   const parts = (path || "/").split("/").filter(Boolean);
   if (q) return renderSearch(q);
   if (parts[0] === "anchors") return renderAnchorList();
@@ -187,9 +208,9 @@ export function renderPath(path, q = "") {
 // Per-entry <title> and description. This is the half of the dictionary that hash
 // routing could never serve: a crawler or link preview reads only these.
 const SITE = "Running Training Dataset";
-export function metaFor(path) {
+export function metaFor(path: string): { title: string; description: string } {
   const parts = (path || "/").split("/").filter(Boolean);
-  const clip = (s, n = 155) => {
+  const clip = (s: string | undefined, n = 155) => {
     const v = String(s || "")
       .replace(/\s+/g, " ")
       .trim();
@@ -244,7 +265,7 @@ export function metaFor(path) {
 // Name an entry from its path. Used by the browser shell's recently-viewed strip,
 // which is per-reader and therefore never prerendered - the files on disk have to
 // stay identical for everyone.
-export function entryLabel(path) {
+export function entryLabel(path: string): { kind: string; label: string } | null {
   const parts = (path || "/").split("/").filter(Boolean);
   if (parts[0] === "system" && bySystem[parts[1]])
     return { kind: "system", label: bySystem[parts[1]].name };
@@ -279,7 +300,7 @@ function renderSystemList() {
 
 // ---- system detail ----------------------------------------------------------
 
-function renderSystemDetail(id) {
+function renderSystemDetail(id: string): string {
   if (!bySystem[id]) return notFound(id);
   return renderToStaticMarkup(<SystemDetail ctx={viewContext()} id={id} />);
 }
@@ -298,11 +319,11 @@ function renderAnchorList() {
 // string, so the router, the browser shell, and the prerenderer are unchanged -
 // which is what lets the migration run one view at a time instead of as a
 // big-bang rewrite. `ctx` carries what the module-level closure used to supply.
-function viewContext() {
+function viewContext(): ViewContext {
   return {
     t,
     lang,
-    url: (path) => `${BASE}${path}`,
+    url: (path: string) => `${BASE}${path}`,
     byWorkout,
     bySystem,
     byAnchor,
@@ -321,7 +342,7 @@ function viewContext() {
   };
 }
 
-function renderAnchorDetail(model) {
+function renderAnchorDetail(model: string): string {
   if (!byAnchor[model]) return notFound(model);
   return renderToStaticMarkup(<AnchorDetail ctx={viewContext()} model={model} />);
 }
@@ -342,17 +363,17 @@ function renderWorkoutList() {
 // definition on hover. Descriptive - it names what the workout targets, not what
 // it produces.
 
-function renderWorkoutDetail(id) {
+function renderWorkoutDetail(id: string): string {
   if (!byWorkout[id]) return notFound(id);
   return renderToStaticMarkup(<WorkoutDetail ctx={viewContext()} id={id} />);
 }
 
 // ---- search (the naming-join headline: "tempo run" -> two workouts) ---------
-function renderSearch(rawQ) {
+function renderSearch(rawQ: string): string {
   return renderToStaticMarkup(<SearchResults ctx={viewContext()} rawQ={rawQ} />);
 }
 
 // ---- misc -------------------------------------------------------------------
-function notFound(id) {
+function notFound(id: string): string {
   return renderToStaticMarkup(<NotFound ctx={viewContext()} id={id} />);
 }

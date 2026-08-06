@@ -30,6 +30,23 @@ jobs:
       - name: Render (every workout -> schematic svg)
         run: pnpm run render
 
+      # The data types are generated from data/schema/*.json and checked in, so a
+      # fresh clone type-checks without running the generator. Regenerate and
+      # assert nothing moved - otherwise a schema edit could ship with types that
+      # still describe the old shape, which is the drift the generation exists to
+      # prevent.
+      - name: Verify generated types match the schemas
+        run: |
+          pnpm run types
+          # --porcelain, not `git diff`: it reports untracked output too, so a
+          # generated file that was never committed cannot pass vacuously.
+          if [ -n "$(git status --porcelain -- src/types/)" ]; then
+            echo "src/types/ does not match data/schema/ - run 'vp run types' and commit the result"
+            git status --porcelain -- src/types/
+            git diff -- src/types/
+            exit 1
+          fi
+
       - name: Check (format + lint + types)
         run: pnpm run check
 

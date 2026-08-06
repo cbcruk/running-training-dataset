@@ -9,9 +9,12 @@ import {
   CiteList,
   MeasurementBlock,
   TierBadge,
-} from "./primitives.jsx";
+} from "./primitives.tsx";
+import type { Usage, Workout } from "../types/index.d.ts";
+import type { Anchor as WorkoutAnchor, Confound } from "../types/workout.d.ts";
+import type { Translatable, WithCtx } from "../types/view.ts";
 
-export function WorkoutDetail({ ctx, id }) {
+export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
   const { t, lang, url, byWorkout } = ctx;
   const w = byWorkout[id];
   if (!w) return null;
@@ -71,7 +74,7 @@ export function WorkoutDetail({ ctx, id }) {
               </tr>
             </thead>
             <tbody>
-              {w.intensity.anchors.map((a) => (
+              {w.intensity.anchors.map((a: WorkoutAnchor) => (
                 <tr key={a.model}>
                   <td>
                     <AnchorCode ctx={ctx} model={a.model} />
@@ -89,7 +92,7 @@ export function WorkoutDetail({ ctx, id }) {
 
         <MeasurementBlock
           ctx={ctx}
-          models={w.intensity.anchors.map((a) => a.model)}
+          models={w.intensity.anchors.map((a: WorkoutAnchor) => a.model)}
           fallbackFor={w.intensity.primary_anchor}
         />
 
@@ -116,7 +119,7 @@ export function WorkoutDetail({ ctx, id }) {
         {w.common_errors?.length > 0 && (
           <Block className="caveats" title={lang === "ko" ? "흔한 실수" : "Common errors"}>
             <ul>
-              {w.common_errors.map((e, i) => (
+              {w.common_errors.map((e: Translatable, i: number) => (
                 <li key={i}>{t(e)}</li>
               ))}
             </ul>
@@ -129,7 +132,7 @@ export function WorkoutDetail({ ctx, id }) {
 
 // An undetectable claim is not a weaker claim - it is a belief. The copy says so
 // rather than letting an unobservable null read as evidence of nothing.
-function FalsificationTest({ ctx, test }) {
+function FalsificationTest({ ctx, test }: WithCtx & { test: Workout["test"] }) {
   const { t, lang } = ctx;
 
   if (!test.detectable) {
@@ -173,7 +176,7 @@ function FalsificationTest({ ctx, test }) {
         <div className="kv">
           <span>{lang === "ko" ? "교란" : "confounds"}</span>
           <div className="confounds">
-            {confounds.map((c) => (
+            {confounds.map((c: Confound) => (
               <div className={`confound sev-${c.severity}`} key={c.factor}>
                 <div className="confound-head">
                   <code>{c.factor}</code>
@@ -203,7 +206,7 @@ function FalsificationTest({ ctx, test }) {
 
 // The collision table, from the workout's side: naming is a join, not a field,
 // so one colloquial term can point at several rows.
-function CollisionTable({ ctx, id }) {
+function CollisionTable({ ctx, id }: WithCtx & { id: string }) {
   const { t, lang, url, bySystem, usage } = ctx;
   const uses = usage.filter((u) => u.workout === id);
   if (!uses.length) return null;
@@ -214,7 +217,7 @@ function CollisionTable({ ctx, id }) {
     >
       <table className="usage">
         <tbody>
-          {uses.map((u, i) => {
+          {uses.map((u: Usage, i: number) => {
             const sysName = u.system
               ? bySystem[u.system]?.name || u.system
               : lang === "ko"

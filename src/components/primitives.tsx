@@ -1,8 +1,17 @@
+import type { ReactNode } from "react";
+import type { Translatable, WithCtx } from "../types/view.ts";
+
 // Shared primitives. These are the repeated shapes the template-literal views
 // open-coded at every call site - a `<section className="block">` with an
 // uppercase h3 and an optional sub-line appeared a dozen times.
 
-export function Block({ title, sub, className: cls, children }) {
+interface BlockProps {
+  title: ReactNode;
+  sub?: ReactNode;
+  className?: string;
+  children?: ReactNode;
+}
+export function Block({ title, sub, className: cls, children }: BlockProps) {
   return (
     <section className={cls ? `block ${cls}` : "block"}>
       <h3>{title}</h3>
@@ -12,7 +21,12 @@ export function Block({ title, sub, className: cls, children }) {
   );
 }
 
-export function Chip({ title, className: cls, children }) {
+interface ChipProps {
+  title?: string;
+  className?: string;
+  children?: ReactNode;
+}
+export function Chip({ title, className: cls, children }: ChipProps) {
   return (
     <span className={cls ? `chip ${cls}` : "chip"} title={title}>
       {children}
@@ -20,7 +34,7 @@ export function Chip({ title, className: cls, children }) {
   );
 }
 
-export function WChip({ href, children }) {
+export function WChip({ href, children }: { href: string; children?: ReactNode }) {
   return (
     <a className="wchip" href={href}>
       {children}
@@ -32,13 +46,13 @@ export function WChip({ href, children }) {
 // tradition reads as unproven. Flattening these is the failure the README bans -
 // which is also why this stays bespoke rather than becoming a design-system
 // status badge (ADR 0002): the tiers are not success/warning/danger.
-const TIER_LABEL = {
+const TIER_LABEL: Record<string, Translatable> = {
   consensus: { ko: "정설", en: "consensus" },
   plausible: { ko: "유력", en: "plausible" },
   tradition: { ko: "관행", en: "tradition" },
 };
 
-export function TierBadge({ ctx, tier }) {
+export function TierBadge({ ctx, tier }: WithCtx & { tier?: string }) {
   if (!tier) return null;
   const label = TIER_LABEL[tier] || { ko: tier, en: tier };
   return (
@@ -51,7 +65,7 @@ export function TierBadge({ ctx, tier }) {
 // A raw intensity_model / anchor.model code, made hoverable and clickable: the
 // tooltip pulls label + construct + what-it-takes-to-measure from anchors.json so
 // a slug like "lactate_mmol" explains itself in place.
-export function AnchorCode({ ctx, model }) {
+export function AnchorCode({ ctx, model }: WithCtx & { model: string }) {
   const { t, url, byAnchor, constructLabel } = ctx;
   const a = byAnchor[model];
   if (!a) return <code>{model}</code>;
@@ -67,7 +81,11 @@ export function AnchorCode({ ctx, model }) {
 
 // A commitment chip that explains its dimension on hover - the terse "9-13x/wk"
 // says what, the tooltip says what it means.
-export function InfoChip({ ctx, tip, children }) {
+export function InfoChip({
+  ctx,
+  tip,
+  children,
+}: WithCtx & { tip: Translatable; children?: ReactNode }) {
   return (
     <span className="chip chip-info" title={ctx.t(tip)}>
       {children}
@@ -75,7 +93,7 @@ export function InfoChip({ ctx, tip, children }) {
   );
 }
 
-export function CiteList({ evidence }) {
+export function CiteList({ evidence }: { evidence?: { cite?: string[] } }) {
   if (!evidence?.cite?.length) return null;
   return (
     <ul className="cites">
@@ -89,7 +107,11 @@ export function CiteList({ evidence }) {
 // The measurement layer (data/anchors.json): what each anchor takes to measure,
 // and the honest floor when you cannot. It points down to RPE and names what is
 // lost - never a numeric conversion, because anchors do not convert cleanly.
-export function MeasurementBlock({ ctx, models, fallbackFor = null }) {
+export function MeasurementBlock({
+  ctx,
+  models,
+  fallbackFor = null,
+}: WithCtx & { models: string[]; fallbackFor?: string | null }) {
   const { t, lang, byAnchor, constructs } = ctx;
   const uniq = [...new Set(models.filter((m) => byAnchor[m]))];
   const groups = constructs
@@ -146,7 +168,7 @@ export function MeasurementBlock({ ctx, models, fallbackFor = null }) {
 // target_adaptation slugs under their coarse physiological category, with the
 // definition on hover. Descriptive - it names what the workout targets, not what
 // it produces.
-export function AdaptationsBlock({ ctx, ids }) {
+export function AdaptationsBlock({ ctx, ids }: WithCtx & { ids: string[] }) {
   const { t, lang, byAdaptation, adaptCategories } = ctx;
   const groups = adaptCategories
     .map((cat) => ({

@@ -1,9 +1,12 @@
 // The system entry - the browsing unit. Leads with the bet and the evidence
 // tier, because the README's one hard UI rule is that browsing ten systems must
 // never make a `tradition` system look as settled as a `consensus` one.
-import { AnchorCode, Block, InfoChip, MeasurementBlock, TierBadge } from "./primitives.jsx";
+import { AnchorCode, Block, InfoChip, MeasurementBlock, TierBadge } from "./primitives.tsx";
+import type { System } from "../types/index.d.ts";
+import type { Distribution, Phase, SwitchingCost, VolumeCap } from "../types/system.d.ts";
+import type { Translatable, WithCtx } from "../types/view.ts";
 
-export function SystemDetail({ ctx, id }) {
+export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
   const { t, lang, url, bySystem, fmt } = ctx;
   const s = bySystem[id];
   if (!s) return null;
@@ -77,7 +80,7 @@ export function SystemDetail({ ctx, id }) {
 
 // `silent` marks the dangerous case: a term survives the switch while its meaning
 // changes. `anchor_change` is derived from intensity_model, so it is machine-verified.
-function SwitchingCost({ ctx, system }) {
+function SwitchingCost({ ctx, system }: WithCtx & { system: System }) {
   const { t, lang, url, bySystem } = ctx;
   const entries = system.switching_cost || [];
   if (!entries.length) return null;
@@ -90,7 +93,7 @@ function SwitchingCost({ ctx, system }) {
           : "Switching silently swaps your intensity anchor. anchor_change is derived from intensity_model, so it is machine-verified."
       }
     >
-      {entries.map((x, i) => (
+      {entries.map((x: SwitchingCost, i: number) => (
         <div className="switch" key={`${x.from}-${i}`}>
           <div className="switch-head">
             <span className="switch-from">
@@ -115,7 +118,7 @@ function SwitchingCost({ ctx, system }) {
   );
 }
 
-function Distribution({ ctx, distribution }) {
+function Distribution({ ctx, distribution }: WithCtx & { distribution?: Distribution }) {
   const { lang } = ctx;
   if (!distribution) return null;
   return (
@@ -125,7 +128,7 @@ function Distribution({ ctx, distribution }) {
       </p>
       {distribution.zones && (
         <ul className="zones">
-          {distribution.zones.map((z) => (
+          {distribution.zones.map((z: { label: string; pct_sessions: number }) => (
             <li key={z.label}>
               <span>{z.label}</span>
               <b>{z.pct_sessions}%</b>
@@ -137,17 +140,17 @@ function Distribution({ ctx, distribution }) {
   );
 }
 
-function Phases({ ctx, phases }) {
+function Phases({ ctx, phases }: WithCtx & { phases?: Phase[] }) {
   const { lang, url, byWorkout } = ctx;
   if (!phases?.length) return null;
   return (
     <Block title={lang === "ko" ? "주기별 강조 워크아웃" : "Phase emphasis"}>
       <div className="phases">
-        {phases.map((p) => (
+        {phases.map((p: Phase) => (
           <div className="phase" key={p.name}>
             <span className="phase-name">{p.name}</span>
             <div className="wchips">
-              {(p.emphasis || []).map((wid) => (
+              {(p.emphasis || []).map((wid: string) => (
                 <a className="wchip" href={url(`workout/${wid}`)} key={wid}>
                   {byWorkout[wid]?.canonical_name || wid}
                 </a>
@@ -160,7 +163,7 @@ function Phases({ ctx, phases }) {
   );
 }
 
-function VolumeCaps({ ctx, caps }) {
+function VolumeCaps({ ctx, caps }: WithCtx & { caps?: VolumeCap[] }) {
   const { t, lang } = ctx;
   if (!caps?.length) return null;
   return (
@@ -174,7 +177,7 @@ function VolumeCaps({ ctx, caps }) {
           </tr>
         </thead>
         <tbody>
-          {caps.map((v) => (
+          {caps.map((v: VolumeCap) => (
             <tr key={v.zone}>
               <td>
                 <code>{v.zone}</code>
@@ -191,13 +194,13 @@ function VolumeCaps({ ctx, caps }) {
   );
 }
 
-function Caveats({ ctx, caveats }) {
+function Caveats({ ctx, caveats }: WithCtx & { caveats?: Translatable[] }) {
   const { t, lang } = ctx;
   if (!caveats?.length) return null;
   return (
     <Block className="caveats" title={lang === "ko" ? "주의" : "Caveats"}>
       <ul>
-        {caveats.map((c, i) => (
+        {caveats.map((c, i: number) => (
           <li key={i}>{t(c)}</li>
         ))}
       </ul>

@@ -2,11 +2,17 @@
 //
 // The cards are shared between a list and the search results, which is exactly
 // the duplication the template-literal version had to open-code twice.
-import { TierBadge } from "./primitives.jsx";
+import { TierBadge } from "./primitives.tsx";
+import type { Anchor, System, Workout } from "../types/index.d.ts";
+import type { WithCtx } from "../types/view.ts";
 
 // Tier goes on the card, never only in the detail view - the README's one hard UI
 // rule, so browsing ten systems cannot make `tradition` look like `consensus`.
-export function SystemCard({ ctx, system: s, brief = false }) {
+export function SystemCard({
+  ctx,
+  system: s,
+  brief = false,
+}: WithCtx & { system: System; brief?: boolean }) {
   const { t, url, fmt } = ctx;
   const c = s.commitment || {};
   const chips = [
@@ -37,7 +43,11 @@ export function SystemCard({ ctx, system: s, brief = false }) {
   );
 }
 
-export function WorkoutCard({ ctx, workout: w, brief = false }) {
+export function WorkoutCard({
+  ctx,
+  workout: w,
+  brief = false,
+}: WithCtx & { workout: Workout; brief?: boolean }) {
   const { t, lang, url } = ctx;
   return (
     <a className="card wk-card" href={url(`workout/${w.id}`)}>
@@ -61,7 +71,7 @@ export function WorkoutCard({ ctx, workout: w, brief = false }) {
   );
 }
 
-export function AnchorCard({ ctx, anchor: a }) {
+export function AnchorCard({ ctx, anchor: a }: WithCtx & { anchor: Anchor }) {
   const { t, lang, url, indexes } = ctx;
   const sys = indexes.systemsByAnchor[a.model]?.length || 0;
   const wk = indexes.workoutsByAnchor[a.model]?.length || 0;
@@ -85,7 +95,7 @@ export function AnchorCard({ ctx, anchor: a }) {
   );
 }
 
-export function SystemList({ ctx }) {
+export function SystemList({ ctx }: WithCtx) {
   const { lang, systems } = ctx;
   return (
     <>
@@ -115,7 +125,7 @@ export function SystemList({ ctx }) {
   );
 }
 
-export function WorkoutList({ ctx }) {
+export function WorkoutList({ ctx }: WithCtx) {
   const { lang, workouts } = ctx;
   return (
     <>
@@ -143,7 +153,7 @@ export function WorkoutList({ ctx }) {
   );
 }
 
-export function AnchorList({ ctx }) {
+export function AnchorList({ ctx }: WithCtx) {
   const { t, lang, anchors, constructs } = ctx;
   const groups = constructs
     .map((c) => ({ c, items: anchors.filter((a) => a.construct === c.id) }))
@@ -187,14 +197,14 @@ export function AnchorList({ ctx }) {
 
 // The naming-join headline: one colloquial term ("tempo run") resolving to more
 // than one workout is the collision the dataset exists to make visible.
-export function SearchResults({ ctx, rawQ }) {
+export function SearchResults({ ctx, rawQ }: WithCtx & { rawQ: string }) {
   const { t, lang, url, systems, workouts, anchors, usage, byWorkout, bySystem } = ctx;
   const q = rawQ.trim().toLowerCase();
 
   const termHits = usage.filter(
     (u) =>
       u.calls_it.toLowerCase().includes(q) ||
-      (u.also_known_as || []).some((a) => a.toLowerCase().includes(q)),
+      (u.also_known_as || []).some((a: string) => a.toLowerCase().includes(q)),
   );
   const termWorkouts = [...new Set(termHits.map((u) => u.workout))];
 
@@ -233,7 +243,7 @@ export function SearchResults({ ctx, rawQ }) {
             ? `는 서로 다른 워크아웃 ${termWorkouts.length}개를 가리킨다 — 이름은 필드가 아니라 조인이다.`
             : `maps to ${termWorkouts.length} different workouts — naming is a join, not a field.`}
           <div className="collision-list">
-            {termWorkouts.map((id) => (
+            {termWorkouts.map((id: string) => (
               <a href={url(`workout/${id}`)} className="collision-item" key={id}>
                 <b>{byWorkout[id]?.canonical_name || id}</b>
                 <span>
@@ -274,7 +284,7 @@ export function SearchResults({ ctx, rawQ }) {
         <>
           <h3 className="search-h">{lang === "ko" ? "앵커" : "Anchors"}</h3>
           <div className="grid">
-            {anchorHits.map((a) => (
+            {anchorHits.map((a: Anchor) => (
               <AnchorCard ctx={ctx} anchor={a} key={a.model} />
             ))}
           </div>
@@ -284,7 +294,7 @@ export function SearchResults({ ctx, rawQ }) {
   );
 }
 
-export function NotFound({ ctx, id }) {
+export function NotFound({ ctx, id }: WithCtx & { id: string }) {
   const { lang, url } = ctx;
   return (
     <>
