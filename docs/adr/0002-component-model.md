@@ -157,10 +157,22 @@ that carries the epistemics.
 - Do not add a router, a state library, or a data-fetching layer along with the
   component model. Nothing in ADR 0001's analysis of those changed.
 
+## Migration status
+
+**All views are converted.** `src/views.jsx` went from 1,028 lines of template
+literals to 358 lines of routing, metadata, and context assembly; the markup lives
+in `src/components/` as five files. Every step was checked against a 44-route
+prerender snapshot, and every step came back **44/44 identical** - including the
+workout entry, which embeds a generated SVG and the confound/test blocks.
+
+The duplication the template-literal version could not avoid is gone with it: the
+system and workout cards were open-coded twice, once for a list and once for
+search, and are now one component with a `brief` prop.
+
+`esc()` is deleted. There is no manual escaping left in the view layer.
+
 ## Remaining work
 
-1. Convert the other views (`system` detail, `workout` detail, lists, search) the
-   same way, one at a time, each with a parity check.
 2. Switch the browser shell from `innerHTML` to React DOM rendering, which drops
    `react-dom/server` from the client bundle.
 3. Get `vp test` running and put component render tests behind it in CI — the gap
