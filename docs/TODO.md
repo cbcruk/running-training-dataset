@@ -25,7 +25,7 @@ be fixed before verifying anything else, because a verifier should check each
 source once, not three spellings of it.
 
 An audit over every `cite` in `systems.json` and `workouts.json` found exactly the
-three inconsistencies below and no others. All are normalized, and `validate.mjs`
+three inconsistencies below and no others. All are normalized, and `validate.ts`
 now enforces the policy so they cannot re-fragment.
 
 - [x] **Policy: one reference, one string — the full form, everywhere.** Short forms
@@ -66,27 +66,51 @@ the failure this dataset exists to avoid.
 
 **The checklist is [`docs/verification.md`](verification.md)**, generated from the
 data by `vp run verify` so it cannot drift from the rows it describes. It maps each
-of the 13 sources to every assertion hanging off it, quoting the exact sentence to
+of the sources to every assertion hanging off it, quoting the exact sentence to
 check, so a verifier reads one source and settles all its rows at once.
 
 The worksheet opens with three questions answerable **without** opening a source,
-because they are the ones most likely to move a tier:
+because they are the ones most likely to move a tier.
 
-1. **Sources never attached to a falsifiable sentence — 5 of 13.** They sit on
-   system rows and distributions only, so nothing states what they are supposed to
-   have shown. Canonical texts (`lydiard`, `pfitzinger`) are a method describing
-   itself, which is not evidence it works; review papers (`polarized-80-20`,
-   `critical-speed`, `hrr-karvonen`) may support something, but the row never says
-   what. Either the README documents that the tier convention admits these, or the
-   rows get a `claim.proposition` to check against, or they drop to `tradition`
-   and the cites come off.
-2. **The `consensus` rows** — the highest bar in the tier table, so the strongest
-   claims and the fewest of them.
-3. **Unobservable tests carrying a tier above `tradition`** — confirm the tier is
-   about the mechanism rather than the test.
+**Question 1 is settled.** It asked about sources never attached to a falsifiable
+sentence — 5 of 13 at the time. The decision, and what it produced:
 
-- [ ] Settle question 1. It is the largest single item here and it is a policy
-      decision, not a reading task.
+- **Review papers get a proposition to be checked against.** `polarized-80-20`
+  (Seiler), `critical-speed` (Jones & Vanhatalo) and `hrr-karvonen` (Karvonen) now
+  carry a `claim.proposition` stating what the source is supposed to have shown.
+  Those propositions are **authored to be checked, not confirmed** — the tier is
+  unchanged and the rows are still `draft`.
+- **Canonical texts drop to `tradition`, which removes the cite.** A method
+  describing itself is not evidence that it works. Applied to `lydiard` and
+  `pfitzinger` — and to **`daniels`**, which the worksheet's triage missed because
+  it groups by _source_: the Daniels book is attached to workout propositions
+  elsewhere, so it never showed as unattached, even though the `daniels` system row
+  had the same defect. Same case, same fix.
+- **The same rule applied at the distribution level**, which the triage did not
+  cover. `daniels`, `pfitzinger` and `critical-speed` distributions dropped to
+  `tradition`. The Jones cite on `critical-speed.distribution` was simply
+  misattached — that review is about the CS/W′ model, not about pyramidal session
+  distribution, and the model claim now lives on the system's `claim`.
+  `polarized-80-20.distribution` keeps Seiler: it is the one distribution whose
+  cite and field actually match, and it is the only one with explicit `zones`.
+
+Net: **plausible 23 → 17, tradition 48 → 54**, and no source is left unattached.
+
+**Machine-enforced so it cannot return.** `system.schema.json` gained a `claim`
+object, and `validate.ts` now fails a system whose root evidence claims more than
+`tradition` without a `claim.proposition` — evidence with nothing to be evidence
+_for_ cannot be checked or falsified. Verified by removing a proposition and
+watching it fail.
+
+The two remaining questions, still open:
+
+- [ ] **The `consensus` rows** — the highest bar in the tier table, so the
+      strongest claims and the fewest of them.
+- [ ] **Unobservable tests carrying a tier above `tradition`** — confirm the tier
+      is about the mechanism rather than the test.
+
+And the reading itself, which no script can do:
+
 - [ ] Work the worksheet source by source, ticking rows as each is confirmed.
 - [ ] Downgrade rather than stretch: a `plausible`/`consensus` row whose source
       does not actually support it must drop to `tradition`, which means
@@ -96,6 +120,14 @@ because they are the ones most likely to move a tier:
 - [ ] **Daniels volume caps** (`daniels.volume_caps`) are marked `tradition` +
       "from memory" (README already flags this). Verify the T/I/R cap figures
       against the source text before promoting.
+
+**A tension this exposed, worth naming.** The tier table conflates evidence that a
+method _works_ with evidence of what a method _is_. `tradition` forbids a cite, so
+there is now no way to source a factual description of a method — the Lydiard,
+Pfitzinger and Daniels books are the authoritative record of what those systems
+prescribe, and that record is now uncited. If that matters, the fix is a separate
+`source` field for provenance, distinct from `evidence` for efficacy. Not done
+here; it is a schema decision, not a verification one.
 
 ### 1c. Non-goal guard (do **not** do)
 

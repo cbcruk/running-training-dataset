@@ -79,8 +79,11 @@
     "distribution": {
       "model": "pyramidal",
       "evidence": {
-        "tier": "plausible",
-        "cite": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."]
+        "tier": "tradition",
+        "note": {
+          "ko": "정본 텍스트가 이 분포를 서술한다. 실제 세션 비율은 책의 처방에서 읽은 것이지 관찰 연구에서 온 것이 아니다.",
+          "en": "A canonical text describes this distribution. The session split is read off the book's prescription, not from an observational study."
+        }
       }
     },
     "volume_caps": [
@@ -135,8 +138,11 @@
       }
     ],
     "evidence": {
-      "tier": "plausible",
-      "cite": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."]
+      "tier": "tradition",
+      "note": {
+        "ko": "정본 텍스트가 이 방법을 서술한다. VDOT 표와 존 처방은 잘 문서화돼 있지만, 그것이 다른 처방보다 낫다는 통제된 비교는 별개 문제다. (개별 워크아웃 주장에 붙은 Daniels 인용은 그대로 유효하다.)",
+        "en": "A canonical text describes this method. The VDOT tables and zone prescriptions are well documented; that they beat other prescriptions is a separate and untested question. (The Daniels cites on individual workout claims are unaffected.)"
+      }
     },
     "caveats": [
       {
@@ -351,6 +357,12 @@
         "emphasis": ["easy-run", "vo2max-intervals", "vo2max-30-30"]
       }
     ],
+    "claim": {
+      "proposition": {
+        "ko": "엘리트 지구력 선수는 세션의 약 80%를 첫 역치 아래에서, 약 20%를 두 번째 역치 위에서 수행하며 중간 강도에는 거의 시간을 쓰지 않는다.",
+        "en": "Elite endurance athletes place roughly 80% of sessions below the first threshold and roughly 20% above the second, spending little time at moderate intensity."
+      }
+    },
     "evidence": {
       "tier": "plausible",
       "cite": [
@@ -447,11 +459,10 @@
       }
     ],
     "evidence": {
-      "tier": "plausible",
-      "cite": ["Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport."],
+      "tier": "tradition",
       "note": {
-        "ko": "유산소 베이스 원리 자체는 지지받지만, 처방된 국면 순서 전체의 우월성은 통제 비교가 없다.",
-        "en": "The aerobic-base principle is supported, but the superiority of the full prescribed phase sequence has no controlled comparison."
+        "ko": "정본 텍스트가 이 방법을 서술한다. 방법이 자기 자신을 서술하는 것은 그것이 작동한다는 증거가 아니므로, 인용을 붙일 수 있는 등급이 아니다. 유산소 베이스 원리 자체는 별개로 지지되지만, 규정된 국면 순서 전체의 우월성에는 통제된 비교가 없다.",
+        "en": "A canonical text describes this method. A method describing itself is not evidence that it works, so this is not a tier that can carry a cite. The aerobic-base principle is separately supported, but the superiority of the full prescribed phase sequence has no controlled comparison."
       }
     },
     "caveats": [
@@ -523,8 +534,11 @@
     "distribution": {
       "model": "pyramidal",
       "evidence": {
-        "tier": "plausible",
-        "cite": ["Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics."]
+        "tier": "tradition",
+        "note": {
+          "ko": "정본 텍스트가 이 분포를 서술한다. 처방된 구조이지 측정된 분포가 아니다.",
+          "en": "A canonical text describes this distribution. It is the prescribed structure, not a measured distribution."
+        }
       }
     },
     "phases": [
@@ -546,8 +560,11 @@
       }
     ],
     "evidence": {
-      "tier": "plausible",
-      "cite": ["Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics."]
+      "tier": "tradition",
+      "note": {
+        "ko": "정본 텍스트가 이 방법을 서술한다. 규정된 구조는 잘 문서화돼 있지만, 그 구조가 대안보다 낫다는 통제된 비교는 없다.",
+        "en": "A canonical text describes this method. The prescribed structure is well documented; that it beats the alternatives is not."
+      }
     },
     "caveats": [
       {
@@ -883,10 +900,11 @@
     "distribution": {
       "model": "pyramidal",
       "evidence": {
-        "tier": "plausible",
-        "cite": [
-          "Jones AM, Vanhatalo A (2017). The 'Critical Power' Concept: Applications to Sports Performance. Sports Med 47(Suppl 1)."
-        ]
+        "tier": "tradition",
+        "note": {
+          "ko": "이 분포에는 출처가 없다. Jones & Vanhatalo는 CS/W′ 모델을 다루며 이제 체계의 claim에 붙어 있다 — 그 리뷰는 CS 기반 체계가 피라미드형으로 분포한다는 것을 말하지 않으므로, 여기 붙어 있던 것은 오부착이었다.",
+          "en": "This distribution has no source. Jones & Vanhatalo covers the CS/W' model and now sits on the system's claim - the review says nothing about CS-anchored systems distributing pyramidally, so the cite was misattached here."
+        }
       }
     },
     "phases": [
@@ -903,6 +921,12 @@
         "emphasis": ["vo2max-intervals"]
       }
     ],
+    "claim": {
+      "proposition": {
+        "ko": "임계속도는 실재하는 생리적 경계다: 그 아래에서는 대사가 정상상태에 머물고, 위에서는 유한한 여력(W′)이 소모되며 소진 시점이 예측 가능하다.",
+        "en": "Critical speed marks a real physiological boundary: below it metabolism settles into a steady state, above it the finite reserve (W') depletes and time to exhaustion is predictable."
+      }
+    },
     "evidence": {
       "tier": "plausible",
       "cite": [
@@ -970,6 +994,12 @@
         }
       }
     ],
+    "claim": {
+      "proposition": {
+        "ko": "강도를 최대심박수 비율이 아니라 심박수 예비량 비율로 처방하면, 안정시 심박수의 개인차를 흡수해 더 일관된 생리적 부하를 겨냥한다.",
+        "en": "Prescribing intensity as a percentage of heart-rate reserve rather than of maximum heart rate absorbs individual differences in resting heart rate and so targets a more consistent physiological load."
+      }
+    },
     "evidence": {
       "tier": "plausible",
       "cite": [
