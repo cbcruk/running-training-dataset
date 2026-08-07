@@ -11,7 +11,7 @@ For people who like trying different methods. Light to browse, honest underneath
 
 Modeled on the shape of [exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset), but the atoms are different, so the schema is too.
 
-**Status: early.** 13 systems, 20 workouts. Every row is `status: draft` — no citation has been human-verified. All eight `intensity_model` anchors are now represented by at least one system, and all nine workout families are populated.
+**Status: early.** 14 systems, 22 workouts. Every row is `status: draft` — no citation has been human-verified. All eight `intensity_model` anchors are now represented by at least one system, and all nine workout families are populated.
 
 ---
 
@@ -133,9 +133,9 @@ Instead, each row carries a falsification procedure:
 
 ```
 data/
-  systems.json       # 13 - the browsing entity. bet / commitment / switching_cost
-  workouts.json      # 20 - detail view. claim / test / structure / intensity
-  usage.json         # 49 - (system, workout) -> calls_it. The collision table.
+  systems.json       # 14 - the browsing entity. bet / commitment / switching_cost
+  workouts.json      # 22 - detail view. claim / test / structure / intensity
+  usage.json         # 54 - (system, workout) -> calls_it. The collision table.
   anchors.json       # 8  - measurement layer. per intensity_model: requires + fallback (-> RPE)
   adaptations.json   # 15 - taxonomy over target_adaptation: coarse category + definition
   schema/*.json      # JSON Schema 2020-12
@@ -204,7 +204,7 @@ the data stays JSON, why the whole corpus is loaded up front on purpose, and why
 web framework is adopted.
 
 - ~~**The card view flattens the tier.**~~ Addressed. `index.html` puts the tier badge on every system and workout card, and `consensus` / `plausible` / `tradition` are given deliberately different visual weight — a solid fill, an outline, and a faint dashed outline respectively — so browsing cannot make `tradition` read as settled. The constraint stands for any future card added.
-- **Nothing is verified yet.** All 13 systems and 20 workouts are `status: draft`. Citations are now normalized and machine-enforced (one reference, one string), but that says only that a source _reads_ the same everywhere — not that it supports the claim it is attached to. The verification checklist is in [`docs/TODO.md`](docs/TODO.md#1-verification-draft--verified).
+- **Nothing is verified yet.** All 14 systems and 22 workouts are `status: draft`. Citations are now normalized and machine-enforced (one reference, one string), but that says only that a source _reads_ the same everywhere — not that it supports the claim it is attached to. The verification checklist is in [`docs/TODO.md`](docs/TODO.md#1-verification-draft--verified).
 - **Daniels' volume caps are from memory**, marked `tradition` + draft. Verify against the source text.
 - **VDOT tables are a compiled work.** Do not scrape. Re-derive from the published equations in Daniels & Gilbert (1979), _Oxygen Power_. VDOT is a trademark. Same trap for Purdy Points and WMA age-grading tables.
 - **Prior art unverified.** GoldenCheetah is the reference implementation for the analysis side, but it is an engine, not a knowledge base. Confirm nothing like this catalog exists.
