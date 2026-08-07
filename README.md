@@ -74,6 +74,8 @@ So rows are hypotheses. `claim.proposition` is one falsifiable sentence; `test` 
 | `plausible` | studied, contested             | **required**  |
 | `tradition` | everyone does it, nobody knows | **forbidden** |
 
+**`source` is provenance; `cite` is efficacy.** These are different claims and the schema keeps them apart. A canonical text — Daniels' _Running Formula_, Lydiard's _Running to the Top_ — is the authoritative record of what a system **prescribes**; that it **works** is a separate question, and a method describing itself does not answer it. So `source` sits beside `attribution`, is allowed at any tier including `tradition`, and never justifies one. `validate.ts` holds it to the same citation bar as `cite`, folds it into the one-reference-one-string rule, and rejects a row that lists the same work as both — that collapse is exactly what the split exists to prevent.
+
 Current distribution: **consensus 3 / plausible 23 / tradition 47.** Tradition dominates. That is the honest shape of running knowledge; forcing the ratio the other way kills the project.
 
 Enforced at the schema/CI layer, not in a contributor guideline:
@@ -82,6 +84,7 @@ Enforced at the schema/CI layer, not in a contributor guideline:
 - `cite` without a `(year)` → violation. A URL is not a citation.
 - one reference written two ways → violation. A source must read identically in every row, or a verifier checking it once cannot tell it is the same source.
 - a system claiming more than `tradition` without a `claim.proposition` → violation. Evidence with nothing to be evidence _for_ cannot be checked or falsified, so the cite would sit there unfalsifiable.
+- the same reference as both `source` and `cite` on one row → violation. Provenance and efficacy are different claims.
 - `status: verified` from a generator → violation. Requires human sign-off.
 - colloquial term in `id`/`canonical_name` → violation. It belongs in `usage.json`.
 - `bet` longer than one sentence → violation.

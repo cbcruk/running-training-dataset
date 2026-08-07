@@ -54,6 +54,23 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
           </Block>
         )}
 
+        {s.source?.length && (
+          <Block
+            title={lang === "ko" ? "출처 (서술)" : "Source (description)"}
+            sub={
+              lang === "ko"
+                ? "이 체계가 무엇을 처방하는지의 기록이다. 작동한다는 증거가 아니다 — 그건 등급과 인용이 따로 답한다."
+                : "The record of what this system prescribes. Not evidence that it works — the tier and its cites answer that separately."
+            }
+          >
+            <ul className="cites">
+              {s.source.map((c: string) => (
+                <li key={c}>{c}</li>
+              ))}
+            </ul>
+          </Block>
+        )}
+
         <Block title={lang === "ko" ? "철학" : "Philosophy"}>
           <p>{t(s.philosophy)}</p>
         </Block>
