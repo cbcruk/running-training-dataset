@@ -4,6 +4,7 @@
     "name": "Daniels' Running Formula",
     "attribution": "Jack Daniels",
     "source": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."],
+    "provenance": "recorded",
     "status": "draft",
     "intensity_model": "daniels-vdot",
     "bet": {
@@ -160,6 +161,7 @@
     "id": "hansons",
     "name": "Hansons Marathon Method",
     "attribution": "Kevin & Keith Hanson",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "race_pace_ref",
     "bet": {
@@ -265,6 +267,7 @@
     "id": "polarized-80-20",
     "name": "Polarized (80/20) Training",
     "attribution": "Stephen Seiler",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "pct_vo2max",
     "bet": {
@@ -386,6 +389,7 @@
     "name": "Lydiard System",
     "attribution": "Arthur Lydiard",
     "source": ["Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport."],
+    "provenance": "recorded",
     "status": "draft",
     "intensity_model": "rpe_10",
     "bet": {
@@ -479,6 +483,7 @@
     "name": "Pfitzinger (Advanced Marathoning)",
     "attribution": "Pete Pfitzinger",
     "source": ["Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics."],
+    "provenance": "recorded",
     "status": "draft",
     "intensity_model": "pct_hrmax",
     "bet": {
@@ -580,6 +585,7 @@
     "id": "maf",
     "name": "MAF (Maffetone Method)",
     "attribution": "Phil Maffetone",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "pct_hrmax",
     "bet": {
@@ -659,6 +665,7 @@
     "id": "norwegian-singles",
     "name": "Norwegian Singles (Threshold)",
     "attribution": null,
+    "provenance": "uncitable",
     "status": "draft",
     "intensity_model": "lactate_mmol",
     "bet": {
@@ -761,6 +768,7 @@
     "id": "bakken-doubles",
     "name": "Bakken Double Threshold",
     "attribution": "Marius Bakken",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "lactate_mmol",
     "bet": {
@@ -849,6 +857,7 @@
     "id": "critical-speed",
     "name": "Critical Speed Training",
     "attribution": "Monod & Scherrer (critical-power model)",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "pct_cs",
     "bet": {
@@ -955,6 +964,7 @@
     "id": "hrr-karvonen",
     "name": "HRR Zone Training (Karvonen)",
     "attribution": "Martti Karvonen",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "pct_hrr",
     "bet": {
@@ -1034,6 +1044,7 @@
     "id": "canova",
     "name": "Canova (Percentage of Race Pace)",
     "attribution": "Renato Canova",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "race_pace_ref",
     "bet": {
@@ -1127,6 +1138,7 @@
     "id": "galloway",
     "name": "Galloway (Run-Walk)",
     "attribution": "Jeff Galloway",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "rpe_10",
     "bet": {
@@ -1207,6 +1219,7 @@
     "id": "first-furman",
     "name": "FIRST (Run Less, Run Faster)",
     "attribution": "Bill Pierce (Furman Institute)",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "race_pace_ref",
     "bet": {
@@ -1286,6 +1299,199 @@
       {
         "ko": "크로스 트레이닝의 강도와 질이 표준화되지 않아, 같은 'FIRST 플랜'이 사람마다 전혀 다른 총 부하가 된다. 낮은 러닝 빈도는 러닝 특이적 내구성에 불리할 수 있다.",
         "en": "The intensity and quality of cross-training are unstandardised, so the same 'FIRST plan' becomes a very different total load per person. The low run frequency may work against run-specific durability."
+      }
+    ]
+  },
+  {
+    "id": "moderate-primary",
+    "name": "Moderate-Primary",
+    "provenance": "uncitable",
+    "status": "draft",
+    "intensity_model": "lactate_mmol",
+    "bet": {
+      "ko": "하드 워크아웃 대신 중강도 러닝을 훈련의 본체로 삼는다.",
+      "en": "Make moderate running the training itself, not the filler between hard workouts."
+    },
+    "philosophy": {
+      "ko": "아마추어의 전형적 실패를 '세게 달리거나, 아니면 조깅'으로 규정하고, 그 사이의 구간을 훈련의 중심에 놓는다. 중강도는 젖산이 올라가지 않고(2mmol/L 이하) 자기 호흡 소리가 들리지 않는 선에서 낼 수 있는 가장 빠른 페이스로 정의되며, 회복용으로 쓰이는 중강도(최대심박수 70~75%)와는 목적이 달라 같은 선상에서 비교되지 않는다. 기초기에는 주 3~4회 중강도에 집중하고, 레이스가 가까워지면 레이스 특이적 훈련으로 초점을 옮긴다. 주 40~50시간을 일하는 러너를 전제로 설계된 배분이라, 실행 가능성 자체가 설계 조건에 들어가 있다.",
+      "en": "It names the typical amateur failure as 'run hard, or else jog' and puts the band between them at the centre of training. Moderate is defined as the fastest pace that keeps blood lactate from rising (at or below 2 mmol/L) and your own breathing inaudible - a different purpose from the moderate running other coaches use for recovery (70-75% HRmax), and therefore not comparable to it. The fundamental period concentrates on 3-4 moderate runs a week; as the race approaches, focus shifts to race-specific work. The distribution is designed around runners working 40-50 hours a week, so executability is part of the design brief rather than an afterthought."
+    },
+    "commitment": {
+      "sessions_per_week": {
+        "min": 5,
+        "max": 7
+      },
+      "requires_track": false,
+      "note": {
+        "ko": "시간 예산이 낮다: 평일 중강도는 30~40분, 90~120분짜리는 월 2~4회뿐이다. 대신 앵커가 실측 젖산이라 원칙적으로 측정기가 필요하고, 대부분은 호흡 소리와 %HRmax로 대리한다. 출처 문서가 제시하는 주행거리 기준은 남자 서브2:50 / 여자 서브3:05에 월 300km, 마라톤 서브2:10에 최소 월 600km(종종 1,000km 이상)이다.",
+        "en": "The time budget is low: 30-40 minutes on weekdays, with 90-120 minute runs only 2-4 times a month. The anchor is measured blood lactate, so strictly it needs a meter; in practice it is proxied by breathing sound and %HRmax. The source's mileage references are 300 km/month for a sub-2:50 man or sub-3:05 woman, and at least 600 km/month - often over 1,000 - for a sub-2:10 marathon."
+      }
+    },
+    "switching_cost": [
+      {
+        "from": "polarized-80-20",
+        "anchor_change": "pct_vo2max -> lactate_mmol",
+        "silent": false,
+        "note": {
+          "ko": "폴라라이즈드가 비우라고 지시하는 중간 구간이 정확히 이 체계의 본체다. 정면 충돌이라 조용하지 않지만, 두 체계가 서로를 반박하는 것이 아니라는 점이 함정이다 - 폴라라이즈드의 근거는 엘리트 관찰이고, 이 체계는 잠재력에서 먼 아마추어를 대상으로 삼는다. 같은 질문에 대한 두 답이 아니라 다른 모집단에 대한 두 처방일 수 있다.",
+          "en": "The middle that polarized tells you to vacate is exactly where this system lives. It is a head-on collision, so nothing is silent - but the trap is that the two may not actually contradict each other: polarized argues from observing elites, while this system addresses amateurs far from their potential. These may be two prescriptions for different populations rather than two answers to one question."
+        }
+      },
+      {
+        "from": "norwegian-singles",
+        "anchor_change": "lactate_mmol -> lactate_mmol",
+        "silent": true,
+        "note": {
+          "ko": "앵커도 숫자도 거의 그대로라 아무것도 바뀌지 않은 것처럼 보인다. 바뀌는 건 상한과 역할이다. 2~3mmol을 노리는 '세션'이 2mmol을 넘지 않는 '평상시 주행'이 되고, 세션과 이지런의 구분이 사라진다. 숫자가 비슷해서 조용하다.",
+          "en": "The anchor and even the number barely move, so it looks like nothing changed. What changes is the ceiling and the role: a session aiming at 2-3 mmol becomes an everyday run capped below 2 mmol, and the line between session and easy run disappears. It is silent precisely because the numbers look alike."
+        }
+      },
+      {
+        "from": "daniels",
+        "anchor_change": "daniels-vdot -> lactate_mmol",
+        "silent": true,
+        "note": {
+          "ko": "VDOT 표에 이 강도의 존이 없다. E는 아래, M은 레이스에 묶여 있고, T는 위다. 그래서 넘어온 러너는 대개 이 세션을 '조금 빠른 E'로 실행하고, Daniels가 상한으로 걸어둔 E의 절제가 조용히 무너진다. 이름은 그대로 easy run인 채로 페이스만 올라간다.",
+          "en": "The VDOT table has no zone at this intensity: E is below it, M is tied to a race, T is above it. So arrivals usually run it as a slightly quick E, and the upper bound Daniels puts on E quietly erodes. The name stays 'easy run' while the pace rises."
+        }
+      },
+      {
+        "from": "maf",
+        "anchor_change": "pct_hrmax -> lactate_mmol",
+        "silent": false,
+        "note": {
+          "ko": "MAF의 180-나이 상한(대략 최대심박수 70~75%)이 약 80%로 올라가고, 통제 수단이 심박에서 젖산·호흡으로 바뀐다. MAF에서는 위반인 강도가 여기서는 기본값이다. 명시적 상한 교체라 조용하지는 않지만, MAF를 지키던 러너에게는 체계의 정체성 자체가 사라지는 전환이다.",
+          "en": "MAF's 180-minus-age cap (roughly 70-75% HRmax) rises to about 80%, and control moves from heart rate to lactate and breathing. What MAF treats as a violation is here the default. Swapping an explicit cap is not silent, but for someone who kept to MAF it removes the system's entire identity."
+        }
+      },
+      {
+        "from": "lydiard",
+        "anchor_change": "rpe_10 -> lactate_mmol",
+        "silent": false,
+        "note": {
+          "ko": "가장 가까운 조상이다. Lydiard의 '스테디 스테이트'가 차지하던 자리를 그대로 물려받되, 감각으로 관리하던 상한을 젖산 2mmol과 호흡 소리라는 두 조건으로 못박는다. 잃는 것은 없고 정밀도가 오르는 전환처럼 보이지만, 측정기 없이 대리하면 결국 다시 감각으로 돌아온다.",
+          "en": "The closest ancestor. It inherits the place Lydiard's 'steady state' occupied but pins the ceiling, previously managed by feel, to two conditions: 2 mmol and inaudible breathing. It looks like a pure gain in precision, but proxied without a meter it lands back on feel."
+        }
+      }
+    ],
+    "distribution": {
+      "model": "threshold",
+      "zones": [
+        {
+          "label": "easy",
+          "pct_sessions": 45
+        },
+        {
+          "label": "moderate (at or below 2 mmol)",
+          "pct_sessions": 50
+        },
+        {
+          "label": "hard (race-specific or speed)",
+          "pct_sessions": 5
+        }
+      ],
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "출처 문서는 백분율을 제시하지 않는다. 이 숫자는 '기초기 주 3~4회 중강도'를 주 6~7세션에 대비해 유도한 것이라 정밀도를 주장하지 않는다. 네 가지 모델 중 threshold가 가장 가깝지만 정확하지는 않다 - 중심 구간이 역치(LT2)가 아니라 그 아래(LT1)이고, 특화기에는 배분이 크게 달라진다.",
+          "en": "The source states no percentages. These are derived from '3-4 moderate runs a week in the fundamental period' against a 6-7 session week and claim no precision. Of the four models `threshold` is the closest fit but not an accurate one: the occupied band is below threshold (LT1), not at it, and the specific period redistributes substantially."
+        }
+      }
+    },
+    "volume_caps": [
+      {
+        "zone": "moderate (aerobic threshold)",
+        "rule": {
+          "ko": "평일 중강도는 30~40분으로 묶고, 90~120분짜리는 월 2~4회까지만 허용한다.",
+          "en": "Keep weekday moderate runs to 30-40 minutes; allow 90-120 minute versions only 2-4 times a month."
+        },
+        "evidence": {
+          "tier": "tradition",
+          "note": {
+            "ko": "주 40~50시간 일하는 러너를 전제로 한 실행 가능성 규칙이지, 생리적 상한으로 제시된 것이 아니다.",
+            "en": "An executability rule premised on runners working 40-50 hours a week, not offered as a physiological ceiling."
+          }
+        }
+      },
+      {
+        "zone": "weekly total",
+        "rule": {
+          "ko": "총 주행거리는 이지 런의 횟수와 볼륨으로만 늘린다. 강도 높은 훈련으로는 늘릴 수 없다.",
+          "en": "Grow total mileage only by adding easy runs, in count and in volume. Higher-intensity work cannot grow it."
+        },
+        "evidence": {
+          "tier": "tradition",
+          "note": {
+            "ko": "'우리 몸이 그렇게 설계되어 있다'는 진술 외에 근거가 제시되지 않는다.",
+            "en": "No support is offered beyond the assertion that the body is built that way."
+          }
+        }
+      }
+    ],
+    "phases": [
+      {
+        "name": "base",
+        "emphasis": ["aerobic-threshold-continuous", "easy-run", "long-run"],
+        "note": {
+          "ko": "기초기. 향상의 대부분이 여기서 나온다는 것이 이 체계의 전제이고, 목표는 '문제 없이 소화되는 평균 주행거리' 자체를 끌어올리는 것이다.",
+          "en": "The fundamental period. This system's premise is that most improvement comes from here, and the goal is to raise the average daily distance you can absorb without trouble."
+        }
+      },
+      {
+        "name": "build",
+        "emphasis": [
+          "aerobic-threshold-progression",
+          "aerobic-threshold-continuous",
+          "easy-run",
+          "fartlek"
+        ],
+        "note": {
+          "ko": "하드 워크아웃이 시작되면 중강도의 초점이 획득에서 유지로 바뀐다. 빈도를 줄이거나 aerobic-threshold-progression으로 대체한다. 보조 스피드는 짧은 파틀렉(1분 빠르게 / 1분 느리게 × 20~25회) 수준이다.",
+          "en": "Once hard workouts start, the moderate work shifts from acquiring to maintaining: cut the frequency, or substitute aerobic-threshold-progression. Auxiliary speed stays at the level of a short fartlek (1 minute fast / 1 minute slow, 20-25 times)."
+        }
+      },
+      {
+        "name": "peak",
+        "emphasis": ["race-pace-intervals", "marathon-pace-run", "aerobic-threshold-progression"],
+        "note": {
+          "ko": "특화기. 5,000m는 목표 레이스 페이스로 1,000m × 5회에 리커버리 조깅 1분, 마라톤은 레이스 페이스의 90% 강도로 40km. 레이스에서 멀수록·생애 누적 거리가 적을수록 중강도로, 가까울수록·많을수록 특이적 훈련으로 기운다.",
+          "en": "The specific period. For 5000m: 5 x 1000m at goal race pace with one minute of jog recovery. For the marathon: 40 km at 90% of race-pace intensity. The further from the race and the lower the lifetime volume, the more moderate work; the closer and the higher, the more specific work."
+        }
+      }
+    ],
+    "claim": {
+      "proposition": {
+        "ko": "기량 향상의 70~80%는 하드 워크아웃이 아니라 이지 런과 중강도 러닝에서 온다.",
+        "en": "70-80% of performance improvement comes from easy and moderate running rather than from hard workouts."
+      },
+      "mechanism": {
+        "ko": "반복 가능한 유산소 자극의 누적이 기본 능력을 만들고, 하드 워크아웃은 이미 만들어진 기본 능력을 레이스에 맞게 변환할 뿐이라는 주장이다. 따라서 잠재력에서 멀수록 이 비율이 커지고, 가까울수록 작아진다.",
+        "en": "The claim is that accumulated, repeatable aerobic stimulus builds basic capacity, and hard workouts only convert already-built capacity into race form. The share therefore grows the further you are from your potential and shrinks as you approach it."
+      }
+    },
+    "evidence": {
+      "tier": "tradition",
+      "note": {
+        "ko": "출처는 단일 코칭 에세이다. 근거로 제시되는 것은 저자의 지도 경험과 자기 기록(하프 63:09, 이후 하드 워크아웃 없이 중강도와 짧은 파틀렉만으로 64~65분 유지)이며, 70~80%라는 수치의 출처는 제시되지 않는다. 통제 시험이 아니므로 tradition이고, tradition에는 cite를 달 수 없다.",
+        "en": "The source is a single coaching essay. What is offered is the author's coaching experience and own results (a 63:09 half marathon, later repeated at 64-65 minutes on moderate running and short fartlek alone, with no hard workouts). No source is given for the 70-80% figure. Not a controlled trial, therefore tradition - and tradition may carry no cite."
+      }
+    },
+    "caveats": [
+      {
+        "ko": "이 행의 provenance를 기록할 수 없다. 출처 문서에 저자와 발행연도가 없어 `source`가 요구하는 인용 형태를 만들 수 없고, 따라서 이 행은 '문헌으로 확인된 방법'이 아니라 '한 편의 글에서 옮긴 주장'이다. 다른 체계 행들과 같은 줄에 놓고 읽을 때 이 차이를 먼저 볼 것.",
+        "en": "This row's provenance cannot be recorded. The source document carries no author and no year, so it cannot be written in the citation form `source` requires - which makes this row a claim transcribed from one piece of writing, not a method confirmed against a text. Read that difference first when placing it beside the other system rows."
+      },
+      {
+        "ko": "앵커는 실측 젖산이지만 실제로는 호흡 소리와 %HRmax로 대리된다. 대리하는 순간 상한이 흐려지고, 이 체계는 '조금 빠른 이지런'과 구분되지 않는다. norwegian-singles가 겪는 문제와 같다.",
+        "en": "The anchor is measured lactate, but in practice it is proxied by breathing sound and %HRmax. The moment it is proxied the ceiling blurs and the system becomes indistinguishable from slightly quick easy running - the same problem norwegian-singles has."
+      },
+      {
+        "ko": "체계가 스스로 적용 범위를 좁힌다. 4시간대 러너에게 극적인 것이 2시간 10분대에게는 거의 아무것도 아니라고 명시하므로, 효과 주장은 '잠재력에서 먼 러너'에 한정해서만 읽어야 한다.",
+        "en": "The system narrows its own scope. It states outright that what is dramatic for a four-hour marathoner is close to nothing for a 2:10 runner, so its efficacy claims should be read as applying only to runners far from their potential."
+      },
+      {
+        "ko": "내부 수치가 어긋난다. 중강도를 5,000m 페이스보다 km당 40~60초 느린 페이스로 규정하면서, 같은 문서의 예시는 25분 러너에게 km당 1분 30초를 든다. 대리 지표로 쓰기 전에 자기 수준에서 다시 잡을 것.",
+        "en": "Its own numbers disagree. It defines moderate as 40-60 s/km slower than 5000m pace, then gives 90 s/km for a 25:00 runner in the same document. Re-derive it at your own level before using it as a proxy."
       }
     ]
   }

@@ -2733,5 +2733,269 @@
       "ko": "웜업 후 90초x2, 60초x4, 30초x4, 15초x4를 각 구간과 동일한 이지 회복으로. 총 20분 고정. 뒤로 갈수록 빠르게.",
       "en": "After warmup: 90s x2, 60s x4, 30s x4, 15s x4, each with an equal easy recovery. A fixed 20 minutes. Faster as it goes."
     }
+  },
+  {
+    "id": "aerobic-threshold-continuous",
+    "canonical_name": "Aerobic Threshold Continuous Run",
+    "family": "threshold",
+    "status": "draft",
+    "target_adaptation": [
+      "capillarization",
+      "mitochondrial-density",
+      "lactate-clearance",
+      "mlss-shift",
+      "fat-oxidation"
+    ],
+    "venue": ["any"],
+    "placement": ["base", "build", "offseason"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "work",
+          "duration": {
+            "min": 1800,
+            "max": 7200,
+            "unit": "s"
+          },
+          "intensity_ref": "self"
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "lactate_mmol",
+      "anchors": [
+        {
+          "model": "lactate_mmol",
+          "value": 2,
+          "confidence": "exact",
+          "note": {
+            "ko": "상한이지 목표가 아니다. 젖산이 올라가지 않는(2mmol/L를 넘지 않는) 선에서 가장 빠른 페이스라는 것이 이 세션의 정의다. threshold-continuous의 4mmol과는 다른 지점이며, 개인별 LT1 위치는 크게 다르다.",
+            "en": "A ceiling, not a target. The session is defined as the fastest pace that keeps blood lactate from rising above 2 mmol/L. This is a different point from threshold-continuous' 4 mmol, and where LT1 actually falls varies widely between individuals."
+          }
+        },
+        {
+          "model": "rpe_10",
+          "range": [4, 5],
+          "confidence": "approx",
+          "note": {
+            "ko": "현장 판정 기준은 호흡 소리다. 자기 호흡 소리가 들리기 시작하면 이미 중강도가 아니다. 쉽지 않지만 힘들지도 않은 구간.",
+            "en": "The field test is your own breathing: once you can hear it, you are already past this session. Not easy, but not hard either."
+          }
+        },
+        {
+          "model": "pct_hrmax",
+          "value": 0.8,
+          "confidence": "approx",
+          "note": {
+            "ko": "보조 지표다. HRmax 추정식의 SEE가 ±10bpm 이상이라 80%라는 숫자 자체가 흔들리고, 다른 코치들이 medium run으로 부르는 70~80% 구간과 상단에서만 겹친다.",
+            "en": "A secondary index. HRmax estimators carry SEE >10bpm, so the 80% figure is itself unstable, and it overlaps only at the top with the 70-80% band other coaches call a medium run."
+          }
+        },
+        {
+          "model": "race_pace_ref",
+          "value": "5000m race pace + 40-60 s/km",
+          "confidence": "rough",
+          "note": {
+            "ko": "간격은 체력이 오를수록 좁아진다: 5,000m 15분이면 약 50초/km, 25분이면 약 1분 30초/km. 출처 문서가 제시한 40~60초 폭이 자기가 든 25분 예시를 담지 못한다 - 느린 러너에게는 이 대리값이 성립하지 않는다.",
+            "en": "The gap narrows as fitness rises: about 50 s/km for a 15:00 5000m, about 90 s/km for a 25:00. The source's stated 40-60 s/km band does not cover its own 25:00 example, so this proxy does not hold for slower runners."
+          }
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "젖산이 올라가지 않는 선의 가장 빠른 페이스로 주 3~4회 달리면, 하드 워크아웃 없이도 중강도 페이스가 5,000m 레이스 페이스 쪽으로 당겨진다.",
+        "en": "Running 3-4 times a week at the fastest pace that keeps lactate from rising pulls moderate pace toward 5000m race pace without any hard workouts."
+      },
+      "mechanism": {
+        "ko": "첫 젖산 변곡점 바로 아래에서의 연속 주행은 이지 런보다 세션당 유산소 자극이 크면서도, 주 3~4회 반복해도 회복이 끊기지 않을 만큼 낮다. 자극의 크기가 아니라 '반복 가능한 크기'가 변수라는 주장이다.",
+        "en": "Continuous running just below the first lactate turnpoint delivers more aerobic stimulus per session than easy running while staying low enough to repeat 3-4 times a week without breaking recovery. The claim is that the variable is not the size of the stimulus but the size that can be repeated."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "단일 코칭 에세이의 지도 경험과 자기 기록에 근거한다. 통제 시험이 아니며, 출처 문서는 러닝 밖의 80/20 강도 배분 관찰을 원용하지만 확인 가능한 인용을 제시하지 않는다.",
+          "en": "Rests on one coaching essay's experience and the author's own results. Not a controlled trial; the source appeals to an 80/20 intensity-distribution observation from outside running but offers no verifiable citation."
+        }
+      }
+    },
+    "test": {
+      "detectable": true,
+      "what": {
+        "ko": "같은 최대심박수 비율(약 80%)에서 유지되는 페이스가 빨라지고, 최근 5,000m 페이스와의 간격이 좁아진다.",
+        "en": "Pace held at the same fraction of HRmax (about 80%) gets faster, and the gap to a recent 5000m pace narrows."
+      },
+      "when_weeks": {
+        "min": 8,
+        "max": 16
+      },
+      "mechanism": {
+        "ko": "말초 유산소 적응(모세혈관·미토콘드리아)과 젖산 제거 능력의 개선이 같은 심박에서 더 빠른 페이스로 나타난다고 본다.",
+        "en": "Peripheral aerobic adaptation (capillaries, mitochondria) and improved lactate clearance are taken to surface as a faster pace at the same heart rate."
+      },
+      "evidence": {
+        "tier": "tradition"
+      },
+      "confounds": [
+        {
+          "factor": "concurrent-volume-increase",
+          "severity": "high",
+          "shares_mechanism": true,
+          "note": {
+            "ko": "중강도 세션을 주 3~4회 넣으면 주간 총량도 같이 오른다. 볼륨은 이 주장과 정확히 같은 유산소 기전으로, 같은 타임스케일에 작동한다. 관찰만으로는 강도 배치의 효과와 분리 불가능하다.",
+            "en": "Adding 3-4 moderate sessions a week also raises weekly volume, and volume acts through exactly the aerobic mechanism this claim invokes, on the same timescale. Not separable from the intensity placement by observation alone."
+          }
+        },
+        {
+          "factor": "moving-reference-pace",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "신호가 두 페이스 사이의 '간격'이라 기준선도 함께 움직인다. 5,000m 기록이 낡았거나 레이스 컨디션이 달랐으면 간격의 변화는 중강도와 무관하게 생긴다.",
+            "en": "The signal is a gap between two paces, so the reference moves too. A stale 5000m time or a different race day makes the gap change for reasons unrelated to the moderate runs."
+          }
+        },
+        {
+          "factor": "hrmax-estimation-error",
+          "severity": "moderate",
+          "shares_mechanism": false,
+          "note": {
+            "ko": "'같은 80%'라는 비교 조건 자체가 추정 HRmax 위에 얹혀 있다. 추정이 틀리면 비교하고 있는 강도가 애초에 같지 않다.",
+            "en": "The comparison condition ('the same 80%') sits on an estimated HRmax. If the estimate is wrong, the intensities being compared were never the same."
+          }
+        }
+      ],
+      "if_absent": {
+        "ko": "8~16주 무변화는 실패가 아니다. 순서대로 의심할 것: (1) 호흡 소리가 들렸다면 중강도가 아니라 역치였음 (2) 생애 누적 주행거리가 많아 헤드룸이 없음 - 출처 문서 스스로 잠재력에 가까울수록 효과가 준다고 말한다 (3) 비교 기준인 5,000m 기록이 낡았음.",
+        "en": "Eight to sixteen weeks of no change is not failure. Suspect in order: (1) you could hear your breathing, so it was threshold, not moderate (2) a large lifetime volume leaves no headroom - the source itself says the effect shrinks as you approach your potential (3) the 5000m time used as the reference is stale."
+      }
+    },
+    "safety": {
+      "injury_risk": "moderate",
+      "note": {
+        "ko": "세션 하나는 가볍지만 주 3~4회로 쌓인다. 위험은 강도가 아니라 빈도에 있고, 실패 모드는 이 세션이 조용히 역치주로 올라가는 것이다.",
+        "en": "One session is light, but it recurs 3-4 times a week. The risk lives in the frequency, not the intensity, and the failure mode is this session quietly drifting up into a tempo run."
+      }
+    },
+    "common_errors": [
+      {
+        "ko": "너무 빠르게 달려 역치주가 된다. 자기 호흡 소리가 들리면 이미 이 세션이 아니다.",
+        "en": "Running it too fast until it becomes a threshold session. If you can hear your own breathing, it is no longer this workout."
+      },
+      {
+        "ko": "회복 목적의 중강도(최대심박수 70~75%)와 훈련 목적의 중강도를 같은 것으로 취급한다. 출처 문서가 가장 강하게 구분하는 지점이다.",
+        "en": "Treating recovery-purpose moderate running (70-75% HRmax) as the same thing as this. It is the distinction the source draws most forcefully."
+      }
+    ],
+    "instructions": {
+      "ko": "젖산이 올라가지 않고 호흡 소리가 들리지 않는 선에서 가장 빠른 페이스로 연속 주행. 기초기에는 주 3~4회, 평일은 30~40분, 월 2~4회만 90~120분까지 늘린다. 하드 워크아웃을 시작하면 빈도를 줄인다.",
+      "en": "Run continuously at the fastest pace that keeps lactate flat and your breathing inaudible. In the fundamental period, 3-4 times a week: 30-40 minutes on weekdays, stretching to 90-120 minutes only 2-4 times a month. Cut the frequency once hard workouts start."
+    }
+  },
+  {
+    "id": "aerobic-threshold-progression",
+    "canonical_name": "Easy-to-Aerobic-Threshold Progression Run",
+    "family": "easy",
+    "status": "draft",
+    "target_adaptation": [
+      "capillarization",
+      "mitochondrial-density",
+      "fat-oxidation",
+      "pacing-skill"
+    ],
+    "venue": ["any"],
+    "placement": ["base", "build", "peak"],
+    "attribution": null,
+    "structure": {
+      "segments": [
+        {
+          "kind": "work",
+          "duration": {
+            "min": 1800,
+            "max": 4800,
+            "unit": "s"
+          },
+          "intensity_ref": "easy-run",
+          "ramp_to": "aerobic-threshold-continuous",
+          "note": {
+            "ko": "천장이 역치가 아니라 중강도라는 점이 progression-run과의 차이다. 마지막 구간이 aerobic-threshold-continuous를 넘으면 다른 세션이 된다.",
+            "en": "The ceiling is the moderate run, not threshold - that is what separates this from progression-run. If the last stretch goes past aerobic-threshold-continuous it has become a different session."
+          }
+        }
+      ]
+    },
+    "intensity": {
+      "primary_anchor": "rpe_10",
+      "anchors": [
+        {
+          "model": "rpe_10",
+          "range": [2, 5],
+          "confidence": "approx",
+          "note": {
+            "ko": "초반 2~3에서 후반 4~5로 오른다. 정해진 스케줄이 아니라 그날 몸 상태가 상승 폭을 정한다.",
+            "en": "Rises from 2-3 early to 4-5 late. How far it rises is set by how the body feels that day, not by a schedule."
+          }
+        },
+        {
+          "model": "pct_hrmax",
+          "range": [0.65, 0.8],
+          "confidence": "approx",
+          "note": {
+            "ko": "출처 문서의 예시는 10km를 6:00/km로 시작해 마지막 1km를 5:00/km로 끝내고, 평균 페이스 5:30/km에 평균 심박이 최대심박수의 75%였다.",
+            "en": "The source's example: 10 km starting at 6:00/km and finishing the last kilometre at 5:00/km, averaging 5:30/km and 75% of HRmax."
+          }
+        },
+        {
+          "model": "lactate_mmol",
+          "value": 2,
+          "confidence": "rough",
+          "note": {
+            "ko": "종료 시점의 상한일 뿐이고, 주행 대부분은 그보다 훨씬 아래에 있다. 세션 전체를 대표하는 값이 아니다.",
+            "en": "A ceiling at the finish only; most of the run sits well below it. Not a value that represents the session as a whole."
+          }
+        }
+      ]
+    },
+    "claim": {
+      "proposition": {
+        "ko": "이지에서 중강도까지 서서히 올리는 주행은 하드 워크아웃 시기에 중강도 능력을 유지시키면서 주간 총 부하는 중강도 러닝보다 덜 올린다.",
+        "en": "Drifting from easy up to the moderate pace maintains moderate-run capacity during a hard-workout block while adding less weekly load than a full moderate run."
+      },
+      "mechanism": {
+        "ko": "중강도 구간을 세션의 끝부분에만 두어 자극은 남기고 누적 시간은 줄인다는 발상이다. 유지에 필요한 자극이 획득에 필요한 자극보다 작다는 전제 위에 서 있고, 그 전제 자체는 이 데이터셋에서 검증되지 않았다.",
+        "en": "The idea is to keep the moderate stimulus but shorten the time spent there by placing it only at the end. It rests on the premise that maintaining costs less stimulus than acquiring, and that premise is itself unverified here."
+      },
+      "evidence": {
+        "tier": "tradition",
+        "note": {
+          "ko": "단일 코칭 에세이의 선호로 제시될 뿐, 유지 효과를 비교한 근거는 제시되지 않는다.",
+          "en": "Offered as one coaching essay's preference; no comparison supporting the maintenance effect is given."
+        }
+      }
+    },
+    "test": {
+      "detectable": false,
+      "mechanism": {
+        "ko": "'유지'는 정의상 변화가 없는 상태라 관찰할 신호가 없다. 게다가 이 세션은 하드 워크아웃 시기에만 쓰이므로, 유지된 능력이 이 주행 덕인지 함께 하는 하드 워크아웃 덕인지 현장에서 분리되지 않는다.",
+        "en": "Maintenance is by definition the absence of change, so there is no signal to watch for. Worse, this session is used only during a hard-workout block, so whether the retained capacity came from this run or from the hard workouts beside it cannot be separated in the field."
+      },
+      "evidence": {
+        "tier": "tradition"
+      }
+    },
+    "safety": {
+      "injury_risk": "low"
+    },
+    "common_errors": [
+      {
+        "ko": "처음부터 중강도로 시작해 그냥 짧은 중강도 러닝이 된다. 시작이 이지가 아니면 이 세션이 아니다.",
+        "en": "Starting at the moderate pace, which makes it just a short moderate run. If the start is not easy, it is not this session."
+      }
+    ],
+    "instructions": {
+      "ko": "이지 페이스로 시작해 몸이 풀리는 대로 중강도까지 서서히 올리며 30~80분. 마지막 구간에서만 중강도에 닿으면 되고, 매 세션 같은 상승 폭을 강요하지 않는다.",
+      "en": "30-80 minutes, starting easy and lifting gradually toward the moderate pace as the body loosens. Only the last stretch needs to reach it, and the same rise is not required every session."
+    }
   }
 ]

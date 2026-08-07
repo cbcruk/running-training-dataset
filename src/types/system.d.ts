@@ -41,6 +41,10 @@ export interface TrainingSystem {
    */
   source?: [string, ...string[]];
   /**
+   * The state of `source`, stated rather than left to be inferred from its absence. recorded = the describing text is cited in `source`. unrecorded = such a text exists but is not cited here yet. uncitable = no citable describing text exists at all, so `source` can never be filled. The last two both render as an empty `source`, which is why the distinction has to be written down: 'not yet done' and 'cannot be done' are different facts about a row. Tied to `source` in validate.ts, so it cannot drift from it.
+   */
+  provenance: "recorded" | "unrecorded" | "uncitable";
+  /**
    * draft = citations unverified by a human. Nothing ships verified without L4 human commit.
    */
   status: "draft" | "verified";

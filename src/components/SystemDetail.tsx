@@ -8,12 +8,25 @@ import {
   EntryLink,
   InfoChip,
   MeasurementBlock,
+  ProvenanceBadge,
   TierBadge,
   WChip,
 } from "./primitives.tsx";
 import type { System } from "../types/index.d.ts";
 import type { Distribution, Phase, SwitchingCost, VolumeCap } from "../types/system.d.ts";
 import type { Translatable, WithCtx } from "../types/view.ts";
+
+// The two ways the source slot can be empty. They look the same on the page, so
+// each has to say which it is - "nobody has done it yet" and "it cannot be done"
+// call for opposite things from a reader.
+const UNRECORDED_NOTE: Translatable = {
+  ko: "정본은 존재하지만 아직 여기 기록되지 않았다. 이 페이지의 서술이 그 정본과 일치하는지 확인된 바 없으므로, 처방의 세부는 원전으로 확인할 것.",
+  en: "A defining text exists but has not been recorded here. Nothing has checked this page's description against it, so confirm the details of the prescription against the original.",
+};
+const UNCITABLE_NOTE: Translatable = {
+  ko: "인용할 정본이 아예 없다. 이 체계의 서술은 인용 형태로 쓸 수 없는 자료 — 저자·연도가 없는 글이거나 커뮤니티에서 형식화된 관행 — 에서 왔고, 따라서 이 칸은 앞으로도 채워지지 않는다. 정본이 있는 체계와 같은 무게로 읽지 말 것.",
+  en: "There is no citable text at all. This system's description comes from material that cannot be written in citation form - writing with no author or year, or a practice formalised in a community - so this slot will stay empty. Do not read it with the same weight as a system that has one.",
+};
 
 export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
   const { t, lang, bySystem, fmt } = ctx;
@@ -35,7 +48,10 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
               <AnchorCode ctx={ctx} model={s.intensity_model} />
             </p>
           </div>
-          <TierBadge ctx={ctx} tier={s.evidence?.tier} />
+          <span className="badges">
+            <TierBadge ctx={ctx} tier={s.evidence?.tier} />
+            <ProvenanceBadge ctx={ctx} provenance={s.provenance} />
+          </span>
         </div>
         <p className="bet big">{t(s.bet)}</p>
 
@@ -54,22 +70,30 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
           </Block>
         )}
 
-        {s.source?.length && (
-          <Block
-            title={lang === "ko" ? "출처 (서술)" : "Source (description)"}
-            sub={
-              lang === "ko"
-                ? "이 체계가 무엇을 처방하는지의 기록이다. 작동한다는 증거가 아니다 — 그건 등급과 인용이 따로 답한다."
-                : "The record of what this system prescribes. Not evidence that it works — the tier and its cites answer that separately."
-            }
-          >
+        {/* Rendered even with nothing to show. This block used to disappear when
+            `source` was empty, which is how an unrecorded system came to look
+            identical to a recorded one: the reader saw no claim rather than a
+            missing one. An empty slot now has to say which kind of empty it is. */}
+        <Block
+          title={lang === "ko" ? "출처 (서술)" : "Source (description)"}
+          sub={
+            lang === "ko"
+              ? "이 체계가 무엇을 처방하는지의 기록이다. 작동한다는 증거가 아니다 — 그건 등급과 인용이 따로 답한다."
+              : "The record of what this system prescribes. Not evidence that it works — the tier and its cites answer that separately."
+          }
+        >
+          {s.source?.length ? (
             <ul className="cites">
               {s.source.map((c: string) => (
                 <li key={c}>{c}</li>
               ))}
             </ul>
-          </Block>
-        )}
+          ) : (
+            <p className={`note prov-empty prov-empty-${s.provenance}`}>
+              {t(s.provenance === "uncitable" ? UNCITABLE_NOTE : UNRECORDED_NOTE)}
+            </p>
+          )}
+        </Block>
 
         <Block title={lang === "ko" ? "철학" : "Philosophy"}>
           <p>{t(s.philosophy)}</p>

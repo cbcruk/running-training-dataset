@@ -216,6 +216,23 @@ for (const sys of systems)
     if (!/\(\d{4}\)/.test(src))
       fail(`[discipline] ${sys.id}: source lacks a (year): "${src.slice(0, 50)}"`);
 
+// An empty `source` says nothing on its own, and silence reads as "fine". A row
+// with no recorded text and a row for which no text can exist are different
+// facts, and until `provenance` existed both rendered as the same blank. Tying
+// the two together makes the field a checked statement rather than a label
+// anyone can set: `recorded` has to produce the source it claims, and the other
+// two have to be empty, so the badge can never disagree with the row under it.
+for (const s of systems) {
+  const has = !!s.source?.length;
+  if (s.provenance === "recorded" && !has)
+    fail(`[discipline] ${s.id}: provenance="recorded" but no source - nothing was recorded`);
+  if (s.provenance !== "recorded" && has)
+    fail(
+      `[discipline] ${s.id}: provenance="${s.provenance}" but a source is present - ` +
+        `a recorded text makes the row "recorded"`,
+    );
+}
+
 // The distinction only holds if the two never collapse. A row citing the same work
 // as both its description and its proof is asserting that a method describing
 // itself demonstrates itself - the conflation `source` was introduced to separate.

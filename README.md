@@ -11,7 +11,7 @@ For people who like trying different methods. Light to browse, honest underneath
 
 Modeled on the shape of [exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset), but the atoms are different, so the schema is too.
 
-**Status: early.** 13 systems, 20 workouts. Every row is `status: draft` — no citation has been human-verified. All eight `intensity_model` anchors are now represented by at least one system, and all nine workout families are populated.
+**Status: early.** 14 systems, 22 workouts. Every row is `status: draft` — no citation has been human-verified. All eight `intensity_model` anchors are now represented by at least one system, and all nine workout families are populated.
 
 ---
 
@@ -76,7 +76,9 @@ So rows are hypotheses. `claim.proposition` is one falsifiable sentence; `test` 
 
 **`source` is provenance; `cite` is efficacy.** These are different claims and the schema keeps them apart. A canonical text — Daniels' _Running Formula_, Lydiard's _Running to the Top_ — is the authoritative record of what a system **prescribes**; that it **works** is a separate question, and a method describing itself does not answer it. So `source` sits beside `attribution`, is allowed at any tier including `tradition`, and never justifies one. `validate.ts` holds it to the same citation bar as `cite`, folds it into the one-reference-one-string rule, and rejects a row that lists the same work as both — that collapse is exactly what the split exists to prevent.
 
-Current distribution: **consensus 3 / plausible 23 / tradition 47.** Tradition dominates. That is the honest shape of running knowledge; forcing the ratio the other way kills the project.
+**An empty `source` has to say which kind of empty it is.** `source` renders when present and says nothing when absent, so a documented system and an undocumented one looked the same while browsing — and one blank covered two unlike facts: a text nobody has recorded yet, versus a system for which no citable text exists at all. A required **`provenance`** enum states it instead: `recorded` (the text is in `source`), `unrecorded` (a text exists, not recorded here), `uncitable` (there is none, so the slot will stay empty). `validate.ts` ties it to `source` — `recorded` must produce one, the other two must not have one — so the label cannot disagree with the row beneath it. It is rendered as a badge beside the tier, deliberately unlike one: sharing a colour scale would merge two independent questions into a single verdict. Current state: **recorded 3 / unrecorded 9 / uncitable 2** — the majority of systems are described by nobody in particular, which is worth seeing before comparing them.
+
+Current distribution: **consensus 3 / plausible 17 / tradition 62.** Tradition dominates. That is the honest shape of running knowledge; forcing the ratio the other way kills the project.
 
 Enforced at the schema/CI layer, not in a contributor guideline:
 
@@ -133,9 +135,9 @@ Instead, each row carries a falsification procedure:
 
 ```
 data/
-  systems.json       # 13 - the browsing entity. bet / commitment / switching_cost
-  workouts.json      # 20 - detail view. claim / test / structure / intensity
-  usage.json         # 49 - (system, workout) -> calls_it. The collision table.
+  systems.json       # 14 - the browsing entity. bet / commitment / switching_cost
+  workouts.json      # 22 - detail view. claim / test / structure / intensity
+  usage.json         # 54 - (system, workout) -> calls_it. The collision table.
   anchors.json       # 8  - measurement layer. per intensity_model: requires + fallback (-> RPE)
   adaptations.json   # 15 - taxonomy over target_adaptation: coarse category + definition
   schema/*.json      # JSON Schema 2020-12
@@ -204,7 +206,7 @@ the data stays JSON, why the whole corpus is loaded up front on purpose, and why
 web framework is adopted.
 
 - ~~**The card view flattens the tier.**~~ Addressed. `index.html` puts the tier badge on every system and workout card, and `consensus` / `plausible` / `tradition` are given deliberately different visual weight — a solid fill, an outline, and a faint dashed outline respectively — so browsing cannot make `tradition` read as settled. The constraint stands for any future card added.
-- **Nothing is verified yet.** All 13 systems and 20 workouts are `status: draft`. Citations are now normalized and machine-enforced (one reference, one string), but that says only that a source _reads_ the same everywhere — not that it supports the claim it is attached to. The verification checklist is in [`docs/TODO.md`](docs/TODO.md#1-verification-draft--verified).
+- **Nothing is verified yet.** All 14 systems and 22 workouts are `status: draft`. Citations are now normalized and machine-enforced (one reference, one string), but that says only that a source _reads_ the same everywhere — not that it supports the claim it is attached to. The verification checklist is in [`docs/TODO.md`](docs/TODO.md#1-verification-draft--verified).
 - **Daniels' volume caps are from memory**, marked `tradition` + draft. Verify against the source text.
 - **VDOT tables are a compiled work.** Do not scrape. Re-derive from the published equations in Daniels & Gilbert (1979), _Oxygen Power_. VDOT is a trademark. Same trap for Purdy Points and WMA age-grading tables.
 - **Prior art unverified.** GoldenCheetah is the reference implementation for the analysis side, but it is an engine, not a knowledge base. Confirm nothing like this catalog exists.
