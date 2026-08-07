@@ -35,6 +35,12 @@ export interface TrainingSystem {
    */
   attribution?: string | null;
   /**
+   * Provenance: where the description of this method comes from. A canonical text is the authoritative record of what a system prescribes - which is a different question from whether it works, and that one is answered (or not) by `evidence`. A `source` never justifies a tier, and unlike `cite` it is allowed at any tier, including `tradition`.
+   *
+   * @minItems 1
+   */
+  source?: [string, ...string[]];
+  /**
    * draft = citations unverified by a human. Nothing ships verified without L4 human commit.
    */
   status: "draft" | "verified";

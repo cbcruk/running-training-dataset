@@ -209,19 +209,51 @@ for (const w of [...workouts, ...systems])
       if (!/\(\d{4}\)/.test(c))
         fail(`[discipline] ${w.id}${path}: cite lacks a (year): "${c.slice(0, 50)}"`);
 
+// A `source` is provenance, not evidence, but it is still a citation and is held
+// to the same bar.
+for (const sys of systems)
+  for (const src of sys.source ?? [])
+    if (!/\(\d{4}\)/.test(src))
+      fail(`[discipline] ${sys.id}: source lacks a (year): "${src.slice(0, 50)}"`);
+
+// The distinction only holds if the two never collapse. A row citing the same work
+// as both its description and its proof is asserting that a method describing
+// itself demonstrates itself - the conflation `source` was introduced to separate.
+for (const sys of systems) {
+  const cites = new Set<string>();
+  const collect = (o: Row) => {
+    if (!o || typeof o !== "object") return;
+    for (const c of o.evidence?.cite ?? []) cites.add(c);
+    for (const [k, v] of Object.entries(o)) if (k !== "source") collect(v);
+  };
+  collect(sys);
+  for (const src of sys.source ?? [])
+    if (cites.has(src))
+      fail(
+        `[discipline] ${sys.id}: "${src.slice(0, 45)}..." is both a source and an evidence cite - ` +
+          `provenance and efficacy are different claims and must not share a reference on one row`,
+      );
+}
+
 // One reference, one string. The verification pass (docs/TODO.md #1) asks a human
 // to check each source once - which only works if a source reads the same
 // everywhere. Two renderings of one reference (a short form in a test, the full
 // form in a claim) look like two sources and cannot be grepped as one. Billat 2001
 // had drifted into three forms, one with the wrong initials, before this ran.
 const citeForms: Record<string, Set<string>> = {};
+const noteForm = (c: string) => {
+  const m = c.match(/^([A-Za-z][^(]*?)\s*\((\d{4})\)/);
+  if (!m) return;
+  const key = `${m[1].trim().split(/[\s,&]+/)[0]} ${m[2]}`;
+  (citeForms[key] ??= new Set()).add(c);
+};
+// A source is a reference like any other: one work, one string, whether it appears
+// as provenance or as evidence.
+for (const sys of systems) for (const src of sys.source ?? []) noteForm(src);
 for (const w of [...workouts, ...systems])
   for (const [, ev] of collectEvidence(w))
     for (const c of ev.cite ?? []) {
-      const m = c.match(/^([A-Za-z][^(]*?)\s*\((\d{4})\)/);
-      if (!m) continue;
-      const key = `${m[1].trim().split(/[\s,&]+/)[0]} ${m[2]}`;
-      (citeForms[key] ??= new Set()).add(c);
+      noteForm(c);
     }
 for (const [key, forms] of Object.entries(citeForms))
   if (forms.size > 1)

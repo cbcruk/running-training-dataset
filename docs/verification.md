@@ -98,6 +98,19 @@ Carries 2 assertions:
 
 ---
 
+## Not in scope: provenance
+
+These references are `source`, not `cite`: they record what a system _prescribes_,
+which is a different question from whether it works. Nothing here needs verifying
+against a claim, because none is offered as evidence. `validate.ts` keeps the two
+apart — a reference cannot be both on one row.
+
+- `daniels` — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
+- `lydiard` — Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport.
+- `pfitzinger` — Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics.
+
+---
+
 ## Triage: three questions to settle first
 
 ### 1. Sources never attached to a falsifiable sentence

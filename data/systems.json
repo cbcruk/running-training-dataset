@@ -3,6 +3,7 @@
     "id": "daniels",
     "name": "Daniels' Running Formula",
     "attribution": "Jack Daniels",
+    "source": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."],
     "status": "draft",
     "intensity_model": "daniels-vdot",
     "bet": {
@@ -140,8 +141,8 @@
     "evidence": {
       "tier": "tradition",
       "note": {
-        "ko": "정본 텍스트가 이 방법을 서술한다. VDOT 표와 존 처방은 잘 문서화돼 있지만, 그것이 다른 처방보다 낫다는 통제된 비교는 별개 문제다. (개별 워크아웃 주장에 붙은 Daniels 인용은 그대로 유효하다.)",
-        "en": "A canonical text describes this method. The VDOT tables and zone prescriptions are well documented; that they beat other prescriptions is a separate and untested question. (The Daniels cites on individual workout claims are unaffected.)"
+        "ko": "정본 텍스트가 이 방법을 서술한다(`source` 참조). VDOT 표와 존 처방은 잘 문서화돼 있지만, 그것이 다른 처방보다 낫다는 통제된 비교는 별개 문제다. (개별 워크아웃 주장에 붙은 Daniels 인용은 그대로 유효하다.)",
+        "en": "A canonical text describes this method (see `source`). The VDOT tables and zone prescriptions are well documented; that they beat other prescriptions is a separate and untested question. (The Daniels cites on individual workout claims are unaffected.)"
       }
     },
     "caveats": [
@@ -384,6 +385,7 @@
     "id": "lydiard",
     "name": "Lydiard System",
     "attribution": "Arthur Lydiard",
+    "source": ["Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport."],
     "status": "draft",
     "intensity_model": "rpe_10",
     "bet": {
@@ -461,8 +463,8 @@
     "evidence": {
       "tier": "tradition",
       "note": {
-        "ko": "정본 텍스트가 이 방법을 서술한다. 방법이 자기 자신을 서술하는 것은 그것이 작동한다는 증거가 아니므로, 인용을 붙일 수 있는 등급이 아니다. 유산소 베이스 원리 자체는 별개로 지지되지만, 규정된 국면 순서 전체의 우월성에는 통제된 비교가 없다.",
-        "en": "A canonical text describes this method. A method describing itself is not evidence that it works, so this is not a tier that can carry a cite. The aerobic-base principle is separately supported, but the superiority of the full prescribed phase sequence has no controlled comparison."
+        "ko": "정본 텍스트가 이 방법을 서술한다(`source` 참조). 방법이 자기 자신을 서술하는 것은 그것이 작동한다는 증거가 아니다. 유산소 베이스 원리 자체는 별개로 지지되지만, 규정된 국면 순서 전체의 우월성에는 통제된 비교가 없다.",
+        "en": "A canonical text describes this method (see `source`). A method describing itself is not evidence that it works. The aerobic-base principle is separately supported, but the superiority of the full prescribed phase sequence has no controlled comparison."
       }
     },
     "caveats": [
@@ -476,6 +478,7 @@
     "id": "pfitzinger",
     "name": "Pfitzinger (Advanced Marathoning)",
     "attribution": "Pete Pfitzinger",
+    "source": ["Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics."],
     "status": "draft",
     "intensity_model": "pct_hrmax",
     "bet": {
@@ -562,8 +565,8 @@
     "evidence": {
       "tier": "tradition",
       "note": {
-        "ko": "정본 텍스트가 이 방법을 서술한다. 규정된 구조는 잘 문서화돼 있지만, 그 구조가 대안보다 낫다는 통제된 비교는 없다.",
-        "en": "A canonical text describes this method. The prescribed structure is well documented; that it beats the alternatives is not."
+        "ko": "정본 텍스트가 이 방법을 서술한다(`source` 참조). 규정된 구조는 잘 문서화돼 있지만, 그 구조가 대안보다 낫다는 통제된 비교는 없다.",
+        "en": "A canonical text describes this method (see `source`). The prescribed structure is well documented; that it beats the alternatives is not."
       }
     },
     "caveats": [

@@ -135,6 +135,23 @@ for (const c of cites)
     if (u.assertion.startsWith("(unobservable test)") && u.tier !== "tradition")
       unobservable.push(`\`${u.row}\` (${u.tier}) — ${c}`);
 
+// `source` entries are provenance, not evidence, so they are deliberately absent
+// from everything above - there is no claim to check them against. Listing them
+// keeps that a stated choice rather than a silent omission.
+const sourced = systems.filter((s: Row) => s.source?.length);
+lines.push("---", "", "## Not in scope: provenance", "");
+lines.push(
+  "These references are `source`, not `cite`: they record what a system *prescribes*,",
+  "which is a different question from whether it works. Nothing here needs verifying",
+  "against a claim, because none is offered as evidence. `validate.ts` keeps the two",
+  "apart — a reference cannot be both on one row.",
+  "",
+);
+if (sourced.length)
+  for (const s of sourced) for (const src of s.source) lines.push(`- \`${s.id}\` — ${src}`);
+else lines.push("- _(none)_");
+lines.push("");
+
 lines.push("---", "", "## Triage: three questions to settle first", "");
 
 lines.push(

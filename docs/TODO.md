@@ -121,13 +121,18 @@ And the reading itself, which no script can do:
       "from memory" (README already flags this). Verify the T/I/R cap figures
       against the source text before promoting.
 
-**A tension this exposed, worth naming.** The tier table conflates evidence that a
-method _works_ with evidence of what a method _is_. `tradition` forbids a cite, so
-there is now no way to source a factual description of a method — the Lydiard,
-Pfitzinger and Daniels books are the authoritative record of what those systems
-prescribe, and that record is now uncited. If that matters, the fix is a separate
-`source` field for provenance, distinct from `evidence` for efficacy. Not done
-here; it is a schema decision, not a verification one.
+**The tension this exposed is now resolved.** The tier table conflated evidence
+that a method _works_ with evidence of what a method _is_; because `tradition`
+forbids a cite, downgrading the canonical texts left the record of what those
+systems prescribe uncited. `system.schema.json` gained a **`source`** field for
+provenance, separate from `evidence` for efficacy. `daniels`, `lydiard` and
+`pfitzinger` carry their books there — the same strings that were removed, nothing
+invented. `validate.ts` holds a `source` to the same citation bar as a `cite`,
+folds it into the one-reference-one-string rule, and rejects a row listing one work
+as both.
+
+- [ ] The other ten systems have an `attribution` but no `source`. Adding one means
+      having the actual text in hand; do not fill these from memory.
 
 ### 1c. Non-goal guard (do **not** do)
 
