@@ -68,7 +68,9 @@ function walk(node: Row, row: string, path: string, inherited: string) {
 }
 
 for (const w of workouts) walk(w, w.id, "", "");
-for (const s of systems) walk(s, s.id, "", "");
+// A system's claim sits beside its evidence rather than inside it, so seed the
+// walk with it - otherwise the row's own proposition never reaches its cite.
+for (const s of systems) walk(s, s.id, "", s.claim?.proposition ? pick(s.claim.proposition) : "");
 
 const cites = Object.keys(byCite).sort();
 const tierCount: Record<string, number> = {};

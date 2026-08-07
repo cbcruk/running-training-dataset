@@ -81,6 +81,7 @@ Enforced at the schema/CI layer, not in a contributor guideline:
 - `tier: tradition` + `cite` → violation. If you have a citation, it is not tradition.
 - `cite` without a `(year)` → violation. A URL is not a citation.
 - one reference written two ways → violation. A source must read identically in every row, or a verifier checking it once cannot tell it is the same source.
+- a system claiming more than `tradition` without a `claim.proposition` → violation. Evidence with nothing to be evidence _for_ cannot be checked or falsified, so the cite would sit there unfalsifiable.
 - `status: verified` from a generator → violation. Requires human sign-off.
 - colloquial term in `id`/`canonical_name` → violation. It belongs in `usage.json`.
 - `bet` longer than one sentence → violation.

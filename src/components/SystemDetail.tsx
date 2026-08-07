@@ -4,6 +4,7 @@
 import {
   AnchorCode,
   Block,
+  CiteList,
   EntryLink,
   InfoChip,
   MeasurementBlock,
@@ -37,6 +38,21 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
           <TierBadge ctx={ctx} tier={s.evidence?.tier} />
         </div>
         <p className="bet big">{t(s.bet)}</p>
+
+        {s.claim?.proposition && (
+          <Block
+            className="claim"
+            title={
+              <>
+                {lang === "ko" ? "주장" : "Claim"} <TierBadge ctx={ctx} tier={s.evidence?.tier} />
+              </>
+            }
+          >
+            <p className="proposition">{t(s.claim.proposition)}</p>
+            {s.claim.mechanism && <p>{t(s.claim.mechanism)}</p>}
+            <CiteList evidence={s.evidence} />
+          </Block>
+        )}
 
         <Block title={lang === "ko" ? "철학" : "Philosophy"}>
           <p>{t(s.philosophy)}</p>

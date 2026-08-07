@@ -9,7 +9,7 @@ It is generated from the data, so it cannot drift from the rows it describes.
 `status: verified`; that flip is a human act, done per row, after reading the
 source. This file only says what to read and what to check it against.
 
-**13 sources** carry **29 assertions** (5 consensus, 24 plausible).
+**11 sources** carry **23 assertions** (5 consensus, 18 plausible).
 
 How to use it: take one source, read it once, then walk its rows below. For
 each, the question is not _is this true_ but **does this source say it**. If it
@@ -36,7 +36,7 @@ Carries 2 assertions:
 
 ## Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
 
-Carries 8 assertions:
+Carries 6 assertions:
 
 - [ ] `threshold-continuous` · `claim` · **consensus** — "Sustained running near lactate steady state shifts the steady-state intensity itself upward."
 - [ ] `threshold-continuous` · `test` · **plausible** — "(test) The pace that feels comfortably hard shifts faster at the same RPE. Unlike the easy run, this is slow and noisy."
@@ -44,8 +44,6 @@ Carries 8 assertions:
 - [ ] `cruise-intervals` · `test` · **plausible** — "(test) Sustainable total time at the same T pace increases without blow-up, or the same total time is held at a lower RPE."
 - [ ] `rep-intervals` · `claim` · **plausible** — "Fast, relaxed reps with full recovery improve running economy and neuromuscular recruitment without significant anaerobic stress."
 - [ ] `rep-intervals` · `test` · **plausible** — "(unobservable test) Economy is only reliably measured in a lab; the field sense of 'lighter' legs is inseparable from neural learning and placebo."
-- [ ] `daniels` · `(row itself)` · **plausible** — _(no falsifiable sentence attached)_
-- [ ] `daniels` · `distribution` · **plausible** — _(no falsifiable sentence attached)_
 
 ## Egan B, Zierath JR (2013). Exercise metabolism and the molecular regulation of skeletal muscle adaptation. Cell Metab 17(2).
 
@@ -68,22 +66,15 @@ Carries 1 assertion:
 
 ## Jones AM, Vanhatalo A (2017). The 'Critical Power' Concept: Applications to Sports Performance. Sports Med 47(Suppl 1).
 
-Carries 2 assertions:
+Carries 1 assertion:
 
-- [ ] `critical-speed` · `(row itself)` · **plausible** — _(no falsifiable sentence attached)_
-- [ ] `critical-speed` · `distribution` · **plausible** — _(no falsifiable sentence attached)_
+- [ ] `critical-speed` · `(row itself)` · **plausible** — "Critical speed marks a real physiological boundary: below it metabolism settles into a steady state, above it the finite reserve (W') depletes and time to exhaustion is predictable."
 
 ## Karvonen MJ, Kentala E, Mustala O (1957). The effects of training on heart rate. Ann Med Exp Biol Fenn 35(3).
 
 Carries 1 assertion:
 
-- [ ] `hrr-karvonen` · `(row itself)` · **plausible** — _(no falsifiable sentence attached)_
-
-## Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport.
-
-Carries 1 assertion:
-
-- [ ] `lydiard` · `(row itself)` · **plausible** — _(no falsifiable sentence attached)_
+- [ ] `hrr-karvonen` · `(row itself)` · **plausible** — "Prescribing intensity as a percentage of heart-rate reserve rather than of maximum heart rate absorbs individual differences in resting heart rate and so targets a more consistent physiological load."
 
 ## McHugh MP (2003). Recent advances in the understanding of the repeated bout effect. Scand J Med Sci Sports 13(2).
 
@@ -98,19 +89,12 @@ Carries 1 assertion:
 
 - [ ] `vo2max-intervals` · `claim` · **plausible** — "Total dwell time at or near VO2max determines the magnitude of VO2max improvement."
 
-## Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics.
-
-Carries 2 assertions:
-
-- [ ] `pfitzinger` · `(row itself)` · **plausible** — _(no falsifiable sentence attached)_
-- [ ] `pfitzinger` · `distribution` · **plausible** — _(no falsifiable sentence attached)_
-
 ## Seiler S (2010). What is best practice for training intensity and duration distribution? Int J Sports Physiol Perform 5(3).
 
 Carries 2 assertions:
 
-- [ ] `polarized-80-20` · `(row itself)` · **plausible** — _(no falsifiable sentence attached)_
-- [ ] `polarized-80-20` · `distribution` · **plausible** — _(no falsifiable sentence attached)_
+- [ ] `polarized-80-20` · `(row itself)` · **plausible** — "Elite endurance athletes place roughly 80% of sessions below the first threshold and roughly 20% above the second, spending little time at moderate intensity."
+- [ ] `polarized-80-20` · `distribution` · **plausible** — "Elite endurance athletes place roughly 80% of sessions below the first threshold and roughly 20% above the second, spending little time at moderate intensity."
 
 ---
 
@@ -122,16 +106,7 @@ Carries 2 assertions:
 system rows and distributions only — they never back a `claim.proposition`
 anywhere in the data, so nothing states what they are supposed to have shown:
 
-- [ ] Jones AM, Vanhatalo A (2017). The 'Critical Power' Concept: Applications to Sports Performance. Sports Med 47(Suppl 1).
-      _rows: `critical-speed`, `critical-speed`_
-- [ ] Karvonen MJ, Kentala E, Mustala O (1957). The effects of training on heart rate. Ann Med Exp Biol Fenn 35(3).
-      _rows: `hrr-karvonen`_
-- [ ] Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport.
-      _rows: `lydiard`_
-- [ ] Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics.
-      _rows: `pfitzinger`, `pfitzinger`_
-- [ ] Seiler S (2010). What is best practice for training intensity and duration distribution? Int J Sports Physiol Perform 5(3).
-      _rows: `polarized-80-20`, `polarized-80-20`_
+- _(none)_
 
 They split into two kinds, and the fix differs:
 
@@ -142,7 +117,7 @@ They split into two kinds, and the fix differs:
   Give the row a `claim.proposition` the source can be checked against, or drop
   the tier to `tradition` and remove the cite.
 
-This is the largest single question in §1b: it covers 5 of the 13 sources.
+This is the largest single question in §1b: it covers 0 of the 11 sources.
 
 ### 2. `consensus` rows
 

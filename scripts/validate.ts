@@ -230,6 +230,17 @@ for (const [key, forms] of Object.entries(citeForms))
         [...forms].map((f: Row) => `      - ${f}`).join("\n"),
     );
 
+// Evidence needs something to be evidence *for*. A system row claiming more than
+// tradition without a claim.proposition is unfalsifiable by construction - the
+// cite sits there with nothing stating what it is supposed to have shown. Found
+// in 6 of 13 rows during the TODO #1b pass; this keeps it from coming back.
+for (const s of systems)
+  if (s.evidence && s.evidence.tier !== "tradition" && !s.claim?.proposition)
+    fail(
+      `[discipline] ${s.id}: evidence.tier="${s.evidence.tier}" needs a claim.proposition - ` +
+        `evidence with nothing to be evidence for cannot be checked or falsified`,
+    );
+
 // Nothing ships verified while its citations are unchecked.
 for (const w of [...workouts, ...systems])
   if (w.status === "verified")

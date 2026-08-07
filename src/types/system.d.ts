@@ -57,6 +57,7 @@ export interface TrainingSystem {
   distribution?: Distribution;
   volume_caps?: VolumeCap[];
   phases?: Phase[];
+  claim?: Claim;
   evidence: Evidence;
   caveats?: I18N1[];
 }
@@ -138,4 +139,18 @@ export interface Phase {
    */
   emphasis: [string, ...string[]];
   note?: I18N1;
+}
+/**
+ * What this system asserts that its evidence is supposed to support. Required whenever root evidence claims more than tradition - evidence with nothing to be evidence *for* is unfalsifiable.
+ */
+export interface Claim {
+  proposition: I18N2;
+  mechanism?: I18N1;
+}
+/**
+ * One falsifiable sentence.
+ */
+export interface I18N2 {
+  ko: string;
+  en: string;
 }
