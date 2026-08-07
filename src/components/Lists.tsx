@@ -2,12 +2,15 @@
 //
 // The cards are shared between a list and the search results, which is exactly
 // the duplication the template-literal version had to open-code twice.
-import { EntryLink, TierBadge } from "./primitives.tsx";
+import { EntryLink, ProvenanceBadge, TierBadge } from "./primitives.tsx";
 import type { Anchor, System, Workout } from "../types/index.d.ts";
 import type { WithCtx } from "../types/view.ts";
 
 // Tier goes on the card, never only in the detail view - the README's one hard UI
 // rule, so browsing ten systems cannot make `tradition` look like `consensus`.
+// Provenance rides beside it for the same reason: 11 of 14 systems have no
+// recorded source, and a blank one made an undocumented row indistinguishable
+// from a documented one while browsing.
 export function SystemCard({
   ctx,
   system: s,
@@ -26,7 +29,10 @@ export function SystemCard({
     <EntryLink className="card sys-card" to={`system/${s.id}`}>
       <div className="card-head">
         <h2>{s.name}</h2>
-        <TierBadge ctx={ctx} tier={s.evidence?.tier} />
+        <span className="badges">
+          <TierBadge ctx={ctx} tier={s.evidence?.tier} />
+          <ProvenanceBadge ctx={ctx} provenance={s.provenance} />
+        </span>
       </div>
       {!brief && <p className="attribution">{s.attribution || ""}</p>}
       <p className="bet">{t(s.bet)}</p>

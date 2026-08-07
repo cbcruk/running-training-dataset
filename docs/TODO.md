@@ -131,8 +131,39 @@ invented. `validate.ts` holds a `source` to the same citation bar as a `cite`,
 folds it into the one-reference-one-string rule, and rejects a row listing one work
 as both.
 
-- [ ] The other ten systems have an `attribution` but no `source`. Adding one means
-      having the actual text in hand; do not fill these from memory.
+- [ ] The other eleven systems have no `source`. Adding one means having the actual
+      text in hand; do not fill these from memory. Which of them are _waiting_ on a
+      text and which can never have one is now recorded per row — see 1d.
+
+### 1d. Say which rows have no source, and why
+
+**Field added; the filling is still open.** The gap above was invisible where it
+mattered. `source` renders when present and says nothing when absent, so the three
+documented systems and the eleven undocumented ones looked identical while
+browsing — at exactly the moment a reader is deciding how much to trust one. Worse,
+one blank covered two unlike facts: a text nobody has recorded yet, and a system
+for which no citable text exists at all.
+
+`system.schema.json` gained a required **`provenance`** enum — `recorded` /
+`unrecorded` / `uncitable` — tied to `source` in `validate.ts` (`recorded` must
+produce a source; the other two must not have one), so the label cannot drift from
+the row. It renders as a badge beside the tier on both the card and the detail
+page, and the source block now stays on the page when empty to say which kind of
+empty it is.
+
+Current state: **recorded 3 / unrecorded 9 / uncitable 2.**
+
+- [ ] `unrecorded` (9) — a defining text exists, nobody has recorded it here:
+      `hansons`, `polarized-80-20`, `maf`, `bakken-doubles`, `critical-speed`,
+      `hrr-karvonen`, `canova`, `galloway`, `first-furman`. Each one moved to
+      `recorded` is one row whose description can be checked against something.
+      Watch for the conflation trap on `polarized-80-20`, `critical-speed` and
+      `hrr-karvonen`: the paper that _defines_ the method is often the same paper
+      already used as a `cite`, and `validate.ts` rejects a row listing one work as
+      both. Those need a distinct describing text, or they stay `unrecorded`.
+- [x] `uncitable` (2) — `norwegian-singles` (formalised in an amateur community, no
+      authoritative text) and `moderate-primary` (transcribed from an unattributed,
+      undated coaching essay). Nothing to do: these are stated, not pending.
 
 ### 1c. Non-goal guard (do **not** do)
 

@@ -282,6 +282,60 @@ main {
   opacity: 0.85;
 }
 
+/* Provenance answers "do we have a record of what this prescribes", which is a
+   different question from the evidence tier. It must not read as a second tier,
+   so it shares no colour with them: lower case, lighter weight, a leading mark
+   instead of a verdict word. */
+.badges {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.prov {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: transparent;
+}
+.prov-mark {
+  font-size: 0.62rem;
+  line-height: 1;
+}
+.prov-recorded {
+  color: var(--fg);
+}
+/* The only state given real emphasis. `unrecorded` is a to-do; `uncitable` is a
+   standing fact about the row that a reader has to weigh before believing it.
+   Emphasis is carried by weight and a dashed edge rather than a new hue - a
+   colour here would pull the badge back into the tier scale it must stay out
+   of. */
+.prov-uncitable {
+  border-style: dashed;
+  border-color: var(--fg);
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.prov-empty {
+  margin: 0;
+}
+.prov-empty-uncitable {
+  border-left: 2px solid var(--fg);
+  padding-left: 0.7rem;
+  color: var(--fg);
+}
+
 /* ---- detail ---- */
 .back {
   display: inline-block;

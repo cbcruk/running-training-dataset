@@ -4,6 +4,7 @@
     "name": "Daniels' Running Formula",
     "attribution": "Jack Daniels",
     "source": ["Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics."],
+    "provenance": "recorded",
     "status": "draft",
     "intensity_model": "daniels-vdot",
     "bet": {
@@ -160,6 +161,7 @@
     "id": "hansons",
     "name": "Hansons Marathon Method",
     "attribution": "Kevin & Keith Hanson",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "race_pace_ref",
     "bet": {
@@ -265,6 +267,7 @@
     "id": "polarized-80-20",
     "name": "Polarized (80/20) Training",
     "attribution": "Stephen Seiler",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "pct_vo2max",
     "bet": {
@@ -386,6 +389,7 @@
     "name": "Lydiard System",
     "attribution": "Arthur Lydiard",
     "source": ["Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport."],
+    "provenance": "recorded",
     "status": "draft",
     "intensity_model": "rpe_10",
     "bet": {
@@ -479,6 +483,7 @@
     "name": "Pfitzinger (Advanced Marathoning)",
     "attribution": "Pete Pfitzinger",
     "source": ["Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics."],
+    "provenance": "recorded",
     "status": "draft",
     "intensity_model": "pct_hrmax",
     "bet": {
@@ -580,6 +585,7 @@
     "id": "maf",
     "name": "MAF (Maffetone Method)",
     "attribution": "Phil Maffetone",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "pct_hrmax",
     "bet": {
@@ -659,6 +665,7 @@
     "id": "norwegian-singles",
     "name": "Norwegian Singles (Threshold)",
     "attribution": null,
+    "provenance": "uncitable",
     "status": "draft",
     "intensity_model": "lactate_mmol",
     "bet": {
@@ -761,6 +768,7 @@
     "id": "bakken-doubles",
     "name": "Bakken Double Threshold",
     "attribution": "Marius Bakken",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "lactate_mmol",
     "bet": {
@@ -849,6 +857,7 @@
     "id": "critical-speed",
     "name": "Critical Speed Training",
     "attribution": "Monod & Scherrer (critical-power model)",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "pct_cs",
     "bet": {
@@ -955,6 +964,7 @@
     "id": "hrr-karvonen",
     "name": "HRR Zone Training (Karvonen)",
     "attribution": "Martti Karvonen",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "pct_hrr",
     "bet": {
@@ -1034,6 +1044,7 @@
     "id": "canova",
     "name": "Canova (Percentage of Race Pace)",
     "attribution": "Renato Canova",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "race_pace_ref",
     "bet": {
@@ -1127,6 +1138,7 @@
     "id": "galloway",
     "name": "Galloway (Run-Walk)",
     "attribution": "Jeff Galloway",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "rpe_10",
     "bet": {
@@ -1207,6 +1219,7 @@
     "id": "first-furman",
     "name": "FIRST (Run Less, Run Faster)",
     "attribution": "Bill Pierce (Furman Institute)",
+    "provenance": "unrecorded",
     "status": "draft",
     "intensity_model": "race_pace_ref",
     "bet": {
@@ -1292,6 +1305,7 @@
   {
     "id": "moderate-primary",
     "name": "Moderate-Primary",
+    "provenance": "uncitable",
     "status": "draft",
     "intensity_model": "lactate_mmol",
     "bet": {
