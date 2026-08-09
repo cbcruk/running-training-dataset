@@ -4,37 +4,37 @@
 // one field in memory, and ask what breaks, without writing to the repo. That is
 // the difference between probing a rule and staging a file, spawning a process
 // and grepping its output.
-import { readFileSync, readdirSync } from "node:fs";
-import { resolve } from "node:path";
+import { readFileSync, readdirSync } from 'node:fs'
+import { resolve } from 'node:path'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-type Row = any;
+type Row = any
 
 export interface Dataset {
-  workouts: Row[];
-  systems: Row[];
-  usage: Row[];
-  anchors: Row[];
-  adaptations: Row[];
+  workouts: Row[]
+  systems: Row[]
+  usage: Row[]
+  anchors: Row[]
+  adaptations: Row[]
   /** JSON Schemas by file name, e.g. `workout.schema.json`. */
-  schemas: Record<string, Row>;
+  schemas: Record<string, Row>
 }
 
 export function load(root: string): Dataset {
-  const j = (p: string): Row => JSON.parse(readFileSync(resolve(root, p), "utf8"));
-  const schemaDir = resolve(root, "data/schema");
-  const schemas: Record<string, Row> = {};
-  for (const f of readdirSync(schemaDir).filter((f) => f.endsWith(".schema.json")))
-    schemas[f] = JSON.parse(readFileSync(resolve(schemaDir, f), "utf8"));
+  const j = (p: string): Row => JSON.parse(readFileSync(resolve(root, p), 'utf8'))
+  const schemaDir = resolve(root, 'data/schema')
+  const schemas: Record<string, Row> = {}
+  for (const f of readdirSync(schemaDir).filter((f) => f.endsWith('.schema.json')))
+    schemas[f] = JSON.parse(readFileSync(resolve(schemaDir, f), 'utf8'))
 
   return {
-    workouts: j("data/workouts.json"),
-    systems: j("data/systems.json"),
-    usage: j("data/usage.json"),
-    anchors: j("data/anchors.json"),
-    adaptations: j("data/adaptations.json"),
+    workouts: j('data/workouts.json'),
+    systems: j('data/systems.json'),
+    usage: j('data/usage.json'),
+    anchors: j('data/anchors.json'),
+    adaptations: j('data/adaptations.json'),
     schemas,
-  };
+  }
 }
 
 /**
@@ -46,15 +46,15 @@ export function load(root: string): Dataset {
  */
 export function patch(
   data: Dataset,
-  list: "workouts" | "systems" | "usage" | "anchors" | "adaptations",
+  list: 'workouts' | 'systems' | 'usage' | 'anchors' | 'adaptations',
   id: string,
   change: (row: Row) => Row,
 ): Dataset {
-  const key = list === "anchors" ? "model" : "id";
+  const key = list === 'anchors' ? 'model' : 'id'
   const rows = data[list].map((r: Row) => {
-    if (r[key] !== id) return r;
-    const clone = structuredClone(r);
-    return change(clone) ?? clone;
-  });
-  return { ...data, [list]: rows };
+    if (r[key] !== id) return r
+    const clone = structuredClone(r)
+    return change(clone) ?? clone
+  })
+  return { ...data, [list]: rows }
 }

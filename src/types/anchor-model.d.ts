@@ -9,49 +9,49 @@
  * The measurement layer. One row per intensity_model: what it takes to measure, and the honest degraded path when you cannot. NOT a conversion - anchors do not convert cleanly, so the fallback points at the equipment-free floor (rpe_10) and names what is lost, never a numeric substitution.
  */
 export type IntensityAnchorModel = {
-  [k: string]: unknown;
+  [k: string]: unknown
 } & {
   /**
    * Matches intensity_model on systems and anchor.model on workouts.
    */
   model:
-    | "daniels-vdot"
-    | "pct_hrmax"
-    | "pct_hrr"
-    | "pct_vo2max"
-    | "pct_cs"
-    | "rpe_10"
-    | "lactate_mmol"
-    | "race_pace_ref";
+    | 'daniels-vdot'
+    | 'pct_hrmax'
+    | 'pct_hrr'
+    | 'pct_vo2max'
+    | 'pct_cs'
+    | 'rpe_10'
+    | 'lactate_mmol'
+    | 'race_pace_ref'
   /**
    * The physical quantity the anchor reads. Anchors sharing a construct are NOT interconvertible - two heart-rate anchors (max vs reserve) mean different bpm for the same %; grouping shows the axes, it does not bridge them. Only rpe_10 is 'perception'.
    */
-  construct: "perception" | "pace" | "heart-rate" | "metabolic";
-  label: I18N;
-  requires: I18N1;
+  construct: 'perception' | 'pace' | 'heart-rate' | 'metabolic'
+  label: I18N
+  requires: I18N1
   /**
    * true only for the universal floor (rpe_10). Enforced in validate.mjs.
    */
-  equipment_free: boolean;
-  fallback?: I18N2;
-  note?: I18N;
-};
+  equipment_free: boolean
+  fallback?: I18N2
+  note?: I18N
+}
 
 export interface I18N {
-  ko: string;
-  en: string;
+  ko: string
+  en: string
 }
 /**
  * What a runner needs to actually use this anchor - equipment and/or a test.
  */
 export interface I18N1 {
-  ko: string;
-  en: string;
+  ko: string
+  en: string
 }
 /**
  * The honest degraded path when the requirement is unmet: drop toward rpe_10 and what you lose. Required unless equipment_free.
  */
 export interface I18N2 {
-  ko: string;
-  en: string;
+  ko: string
+  en: string
 }

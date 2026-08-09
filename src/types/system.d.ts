@@ -6,91 +6,91 @@
 /* eslint-disable */
 
 export type Count = {
-  value?: number;
-  min?: number;
-  max?: number;
-} & Count1;
+  value?: number
+  min?: number
+  max?: number
+} & Count1
 export type Count1 = {
-  [k: string]: unknown;
-};
+  [k: string]: unknown
+}
 export type Evidence = {
-  [k: string]: unknown;
+  [k: string]: unknown
 } & {
-  tier: "consensus" | "plausible" | "tradition";
+  tier: 'consensus' | 'plausible' | 'tradition'
   /**
    * @minItems 1
    */
-  cite?: [string, ...string[]];
-  note?: I18N1;
-};
+  cite?: [string, ...string[]]
+  note?: I18N1
+}
 
 /**
  * The browsing entity. A system is a bet plus the cost of taking it, not a plan.
  */
 export interface TrainingSystem {
-  id: string;
-  name: string;
+  id: string
+  name: string
   /**
    * Who formalized it. null = folk/unattributable.
    */
-  attribution?: string | null;
+  attribution?: string | null
   /**
    * Provenance: where the description of this method comes from. A canonical text is the authoritative record of what a system prescribes - which is a different question from whether it works, and that one is answered (or not) by `evidence`. A `source` never justifies a tier, and unlike `cite` it is allowed at any tier, including `tradition`.
    *
    * @minItems 1
    */
-  source?: [string, ...string[]];
+  source?: [string, ...string[]]
   /**
    * The state of `source`, stated rather than left to be inferred from its absence. recorded = the describing text is cited in `source`. unrecorded = such a text exists but is not cited here yet. uncitable = no citable describing text exists at all, so `source` can never be filled. The last two both render as an empty `source`, which is why the distinction has to be written down: 'not yet done' and 'cannot be done' are different facts about a row. Tied to `source` in validate.ts, so it cannot drift from it.
    */
-  provenance: "recorded" | "unrecorded" | "uncitable";
+  provenance: 'recorded' | 'unrecorded' | 'uncitable'
   /**
    * draft = citations unverified by a human. Nothing ships verified without L4 human commit.
    */
-  status: "draft" | "verified";
+  status: 'draft' | 'verified'
   /**
    * The system's anchor. switching_cost.anchor_change is derived from this, therefore machine-verifiable.
    */
   intensity_model:
-    | "daniels-vdot"
-    | "pct_hrmax"
-    | "pct_hrr"
-    | "pct_vo2max"
-    | "pct_cs"
-    | "rpe_10"
-    | "lactate_mmol"
-    | "race_pace_ref";
-  bet: I18N;
-  philosophy: I18N1;
-  commitment: Commitment;
-  switching_cost?: SwitchingCost[];
-  distribution?: Distribution;
-  volume_caps?: VolumeCap[];
-  phases?: Phase[];
-  claim?: Claim;
-  evidence: Evidence;
-  caveats?: I18N1[];
+    | 'daniels-vdot'
+    | 'pct_hrmax'
+    | 'pct_hrr'
+    | 'pct_vo2max'
+    | 'pct_cs'
+    | 'rpe_10'
+    | 'lactate_mmol'
+    | 'race_pace_ref'
+  bet: I18N
+  philosophy: I18N1
+  commitment: Commitment
+  switching_cost?: SwitchingCost[]
+  distribution?: Distribution
+  volume_caps?: VolumeCap[]
+  phases?: Phase[]
+  claim?: Claim
+  evidence: Evidence
+  caveats?: I18N1[]
 }
 /**
  * One sentence, what it wagers that others do not. Length and sentence count are enforced in validate.mjs. Longer than a sentence is philosophy, and there is a field for that.
  */
 export interface I18N {
-  ko: string;
-  en: string;
+  ko: string
+  en: string
 }
 export interface I18N1 {
-  ko: string;
-  en: string;
+  ko: string
+  en: string
 }
 /**
  * The first filter for someone shopping methods: can I even run this? Rarely stated by the systems themselves.
  */
 export interface Commitment {
-  sessions_per_week: Count;
-  min_weekly_km?: number;
-  plan_length_weeks?: Count;
-  requires_track?: boolean;
-  note?: I18N1;
+  sessions_per_week: Count
+  min_weekly_km?: number
+  plan_length_weeks?: Count
+  requires_track?: boolean
+  note?: I18N1
 }
 /**
  * What breaks when you arrive here from another system. anchor_change is derivable from both systems' intensity_model and is checked in validate.mjs.
@@ -99,19 +99,19 @@ export interface SwitchingCost {
   /**
    * A system id. Never this system's own id.
    */
-  from: string;
+  from: string
   /**
    * '<from.intensity_model> -> <this.intensity_model>'. Machine-verified, not authored freely.
    */
-  anchor_change: string;
+  anchor_change: string
   /**
    * true = a term survives the switch while its meaning changes. The dangerous case, because nothing signals it.
    */
-  silent: boolean;
-  note: I18N1;
+  silent: boolean
+  note: I18N1
 }
 export interface Distribution {
-  model: "pyramidal" | "polarized" | "threshold" | "unstructured";
+  model: 'pyramidal' | 'polarized' | 'threshold' | 'unstructured'
   /**
    * Percent of SESSIONS, not time. The confusion is common enough to name in the field description.
    *
@@ -119,48 +119,48 @@ export interface Distribution {
    */
   zones?: [
     {
-      label: string;
-      pct_sessions: number;
+      label: string
+      pct_sessions: number
     },
     {
-      label: string;
-      pct_sessions: number;
+      label: string
+      pct_sessions: number
     },
     ...{
-      label: string;
-      pct_sessions: number;
+      label: string
+      pct_sessions: number
     }[],
-  ];
-  evidence: Evidence;
+  ]
+  evidence: Evidence
 }
 export interface VolumeCap {
-  zone: string;
-  max_pct_weekly?: number;
-  max_km?: number;
-  rule: I18N1;
-  evidence: Evidence;
+  zone: string
+  max_pct_weekly?: number
+  max_km?: number
+  rule: I18N1
+  evidence: Evidence
 }
 export interface Phase {
-  name: "base" | "build" | "peak" | "taper" | "offseason";
+  name: 'base' | 'build' | 'peak' | 'taper' | 'offseason'
   /**
    * Workout ids. Referential integrity checked in validate.mjs.
    *
    * @minItems 1
    */
-  emphasis: [string, ...string[]];
-  note?: I18N1;
+  emphasis: [string, ...string[]]
+  note?: I18N1
 }
 /**
  * What this system asserts that its evidence is supposed to support. Required whenever root evidence claims more than tradition - evidence with nothing to be evidence *for* is unfalsifiable.
  */
 export interface Claim {
-  proposition: I18N2;
-  mechanism?: I18N1;
+  proposition: I18N2
+  mechanism?: I18N1
 }
 /**
  * One falsifiable sentence.
  */
 export interface I18N2 {
-  ko: string;
-  en: string;
+  ko: string
+  en: string
 }

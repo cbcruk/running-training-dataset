@@ -13,42 +13,42 @@ export interface TargetAdaptation {
    * Matches the target_adaptation enum on workouts.
    */
   id:
-    | "plasma-volume"
-    | "capillarization"
-    | "mitochondrial-density"
-    | "stroke-volume"
-    | "lactate-clearance"
-    | "mlss-shift"
-    | "vo2max"
-    | "running-economy"
-    | "neuromuscular-recruitment"
-    | "glycogen-storage"
-    | "fat-oxidation"
-    | "tendon-stiffness"
-    | "bone-density"
-    | "musculoskeletal-durability"
-    | "pacing-skill";
+    | 'plasma-volume'
+    | 'capillarization'
+    | 'mitochondrial-density'
+    | 'stroke-volume'
+    | 'lactate-clearance'
+    | 'mlss-shift'
+    | 'vo2max'
+    | 'running-economy'
+    | 'neuromuscular-recruitment'
+    | 'glycogen-storage'
+    | 'fat-oxidation'
+    | 'tendon-stiffness'
+    | 'bone-density'
+    | 'musculoskeletal-durability'
+    | 'pacing-skill'
   /**
    * A coarse physiological grouping (the taxonomy's broader term). Deliberately broad, not a claim of mechanistic isolation.
    */
   category:
-    | "central-cardiovascular"
-    | "peripheral-aerobic"
-    | "metabolic"
-    | "neuromuscular"
-    | "structural"
-    | "skill";
-  label: I18N;
-  definition: I18N1;
+    | 'central-cardiovascular'
+    | 'peripheral-aerobic'
+    | 'metabolic'
+    | 'neuromuscular'
+    | 'structural'
+    | 'skill'
+  label: I18N
+  definition: I18N1
 }
 export interface I18N {
-  ko: string;
-  en: string;
+  ko: string
+  en: string
 }
 /**
  * What the adaptation is - descriptive, not an efficacy claim.
  */
 export interface I18N1 {
-  ko: string;
-  en: string;
+  ko: string
+  en: string
 }

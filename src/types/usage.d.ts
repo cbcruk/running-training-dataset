@@ -12,26 +12,26 @@ export interface NamingUsage {
   /**
    * A system id, or null for folk usage belonging to no system.
    */
-  system: string | null;
+  system: string | null
   /**
    * A workout id.
    */
-  workout: string;
+  workout: string
   /**
    * The colloquial name as used. This is the only place a colloquial name may live.
    */
-  calls_it: string;
+  calls_it: string
   /**
    * @minItems 1
    */
-  also_known_as?: [string, ...string[]];
+  also_known_as?: [string, ...string[]]
   /**
    * true = this name maps to a different workout in another system. Derivable from the table, stored so the renderer can flag without a scan.
    */
-  collides?: boolean;
-  note?: I18N;
+  collides?: boolean
+  note?: I18N
 }
 export interface I18N {
-  ko: string;
-  en: string;
+  ko: string
+  en: string
 }

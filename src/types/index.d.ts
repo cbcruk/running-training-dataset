@@ -5,8 +5,8 @@
 // and hand-fixing a warning would be undone by the next run.
 /* eslint-disable */
 
-export type { Adaptation } from "./adaptation.d.ts";
-export type { Anchor } from "./anchor-model.d.ts";
-export type { System } from "./system.d.ts";
-export type { Usage } from "./usage.d.ts";
-export type { Workout } from "./workout.d.ts";
+export type { Adaptation } from './adaptation.d.ts'
+export type { Anchor } from './anchor-model.d.ts'
+export type { System } from './system.d.ts'
+export type { Usage } from './usage.d.ts'
+export type { Workout } from './workout.d.ts'

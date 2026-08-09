@@ -17,30 +17,30 @@
 // Run it as `vp run pages`, not `prerender`: pnpm matches script names as
 // substrings, so a script called `prerender` would also fire on `vp run render`
 // (which writes the SVGs) and run this before dist/ exists.
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { renderToStaticMarkup } from "react-dom/server";
-import { RouterProvider } from "@tanstack/react-router";
-import { allRoutes, currentView, metaFor, setBase, setLang } from "../src/data.tsx";
-import { makeRouter } from "../src/router.tsx";
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { RouterProvider } from '@tanstack/react-router'
+import { allRoutes, currentView, metaFor, setBase, setLang } from '../src/data.tsx'
+import { makeRouter } from '../src/router.tsx'
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const dist = resolve(root, "dist");
-const BASE = process.env.BASE_PATH || "/running-training-dataset/";
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const dist = resolve(root, 'dist')
+const BASE = process.env.BASE_PATH || '/running-training-dataset/'
 
-setBase(BASE);
-setLang("ko");
+setBase(BASE)
+setLang('ko')
 
 // The built shell: Vite has already injected the hashed asset tags into it. Reuse
 // it verbatim so prerendered pages load exactly the same bundle.
-const shellPath = resolve(dist, "index.html");
-let shell: string;
+const shellPath = resolve(dist, 'index.html')
+let shell: string
 try {
-  shell = readFileSync(shellPath, "utf8");
+  shell = readFileSync(shellPath, 'utf8')
 } catch {
-  console.error("dist/index.html not found - run `vp build` before prerendering.");
-  process.exit(1);
+  console.error('dist/index.html not found - run `vp build` before prerendering.')
+  process.exit(1)
 }
 
 // Vite is configured with a relative base, so asset URLs come out as "./assets/…".
@@ -49,35 +49,35 @@ function absolutizeAssets(html: string): string {
   return html.replace(
     /(src|href)="\.\/([^"]*)"/g,
     (_: string, attr: string, path: string) => `${attr}="${BASE}${path}"`,
-  );
+  )
 }
 
 const esc = (s: string) =>
   String(s).replace(
     /[&<>"']/g,
-    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string,
-  );
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
+  )
 
-const SITE_URL = process.env.SITE_URL || "https://cbcruk.github.io/running-training-dataset";
+const SITE_URL = process.env.SITE_URL || 'https://cbcruk.github.io/running-training-dataset'
 
 async function pageFor(path: string): Promise<string> {
-  const { title, description } = metaFor(path);
-  const canonical = SITE_URL.replace(/\/$/, "") + (path === "/" ? "/" : path);
-  const router = makeRouter(BASE, path);
-  await router.load();
-  const body = renderToStaticMarkup(<RouterProvider router={router} />);
-  const view = currentView(path);
+  const { title, description } = metaFor(path)
+  const canonical = SITE_URL.replace(/\/$/, '') + (path === '/' ? '/' : path)
+  const router = makeRouter(BASE, path)
+  await router.load()
+  const body = renderToStaticMarkup(<RouterProvider router={router} />)
+  const view = currentView(path)
 
-  let html = absolutizeAssets(shell);
+  let html = absolutizeAssets(shell)
 
   // Per-entry metadata: the part hash routing could never serve.
-  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`);
+  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`)
   html = html.replace(
     /<meta\s+name="description"[\s\S]*?\/>/,
     `<meta name="description" content="${esc(description)}" />`,
-  );
+  )
   html = html.replace(
-    "</head>",
+    '</head>',
     `  <link rel="canonical" href="${esc(canonical)}" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="${esc(title)}" />
@@ -85,27 +85,27 @@ async function pageFor(path: string): Promise<string> {
     <meta property="og:url" content="${esc(canonical)}" />
     <meta name="twitter:card" content="summary" />
   </head>`,
-  );
+  )
 
   // The entry itself, so the document is readable with no JavaScript at all.
-  html = html.replace('<main id="app"></main>', `<main id="app">${body}</main>`);
+  html = html.replace('<main id="app"></main>', `<main id="app">${body}</main>`)
 
   // Mark the active nav tab in the served HTML too, not just after hydration.
-  html = html.replace(new RegExp(`(<a[^>]*data-nav="${view}")`), '$1 class="active"');
+  html = html.replace(new RegExp(`(<a[^>]*data-nav="${view}")`), '$1 class="active"')
 
-  return html;
+  return html
 }
 
-mkdirSync(dist, { recursive: true });
-const routes = allRoutes();
+mkdirSync(dist, { recursive: true })
+const routes = allRoutes()
 for (const path of routes) {
-  const out = path === "/" ? resolve(dist, "index.html") : resolve(dist, `.${path}/index.html`);
-  mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, await pageFor(path));
+  const out = path === '/' ? resolve(dist, 'index.html') : resolve(dist, `.${path}/index.html`)
+  mkdirSync(dirname(out), { recursive: true })
+  writeFileSync(out, await pageFor(path))
 }
 
 // GitHub Pages serves 404.html for any path it has no file for. Point it at the
 // shell so a mistyped or newly-added URL still boots the client router.
-writeFileSync(resolve(dist, "404.html"), await pageFor("/"));
+writeFileSync(resolve(dist, '404.html'), await pageFor('/'))
 
-console.log(`prerendered ${routes.length} routes + 404.html into dist/ (base ${BASE})`);
+console.log(`prerendered ${routes.length} routes + 404.html into dist/ (base ${BASE})`)
