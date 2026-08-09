@@ -1,9 +1,11 @@
-// Loading the dataset off disk - the one place that knows where the files are.
-//
-// Kept apart from rules.ts so the rules stay pure: a test can load once, change
-// one field in memory, and ask what breaks, without writing to the repo. That is
-// the difference between probing a rule and staging a file, spawning a process
-// and grepping its output.
+/**
+ * Loading the dataset off disk - the one place that knows where the files are.
+ *
+ * Kept apart from rules.ts so the rules stay pure: a test can load once, change
+ * one field in memory, and ask what breaks, without writing to the repo. That is
+ * the difference between probing a rule and staging a file, spawning a process
+ * and grepping its output.
+ */
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 

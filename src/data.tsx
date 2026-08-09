@@ -1,14 +1,16 @@
-// Data access and route metadata.
-//
-// The markup lives in src/components/, the route tree in src/router.tsx. What is
-// here is what both need and neither owns: the JSON loaded and asserted into the
-// generated schema types, the reverse indexes, the bilingual helper, and the
-// per-entry <title>/description the prerenderer writes.
-//
-// Epistemics live in the JSON; this file is convenience only. The one hard rule
-// it must honour (README "Known open problems"): the evidence tier goes on the
-// browse card, not buried in the detail view — so browsing ten systems can never
-// make a `tradition` system look as settled as a `consensus` one.
+/**
+ * Data access and route metadata.
+ *
+ * The markup lives in src/components/, the route tree in src/router.tsx. What is
+ * here is what both need and neither owns: the JSON loaded and asserted into the
+ * generated schema types, the reverse indexes, the bilingual helper, and the
+ * per-entry <title>/description the prerenderer writes.
+ *
+ * Epistemics live in the JSON; this file is convenience only. The one hard rule
+ * it must honour (README "Known open problems"): the evidence tier goes on the
+ * browse card, not buried in the detail view — so browsing ten systems can never
+ * make a `tradition` system look as settled as a `consensus` one.
+ */
 import systemsRaw from '../data/systems.json' with { type: 'json' }
 import workoutsRaw from '../data/workouts.json' with { type: 'json' }
 import usageRaw from '../data/usage.json' with { type: 'json' }

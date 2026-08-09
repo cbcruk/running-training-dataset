@@ -1,22 +1,24 @@
 #!/usr/bin/env node
-// Emit one real HTML file per dictionary entry, into the built dist/.
-//
-// This is the discovery half of ADR 0001. Hash routing gave the catalog no URL a
-// crawler or a link preview could see; every entry now exists as a document on
-// disk, so GitHub Pages serves it with no rewrite rules and the client bundle
-// upgrades it to instant navigation on load.
-//
-// Markup comes from the views the browser renders from, so a prerendered page and
-// a client-rendered one cannot drift.
-//
-// It imports the SSR *build* (.ssr/views.js), not src/views.jsx directly: the
-// views are components now, and Node cannot parse JSX. `vp run pages` runs the
-// SSR build first. That extra step is the price of the component model - see
-// ADR 0002.
-//
-// Run it as `vp run pages`, not `prerender`: pnpm matches script names as
-// substrings, so a script called `prerender` would also fire on `vp run render`
-// (which writes the SVGs) and run this before dist/ exists.
+/**
+ * Emit one real HTML file per dictionary entry, into the built dist/.
+ *
+ * This is the discovery half of ADR 0001. Hash routing gave the catalog no URL a
+ * crawler or a link preview could see; every entry now exists as a document on
+ * disk, so GitHub Pages serves it with no rewrite rules and the client bundle
+ * upgrades it to instant navigation on load.
+ *
+ * Markup comes from the views the browser renders from, so a prerendered page and
+ * a client-rendered one cannot drift.
+ *
+ * It imports the SSR *build* (.ssr/views.js), not src/views.jsx directly: the
+ * views are components now, and Node cannot parse JSX. `vp run pages` runs the
+ * SSR build first. That extra step is the price of the component model - see
+ * ADR 0002.
+ *
+ * Run it as `vp run pages`, not `prerender`: pnpm matches script names as
+ * substrings, so a script called `prerender` would also fire on `vp run render`
+ * (which writes the SVGs) and run this before dist/ exists.
+ */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'

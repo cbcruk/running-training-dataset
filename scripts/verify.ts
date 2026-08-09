@@ -1,17 +1,19 @@
 #!/usr/bin/env node
-// Generate the source-verification worksheet (docs/verification.md).
-//
-// docs/TODO.md #1b is human work by design - validate.ts forbids a generator
-// from setting `status: verified`, because a machine asserting that a source
-// supports a claim is the exact failure this dataset exists to avoid.
-//
-// What a script *can* do is lay the work out: for each citation, every row that
-// leans on it, the exact sentence that row asserts, and the tier that sentence is
-// claiming. A verifier then reads one source and checks every claim hanging off
-// it at once, instead of rediscovering the mapping by grep.
-//
-// Generated and committed, like src/types/, so it cannot silently go stale as
-// rows are added. Regenerate with `vp run verify`.
+/**
+ * Generate the source-verification worksheet (docs/verification.md).
+ *
+ * docs/TODO.md #1b is human work by design - validate.ts forbids a generator
+ * from setting `status: verified`, because a machine asserting that a source
+ * supports a claim is the exact failure this dataset exists to avoid.
+ *
+ * What a script *can* do is lay the work out: for each citation, every row that
+ * leans on it, the exact sentence that row asserts, and the tier that sentence is
+ * claiming. A verifier then reads one source and checks every claim hanging off
+ * it at once, instead of rediscovering the mapping by grep.
+ *
+ * Generated and committed, like src/types/, so it cannot silently go stale as
+ * rows are added. Regenerate with `vp run verify`.
+ */
 import { execFileSync } from 'node:child_process'
 import { writeFileSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'

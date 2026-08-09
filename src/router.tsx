@@ -1,13 +1,15 @@
-// The route tree, shared by the browser entry and the prerenderer.
-//
-// One definition, two histories: the browser gets `createBrowserHistory`, the
-// prerenderer a `createMemoryHistory` per route. That keeps ADR 0001's
-// load-bearing property - both hosts render the same thing from the same source -
-// now expressed as routes rather than a hand-rolled switch.
-//
-// Code-based routes, not file-based: the route set is derived from the data (44
-// entries) and is small enough to read in one screen. A generated route tree would
-// add a build step for no benefit.
+/**
+ * The route tree, shared by the browser entry and the prerenderer.
+ *
+ * One definition, two histories: the browser gets `createBrowserHistory`, the
+ * prerenderer a `createMemoryHistory` per route. That keeps ADR 0001's
+ * load-bearing property - both hosts render the same thing from the same source -
+ * now expressed as routes rather than a hand-rolled switch.
+ *
+ * Code-based routes, not file-based: the route set is derived from the data (44
+ * entries) and is small enough to read in one screen. A generated route tree would
+ * add a build step for no benefit.
+ */
 import type { ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import {

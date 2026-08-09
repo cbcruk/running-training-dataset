@@ -1,13 +1,15 @@
-// Offline for the dictionary.
-//
-// A reference work you cannot consult without a network is only half a reference
-// work. The whole corpus already ships inside the JS bundle (ADR 0001: that is the
-// feature, not the cost), so caching the shell and the hashed assets is enough to
-// make every entry readable offline.
-//
-// No build-time precache manifest: asset filenames are content-hashed, so the
-// worker learns them at runtime instead. Old caches are dropped on activate, and
-// hashed names mean a new deploy can never be served stale assets.
+/**
+ * Offline for the dictionary.
+ *
+ * A reference work you cannot consult without a network is only half a reference
+ * work. The whole corpus already ships inside the JS bundle (ADR 0001: that is the
+ * feature, not the cost), so caching the shell and the hashed assets is enough to
+ * make every entry readable offline.
+ *
+ * No build-time precache manifest: asset filenames are content-hashed, so the
+ * worker learns them at runtime instead. Old caches are dropped on activate, and
+ * hashed names mean a new deploy can never be served stale assets.
+ */
 
 const VERSION = 'v1'
 const CACHE = `rtd-${VERSION}`

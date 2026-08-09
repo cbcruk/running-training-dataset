@@ -1,10 +1,11 @@
+/**
+ * Shared primitives. These are the repeated shapes the template-literal views
+ * open-coded at every call site - a `<section className="block">` with an
+ * uppercase h3 and an optional sub-line appeared a dozen times.
+ */
 import type { ReactNode } from 'react'
 import { Link } from '@tanstack/react-router'
 import type { Translatable, WithCtx } from '../types/view.ts'
-
-// Shared primitives. These are the repeated shapes the template-literal views
-// open-coded at every call site - a `<section className="block">` with an
-// uppercase h3 and an optional sub-line appeared a dozen times.
 
 interface BlockProps {
   title: ReactNode

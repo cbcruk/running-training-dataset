@@ -1,16 +1,18 @@
-// The one walker over a row's evidence graph.
-//
-// `evidence` hangs in several places on a row - the row itself, `claim`, `test`,
-// `distribution`, each `volume_cap` - and every consumer needs the same three
-// facts about each one: where it sits, what it claims, and the nearest sentence
-// it is supposed to be evidence *for*. Before this module that shape was encoded
-// four separate times across validate.ts and verify.ts, so a schema change that
-// moved evidence could be picked up by some walkers and missed by others with
-// nothing failing to say so.
-//
-// Pure and DOM-free, like svg.ts: the validator and the worksheet generator are
-// two adapters over one traversal, which is what keeps them from disagreeing
-// about what the data contains.
+/**
+ * The one walker over a row's evidence graph.
+ *
+ * `evidence` hangs in several places on a row - the row itself, `claim`, `test`,
+ * `distribution`, each `volume_cap` - and every consumer needs the same three
+ * facts about each one: where it sits, what it claims, and the nearest sentence
+ * it is supposed to be evidence *for*. Before this module that shape was encoded
+ * four separate times across validate.ts and verify.ts, so a schema change that
+ * moved evidence could be picked up by some walkers and missed by others with
+ * nothing failing to say so.
+ *
+ * Pure and DOM-free, like svg.ts: the validator and the worksheet generator are
+ * two adapters over one traversal, which is what keeps them from disagreeing
+ * about what the data contains.
+ */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Row = any

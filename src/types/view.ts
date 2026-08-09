@@ -1,6 +1,8 @@
-// The view layer's own types. The data types next to this file are generated from
-// the JSON Schemas; these are not - they describe how views are called, which the
-// schemas have nothing to say about.
+/**
+ * The view layer's own types. The data types next to this file are generated from
+ * the JSON Schemas; these are not - they describe how views are called, which the
+ * schemas have nothing to say about.
+ */
 import type { Adaptation, Anchor, System, Usage, Workout } from './index.d.ts'
 
 /** A bilingual field as it appears throughout the data. */

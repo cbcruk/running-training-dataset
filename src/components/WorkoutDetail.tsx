@@ -1,6 +1,8 @@
-// The workout entry - the detail view. Each row carries a falsifiable claim and
-// the procedure that would falsify it. There is deliberately no
-// expected-improvement number; see the README's non-goals.
+/**
+ * The workout entry - the detail view. Each row carries a falsifiable claim and
+ * the procedure that would falsify it. There is deliberately no
+ * expected-improvement number; see the README's non-goals.
+ */
 import { renderWorkout } from '../../scripts/svg.ts'
 import {
   AdaptationsBlock,

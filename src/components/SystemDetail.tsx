@@ -1,6 +1,8 @@
-// The system entry - the browsing unit. Leads with the bet and the evidence
-// tier, because the README's one hard UI rule is that browsing ten systems must
-// never make a `tradition` system look as settled as a `consensus` one.
+/**
+ * The system entry - the browsing unit. Leads with the bet and the evidence
+ * tier, because the README's one hard UI rule is that browsing ten systems must
+ * never make a `tradition` system look as settled as a `consensus` one.
+ */
 import {
   AnchorCode,
   Block,

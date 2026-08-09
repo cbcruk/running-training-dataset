@@ -1,6 +1,8 @@
-// structure -> schematic SVG. The point: media is a derivative of data, not a licensed asset.
-// Pure module: no filesystem, no globals. Imported by both the CLI (render.ts) and the browser UI,
-// so the visual stays a single function of the data in both places.
+/**
+ * structure -> schematic SVG. The point: media is a derivative of data, not a licensed asset.
+ * Pure module: no filesystem, no globals. Imported by both the CLI (render.ts) and the browser UI,
+ * so the visual stays a single function of the data in both places.
+ */
 
 // rpe_10 is schema-mandated (contains/minContains/maxContains), so this cannot miss.
 // The cost: RPE is the LEAST precise anchor, so the y-axis is subjective by construction.

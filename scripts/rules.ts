@@ -1,18 +1,20 @@
-// Every rule the dataset is held to, behind one function.
-//
-// The rules were a 375-line script with no exports, whose only interface was
-// "spawn a process and grep stdout for OK". That made a whole class of question
-// unaskable in a test - does *this* rule fire on *this* break - and proving a new
-// rule worked meant copying the JSON aside, editing it on disk, running the
-// binary, grepping stderr and restoring the file.
-//
-// So: one entry point, structured findings, no I/O. scripts/validate.ts is now
-// the CLI adapter over it, the same arrangement svg.ts already has with
-// render.ts and WorkoutDetail.tsx.
-//
-// Adding a rule means adding one `add(...)` with an id. The id is the contract:
-// tests name it, and it is what lets the README's list of violations be checked
-// against the code rather than drifting beside it.
+/**
+ * Every rule the dataset is held to, behind one function.
+ *
+ * The rules were a 375-line script with no exports, whose only interface was
+ * "spawn a process and grep stdout for OK". That made a whole class of question
+ * unaskable in a test - does *this* rule fire on *this* break - and proving a new
+ * rule worked meant copying the JSON aside, editing it on disk, running the
+ * binary, grepping stderr and restoring the file.
+ *
+ * So: one entry point, structured findings, no I/O. scripts/validate.ts is now
+ * the CLI adapter over it, the same arrangement svg.ts already has with
+ * render.ts and WorkoutDetail.tsx.
+ *
+ * Adding a rule means adding one `add(...)` with an id. The id is the contract:
+ * tests name it, and it is what lets the README's list of violations be checked
+ * against the code rather than drifting beside it.
+ */
 
 // ajv ships its 2020 entry as CJS; the default export is the constructor.
 import Ajv2020Module from 'ajv/dist/2020.js'

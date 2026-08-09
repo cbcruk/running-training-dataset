@@ -1,13 +1,15 @@
-// Browser entry.
-//
-// The shell is a React root now rather than an innerHTML assignment, and routing
-// is TanStack Router rather than a hand-rolled History-API switch. What is left
-// here is what a router does not own: the chrome (nav, search box, language
-// toggle), keyboard-first lookup, recently-viewed, and the service worker.
-//
-// The dictionary shape from ADR 0001 is unchanged: prerendered documents for
-// discovery, this bundle for use. `scripts/prerender.tsx` drives the same route
-// tree, so the two cannot drift.
+/**
+ * Browser entry.
+ *
+ * The shell is a React root now rather than an innerHTML assignment, and routing
+ * is TanStack Router rather than a hand-rolled History-API switch. What is left
+ * here is what a router does not own: the chrome (nav, search box, language
+ * toggle), keyboard-first lookup, recently-viewed, and the service worker.
+ *
+ * The dictionary shape from ADR 0001 is unchanged: prerendered documents for
+ * discovery, this bundle for use. `scripts/prerender.tsx` drives the same route
+ * tree, so the two cannot drift.
+ */
 import './style.css'
 import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'

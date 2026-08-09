@@ -1,7 +1,9 @@
-// The browse surfaces: the three lists, the search results, and not-found.
-//
-// The cards are shared between a list and the search results, which is exactly
-// the duplication the template-literal version had to open-code twice.
+/**
+ * The browse surfaces: the three lists, the search results, and not-found.
+ *
+ * The cards are shared between a list and the search results, which is exactly
+ * the duplication the template-literal version had to open-code twice.
+ */
 import { EntryLink, ProvenanceBadge, TierBadge } from './primitives.tsx'
 import type { Anchor, System, Workout } from '../types/index.d.ts'
 import type { WithCtx } from '../types/view.ts'

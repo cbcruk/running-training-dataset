@@ -1,11 +1,13 @@
 #!/usr/bin/env node
-// The CLI over the ruleset: read the data, run every rule, print, set an exit code.
-//
-// The rules themselves live in rules.ts and know nothing about processes or the
-// filesystem, so a test can ask "does this rule fire on this break" without going
-// through here. What is left in this file is the part that genuinely belongs to a
-// command line: where the repo root is, how a finding reads to a person, and the
-// summary a human wants after a green run.
+/**
+ * The CLI over the ruleset: read the data, run every rule, print, set an exit code.
+ *
+ * The rules themselves live in rules.ts and know nothing about processes or the
+ * filesystem, so a test can ask "does this rule fire on this break" without going
+ * through here. What is left in this file is the part that genuinely belongs to a
+ * command line: where the repo root is, how a finding reads to a person, and the
+ * summary a human wants after a green run.
+ */
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { load } from './dataset.ts'

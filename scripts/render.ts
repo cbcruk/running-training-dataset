@@ -1,6 +1,8 @@
 #!/usr/bin/env node
-// structure -> schematic SVG. The point: media is a derivative of data, not a licensed asset.
-// The actual drawing lives in svg.mjs so the browser UI renders the identical visual.
+/**
+ * structure -> schematic SVG. The point: media is a derivative of data, not a licensed asset.
+ * The actual drawing lives in svg.mjs so the browser UI renders the identical visual.
+ */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
