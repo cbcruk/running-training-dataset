@@ -41,6 +41,10 @@ body {
   font-family: var(--sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  /* 한글은 기본값에서 음절 사이 아무 데서나 끊긴다. keep-all이 어절을 지키고,
+     break-word가 끊을 공백이 없는 토큰(URL, daniels-vdot)만 예외로 흘린다. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 code {
@@ -127,7 +131,6 @@ a {
 
 /* ---- search ---- */
 .searchwrap {
-  max-width: 900px;
   margin: 1.5rem auto 0;
   padding: 0 clamp(1rem, 4vw, 2.5rem);
 }
@@ -149,7 +152,6 @@ a {
 
 /* ---- layout ---- */
 main {
-  max-width: 900px;
   margin: 0 auto;
   padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 4rem;
 }
@@ -158,7 +160,6 @@ main {
 .sub {
   color: var(--muted);
   font-size: 0.92rem;
-  max-width: 62ch;
 }
 .intro {
   margin-bottom: 1.5rem;
@@ -211,7 +212,6 @@ main {
   line-height: 1.45;
   font-weight: 500;
   margin: 0.4rem 0 1.5rem;
-  max-width: 40ch;
 }
 .family {
   margin: 0.3rem 0 0;
@@ -358,7 +358,6 @@ main {
 }
 .block p {
   margin: 0.5rem 0;
-  max-width: 68ch;
 }
 .note,
 .belief-note {
@@ -839,7 +838,6 @@ tr.collides {
 
 /* ---- footer ---- */
 .foot {
-  max-width: 900px;
   margin: 0 auto;
   padding: 2rem clamp(1rem, 4vw, 2.5rem) 3rem;
   border-top: 1px solid var(--border);
@@ -848,7 +846,6 @@ tr.collides {
 }
 .foot p {
   margin: 0.3rem 0;
-  max-width: 68ch;
 }
 .foot a {
   color: var(--accent);
