@@ -18,6 +18,13 @@ export interface Dataset {
   usage: Row[]
   anchors: Row[]
   adaptations: Row[]
+  /**
+   * The verification ledger: every act of reading a source, hand-written. Loaded
+   * with the data because the rules cross-check the two - an entry has to name a
+   * real assertion, and whether the cite is still there has to match what the
+   * entry says the reading found.
+   */
+  verified: Row[]
   /** JSON Schemas by file name, e.g. `workout.schema.json`. */
   schemas: Record<string, Row>
 }
@@ -35,6 +42,7 @@ export function load(root: string): Dataset {
     usage: j('data/usage.json'),
     anchors: j('data/anchors.json'),
     adaptations: j('data/adaptations.json'),
+    verified: j('data/verified.json'),
     schemas,
   }
 }

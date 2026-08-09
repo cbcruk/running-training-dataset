@@ -25,11 +25,12 @@
 │   ├── 0004-tanstack-router.md
 │   ├── 0005-comments-as-agent-context.md
 │   ├── 0006-korean-only-dataset.md
-│   └── 0007-korean-repo-prose.md
+│   ├── 0007-korean-repo-prose.md
+│   └── 0008-verification-ledger.md
 └── src/
 ```
 
-새 ADR은 기존 번호를 이어간다 — 다음은 `0008-`.
+새 ADR은 기존 번호를 이어간다 — 다음은 `0009-`.
 
 ## 언어
 

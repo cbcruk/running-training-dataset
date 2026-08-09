@@ -145,8 +145,11 @@ Net: **plausible 23 → 17, tradition 48 → 54**, 그리고 미부착 소스는
 - [ ] 작업지를 소스 단위로 훑으며, 확인되는 행마다 체크한다.
 - [ ] 늘이지 말고 내린다: 소스가 실제로 뒷받침하지 않는 `plausible`/`consensus` 행은
       `tradition`으로 내려야 하고, 그건 cite를 **제거**한다는 뜻이다.
-- [ ] 사람이 한 행의 인용을 확인한 뒤에만 그 행의 `status`가 `verified`로 바뀔 수 있다.
-      행 단위로, 절대 일괄로 하지 않는다.
+- [ ] 읽은 결과는 [`data/verified.json`](../data/verified.json)에 적는다 — 누가·언제·무엇을
+      확인했는지. 뒷받침하지 **않았다는** 기록도 결과이며, 그때는 인용을 데이터에서
+      빼야 한다([ADR 0008](adr/0008-verification-ledger.md)).
+- [ ] 한 행의 모든 인용이 원장에 확인 기록을 가진 뒤에만 그 행의 `status`가 `verified`로
+      바뀔 수 있다. 행 단위로, 절대 일괄로 하지 않는다.
 - [ ] **Daniels 볼륨 상한**(`daniels.volume_caps`)은 `tradition` + "기억에서"로 표시돼
       있다(README도 이미 명시). 승격 전에 T/I/R 상한 수치를 원문과 대조할 것.
 
