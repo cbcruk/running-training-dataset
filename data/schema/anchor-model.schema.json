@@ -24,7 +24,9 @@
       "enum": ["perception", "pace", "heart-rate", "metabolic"],
       "description": "The physical quantity the anchor reads. Anchors sharing a construct are NOT interconvertible - two heart-rate anchors (max vs reserve) mean different bpm for the same %; grouping shows the axes, it does not bridge them. Only rpe_10 is 'perception'."
     },
-    "label": { "$ref": "#/$defs/i18n" },
+    "label": {
+      "$ref": "#/$defs/i18n"
+    },
     "requires": {
       "$ref": "#/$defs/i18n",
       "description": "What a runner needs to actually use this anchor - equipment and/or a test."
@@ -37,14 +39,19 @@
       "$ref": "#/$defs/i18n",
       "description": "The honest degraded path when the requirement is unmet: drop toward rpe_10 and what you lose. Required unless equipment_free."
     },
-    "note": { "$ref": "#/$defs/i18n" }
+    "note": {
+      "$ref": "#/$defs/i18n"
+    }
   },
-
   "allOf": [
     {
       "if": {
         "required": ["equipment_free"],
-        "properties": { "equipment_free": { "const": false } }
+        "properties": {
+          "equipment_free": {
+            "const": false
+          }
+        }
       },
       "then": {
         "required": ["fallback"],
@@ -54,21 +61,24 @@
     {
       "if": {
         "required": ["equipment_free"],
-        "properties": { "equipment_free": { "const": true } }
+        "properties": {
+          "equipment_free": {
+            "const": true
+          }
+        }
       },
       "then": {
-        "not": { "required": ["fallback"] },
+        "not": {
+          "required": ["fallback"]
+        },
         "description": "The equipment-free floor has nothing to fall back to - it IS the fallback."
       }
     }
   ],
-
   "$defs": {
     "i18n": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["ko", "en"],
-      "properties": { "ko": { "type": "string" }, "en": { "type": "string" } }
+      "type": "string",
+      "description": "Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations."
     }
   }
 }

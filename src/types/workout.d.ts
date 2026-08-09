@@ -37,6 +37,10 @@ export type Quantity1 =
   | {
       [k: string]: unknown
     }
+/**
+ * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+ */
+export type I18N = string
 export type Anchor = {
   model:
     | 'daniels-vdot'
@@ -272,10 +276,6 @@ export interface Segment {
   ramp_to?: string
   note?: I18N
 }
-export interface I18N {
-  ko: string
-  en: string
-}
 export interface Intensity {
   primary_anchor?: string
   /**
@@ -289,16 +289,12 @@ export interface Intensity {
  * A falsifiable proposition, not a guide. `test` is the procedure that would falsify `proposition`.
  */
 export interface Claim {
-  proposition: I18N1
+  /**
+   * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+   */
+  proposition: string
   mechanism: I18N
   evidence: Evidence
-}
-/**
- * One sentence, falsifiable. 'Doing X shifts Y.' Not 'X is good for Y.'
- */
-export interface I18N1 {
-  ko: string
-  en: string
 }
 /**
  * NOT effect size. A falsification procedure: what you would observe if the claim holds, when, what could fake it, and what a null means.
@@ -314,7 +310,10 @@ export interface Test {
    * @minItems 1
    */
   confounds?: [Confound, ...Confound[]]
-  if_absent?: I18N2
+  /**
+   * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+   */
+  if_absent?: string
   evidence: Evidence
 }
 export interface Confound {
@@ -325,13 +324,6 @@ export interface Confound {
    */
   shares_mechanism?: boolean
   note: I18N
-}
-/**
- * What a null result means. Without this the claim is unfalsifiable, i.e. not a claim.
- */
-export interface I18N2 {
-  ko: string
-  en: string
 }
 export interface Prerequisites {
   min_weekly_volume_km?: number

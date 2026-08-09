@@ -6,6 +6,11 @@
 /* eslint-disable */
 
 /**
+ * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+ */
+export type I18N = string
+
+/**
  * A taxonomy over target_adaptation - the flat enum grouped into coarse physiological categories with a definition. Descriptive only: it names and groups what a workout is claimed to target, and never asserts that a workout produces an outcome (that would reopen the expected_improvement trap). The categories are broad groupings, not claims of mechanistic isolation.
  */
 export interface TargetAdaptation {
@@ -39,16 +44,8 @@ export interface TargetAdaptation {
     | 'structural'
     | 'skill'
   label: I18N
-  definition: I18N1
-}
-export interface I18N {
-  ko: string
-  en: string
-}
-/**
- * What the adaptation is - descriptive, not an efficacy claim.
- */
-export interface I18N1 {
-  ko: string
-  en: string
+  /**
+   * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+   */
+  definition: string
 }

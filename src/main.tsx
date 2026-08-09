@@ -3,8 +3,8 @@
  *
  * The shell is a React root now rather than an innerHTML assignment, and routing
  * is TanStack Router rather than a hand-rolled History-API switch. What is left
- * here is what a router does not own: the chrome (nav, search box, language
- * toggle), keyboard-first lookup, recently-viewed, and the service worker.
+ * here is what a router does not own: the chrome (nav, search box),
+ * keyboard-first lookup, recently-viewed, and the service worker.
  *
  * The dictionary shape from ADR 0001 is unchanged: prerendered documents for
  * discovery, this bundle for use. `scripts/prerender.tsx` drives the same route
@@ -14,9 +14,8 @@ import './style.css'
 import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from '@tanstack/react-router'
-import { makeRouter, useLang } from './router.tsx'
+import { makeRouter } from './router.tsx'
 import { PLACEHOLDER, RECENT_LABEL, currentView, entryLabel, metaFor } from './data.tsx'
-import type { Lang } from './types/view.ts'
 
 const BASE = import.meta.env.BASE_URL || '/'
 const router = makeRouter(BASE)
@@ -64,12 +63,12 @@ function recordVisit(path: string) {
   }
 }
 
-function RecentStrip({ lang }: { lang: Lang }) {
+function RecentStrip() {
   const items = readRecent()
   if (!items.length) return null
   return (
     <section className="recent">
-      <h3 className="recent-h">{RECENT_LABEL[lang] || RECENT_LABEL.en}</h3>
+      <h3 className="recent-h">{RECENT_LABEL}</h3>
       <div className="recent-items">
         {items.map((x) => (
           <a className="wchip recent-item" href={BASE + x.path.slice(1)} key={x.path}>
@@ -83,7 +82,7 @@ function RecentStrip({ lang }: { lang: Lang }) {
 }
 
 /**
- * The header, search box and language toggle live outside the router outlet, so
+ * The header and search box live outside the router outlet, so
  * they are wired here against router state rather than re-rendered per route.
  * The chrome sits outside the router outlet, so it reads router state through a
  * subscription rather than the hooks - those require the provider's context.
@@ -94,7 +93,7 @@ function useRouterLocation() {
   return loc
 }
 
-function Chrome({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
+function Chrome() {
   const location = useRouterLocation()
   const path = location.pathname.replace(BASE.replace(/\/$/, ''), '') || '/'
   const q = (location.search as { q?: string }).q ?? ''
@@ -112,9 +111,7 @@ function Chrome({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
   // than re-declaring it in React and fighting the prerendered markup.
   useEffect(() => {
     const search = required<HTMLInputElement>('search')
-    const toggle = required<HTMLButtonElement>('lang-toggle')
-    toggle.textContent = lang === 'ko' ? 'EN' : '한국어'
-    search.placeholder = PLACEHOLDER[lang]
+    search.placeholder = PLACEHOLDER
     if (search.value !== draft) search.value = draft
     const view = currentView(path)
     for (const a of document.querySelectorAll<HTMLElement>('[data-nav]')) {
@@ -123,11 +120,10 @@ function Chrome({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
     for (const a of document.querySelectorAll<HTMLAnchorElement>('.topbar a[href^="./"]')) {
       a.setAttribute('href', BASE + (a.getAttribute('href') ?? '').slice(2))
     }
-  }, [lang, path, draft])
+  }, [path, draft])
 
   useEffect(() => {
     const search = required<HTMLInputElement>('search')
-    const toggle = required<HTMLButtonElement>('lang-toggle')
     let timer: ReturnType<typeof setTimeout>
     const onInput = () => {
       clearTimeout(timer)
@@ -138,17 +134,14 @@ function Chrome({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
         void router.navigate({ to, search: value ? { q: value } : {} })
       }, 120)
     }
-    const onToggle = () => setLang(lang === 'ko' ? 'en' : 'ko')
     search.addEventListener('input', onInput)
-    toggle.addEventListener('click', onToggle)
     return () => {
       clearTimeout(timer)
       search.removeEventListener('input', onInput)
-      toggle.removeEventListener('click', onToggle)
     }
-  }, [lang, path, setLang])
+  }, [path])
 
-  return path === '/' && !q ? <RecentStrip lang={lang} /> : null
+  return path === '/' && !q ? <RecentStrip /> : null
 }
 
 /**
@@ -216,11 +209,10 @@ function useKeyboardLookup() {
 }
 
 function App() {
-  const [lang, setLang] = useLang()
   useKeyboardLookup()
   return (
     <>
-      <Chrome lang={lang} setLang={setLang} />
+      <Chrome />
       <RouterProvider router={router} />
     </>
   )

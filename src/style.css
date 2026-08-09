@@ -125,22 +125,6 @@ a {
   font-weight: 600;
 }
 
-.lang-toggle {
-  margin-left: 0.4rem;
-  padding: 0.3rem 0.7rem;
-  font: inherit;
-  font-size: 0.82rem;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--muted);
-  border-radius: 8px;
-  cursor: pointer;
-}
-.lang-toggle:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
 /* ---- search ---- */
 .searchwrap {
   max-width: 900px;

@@ -2,7 +2,7 @@
   "name": "running-training-dataset",
   "version": "0.0.0",
   "private": true,
-  "description": "A browsable catalog of running training systems: what each one bets, what it costs to run, and how much of it is actually known.",
+  "description": "러닝 훈련 체계의 브라우징 카탈로그: 각 체계가 무엇에 베팅하는지, 실행 비용은 얼마인지, 실제로 알려진 것은 어디까지인지.",
   "homepage": "https://github.com/cbcruk/running-training-dataset#readme",
   "bugs": {
     "url": "https://github.com/cbcruk/running-training-dataset/issues"

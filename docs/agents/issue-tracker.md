@@ -1,45 +1,51 @@
-# Issue tracker: GitHub
+# 이슈 트래커: GitHub
 
-Issues and specs for this repo live as GitHub issues on `cbcruk/running-training-dataset`. Use the `gh` CLI for all operations.
+이 저장소의 이슈와 스펙은 `cbcruk/running-training-dataset`의 GitHub 이슈로 산다. 모든
+작업은 `gh` CLI로 한다.
 
-## Conventions
+## 규약
 
-- **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies.
-- **Read an issue**: `gh issue view <number> --comments`, filtering comments by `jq` and also fetching labels.
-- **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` with appropriate `--label` and `--state` filters.
-- **Comment on an issue**: `gh issue comment <number> --body "..."`
-- **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
-- **Close**: `gh issue close <number> --comment "..."`
+- **이슈 생성**: `gh issue create --title "..." --body "..."`. 여러 줄 본문은 heredoc을 쓴다.
+- **이슈 읽기**: `gh issue view <number> --comments`. 댓글은 `jq`로 거르고 라벨도 함께 가져온다.
+- **이슈 목록**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` 에 적절한 `--label`·`--state` 필터를 붙인다.
+- **댓글**: `gh issue comment <number> --body "..."`
+- **라벨 추가/제거**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
+- **닫기**: `gh issue close <number> --comment "..."`
 
-Infer the repo from `git remote -v` — `gh` does this automatically when run inside a clone.
+저장소는 `git remote -v`에서 유추한다 — 클론 안에서 실행하면 `gh`가 알아서 한다.
 
-## Pull requests as a triage surface
+**이슈 본문과 댓글은 한국어로 쓴다** — 이 저장소 산문의 언어를 따른다
+([ADR 0007](../adr/0007-korean-repo-prose.md)). 라벨·필드명·CLI 플래그는 영어 그대로다.
 
-**PRs as a request surface: no.** _(Set to `yes` if this repo treats external PRs as feature requests; `/triage` reads this flag.)_
+## 트리아지 대상으로서의 풀 리퀘스트
 
-When set to `yes`, PRs run through the same labels and states as issues, using the `gh pr` equivalents:
+**PR을 요청 창구로 삼는가: 아니오.** _(외부 PR을 기능 요청으로 다루는 저장소라면 `yes`로
+바꾼다. `/triage`가 이 플래그를 읽는다.)_
 
-- **Read a PR**: `gh pr view <number> --comments` and `gh pr diff <number>` for the diff.
-- **List external PRs for triage**: `gh pr list --state open --json number,title,body,labels,author,authorAssociation,comments` then keep only `authorAssociation` of `CONTRIBUTOR`, `FIRST_TIME_CONTRIBUTOR`, or `NONE` (drop `OWNER`/`MEMBER`/`COLLABORATOR`).
-- **Comment / label / close**: `gh pr comment`, `gh pr edit --add-label`/`--remove-label`, `gh pr close`.
+`yes`일 때 PR은 이슈와 같은 라벨·상태를 거치며, `gh pr` 대응 명령을 쓴다:
 
-GitHub shares one number space across issues and PRs, so a bare `#42` may be either — resolve with `gh pr view 42` and fall back to `gh issue view 42`.
+- **PR 읽기**: `gh pr view <number> --comments`, diff는 `gh pr diff <number>`.
+- **트리아지 대상 외부 PR 목록**: `gh pr list --state open --json number,title,body,labels,author,authorAssociation,comments` 로 받은 뒤 `authorAssociation`이 `CONTRIBUTOR`·`FIRST_TIME_CONTRIBUTOR`·`NONE`인 것만 남긴다(`OWNER`/`MEMBER`/`COLLABORATOR`는 버린다).
+- **댓글 / 라벨 / 닫기**: `gh pr comment`, `gh pr edit --add-label`/`--remove-label`, `gh pr close`.
 
-## When a skill says "publish to the issue tracker"
+GitHub은 이슈와 PR이 번호 공간을 공유하므로 `#42`만으로는 어느 쪽인지 알 수 없다 —
+`gh pr view 42`로 확인하고 실패하면 `gh issue view 42`로 넘어간다.
 
-Create a GitHub issue.
+## 스킬이 "이슈 트래커에 게시하라"고 할 때
 
-## When a skill says "fetch the relevant ticket"
+GitHub 이슈를 만든다.
 
-Run `gh issue view <number> --comments`.
+## 스킬이 "해당 티켓을 가져오라"고 할 때
 
-## Wayfinding operations
+`gh issue view <number> --comments`를 실행한다.
 
-Used by `/wayfinder`. The **map** is a single issue with **child** issues as tickets.
+## Wayfinding 연산
 
-- **Map**: a single issue labelled `wayfinder:map`, holding the Notes / Decisions-so-far / Fog body. `gh issue create --label wayfinder:map`.
-- **Child ticket**: an issue linked to the map as a GitHub sub-issue (`gh api` on the sub-issues endpoint). Where sub-issues aren't enabled, add the child to a task list in the map body and put `Part of #<map>` at the top of the child body. Labels: `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`). Once claimed, the ticket is assigned to the driving dev.
-- **Blocking**: GitHub's **native issue dependencies** — the canonical, UI-visible representation. Add an edge with `gh api --method POST repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>`, where `<blocker-db-id>` is the blocker's numeric **database id** (`gh api repos/<owner>/<repo>/issues/<n> --jq .id`, _not_ the `#number` or `node_id`). GitHub reports `issue_dependencies_summary.blocked_by` (open blockers only — the live gate). Where dependencies aren't available, fall back to a `Blocked by: #<n>, #<n>` line at the top of the child body. A ticket is unblocked when every blocker is closed.
-- **Frontier query**: list the map's open children (`gh issue list --state open`, scoped to the map's sub-issues / task list), drop any with an open blocker (`issue_dependencies_summary.blocked_by > 0`, or an open issue in the `Blocked by` line) or an assignee; first in map order wins.
-- **Claim**: `gh issue edit <n> --add-assignee @me` — the session's first write.
-- **Resolve**: `gh issue comment <n> --body "<answer>"`, then `gh issue close <n>`, then append a context pointer (gist + link) to the map's Decisions-so-far.
+`/wayfinder`가 쓴다. **맵**은 이슈 하나이고 **자식** 이슈가 티켓이다.
+
+- **맵**: `wayfinder:map` 라벨이 붙은 이슈 하나. Notes / Decisions-so-far / Fog 본문을 담는다. `gh issue create --label wayfinder:map`.
+- **자식 티켓**: GitHub 서브이슈로 맵에 연결된 이슈(서브이슈 엔드포인트에 `gh api`). 서브이슈가 활성화돼 있지 않으면 맵 본문의 태스크 리스트에 자식을 넣고 자식 본문 맨 위에 `Part of #<map>`을 적는다. 라벨은 `wayfinder:<type>`(`research`/`prototype`/`grilling`/`task`). 점유되면 티켓은 진행하는 개발자에게 할당된다.
+- **블로킹**: GitHub의 **네이티브 이슈 의존성** — UI에 보이는 정본 표현. `gh api --method POST repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>` 로 간선을 추가하며, `<blocker-db-id>`는 블로커의 숫자 **데이터베이스 id**다(`gh api repos/<owner>/<repo>/issues/<n> --jq .id`. `#number`나 `node_id`가 _아니다_). GitHub은 `issue_dependencies_summary.blocked_by`를 보고한다(열린 블로커만 — 살아 있는 게이트). 의존성을 쓸 수 없으면 자식 본문 맨 위의 `Blocked by: #<n>, #<n>` 줄로 대체한다. 모든 블로커가 닫히면 티켓이 풀린다.
+- **프론티어 질의**: 맵의 열린 자식들을 나열하고(`gh issue list --state open`, 맵의 서브이슈/태스크 리스트로 한정), 열린 블로커가 있거나(`issue_dependencies_summary.blocked_by > 0`, 또는 `Blocked by` 줄에 열린 이슈) 담당자가 있는 것을 버린다. 맵 순서상 첫 번째가 이긴다.
+- **점유**: `gh issue edit <n> --add-assignee @me` — 세션의 첫 쓰기.
+- **해결**: `gh issue comment <n> --body "<답>"` 후 `gh issue close <n>`, 그리고 맵의 Decisions-so-far에 컨텍스트 포인터(gist + 링크)를 덧붙인다.

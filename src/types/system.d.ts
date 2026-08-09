@@ -5,6 +5,10 @@
 // and hand-fixing a warning would be undone by the next run.
 /* eslint-disable */
 
+/**
+ * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+ */
+export type I18N = string
 export type Count = {
   value?: number
   min?: number
@@ -21,7 +25,7 @@ export type Evidence = {
    * @minItems 1
    */
   cite?: [string, ...string[]]
-  note?: I18N1
+  note?: I18N
 }
 
 /**
@@ -60,8 +64,11 @@ export interface TrainingSystem {
     | 'rpe_10'
     | 'lactate_mmol'
     | 'race_pace_ref'
-  bet: I18N
-  philosophy: I18N1
+  /**
+   * One sentence, what it wagers that others do not. Length and sentence count are enforced in validate.ts. Longer than a sentence is philosophy, and there is a field for that.
+   */
+  bet: string
+  philosophy: I18N
   commitment: Commitment
   switching_cost?: SwitchingCost[]
   distribution?: Distribution
@@ -69,18 +76,7 @@ export interface TrainingSystem {
   phases?: Phase[]
   claim?: Claim
   evidence: Evidence
-  caveats?: I18N1[]
-}
-/**
- * One sentence, what it wagers that others do not. Length and sentence count are enforced in validate.ts. Longer than a sentence is philosophy, and there is a field for that.
- */
-export interface I18N {
-  ko: string
-  en: string
-}
-export interface I18N1 {
-  ko: string
-  en: string
+  caveats?: I18N[]
 }
 /**
  * The first filter for someone shopping methods: can I even run this? Rarely stated by the systems themselves.
@@ -90,7 +86,7 @@ export interface Commitment {
   min_weekly_km?: number
   plan_length_weeks?: Count
   requires_track?: boolean
-  note?: I18N1
+  note?: I18N
 }
 /**
  * What breaks when you arrive here from another system. anchor_change is derivable from both systems' intensity_model and is checked in validate.ts.
@@ -108,7 +104,7 @@ export interface SwitchingCost {
    * true = a term survives the switch while its meaning changes. The dangerous case, because nothing signals it.
    */
   silent: boolean
-  note: I18N1
+  note: I18N
 }
 export interface Distribution {
   model: 'pyramidal' | 'polarized' | 'threshold' | 'unstructured'
@@ -137,7 +133,7 @@ export interface VolumeCap {
   zone: string
   max_pct_weekly?: number
   max_km?: number
-  rule: I18N1
+  rule: I18N
   evidence: Evidence
 }
 export interface Phase {
@@ -148,19 +144,15 @@ export interface Phase {
    * @minItems 1
    */
   emphasis: [string, ...string[]]
-  note?: I18N1
+  note?: I18N
 }
 /**
  * What this system asserts that its evidence is supposed to support. Required whenever root evidence claims more than tradition - evidence with nothing to be evidence *for* is unfalsifiable.
  */
 export interface Claim {
-  proposition: I18N2
-  mechanism?: I18N1
-}
-/**
- * One falsifiable sentence.
- */
-export interface I18N2 {
-  ko: string
-  en: string
+  /**
+   * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+   */
+  proposition: string
+  mechanism?: I18N
 }

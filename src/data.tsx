@@ -22,8 +22,6 @@ import type {
   AnchorSwitch,
   AnchorUse,
   Construct,
-  Lang,
-  Translatable,
   ViewContext,
 } from './types/view.ts'
 
@@ -76,77 +74,44 @@ for (const s of systems)
 const ANCHOR_CONSTRUCTS: Construct[] = [
   {
     id: 'perception',
-    label: { ko: '지각', en: 'Perception' },
-    note: {
-      ko: '장비 없는 주관 축 — 유일한 보편 교환 축.',
-      en: 'The subjective, no-equipment axis - the only universal exchange axis.',
-    },
+    label: '지각',
+    note: '장비 없는 주관 축 — 유일한 보편 교환 축.',
   },
   {
     id: 'pace',
-    label: { ko: '페이스(속도)', en: 'Pace (velocity)' },
-    note: {
-      ko: '같은 속도를 읽어도 서로 변환되지 않는다: VDOT는 측정된 피트니스, 목표 페이스는 희망.',
-      en: 'Reads velocity, but they do not interconvert: VDOT is measured fitness, goal pace is a wish.',
-    },
+    label: '페이스(속도)',
+    note: '같은 속도를 읽어도 서로 변환되지 않는다: VDOT는 측정된 피트니스, 목표 페이스는 희망.',
   },
   {
     id: 'heart-rate',
-    label: { ko: '심박수', en: 'Heart rate' },
-    note: {
-      ko: "같은 '70%'라도 최대(HRmax)와 예비량(HRR) 기준이면 다른 bpm이다.",
-      en: "The same '70%' means different bpm under max (HRmax) vs reserve (HRR).",
-    },
+    label: '심박수',
+    note: "같은 '70%'라도 최대(HRmax)와 예비량(HRR) 기준이면 다른 bpm이다.",
   },
   {
     id: 'metabolic',
-    label: { ko: '대사 측정', en: 'Metabolic assay' },
-    note: {
-      ko: '실험실·측정기 필요. VO2와 젖산은 서로 다른 생리 축이다.',
-      en: 'Needs a lab or meter. VO2 and lactate are different physiological axes.',
-    },
+    label: '대사 측정',
+    note: '실험실·측정기 필요. VO2와 젖산은 서로 다른 생리 축이다.',
   },
 ]
 
 /** Fixed display order for the adaptation taxonomy's coarse categories. */
 const ADAPT_CATEGORIES: AdaptCategory[] = [
-  { id: 'central-cardiovascular', label: { ko: '중심 심혈관', en: 'Central cardiovascular' } },
-  { id: 'peripheral-aerobic', label: { ko: '말초 유산소', en: 'Peripheral aerobic' } },
-  { id: 'metabolic', label: { ko: '대사', en: 'Metabolic' } },
-  { id: 'neuromuscular', label: { ko: '신경근', en: 'Neuromuscular' } },
-  { id: 'structural', label: { ko: '구조·내구', en: 'Structural' } },
-  { id: 'skill', label: { ko: '기술', en: 'Skill' } },
+  { id: 'central-cardiovascular', label: '중심 심혈관' },
+  { id: 'peripheral-aerobic', label: '말초 유산소' },
+  { id: 'metabolic', label: '대사' },
+  { id: 'neuromuscular', label: '신경근' },
+  { id: 'structural', label: '구조·내구' },
+  { id: 'skill', label: '기술' },
 ]
 
-/**
- * Module state, set by whichever host is driving: the browser shell (src/main.tsx) or
- * the prerenderer (scripts/prerender.tsx). Rendering one language at a time keeps
- * every view function below unchanged from when they lived in the browser.
- */
-let lang: Lang = 'ko'
+/** Module state, set by whichever host is driving: the browser shell or the prerenderer. */
 let BASE = '/'
 
-export function setLang(next: Lang) {
-  lang = next
-}
 export function setBase(next: string) {
   BASE = next.endsWith('/') ? next : next + '/'
 }
-export function currentLang(): Lang {
-  return lang
-}
 
-/** bilingual field -> current-language string, falling back to the other language. */
-function t(obj: Translatable): string {
-  if (obj == null) return ''
-  if (typeof obj === 'string') return obj
-  return obj[lang] || obj.en || obj.ko || ''
-}
-
-export const PLACEHOLDER = {
-  ko: '검색: "tempo run", daniels, easy…',
-  en: 'search: "tempo run", daniels, easy…',
-}
+export const PLACEHOLDER = '검색: "tempo run", daniels, easy…'
 
 /**
  * A raw intensity_model / anchor.model code, made hoverable: the tooltip pulls
@@ -160,22 +125,11 @@ const CONSTRUCT_LABEL = Object.fromEntries(ANCHOR_CONSTRUCTS.map((c) => [c.id, c
  * "9-13x/wk" / "≥120km" say what, the tooltip says what it means.
  */
 const COMMIT_TIPS = {
-  sessions: {
-    ko: '주당 훈련 세션 수 — 이 체계를 실행하는 데 필요한 주간 빈도다. 더블(하루 2회)이면 세션 수가 훈련일 수보다 많다.',
-    en: 'Training sessions per week - the frequency the system needs. With doubles (twice a day) the session count exceeds the number of training days.',
-  },
-  volume: {
-    ko: '권장 최소 주간 주행거리(km). 이 밑으로 내려가면 체계의 전제가 약해진다.',
-    en: "Minimum recommended weekly volume (km). Below this the system's premise weakens.",
-  },
-  weeks: {
-    ko: '권장 계획 길이(주).',
-    en: 'Recommended plan length, in weeks.',
-  },
-  track: {
-    ko: '트랙이 필요한지 여부. 필요하면 정밀한 반복 구간 측정을 위해서다.',
-    en: 'Whether a track is required - if so, for precise interval measurement.',
-  },
+  sessions:
+    '주당 훈련 세션 수 — 이 체계를 실행하는 데 필요한 주간 빈도다. 더블(하루 2회)이면 세션 수가 훈련일 수보다 많다.',
+  volume: '권장 최소 주간 주행거리(km). 이 밑으로 내려가면 체계의 전제가 약해진다.',
+  weeks: '권장 계획 길이(주).',
+  track: '트랙이 필요한지 여부. 필요하면 정밀한 반복 구간 측정을 위해서다.',
 }
 
 const KM = (n: number | null | undefined) => (n == null ? '' : `${n}km`)
@@ -218,46 +172,40 @@ export function metaFor(path: string): { title: string; description: string } {
   }
   if (parts[0] === 'anchors')
     return {
-      title: `${lang === 'ko' ? '앵커' : 'Anchors'} · ${SITE}`,
+      title: `${'앵커'} · ${SITE}`,
       description: clip(
-        lang === 'ko'
-          ? '강도 앵커 8종을 측정 구성개념(지각·페이스·심박·대사)별로 정리. 같은 구성개념이라도 서로 변환되지 않는다.'
-          : 'The 8 intensity anchors, grouped by the construct they read (perception, pace, heart rate, metabolic). Sharing a construct does not make them interconvert.',
+        '강도 앵커 8종을 측정 구성개념(지각·페이스·심박·대사)별로 정리. 같은 구성개념이라도 서로 변환되지 않는다.',
       ),
     }
   if (parts[0] === 'anchor' && byAnchor[parts[1]]) {
     const a = byAnchor[parts[1]]
     return {
       title: `${a.model} · ${SITE}`,
-      description: clip(`${t(a.label)} — ${t(a.requires)}`),
+      description: clip(`${a.label} — ${a.requires}`),
     }
   }
   if (parts[0] === 'workouts')
     return {
-      title: `${lang === 'ko' ? '워크아웃' : 'Workouts'} · ${SITE}`,
+      title: `${'워크아웃'} · ${SITE}`,
       description: clip(
-        lang === 'ko'
-          ? '각 워크아웃은 반증 가능한 주장과 그것을 반증하는 절차를 싣는다. 개선 수치는 없다 — 의도적으로.'
-          : 'Each workout carries a falsifiable claim and the procedure that would falsify it. No expected-improvement number, deliberately.',
+        '각 워크아웃은 반증 가능한 주장과 그것을 반증하는 절차를 싣는다. 개선 수치는 없다 — 의도적으로.',
       ),
     }
   if (parts[0] === 'workout' && byWorkout[parts[1]]) {
     const w = byWorkout[parts[1]]
     return {
       title: `${w.canonical_name} · ${SITE}`,
-      description: clip(t(w.claim?.proposition)),
+      description: clip(w.claim?.proposition),
     }
   }
   if (parts[0] === 'system' && bySystem[parts[1]]) {
     const s = bySystem[parts[1]]
-    return { title: `${s.name} · ${SITE}`, description: clip(t(s.bet)) }
+    return { title: `${s.name} · ${SITE}`, description: clip(s.bet) }
   }
   return {
     title: SITE,
     description: clip(
-      lang === 'ko'
-        ? '러닝 훈련 체계 카탈로그. 각 체계가 무엇에 베팅하는지, 실행 비용은 얼마인지, 실제로 알려진 것은 어디까지인지. 모든 행은 draft다.'
-        : 'A browsable catalog of running training systems: what each bets, what it costs to run, and how much is actually known. Every row is draft.',
+      '러닝 훈련 체계 카탈로그. 각 체계가 무엇에 베팅하는지, 실행 비용은 얼마인지, 실제로 알려진 것은 어디까지인지. 모든 행은 draft다.',
     ),
   }
 }
@@ -278,10 +226,7 @@ export function entryLabel(path: string): { kind: string; label: string } | null
   return null
 }
 
-export const RECENT_LABEL = {
-  ko: '최근 본 항목',
-  en: 'Recently viewed',
-}
+export const RECENT_LABEL = '최근 본 항목'
 
 /** Every route the prerenderer emits - one file per dictionary entry. */
 export function allRoutes() {
@@ -306,8 +251,6 @@ export function allRoutes() {
  */
 export function viewContext(): ViewContext {
   return {
-    t,
-    lang,
     url: (path: string) => `${BASE}${path}`,
     byWorkout,
     bySystem,
