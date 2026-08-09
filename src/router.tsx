@@ -11,7 +11,7 @@
  * add a build step for no benefit.
  */
 import type { ReactNode } from 'react'
-import { useEffect, useMemo, useState } from 'react'
+
 import {
   Outlet,
   createMemoryHistory,
@@ -29,8 +29,8 @@ import {
 import { AnchorDetail } from './components/AnchorDetail.tsx'
 import { SystemDetail } from './components/SystemDetail.tsx'
 import { WorkoutDetail } from './components/WorkoutDetail.tsx'
-import { currentLang, setLang, viewContext } from './data.tsx'
-import type { Lang, ViewContext } from './types/view.ts'
+import { viewContext } from './data.tsx'
+import type { ViewContext } from './types/view.ts'
 
 export interface RouterContext {
   ctx: ViewContext
@@ -47,7 +47,7 @@ const validateSearch = (raw: Record<string, unknown>): SearchParams => {
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: () => <Outlet />,
-  notFoundComponent: () => <NotFound ctx={viewContext()} id="" />,
+  notFoundComponent: () => <NotFound id="" />,
 })
 
 /**
@@ -78,7 +78,7 @@ const systemRoute = createRoute({
   component: function SystemView() {
     const { id } = systemRoute.useParams()
     const ctx = viewContext()
-    return ctx.bySystem[id] ? <SystemDetail ctx={ctx} id={id} /> : <NotFound ctx={ctx} id={id} />
+    return ctx.bySystem[id] ? <SystemDetail ctx={ctx} id={id} /> : <NotFound id={id} />
   },
 })
 
@@ -88,7 +88,7 @@ const workoutRoute = createRoute({
   component: function WorkoutView() {
     const { id } = workoutRoute.useParams()
     const ctx = viewContext()
-    return ctx.byWorkout[id] ? <WorkoutDetail ctx={ctx} id={id} /> : <NotFound ctx={ctx} id={id} />
+    return ctx.byWorkout[id] ? <WorkoutDetail ctx={ctx} id={id} /> : <NotFound id={id} />
   },
 })
 
@@ -98,11 +98,7 @@ const anchorRoute = createRoute({
   component: function AnchorView() {
     const { model } = anchorRoute.useParams()
     const ctx = viewContext()
-    return ctx.byAnchor[model] ? (
-      <AnchorDetail ctx={ctx} model={model} />
-    ) : (
-      <NotFound ctx={ctx} id={model} />
-    )
+    return ctx.byAnchor[model] ? <AnchorDetail ctx={ctx} model={model} /> : <NotFound id={model} />
   },
 })
 
@@ -126,7 +122,7 @@ export function makeRouter(basepath: string, path?: string) {
     routeTree,
     basepath,
     context: { ctx: viewContext() },
-    defaultNotFoundComponent: () => <NotFound ctx={viewContext()} id="" />,
+    defaultNotFoundComponent: () => <NotFound id="" />,
     // The memory entry must carry the basepath: the router strips it before
     // matching, so a bare "/anchor/rpe_10" matches nothing and renders empty.
     ...(path
@@ -137,28 +133,4 @@ export function makeRouter(basepath: string, path?: string) {
         }
       : {}),
   })
-}
-
-/**
- * Language is React state now rather than a module-level toggle plus a manual
- * re-render. `setLang` still writes the module state the prerenderer reads, so
- * both hosts stay in agreement.
- */
-export function useLang(): [Lang, (next: Lang) => void] {
-  const [lang, set] = useState<Lang>(() => currentLang())
-  useEffect(() => {
-    setLang(lang)
-    document.documentElement.lang = lang
-  }, [lang])
-  return useMemo(
-    () => [
-      lang,
-      (next: Lang) => {
-        setLang(next)
-        localStorage.setItem('lang', next)
-        set(next)
-      },
-    ],
-    [lang],
-  )
 }

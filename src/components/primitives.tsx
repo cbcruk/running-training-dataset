@@ -5,7 +5,7 @@
  */
 import type { ReactNode } from 'react'
 import { Link } from '@tanstack/react-router'
-import type { Translatable, WithCtx } from '../types/view.ts'
+import type { WithCtx } from '../types/view.ts'
 
 interface BlockProps {
   title: ReactNode
@@ -77,18 +77,18 @@ export function WChip({ to, children }: { to: string; children?: ReactNode }) {
  * which is also why this stays bespoke rather than becoming a design-system
  * status badge (ADR 0002): the tiers are not success/warning/danger.
  */
-const TIER_LABEL: Record<string, Translatable> = {
-  consensus: { ko: '정설', en: 'consensus' },
-  plausible: { ko: '유력', en: 'plausible' },
-  tradition: { ko: '관행', en: 'tradition' },
+const TIER_LABEL: Record<string, string> = {
+  consensus: '정설',
+  plausible: '유력',
+  tradition: '관행',
 }
 
-export function TierBadge({ ctx, tier }: WithCtx & { tier?: string }) {
+export function TierBadge({ tier }: { tier?: string }) {
   if (!tier) return null
-  const label = TIER_LABEL[tier] || { ko: tier, en: tier }
+  const label = TIER_LABEL[tier] || tier
   return (
     <span className={`tier tier-${tier}`} title={`evidence tier: ${tier}`}>
-      {ctx.t(label)}
+      {label}
     </span>
   )
 }
@@ -107,55 +107,42 @@ export function TierBadge({ ctx, tier }: WithCtx & { tier?: string }) {
  * one. Workouts carry the same pair as systems and say it the same way: the whole
  * point is that a reader never has to know which kind of entity they are on.
  */
-const PROVENANCE: Record<string, { mark: string; label: Translatable; tip: Translatable }> = {
+const PROVENANCE: Record<string, { mark: string; label: string; tip: string }> = {
   recorded: {
     mark: '◆',
-    label: { ko: '정본', en: 'sourced' },
-    tip: {
-      ko: '이 항목이 무엇을 처방하는지의 정본이 기록되어 있다. 그 처방이 효과가 있다는 뜻은 아니다 — 그건 등급이 따로 답한다.',
-      en: 'The text recording what this row prescribes is on file. It does not say the prescription works; the tier answers that separately.',
-    },
+    label: '정본',
+    tip: '이 항목이 무엇을 처방하는지의 정본이 기록되어 있다. 그 처방이 효과가 있다는 뜻은 아니다 — 그건 등급이 따로 답한다.',
   },
   unrecorded: {
     mark: '◇',
-    label: { ko: '정본 미기록', en: 'unsourced' },
-    tip: {
-      ko: '정본은 존재하지만 아직 이 데이터셋에 기록되지 않았다. 서술의 정확성이 확인되지 않았다는 뜻이다.',
-      en: 'A defining text exists but has not been recorded here yet, so the accuracy of this description is unchecked.',
-    },
+    label: '정본 미기록',
+    tip: '정본은 존재하지만 아직 이 데이터셋에 기록되지 않았다. 서술의 정확성이 확인되지 않았다는 뜻이다.',
   },
   uncitable: {
     mark: '⊘',
-    label: { ko: '정본 없음', en: 'uncitable' },
-    tip: {
-      ko: '인용할 정본이 아예 없다. 이 행은 문헌으로 확인된 방법이 아니라 확인 불가능한 서술에서 옮겨진 것이므로, 정본이 있는 행과 같은 무게로 읽으면 안 된다.',
-      en: 'There is no citable text at all. This row was transcribed from something that cannot be checked, so it should not be read with the same weight as a row that has one.',
-    },
+    label: '정본 없음',
+    tip: '인용할 정본이 아예 없다. 이 행은 문헌으로 확인된 방법이 아니라 확인 불가능한 서술에서 옮겨진 것이므로, 정본이 있는 행과 같은 무게로 읽으면 안 된다.',
   },
 }
 
-export function ProvenanceBadge({ ctx, provenance }: WithCtx & { provenance?: string }) {
+export function ProvenanceBadge({ provenance }: { provenance?: string }) {
   if (!provenance) return null
   const p = PROVENANCE[provenance]
   if (!p) return null
   return (
-    <span className={`prov prov-${provenance}`} title={ctx.t(p.tip)}>
+    <span className={`prov prov-${provenance}`} title={p.tip}>
       <span className="prov-mark" aria-hidden="true">
         {p.mark}
       </span>
-      {ctx.t(p.label)}
+      {p.label}
     </span>
   )
 }
 
-const UNRECORDED_NOTE: Translatable = {
-  ko: '정본은 존재하지만 아직 여기 기록되지 않았다. 이 페이지의 서술이 그 정본과 일치하는지 확인된 바 없으므로, 처방의 세부는 원전으로 확인할 것.',
-  en: "A defining text exists but has not been recorded here. Nothing has checked this page's description against it, so confirm the details of the prescription against the original.",
-}
-const UNCITABLE_NOTE: Translatable = {
-  ko: '인용할 정본이 아예 없다. 이 항목의 서술은 인용 형태로 쓸 수 없는 자료 — 저자·연도가 없는 글이거나, 커뮤니티에서 형식화된 관행이거나, 아무도 특정할 수 없는 통념 — 에서 왔고, 따라서 이 칸은 앞으로도 채워지지 않는다. 정본이 있는 항목과 같은 무게로 읽지 말 것.',
-  en: "There is no citable text at all. This row's description comes from material that cannot be written in citation form - writing with no author or year, a practice formalised in a community, or a convention nobody in particular set down - so this slot will stay empty. Do not read it with the same weight as a row that has one.",
-}
+const UNRECORDED_NOTE =
+  '정본은 존재하지만 아직 여기 기록되지 않았다. 이 페이지의 서술이 그 정본과 일치하는지 확인된 바 없으므로, 처방의 세부는 원전으로 확인할 것.'
+const UNCITABLE_NOTE =
+  '인용할 정본이 아예 없다. 이 항목의 서술은 인용 형태로 쓸 수 없는 자료 — 저자·연도가 없는 글이거나, 커뮤니티에서 형식화된 관행이거나, 아무도 특정할 수 없는 통념 — 에서 왔고, 따라서 이 칸은 앞으로도 채워지지 않는다. 정본이 있는 항목과 같은 무게로 읽지 말 것.'
 
 /**
  * The provenance block, rendered even with nothing to show.
@@ -164,19 +151,12 @@ const UNCITABLE_NOTE: Translatable = {
  * came to look identical to a recorded one: the reader saw no claim rather than a
  * missing one. An empty slot now has to say which kind of empty it is.
  */
-export function SourceBlock({
-  ctx,
-  source,
-  provenance,
-}: WithCtx & { source?: string[]; provenance?: string }) {
-  const { t, lang } = ctx
+export function SourceBlock({ source, provenance }: { source?: string[]; provenance?: string }) {
   return (
     <Block
-      title={lang === 'ko' ? '출처 (서술)' : 'Source (description)'}
+      title={'출처 (서술)'}
       sub={
-        lang === 'ko'
-          ? '이 항목이 무엇을 처방하는지의 기록이다. 작동한다는 증거가 아니다 — 그건 등급과 인용이 따로 답한다.'
-          : 'The record of what this row prescribes. Not evidence that it works — the tier and its cites answer that separately.'
+        '이 항목이 무엇을 처방하는지의 기록이다. 작동한다는 증거가 아니다 — 그건 등급과 인용이 따로 답한다.'
       }
     >
       {source?.length ? (
@@ -187,7 +167,7 @@ export function SourceBlock({
         </ul>
       ) : (
         <p className={`note prov-empty prov-empty-${provenance}`}>
-          {t(provenance === 'uncitable' ? UNCITABLE_NOTE : UNRECORDED_NOTE)}
+          {provenance === 'uncitable' ? UNCITABLE_NOTE : UNRECORDED_NOTE}
         </p>
       )}
     </Block>
@@ -200,12 +180,10 @@ export function SourceBlock({
  * a slug like "lactate_mmol" explains itself in place.
  */
 export function AnchorCode({ ctx, model }: WithCtx & { model: string }) {
-  const { t, byAnchor, constructLabel } = ctx
+  const { byAnchor, constructLabel } = ctx
   const a = byAnchor[model]
   if (!a) return <code>{model}</code>
-  const tip = [t(a.label), t(constructLabel[a.construct]), t(a.requires)]
-    .filter(Boolean)
-    .join(' · ')
+  const tip = [a.label, constructLabel[a.construct], a.requires].filter(Boolean).join(' · ')
   return (
     <EntryLink className="anchor-code" to={`anchor/${model}`} title={tip}>
       <code>{model}</code>
@@ -217,13 +195,9 @@ export function AnchorCode({ ctx, model }: WithCtx & { model: string }) {
  * A commitment chip that explains its dimension on hover - the terse "9-13x/wk"
  * says what, the tooltip says what it means.
  */
-export function InfoChip({
-  ctx,
-  tip,
-  children,
-}: WithCtx & { tip: Translatable; children?: ReactNode }) {
+export function InfoChip({ tip, children }: { tip: string; children?: ReactNode }) {
   return (
-    <span className="chip chip-info" title={ctx.t(tip)}>
+    <span className="chip chip-info" title={tip}>
       {children}
     </span>
   )
@@ -250,7 +224,7 @@ export function MeasurementBlock({
   models,
   fallbackFor = null,
 }: WithCtx & { models: string[]; fallbackFor?: string | null }) {
-  const { t, lang, byAnchor, constructs } = ctx
+  const { byAnchor, constructs } = ctx
   const uniq = [...new Set(models.filter((m) => byAnchor[m]))]
   const groups = constructs
     .map((c) => ({ c, items: uniq.filter((m) => byAnchor[m].construct === c.id) }))
@@ -259,18 +233,16 @@ export function MeasurementBlock({
 
   return (
     <Block
-      title={lang === 'ko' ? '측정 요건' : 'Measurement'}
+      title={'측정 요건'}
       sub={
-        lang === 'ko'
-          ? '앵커는 읽는 구성개념(지각·페이스·심박·대사)으로 묶인다. 같은 구성개념이라도 서로 변환되지 않으며, 장비가 없으면 결국 장비 없이 누구나 쓸 수 있는 유일한 기준인 RPE로 떨어진다 — 변환이 아니라 하강이다.'
-          : 'Anchors are grouped by the construct they read (perception, pace, heart rate, metabolic). Even within a construct they do not interconvert, and without the equipment you ultimately drop to RPE - the one standard anyone can use with no equipment - a descent, not a conversion.'
+        '앵커는 읽는 구성개념(지각·페이스·심박·대사)으로 묶인다. 같은 구성개념이라도 서로 변환되지 않으며, 장비가 없으면 결국 장비 없이 누구나 쓸 수 있는 유일한 기준인 RPE로 떨어진다 — 변환이 아니라 하강이다.'
       }
     >
       <div className="measure-groups">
         {groups.map(({ c, items }) => (
           <div className="measure-group" key={c.id}>
-            <span className="measure-construct" title={t(c.note)}>
-              {t(c.label)}
+            <span className="measure-construct" title={c.note}>
+              {c.label}
             </span>
             <ul className="measure">
               {items.map((m) => {
@@ -278,13 +250,9 @@ export function MeasurementBlock({
                 return (
                   <li key={m}>
                     <code>{m}</code>
-                    <span className="req">{t(a.requires)}</span>
-                    {a.equipment_free && (
-                      <span className="floor-badge">
-                        {lang === 'ko' ? '장비 불필요' : 'no equipment'}
-                      </span>
-                    )}
-                    {a.note && <span className="measure-note">{t(a.note)}</span>}
+                    <span className="req">{a.requires}</span>
+                    {a.equipment_free && <span className="floor-badge">{'장비 불필요'}</span>}
+                    {a.note && <span className="measure-note">{a.note}</span>}
                   </li>
                 )
               })}
@@ -294,8 +262,8 @@ export function MeasurementBlock({
       </div>
       {fa && !fa.equipment_free && (
         <p className="note fallback-note">
-          {lang === 'ko' ? '없으면 → ' : 'if unavailable → '}
-          {t(fa.fallback)}
+          {'없으면 → '}
+          {fa.fallback}
         </p>
       )}
     </Block>
@@ -309,7 +277,7 @@ export function MeasurementBlock({
  * it produces.
  */
 export function AdaptationsBlock({ ctx, ids }: WithCtx & { ids: string[] }) {
-  const { t, lang, byAdaptation, adaptCategories } = ctx
+  const { byAdaptation, adaptCategories } = ctx
   const groups = adaptCategories
     .map((cat) => ({
       cat,
@@ -320,21 +288,19 @@ export function AdaptationsBlock({ ctx, ids }: WithCtx & { ids: string[] }) {
 
   return (
     <Block
-      title={lang === 'ko' ? '표적 적응' : 'Target adaptations'}
+      title={'표적 적응'}
       sub={
-        lang === 'ko'
-          ? '이 워크아웃이 노린다고 주장하는 생리적 적응 — 결과가 아니라 표적이다. 정의는 마우스를 올려서.'
-          : 'The physiological adaptations this workout is claimed to target - a target, not an outcome. Hover for the definition.'
+        '이 워크아웃이 노린다고 주장하는 생리적 적응 — 결과가 아니라 표적이다. 정의는 마우스를 올려서.'
       }
     >
       <div className="adapt-groups">
         {groups.map(({ cat, items }) => (
           <div className="adapt-group" key={cat.id}>
-            <span className="adapt-cat">{t(cat.label)}</span>
+            <span className="adapt-cat">{cat.label}</span>
             <div className="adapt-chips">
               {items.map((a) => (
-                <span className="adapt" title={t(a.definition)} key={a.id}>
-                  {t(a.label)}
+                <span className="adapt" title={a.definition} key={a.id}>
+                  {a.label}
                 </span>
               ))}
             </div>

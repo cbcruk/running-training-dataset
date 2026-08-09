@@ -24,7 +24,7 @@ import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { RouterProvider } from '@tanstack/react-router'
-import { allRoutes, currentView, metaFor, setBase, setLang } from '../src/data.tsx'
+import { allRoutes, currentView, metaFor, setBase } from '../src/data.tsx'
 import { makeRouter } from '../src/router.tsx'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
@@ -32,7 +32,6 @@ const dist = resolve(root, 'dist')
 const BASE = process.env.BASE_PATH || '/running-training-dataset/'
 
 setBase(BASE)
-setLang('ko')
 
 /**
  * The built shell: Vite has already injected the hashed asset tags into it. Reuse

@@ -12,7 +12,7 @@ import {
 } from './primitives.tsx'
 import type { System } from '../types/index.d.ts'
 import type { Distribution, Phase, SwitchingCost, VolumeCap } from '../types/system.d.ts'
-import type { Translatable, WithCtx } from '../types/view.ts'
+import type { WithCtx } from '../types/view.ts'
 
 /**
  * The system entry - the browsing unit. Leads with the bet and the evidence
@@ -20,7 +20,7 @@ import type { Translatable, WithCtx } from '../types/view.ts'
  * never make a `tradition` system look as settled as a `consensus` one.
  */
 export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
-  const { t, lang, bySystem, fmt } = ctx
+  const { bySystem, fmt } = ctx
   const s = bySystem[id]
   if (!s) return null
   const c = s.commitment || {}
@@ -28,7 +28,7 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
   return (
     <>
       <EntryLink className="back" to="">
-        ← {lang === 'ko' ? '체계 목록' : 'systems'}
+        ← {'체계 목록'}
       </EntryLink>
       <article className="detail">
         <div className="detail-head">
@@ -40,72 +40,62 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
             </p>
           </div>
           <span className="badges">
-            <TierBadge ctx={ctx} tier={s.evidence?.tier} />
-            <ProvenanceBadge ctx={ctx} provenance={s.provenance} />
+            <TierBadge tier={s.evidence?.tier} />
+            <ProvenanceBadge provenance={s.provenance} />
           </span>
         </div>
-        <p className="bet big">{t(s.bet)}</p>
+        <p className="bet big">{s.bet}</p>
 
         {s.claim?.proposition && (
           <Block
             className="claim"
             title={
               <>
-                {lang === 'ko' ? '주장' : 'Claim'} <TierBadge ctx={ctx} tier={s.evidence?.tier} />
+                {'주장'} <TierBadge tier={s.evidence?.tier} />
               </>
             }
           >
-            <p className="proposition">{t(s.claim.proposition)}</p>
-            {s.claim.mechanism && <p>{t(s.claim.mechanism)}</p>}
+            <p className="proposition">{s.claim.proposition}</p>
+            {s.claim.mechanism && <p>{s.claim.mechanism}</p>}
             <CiteList evidence={s.evidence} />
           </Block>
         )}
 
-        <SourceBlock ctx={ctx} source={s.source} provenance={s.provenance} />
+        <SourceBlock source={s.source} provenance={s.provenance} />
 
-        <Block title={lang === 'ko' ? '철학' : 'Philosophy'}>
-          <p>{t(s.philosophy)}</p>
+        <Block title={'철학'}>
+          <p>{s.philosophy}</p>
         </Block>
 
-        <Block title={lang === 'ko' ? '실행 조건' : 'Commitment'}>
+        <Block title={'실행 조건'}>
           <div className="chips">
             {fmt.sessions(c.sessions_per_week) && (
-              <InfoChip ctx={ctx} tip={ctx.commitTips.sessions}>
+              <InfoChip tip={ctx.commitTips.sessions}>
                 {`${fmt.sessions(c.sessions_per_week)}/wk`}
               </InfoChip>
             )}
             {c.min_weekly_km && (
-              <InfoChip ctx={ctx} tip={ctx.commitTips.volume}>{`≥ ${fmt.km(
-                c.min_weekly_km,
-              )}`}</InfoChip>
+              <InfoChip tip={ctx.commitTips.volume}>{`≥ ${fmt.km(c.min_weekly_km)}`}</InfoChip>
             )}
             {fmt.weeks(c.plan_length_weeks) && (
-              <InfoChip ctx={ctx} tip={ctx.commitTips.weeks}>
-                {fmt.weeks(c.plan_length_weeks)}
-              </InfoChip>
+              <InfoChip tip={ctx.commitTips.weeks}>{fmt.weeks(c.plan_length_weeks)}</InfoChip>
             )}
             {c.requires_track != null && (
-              <InfoChip ctx={ctx} tip={ctx.commitTips.track}>
-                {c.requires_track
-                  ? lang === 'ko'
-                    ? '트랙 필요'
-                    : 'track'
-                  : lang === 'ko'
-                    ? '트랙 불필요'
-                    : 'no track'}
+              <InfoChip tip={ctx.commitTips.track}>
+                {c.requires_track ? '트랙 필요' : '트랙 불필요'}
               </InfoChip>
             )}
           </div>
-          {c.note && <p className="note">{t(c.note)}</p>}
+          {c.note && <p className="note">{c.note}</p>}
         </Block>
 
         <MeasurementBlock ctx={ctx} models={[s.intensity_model]} fallbackFor={s.intensity_model} />
 
         <SwitchingCost ctx={ctx} system={s} />
-        <Distribution ctx={ctx} distribution={s.distribution} />
+        <Distribution distribution={s.distribution} />
         <Phases ctx={ctx} phases={s.phases} />
-        <VolumeCaps ctx={ctx} caps={s.volume_caps} />
-        <Caveats ctx={ctx} caveats={s.caveats} />
+        <VolumeCaps caps={s.volume_caps} />
+        <Caveats caveats={s.caveats} />
       </article>
     </>
   )
@@ -116,50 +106,41 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
  * changes. `anchor_change` is derived from intensity_model, so it is machine-verified.
  */
 function SwitchingCost({ ctx, system }: WithCtx & { system: System }) {
-  const { t, lang, bySystem } = ctx
+  const { bySystem } = ctx
   const entries = system.switching_cost || []
   if (!entries.length) return null
   return (
     <Block
-      title={lang === 'ko' ? '전환 비용' : 'Switching cost'}
+      title={'전환 비용'}
       sub={
-        lang === 'ko'
-          ? '다른 체계에서 넘어올 때 강도 앵커가 조용히 바뀐다. anchor_change는 intensity_model에서 유도돼 기계 검증된다.'
-          : 'Switching silently swaps your intensity anchor. anchor_change is derived from intensity_model, so it is machine-verified.'
+        '다른 체계에서 넘어올 때 강도 앵커가 조용히 바뀐다. anchor_change는 intensity_model에서 유도돼 기계 검증된다.'
       }
     >
       {entries.map((x: SwitchingCost, i: number) => (
         <div className="switch" key={`${x.from}-${i}`}>
           <div className="switch-head">
             <span className="switch-from">
-              {lang === 'ko' ? '전환 출발' : 'coming from'}:{' '}
+              {'전환 출발'}:{' '}
               <EntryLink to={`system/${x.from}`}>{bySystem[x.from]?.name || x.from}</EntryLink>
             </span>
             <span className={`switch-flag ${x.silent ? 'silent' : 'loud'}`}>
-              {x.silent
-                ? lang === 'ko'
-                  ? '조용함'
-                  : 'silent'
-                : lang === 'ko'
-                  ? '드러남'
-                  : 'overt'}
+              {x.silent ? '조용함' : '드러남'}
             </span>
           </div>
           <code className="anchor">{x.anchor_change}</code>
-          <p>{t(x.note)}</p>
+          <p>{x.note}</p>
         </div>
       ))}
     </Block>
   )
 }
 
-function Distribution({ ctx, distribution }: WithCtx & { distribution?: Distribution }) {
-  const { lang } = ctx
+function Distribution({ distribution }: { distribution?: Distribution }) {
   if (!distribution) return null
   return (
-    <Block title={lang === 'ko' ? '강도 분포' : 'Distribution'}>
+    <Block title={'강도 분포'}>
       <p>
-        <code>{distribution.model}</code> <TierBadge ctx={ctx} tier={distribution.evidence?.tier} />
+        <code>{distribution.model}</code> <TierBadge tier={distribution.evidence?.tier} />
       </p>
       {distribution.zones && (
         <ul className="zones">
@@ -176,10 +157,10 @@ function Distribution({ ctx, distribution }: WithCtx & { distribution?: Distribu
 }
 
 function Phases({ ctx, phases }: WithCtx & { phases?: Phase[] }) {
-  const { lang, byWorkout } = ctx
+  const { byWorkout } = ctx
   if (!phases?.length) return null
   return (
-    <Block title={lang === 'ko' ? '주기별 강조 워크아웃' : 'Phase emphasis'}>
+    <Block title={'주기별 강조 워크아웃'}>
       <div className="phases">
         {phases.map((p: Phase) => (
           <div className="phase" key={p.name}>
@@ -198,16 +179,15 @@ function Phases({ ctx, phases }: WithCtx & { phases?: Phase[] }) {
   )
 }
 
-function VolumeCaps({ ctx, caps }: WithCtx & { caps?: VolumeCap[] }) {
-  const { t, lang } = ctx
+function VolumeCaps({ caps }: { caps?: VolumeCap[] }) {
   if (!caps?.length) return null
   return (
-    <Block title={lang === 'ko' ? '볼륨 캡' : 'Volume caps'}>
+    <Block title={'볼륨 캡'}>
       <table className="caps">
         <thead>
           <tr>
             <th>zone</th>
-            <th>{lang === 'ko' ? '규칙' : 'rule'}</th>
+            <th>{'규칙'}</th>
             <th>tier</th>
           </tr>
         </thead>
@@ -217,9 +197,9 @@ function VolumeCaps({ ctx, caps }: WithCtx & { caps?: VolumeCap[] }) {
               <td>
                 <code>{v.zone}</code>
               </td>
-              <td>{t(v.rule)}</td>
+              <td>{v.rule}</td>
               <td>
-                <TierBadge ctx={ctx} tier={v.evidence?.tier} />
+                <TierBadge tier={v.evidence?.tier} />
               </td>
             </tr>
           ))}
@@ -229,14 +209,13 @@ function VolumeCaps({ ctx, caps }: WithCtx & { caps?: VolumeCap[] }) {
   )
 }
 
-function Caveats({ ctx, caveats }: WithCtx & { caveats?: Translatable[] }) {
-  const { t, lang } = ctx
+function Caveats({ caveats }: { caveats?: string[] }) {
   if (!caveats?.length) return null
   return (
-    <Block className="caveats" title={lang === 'ko' ? '주의' : 'Caveats'}>
+    <Block className="caveats" title={'주의'}>
       <ul>
         {caveats.map((c, i: number) => (
-          <li key={i}>{t(c)}</li>
+          <li key={i}>{c}</li>
         ))}
       </ul>
     </Block>

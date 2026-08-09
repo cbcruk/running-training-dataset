@@ -5,27 +5,16 @@
  */
 import type { Adaptation, Anchor, System, Usage, Workout } from './index.d.ts'
 
-/** A bilingual field as it appears throughout the data. */
-export interface I18n {
-  ko?: string
-  en?: string
-}
-
-export type Lang = 'ko' | 'en'
-
-/** A bilingual value, or a plain string that needs no translation. */
-export type Translatable = I18n | string | null | undefined
-
 /** The physical quantity an anchor reads. Grouping shows the axes without bridging them. */
 export interface Construct {
   id: string
-  label: I18n
-  note: I18n
+  label: string
+  note: string
 }
 
 export interface AdaptCategory {
   id: string
-  label: I18n
+  label: string
 }
 
 /** A workout that lists a given anchor, and whether it is that workout's primary. */
@@ -39,7 +28,7 @@ export interface AnchorSwitch {
   to: string
   from: string
   silent?: boolean
-  note?: I18n
+  note?: string
   from_anchor?: string
   side: 'in' | 'out'
 }
@@ -53,8 +42,6 @@ export interface AnchorSwitch {
  * without booting the app.
  */
 export interface ViewContext {
-  t: (v: Translatable) => string
-  lang: Lang
   /** Base-prefixed href for an internal path, e.g. `url("anchor/rpe_10")`. */
   url: (path: string) => string
 
@@ -70,9 +57,9 @@ export interface ViewContext {
   usage: Usage[]
 
   constructs: Construct[]
-  constructLabel: Record<string, I18n>
+  constructLabel: Record<string, string>
   adaptCategories: AdaptCategory[]
-  commitTips: Record<'sessions' | 'volume' | 'weeks' | 'track', I18n>
+  commitTips: Record<'sessions' | 'volume' | 'weeks' | 'track', string>
 
   fmt: {
     km: (n: number | null | undefined) => string
