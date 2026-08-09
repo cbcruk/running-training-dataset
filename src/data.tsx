@@ -126,8 +126,8 @@ const CONSTRUCT_LABEL = Object.fromEntries(ANCHOR_CONSTRUCTS.map((c) => [c.id, c
  */
 const COMMIT_TIPS = {
   sessions:
-    '주당 훈련 세션 수 — 이 체계를 실행하는 데 필요한 주간 빈도다. 더블(하루 2회)이면 세션 수가 훈련일 수보다 많다.',
-  volume: '권장 최소 주간 주행거리(km). 이 밑으로 내려가면 체계의 전제가 약해진다.',
+    '주당 훈련 세션 수 — 이 훈련법을 실행하는 데 필요한 주간 빈도다. 더블(하루 2회)이면 세션 수가 훈련일 수보다 많다.',
+  volume: '권장 최소 주간 주행거리(km). 이 밑으로 내려가면 훈련법의 전제가 약해진다.',
   weeks: '권장 계획 길이(주).',
   track: '트랙이 필요한지 여부. 필요한 이유는 반복 구간을 정확히 재기 위해서다.',
 }
@@ -205,7 +205,7 @@ export function metaFor(path: string): { title: string; description: string } {
   return {
     title: SITE,
     description: clip(
-      '러닝 훈련 체계 카탈로그. 각 체계가 무엇에 베팅하는지, 실행 비용은 얼마인지, 실제로 알려진 것은 어디까지인지. 모든 행은 draft다.',
+      '러닝 훈련법 카탈로그. 각 훈련법이 무엇에 베팅하는지, 실행 비용은 얼마인지, 실제로 알려진 것은 어디까지인지. 모든 행은 draft다.',
     ),
   }
 }

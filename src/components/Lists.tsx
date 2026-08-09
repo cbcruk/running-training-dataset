@@ -95,7 +95,7 @@ export function AnchorCard({ ctx, anchor: a }: WithCtx & { anchor: Anchor }) {
       <p className="anchor-label">{a.label}</p>
       <p className="req">{a.requires}</p>
       <div className="chips">
-        <span className="chip">{`${'체계'} ${sys}`}</span>
+        <span className="chip">{`${'훈련법'} ${sys}`}</span>
         <span className="chip">{`${'워크아웃'} ${wk}`}</span>
       </div>
     </EntryLink>
@@ -108,7 +108,7 @@ export function SystemList({ ctx }: WithCtx) {
     <>
       <section className="intro">
         <p>
-          러닝 훈련 체계 목록이다. 카드마다 <b>bet</b>(무엇에 걸었는지, 한 문장)·
+          러닝 훈련법 목록이다. 카드마다 <b>bet</b>(무엇에 걸었는지, 한 문장)·
           <b>실행 조건</b>·<b>근거 등급</b>이 먼저 나온다. 등급을 카드에 둔 이유는 간단하다: 여러
           개를 훑다 보면 그냥 다들 하는 것(관행)이 밝혀진 것(정설)처럼 보이기 쉽다.
         </p>
@@ -155,7 +155,7 @@ export function AnchorList({ ctx }: WithCtx) {
       <section className="intro">
         <p>
           <>
-            앵커는 &ldquo;얼마나 세게&rdquo;를 재는 방법이다. 모든 워크아웃과 체계가 여기에 매달려
+            앵커는 &ldquo;얼마나 세게&rdquo;를 재는 방법이다. 모든 워크아웃과 훈련법이 여기에 매달려
             있다. 무엇을 읽는지(<b>구성개념</b>)로 묶어놨지만, 같은 걸 읽어도 서로 환산되지는 않는다
             — 심박 70%와 예비량 70%는 다른 bpm이다. 장비가 없으면 결국 <code>rpe_10</code> 하나로
             내려온다. 환산이 아니라 하강이다.
@@ -243,7 +243,7 @@ export function SearchResults({ ctx, rawQ }: WithCtx & { rawQ: string }) {
 
       {sysHits.length > 0 && (
         <>
-          <h3 className="search-h">{'체계'}</h3>
+          <h3 className="search-h">{'훈련법'}</h3>
           <div className="grid">
             {sysHits.map((s) => (
               <SystemCard ctx={ctx} system={s} brief key={s.id} />

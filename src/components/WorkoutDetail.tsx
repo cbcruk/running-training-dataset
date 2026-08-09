@@ -218,11 +218,11 @@ function CollisionTable({ ctx, id }: WithCtx & { id: string }) {
   if (!uses.length) return null
 
   return (
-    <Block title={'체계별 명칭 (충돌 표)'}>
+    <Block title={'훈련법별 명칭 (충돌 표)'}>
       <table className="usage">
         <tbody>
           {uses.map((u: Usage, i: number) => {
-            const sysName = u.system ? bySystem[u.system]?.name || u.system : '체계 밖'
+            const sysName = u.system ? bySystem[u.system]?.name || u.system : '훈련법 밖'
             return (
               <tr className={u.collides ? 'collides' : ''} key={`${u.system ?? 'none'}-${i}`}>
                 <td>

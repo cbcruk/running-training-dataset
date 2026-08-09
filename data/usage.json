@@ -17,13 +17,13 @@
     "system": "daniels",
     "workout": "vo2max-intervals",
     "calls_it": "I pace intervals",
-    "note": "I 존은 VO2max 부근. Daniels는 세션당 볼륨 상한을 명시하는 드문 체계다."
+    "note": "I 존은 VO2max 부근. Daniels는 세션당 볼륨 상한을 명시하는 드문 훈련법이다."
   },
   {
     "system": "daniels",
     "workout": "strides",
     "calls_it": "Strides",
-    "note": "이름 충돌이 없는 드문 경우. 체계 간 합의된 몇 안 되는 용어다."
+    "note": "이름 충돌이 없는 드문 경우. 훈련법 간 합의된 몇 안 되는 용어다."
   },
   {
     "system": "hansons",
@@ -48,14 +48,14 @@
     "system": "hansons",
     "workout": "vo2max-intervals",
     "calls_it": "Speed workout",
-    "note": "'speed'가 VO2max 인터벌을 가리킨다. 다른 체계에서 speed는 보통 신경근 자극(스트라이드/R 페이스)이다."
+    "note": "'speed'가 VO2max 인터벌을 가리킨다. 다른 훈련법에서 speed는 보통 신경근 자극(스트라이드/R 페이스)이다."
   },
   {
     "system": "polarized-80-20",
     "workout": "easy-run",
     "calls_it": "Zone 1 run",
     "also_known_as": ["Low-intensity session", "LIT"],
-    "note": "존 1은 LT1 아래. 이 체계에서 easy-run은 세션의 약 80%를 차지하는 기본값이다."
+    "note": "존 1은 LT1 아래. 이 훈련법에서 easy-run은 세션의 약 80%를 차지하는 기본값이다."
   },
   {
     "system": "polarized-80-20",
@@ -69,7 +69,7 @@
     "workout": "easy-run",
     "calls_it": "Base run",
     "also_known_as": ["Zone 2 run", "Aerobic run"],
-    "note": "체계 밖의 일상 용어. 'Zone 2 run'의 존 번호는 어느 체계의 존인지 말하지 않는다는 점에서 이름 충돌보다 더 나쁘다."
+    "note": "훈련법 밖의 일상 용어. 'Zone 2 run'의 존 번호는 어느 훈련법의 존인지 말하지 않는다는 점에서 이름 충돌보다 더 나쁘다."
   },
   {
     "system": null,
@@ -96,14 +96,14 @@
     "workout": "long-run",
     "calls_it": "LSD",
     "also_known_as": ["Long slow distance", "Long steady run"],
-    "note": "'Long slow distance'의 slow가 강도를 지시하는 유일한 단어인데, 어느 체계의 느림인지는 말하지 않는다."
+    "note": "'Long slow distance'의 slow가 강도를 지시하는 유일한 단어인데, 어느 훈련법의 느림인지는 말하지 않는다."
   },
   {
     "system": null,
     "workout": "recovery-run",
     "calls_it": "Recovery run",
     "also_known_as": ["Recovery jog", "Shakeout"],
-    "note": "체계 밖 일상 용어. shakeout은 레이스 전날의 아주 짧은 회복런을 따로 가리키기도 한다."
+    "note": "훈련법 밖 일상 용어. shakeout은 레이스 전날의 아주 짧은 회복런을 따로 가리키기도 한다."
   },
   {
     "system": "daniels",
@@ -159,7 +159,7 @@
     "workout": "long-run",
     "calls_it": "Medium-long run",
     "also_known_as": ["Long run"],
-    "note": "Pfitzinger는 미디엄-롱런(약 15~23km)과 롱런(23km 이상)을 명시적으로 구분한다. 대부분의 체계가 뭉뚱그리는 지점을 쪼갠다."
+    "note": "Pfitzinger는 미디엄-롱런(약 15~23km)과 롱런(23km 이상)을 명시적으로 구분한다. 대부분의 훈련법이 뭉뚱그리는 지점을 쪼갠다."
   },
   {
     "system": "maf",
@@ -201,7 +201,7 @@
     "workout": "easy-run",
     "calls_it": "Zone 2",
     "also_known_as": ["Aerobic zone (60-70% HRR)"],
-    "note": "여기서 'Zone 2'는 60~70% HRR로 명확히 정의된다. 어느 체계의 존인지 말하지 않는 일상 용어 'Zone 2 run'과 정확히 대비되는 지점이다."
+    "note": "여기서 'Zone 2'는 60~70% HRR로 명확히 정의된다. 어느 훈련법의 존인지 말하지 않는 일상 용어 'Zone 2 run'과 정확히 대비되는 지점이다."
   },
   {
     "system": "canova",
@@ -215,7 +215,7 @@
     "workout": "long-run",
     "calls_it": "Run-walk long run",
     "also_known_as": ["Long run with walk breaks"],
-    "note": "같은 롱런이지만 계획된 걷기로 끊는다. GPS 평균 페이스가 걷기 때문에 다른 체계의 롱런과 직접 비교되지 않는다."
+    "note": "같은 롱런이지만 계획된 걷기로 끊는다. GPS 평균 페이스가 걷기 때문에 다른 훈련법의 롱런과 직접 비교되지 않는다."
   },
   {
     "system": "galloway",
@@ -236,7 +236,7 @@
     "workout": "threshold-continuous",
     "calls_it": "Key Run 2",
     "also_known_as": ["Tempo key run"],
-    "note": "FIRST의 둘째 키 런, 템포다. threshold-continuous는 이제 다섯 번째 이름을 얻는다 — 체계마다 같은 워크아웃을 다르게 부른다."
+    "note": "FIRST의 둘째 키 런, 템포다. threshold-continuous는 이제 다섯 번째 이름을 얻는다 — 훈련법마다 같은 워크아웃을 다르게 부른다."
   },
   {
     "system": "first-furman",
@@ -250,7 +250,7 @@
     "workout": "progression-run",
     "calls_it": "Progression run",
     "also_known_as": ["Fast-finish run", "Negative-split run"],
-    "note": "체계 밖 용어. 'negative split'은 결과(후반이 빠름)를, 'progression'은 방법을 가리킨다."
+    "note": "훈련법 밖 용어. 'negative split'은 결과(후반이 빠름)를, 'progression'은 방법을 가리킨다."
   },
   {
     "system": null,
@@ -319,7 +319,7 @@
     "workout": "time-trial",
     "calls_it": "CS test",
     "also_known_as": ["Critical speed test", "3-min / 12-min test"],
-    "note": "임계속도 체계에서는 여러 거리의 타임트라이얼이 CS와 W′을 세우는 측정 도구다."
+    "note": "임계속도 훈련법에서는 여러 거리의 타임트라이얼이 CS와 W′을 세우는 측정 도구다."
   },
   {
     "system": null,
@@ -333,7 +333,7 @@
     "workout": "cruise-intervals",
     "calls_it": "Double threshold",
     "also_known_as": ["AM/PM threshold", "Sub-threshold doubles"],
-    "note": "역치 인터벌을 하루 두 번(오전/오후)으로 나눠 수행하는 것이 이 체계의 서명이다. norwegian-singles는 같은 세션을 하루 한 번만 한다."
+    "note": "역치 인터벌을 하루 두 번(오전/오후)으로 나눠 수행하는 것이 이 훈련법의 서명이다. norwegian-singles는 같은 세션을 하루 한 번만 한다."
   },
   {
     "system": "moderate-primary",
@@ -341,7 +341,7 @@
     "calls_it": "Moderate run",
     "also_known_as": ["중강도 러닝", "Moderate running"],
     "collides": true,
-    "note": "이 체계에서 moderate run은 젖산 2mmol 이하·호흡 소리가 들리지 않는 선의 가장 빠른 페이스이고, 회복이 아니라 훈련 그 자체다. 같은 단어가 다른 코치에게는 회복용 이지런을 뜻한다."
+    "note": "이 훈련법에서 moderate run은 젖산 2mmol 이하·호흡 소리가 들리지 않는 선의 가장 빠른 페이스이고, 회복이 아니라 훈련 그 자체다. 같은 단어가 다른 코치에게는 회복용 이지런을 뜻한다."
   },
   {
     "system": null,
@@ -369,6 +369,6 @@
     "system": "moderate-primary",
     "workout": "easy-run",
     "calls_it": "Easy run",
-    "note": "이 체계에서 이지런은 중강도의 보조가 아니라 총 주행거리를 늘리는 유일한 수단이다. 마일리지를 강도로 늘릴 수 없다는 것이 명시적 규칙이다."
+    "note": "이 훈련법에서 이지런은 중강도의 보조가 아니라 총 주행거리를 늘리는 유일한 수단이다. 마일리지를 강도로 늘릴 수 없다는 것이 명시적 규칙이다."
   }
 ]
