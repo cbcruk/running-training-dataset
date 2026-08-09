@@ -104,7 +104,17 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
 /**
  * `silent` marks the dangerous case: a term survives the switch while its meaning
  * changes. `anchor_change` is derived from intensity_model, so it is machine-verified.
+ *
+ * It renders as two `AnchorCode`s rather than the raw `a -> b` string. The slug pair
+ * was dead text on the one page whose whole point is that the two sides mean
+ * different things; as anchor codes each side links to what it takes to measure and
+ * what is lost without it, which is the answer the reader came for.
  */
+const anchorSides = (change: string): [string, string] => {
+  const [from, to] = (change || '').split('->').map((v) => v.trim())
+  return [from, to]
+}
+
 function SwitchingCost({ ctx, system }: WithCtx & { system: System }) {
   const { bySystem } = ctx
   const entries = system.switching_cost || []
@@ -113,24 +123,38 @@ function SwitchingCost({ ctx, system }: WithCtx & { system: System }) {
     <Block
       title={'전환 비용'}
       sub={
-        '다른 체계에서 넘어올 때 강도 앵커가 조용히 바뀐다. anchor_change는 intensity_model에서 유도돼 기계 검증된다.'
+        '다른 체계를 하다 이리로 넘어올 때 무엇이 어긋나는지. 체계를 바꾸면 강도를 재는 기준이 함께 바뀌는데, 그게 조용히 바뀔 때가 위험하다 — 쓰던 말은 그대로인데 뜻만 달라지기 때문이다.'
       }
     >
-      {entries.map((x: SwitchingCost, i: number) => (
-        <div className="switch" key={`${x.from}-${i}`}>
-          <div className="switch-head">
-            <span className="switch-from">
-              {'전환 출발'}:{' '}
-              <EntryLink to={`system/${x.from}`}>{bySystem[x.from]?.name || x.from}</EntryLink>
-            </span>
-            <span className={`switch-flag ${x.silent ? 'silent' : 'loud'}`}>
-              {x.silent ? '조용함' : '드러남'}
-            </span>
+      {entries.map((x: SwitchingCost, i: number) => {
+        const [from, to] = anchorSides(x.anchor_change)
+        return (
+          <div className="switch" key={`${x.from}-${i}`}>
+            <div className="switch-head">
+              <span className="switch-from">
+                {'전환 출발'}:{' '}
+                <EntryLink to={`system/${x.from}`}>{bySystem[x.from]?.name || x.from}</EntryLink>
+              </span>
+              <span
+                className={`switch-flag ${x.silent ? 'silent' : 'loud'}`}
+                title={
+                  x.silent
+                    ? '쓰던 용어가 그대로 살아남아서 바뀐 걸 알아채기 어렵다. 그래서 더 위험하다.'
+                    : '바뀐 것이 바로 눈에 띈다. 적응할 기회가 있다.'
+                }
+              >
+                {x.silent ? '조용함' : '드러남'}
+              </span>
+            </div>
+            <p className="anchor-shift">
+              {'강도 기준'}: <AnchorCode ctx={ctx} model={from} />
+              {' → '}
+              <AnchorCode ctx={ctx} model={to} />
+            </p>
+            <p>{x.note}</p>
           </div>
-          <code className="anchor">{x.anchor_change}</code>
-          <p>{x.note}</p>
-        </div>
-      ))}
+        )
+      })}
     </Block>
   )
 }

@@ -468,9 +468,10 @@ main {
 .fallback-block h3 {
   margin-top: 0;
 }
-.anchor {
-  display: inline-block;
-  margin: 0.2rem 0 0.4rem;
+.anchor-shift {
+  margin: 0.2rem 0 0.5rem;
+  font-size: 0.88rem;
+  color: var(--muted);
 }
 
 /* ---- phases ---- */
