@@ -177,6 +177,7 @@ src/
   components/        # React 컴포넌트 (ADR 0002), Node에서도 문자열로 렌더된다
   main.tsx           # 브라우저 셸: 크롬, 키보드 조회, 최근 본 항목, SW
   style.css          # tier 배지는 시각적 무게를 갖는다. tradition이 consensus로 읽혀선 안 된다
+CONTEXT.md           # 용어집: 이 프로젝트가 쓰는 말과 쓰지 않는 말
 docs/
   TODO.md            # 작업 목록: 검증, 대칭성, 얕은 필드
   verification.md    # 생성물 - 각 소스가 무엇을 뒷받침해야 하는지, 행 단위로
