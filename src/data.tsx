@@ -1,15 +1,14 @@
 /**
- * Data access and route metadata.
+ * 데이터 접근과 라우트 메타데이터.
  *
- * The markup lives in src/components/, the route tree in src/router.tsx. What is
- * here is what both need and neither owns: the JSON loaded and asserted into the
- * generated schema types, the reverse indexes, the bilingual helper, and the
- * per-entry <title>/description the prerenderer writes.
+ * 마크업은 src/components/에, 라우트 트리는 src/router.tsx에 있다. 여기 있는 것은 둘 다
+ * 필요로 하지만 어느 쪽도 소유하지 않는 것들이다. 생성된 스키마 타입으로 단언해 읽은
+ * JSON, 역인덱스, 그리고 프리렌더러가 쓰는 엔트리별 <title>/description.
  *
- * Epistemics live in the JSON; this file is convenience only. The one hard rule
- * it must honour (README "Known open problems"): the evidence tier goes on the
- * browse card, not buried in the detail view — so browsing ten systems can never
- * make a `tradition` system look as settled as a `consensus` one.
+ * 인식론은 JSON에 산다. 이 파일은 편의일 뿐이다. 다만 반드시 지켜야 하는 규칙 하나가
+ * 있다(README "알려진 미해결 문제"): 근거 등급은 브라우즈 카드에 있어야지 상세 뷰에
+ * 묻혀서는 안 된다 — 그래야 훈련법 열 개를 훑어도 `tradition`이 `consensus`처럼 정착된
+ * 것으로 보이지 않는다.
  */
 import systemsRaw from '../data/systems.json' with { type: 'json' }
 import workoutsRaw from '../data/workouts.json' with { type: 'json' }
@@ -26,9 +25,9 @@ import type {
 } from './types/view.ts'
 
 /**
- * The schemas are the source of truth for these shapes; the types next to this
- * file are generated from them (scripts/types.ts). The JSON is asserted into
- * them rather than inferred, so a schema change surfaces here as a type error.
+ * 이 모양들의 진실의 원천은 스키마이고, 이 파일 옆의 타입은 거기서 생성된다
+ * (scripts/types.ts). JSON은 추론되는 대신 그 타입으로 단언되므로, 스키마 변경이 여기서
+ * 타입 오류로 드러난다.
  */
 const systems = systemsRaw as unknown as System[]
 const workouts = workoutsRaw as unknown as Workout[]
@@ -44,9 +43,9 @@ const byAdaptation: Record<string, Adaptation> = Object.fromEntries(
 )
 
 /**
- * Reverse indexes so an anchor page can show everything that references it:
- * which systems anchor on it, which workouts list it (and where it is primary),
- * and every switching_cost whose anchor_change touches it on either side.
+ * 앵커 페이지가 자기를 참조하는 모든 것을 보여줄 수 있도록 만든 역인덱스. 어떤 훈련법이
+ * 거기에 매달리는지, 어떤 워크아웃이 그것을 싣는지(그리고 어디서 주앵커인지), 그리고
+ * anchor_change가 어느 쪽으로든 그것에 닿는 모든 switching_cost.
  */
 const systemsByAnchor: Record<string, System[]> = {}
 for (const s of systems) (systemsByAnchor[s.intensity_model] ??= []).push(s)
@@ -68,8 +67,8 @@ for (const s of systems)
   }
 
 /**
- * Anchor constructs: the physical quantity each anchor reads. Grouping shows the
- * axes; the notes state that sharing a construct does NOT make anchors convert.
+ * 앵커 구성개념. 각 앵커가 읽는 물리량이다. 묶음은 축을 보여줄 뿐이고, 노트가 구성개념을
+ * 공유한다고 앵커가 서로 환산되지는 않는다고 말한다.
  */
 const ANCHOR_CONSTRUCTS: Construct[] = [
   {
@@ -94,7 +93,7 @@ const ANCHOR_CONSTRUCTS: Construct[] = [
   },
 ]
 
-/** Fixed display order for the adaptation taxonomy's coarse categories. */
+/** 적응 분류의 거친 범주를 표시하는 고정 순서. */
 const ADAPT_CATEGORIES: AdaptCategory[] = [
   { id: 'central-cardiovascular', label: '중심 심혈관' },
   { id: 'peripheral-aerobic', label: '말초 유산소' },
@@ -104,7 +103,7 @@ const ADAPT_CATEGORIES: AdaptCategory[] = [
   { id: 'skill', label: '기술' },
 ]
 
-/** Module state, set by whichever host is driving: the browser shell or the prerenderer. */
+/** 모듈 상태. 구동하는 쪽이 세운다 — 브라우저 셸이거나 프리렌더러. */
 let BASE = '/'
 
 export function setBase(next: string) {
@@ -114,15 +113,15 @@ export function setBase(next: string) {
 export const PLACEHOLDER = '검색: "tempo run", daniels, easy…'
 
 /**
- * A raw intensity_model / anchor.model code, made hoverable: the tooltip pulls
- * label + construct + what-it-takes-to-measure from anchors.json so a slug like
- * "lactate_mmol" explains itself in place.
+ * 날것의 intensity_model / anchor.model 코드를 호버 가능하게 만든다. 툴팁이 anchors.json
+ * 에서 라벨 + 구성개념 + 측정에 필요한 것을 끌어오므로 `lactate_mmol` 같은 슬러그가 그
+ * 자리에서 스스로를 설명한다.
  */
 const CONSTRUCT_LABEL = Object.fromEntries(ANCHOR_CONSTRUCTS.map((c) => [c.id, c.label]))
 
 /**
- * A commitment chip that explains its dimension on hover - the terse
- * "9-13x/wk" / "≥120km" say what, the tooltip says what it means.
+ * 호버하면 자기 차원을 설명하는 실행 조건 칩. 짧은 "9-13x/wk"·"≥120km"는 무엇인지를
+ * 말하고, 툴팁은 그것이 무슨 뜻인지를 말한다.
  */
 const COMMIT_TIPS = {
   sessions:
@@ -145,9 +144,9 @@ function weeksText(pl?: { value?: number; min?: number; max?: number }) {
 }
 
 /**
- * The route tree lives in src/router.tsx now. What stays here is what the router
- * does not own: which nav tab a path belongs to, the per-entry <title> and
- * description the prerenderer writes, and the list of routes to emit.
+ * 라우트 트리는 이제 src/router.tsx에 있다. 여기 남는 것은 라우터가 소유하지 않는
+ * 것들이다. 어떤 경로가 어느 내비 탭에 속하는지, 프리렌더러가 쓰는 엔트리별 <title>과
+ * description, 그리고 내보낼 라우트 목록.
  */
 export function currentView(path: string): string {
   const p = path || '/'
@@ -158,8 +157,8 @@ export function currentView(path: string): string {
 }
 
 /**
- * Per-entry <title> and description. This is the half of the dictionary that hash
- * routing could never serve: a crawler or link preview reads only these.
+ * 엔트리별 <title>과 description. 해시 라우팅이 결코 서빙할 수 없던 사전의 절반이다.
+ * 크롤러나 링크 프리뷰가 읽는 것은 이것뿐이다.
  */
 const SITE = 'Running Training Dataset'
 export function metaFor(path: string): { title: string; description: string } {
@@ -211,9 +210,8 @@ export function metaFor(path: string): { title: string; description: string } {
 }
 
 /**
- * Name an entry from its path. Used by the browser shell's recently-viewed strip,
- * which is per-reader and therefore never prerendered - the files on disk have to
- * stay identical for everyone.
+ * 경로에서 엔트리 이름을 만든다. 브라우저 셸의 최근 본 항목 띠가 쓰는데, 그것은 읽는
+ * 사람마다 다르므로 절대 프리렌더되지 않는다 — 디스크의 파일은 모두에게 같아야 한다.
  */
 export function entryLabel(path: string): { kind: string; label: string } | null {
   const parts = (path || '/').split('/').filter(Boolean)
@@ -228,7 +226,7 @@ export function entryLabel(path: string): { kind: string; label: string } | null
 
 export const RECENT_LABEL = '최근 본 항목'
 
-/** Every route the prerenderer emits - one file per dictionary entry. */
+/** 프리렌더러가 내보내는 모든 라우트. 사전 엔트리당 파일 하나. */
 export function allRoutes() {
   return [
     '/',
@@ -241,13 +239,11 @@ export function allRoutes() {
 }
 
 /**
- * Everything a view needs that it should not go and fetch for itself: the rows,
- * the reverse indexes, the display vocabularies and the language-bound `t`.
+ * 뷰가 필요로 하지만 스스로 가지러 가서는 안 되는 것 전부. 행들, 역인덱스, 표시용 어휘.
  *
- * It exists because the views used to be template literals in this file and read
- * all of that off the module-level closure. Once they became components they had
- * to be handed it instead, and passing one `ctx` is what let the migration run a
- * view at a time rather than as a big-bang rewrite.
+ * 이것이 있는 이유는 뷰가 예전에 이 파일 안의 템플릿 리터럴이었고 그 모든 것을 모듈
+ * 수준 클로저에서 읽었기 때문이다. 컴포넌트가 되고 나서는 건네받아야 했고, `ctx` 하나를
+ * 넘기는 방식이 마이그레이션을 한 번에 뒤엎는 대신 뷰 하나씩 진행할 수 있게 했다.
  */
 export function viewContext(): ViewContext {
   return {

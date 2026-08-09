@@ -1,20 +1,19 @@
 /**
- * The browse surfaces: the three lists, the search results, and not-found.
+ * 브라우즈 표면. 목록 셋, 검색 결과, 그리고 not-found.
  *
- * The cards are shared between a list and the search results, which is exactly
- * the duplication the template-literal version had to open-code twice.
+ * 카드는 목록과 검색 결과가 공유한다. 템플릿 리터럴 판본이 두 번 펼쳐 써야 했던 바로 그
+ * 중복이다.
  */
 import { EntryLink, ProvenanceBadge, TierBadge } from './primitives.tsx'
 import type { Anchor, System, Workout } from '../types/index.d.ts'
 import type { WithCtx } from '../types/view.ts'
 
 /**
- * Tier goes on the card, never only in the detail view - the README's one hard UI
- * rule, so browsing ten systems cannot make `tradition` look like `consensus`.
- * Provenance rides beside it for the same reason: most rows have no recorded
- * source, and a blank one made an undocumented row indistinguishable from a
- * documented one while browsing. Both entities carry the pair, so a reader never
- * has to know which kind of card they are looking at to read the badges.
+ * 등급은 카드에 올라간다. 상세 뷰에만 두는 일은 없다 — README의 유일한 강한 UI 규칙이고,
+ * 그래야 훈련법 열 개를 훑어도 `tradition`이 `consensus`처럼 보이지 않는다. 출처 상태가
+ * 그 옆에 붙는 이유도 같다. 대부분의 행에 기록된 source가 없고, 빈칸은 브라우징 중에
+ * 문서화되지 않은 행을 문서화된 행과 구별할 수 없게 만들었다. 두 엔티티가 모두 이 쌍을
+ * 달고 있으므로, 읽는 사람은 자기가 어떤 종류의 카드를 보는지 몰라도 배지를 읽을 수 있다.
  */
 export function SystemCard({
   ctx,
@@ -179,8 +178,8 @@ export function AnchorList({ ctx }: WithCtx) {
 }
 
 /**
- * The naming-join headline: one colloquial term ("tempo run") resolving to more
- * than one workout is the collision the dataset exists to make visible.
+ * 네이밍 조인의 헤드라인. 통칭 하나("tempo run")가 둘 이상의 워크아웃으로 풀리는 것이,
+ * 이 데이터셋이 보이게 만들려고 존재하는 충돌이다.
  */
 export function SearchResults({ ctx, rawQ }: WithCtx & { rawQ: string }) {
   const { systems, workouts, anchors, usage, byWorkout, bySystem } = ctx

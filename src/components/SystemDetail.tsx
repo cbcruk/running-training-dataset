@@ -15,9 +15,9 @@ import type { Distribution, Phase, SwitchingCost, VolumeCap } from '../types/sys
 import type { WithCtx } from '../types/view.ts'
 
 /**
- * The system entry - the browsing unit. Leads with the bet and the evidence
- * tier, because the README's one hard UI rule is that browsing ten systems must
- * never make a `tradition` system look as settled as a `consensus` one.
+ * 훈련법 엔트리. 브라우징 단위다. bet과 근거 등급을 앞세우는 이유는, 훈련법 열 개를
+ * 훑어도 `tradition`이 `consensus`만큼 정착된 것으로 보여서는 안 된다는 것이 README의
+ * 유일한 강한 UI 규칙이기 때문이다.
  */
 export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
   const { bySystem, fmt } = ctx
@@ -102,13 +102,13 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
 }
 
 /**
- * `silent` marks the dangerous case: a term survives the switch while its meaning
- * changes. `anchor_change` is derived from intensity_model, so it is machine-verified.
+ * `silent`은 위험한 경우를 표시한다. 용어가 전환에서 살아남으면서 뜻만 바뀌는 것.
+ * `anchor_change`는 intensity_model에서 유도되므로 기계 검증된다.
  *
- * It renders as two `AnchorCode`s rather than the raw `a -> b` string. The slug pair
- * was dead text on the one page whose whole point is that the two sides mean
- * different things; as anchor codes each side links to what it takes to measure and
- * what is lost without it, which is the answer the reader came for.
+ * 날것의 `a -> b` 문자열 대신 `AnchorCode` 둘로 렌더한다. 슬러그 쌍은, 양쪽이 서로 다른
+ * 것을 뜻한다는 것이 요점의 전부인 바로 그 페이지에서 죽은 텍스트였다. 앵커 코드로 만들면
+ * 양쪽이 각각 무엇을 재야 하는지와 그것 없이 무엇을 잃는지로 이어지고, 그게 독자가 보러
+ * 온 답이다.
  */
 const anchorSides = (change: string): [string, string] => {
   const [from, to] = (change || '').split('->').map((v) => v.trim())

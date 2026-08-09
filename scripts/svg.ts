@@ -4,10 +4,10 @@ import type { Anchor, Quantity, Segment } from '../src/types/workout.d.ts'
 type ById = Record<string, Workout>
 
 /**
- * The y-axis. `rpe_10` is schema-mandated (contains/minContains/maxContains), so
- * this cannot miss - and it is the LEAST precise anchor the data has, which makes
- * the vertical axis subjective by construction. The chart looks precise on both
- * axes and is schematic on both; label it accordingly.
+ * y축. `rpe_10`은 스키마가 강제하므로(contains/minContains/maxContains) 여기서 빗나갈 수
+ * 없다 — 그리고 그것은 이 데이터가 가진 가장 부정확한 앵커라, 세로축이 구조적으로
+ * 주관적이 된다. 차트는 두 축 모두 정밀해 보이지만 두 축 모두 도식이다. 라벨이 그렇게
+ * 말하게 할 것.
  */
 const rpe = (w: Workout): number => {
   const a = w.intensity.anchors.find((x: Anchor) => x.model === 'rpe_10')!
@@ -16,12 +16,11 @@ const rpe = (w: Workout): number => {
 const resolveRpe = (ref: string, self: Workout, byId: ById): number =>
   ref === 'self' ? rpe(self) : rpe(byId[ref])
 
-/** Layout only. NOT a pace model. Distance segments need a runner to become time; we fake one. */
+/** 배치 전용. 페이스 모델이 아니다. 거리 구간이 시간이 되려면 러너가 필요하고, 여기선 가정한다. */
 const NOMINAL_MPS = (r: number) => 2.4 + (r / 10) * 2.6
 /**
- * The schema requires either `value` or a `min`/`max` pair (oneOf), and
- * validate.ts enforces it, so the generated optional types are wider than the
- * data can actually be.
+ * 스키마는 `value` 또는 `min`/`max` 쌍 중 하나를 요구하고(oneOf) validate.ts가 그것을
+ * 강제하므로, 생성된 옵셔널 타입이 실제 데이터가 가질 수 있는 범위보다 넓다.
  */
 const mid = (q: Quantity): number => (q.value != null ? q.value : (q.min! + q.max!) / 2)
 
@@ -56,12 +55,11 @@ const COLOR: Record<string, string> = {
 }
 
 /**
- * `structure` -> a schematic SVG string. `byId` resolves `intensity_ref` -> workout.
+ * `structure` -> 도식 SVG 문자열. `byId`가 `intensity_ref` -> 워크아웃을 풀어준다.
  *
- * The media this project ships is a derivative of its data, not a licensed asset,
- * which is what makes it free to keep. Pure - no filesystem, no globals - so the
- * CLI (render.ts) and the browser UI can both call it and the visual stays one
- * function of the data in both places.
+ * 이 프로젝트가 싣는 미디어는 라이선스한 자산이 아니라 자기 데이터의 파생물이고, 그래서
+ * 계속 들고 있는 것이 공짜다. 순수하다 — 파일시스템도 전역도 없다 — 그래서 CLI(render.ts)와
+ * 브라우저 UI가 둘 다 호출할 수 있고, 시각물은 양쪽에서 데이터의 한 함수로 남는다.
  */
 export function renderWorkout(w: Workout, byId: ById): string {
   const segs = flatten(w.structure.segments, w, byId)
