@@ -235,7 +235,7 @@ export function MeasurementBlock({
     <Block
       title={'측정 요건'}
       sub={
-        '앵커는 읽는 구성개념(지각·페이스·심박·대사)으로 묶인다. 같은 구성개념이라도 서로 변환되지 않으며, 장비가 없으면 결국 장비 없이 누구나 쓸 수 있는 유일한 기준인 RPE로 떨어진다 — 변환이 아니라 하강이다.'
+        '앵커는 무엇을 읽는지(구성개념: 지각·페이스·심박·대사)로 묶인다. 같은 걸 읽어도 서로 환산되지 않고, 장비가 없으면 결국 RPE 하나로 내려온다. 장비 없이 누구나 쓸 수 있는 유일한 기준이기 때문이다 — 환산이 아니라 하강이다.'
       }
     >
       <div className="measure-groups">
@@ -290,7 +290,7 @@ export function AdaptationsBlock({ ctx, ids }: WithCtx & { ids: string[] }) {
     <Block
       title={'표적 적응'}
       sub={
-        '이 워크아웃이 노린다고 주장하는 생리적 적응 — 결과가 아니라 표적이다. 정의는 마우스를 올려서.'
+        '이 워크아웃이 노린다고 주장하는 생리적 적응 — 결과가 아니라 표적이다. 정의는 마우스를 올리면 나온다.'
       }
     >
       <div className="adapt-groups">
