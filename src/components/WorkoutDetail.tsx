@@ -63,9 +63,9 @@ export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
         </Block>
 
         <Block
-          title={'강도 앵커'}
+          title={'강도 지정'}
           sub={
-            '앵커는 깔끔히 변환되지 않아 각자 confidence를 갖는다. rpe_10은 정확히 하나여야 한다 — 유일한 보편 교환 축.'
+            '앵커 하나당 강도 지정 하나. 앵커끼리는 환산되지 않으므로 지정마다 얼마나 정확한지(confidence)가 따로 붙는다. rpe_10 지정은 정확히 하나여야 한다 — 장비 없이 쓸 수 있는 유일한 축이라 모든 워크아웃의 공통 기준이 된다.'
           }
         >
           <table className="anchors">
