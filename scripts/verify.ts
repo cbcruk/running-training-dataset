@@ -13,64 +13,54 @@
 // Generated and committed, like src/types/, so it cannot silently go stale as
 // rows are added. Regenerate with `vp run verify`.
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { load } from "./dataset.ts";
+import { assertions } from "./evidence.ts";
+import type { Assertion, AssertionKind } from "./evidence.ts";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Row = any;
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const j = (p: string): any => JSON.parse(readFileSync(resolve(root, p), "utf8"));
-const workouts = j("data/workouts.json");
-const systems = j("data/systems.json");
+const data = load(root);
+const { workouts, systems, usage, anchors, adaptations } = data;
+const rows = [...workouts, ...systems];
 
 interface Use {
   row: string;
   where: string;
   tier: string;
   assertion: string;
+  kind: AssertionKind;
 }
 const byCite: Record<string, Use[]> = {};
 
 const pick = (v: Row): string => (typeof v === "string" ? v : (v?.en ?? v?.ko ?? ""));
 
-function walk(node: Row, row: string, path: string, inherited: string) {
-  if (Array.isArray(node)) {
-    node.forEach((v, i) => walk(v, row, `${path}[${i}]`, inherited));
-    return;
-  }
-  if (!node || typeof node !== "object") return;
+// The nearest falsifiable sentence, marked with what kind of sentence it is. A
+// test's is not a physiological finding and an undetectable test's is a statement
+// about why nothing would settle it, so a verifier needs to know which they are
+// reading before they open the source.
+const label = (a: Assertion): string => {
+  const text = pick(a.proposition);
+  if (!text) return "";
+  if (a.kind === "test") return `(test) ${text}`;
+  if (a.kind === "unobservable-test") return `(unobservable test) ${text}`;
+  return text;
+};
 
-  // The nearest falsifiable sentence. An undetectable test has no `what`, so fall
-  // back to its mechanism - that is what a reader would be checking the source for.
-  const assertion = node.proposition
-    ? pick(node.proposition)
-    : node.what
-      ? `(test) ${pick(node.what)}`
-      : node.detectable === false && node.mechanism
-        ? `(unobservable test) ${pick(node.mechanism)}`
-        : inherited;
-
-  if (node.evidence?.cite) {
-    for (const c of node.evidence.cite) {
+for (const row of rows)
+  for (const a of assertions(row))
+    for (const c of a.evidence.cite ?? [])
       (byCite[c] ??= []).push({
-        row,
-        where: path || "(row itself)",
-        tier: node.evidence.tier,
-        assertion,
+        row: row.id,
+        where: a.path || "(row itself)",
+        tier: a.evidence.tier,
+        assertion: label(a),
+        kind: a.kind,
       });
-    }
-  }
-  for (const [k, v] of Object.entries(node)) {
-    if (k !== "evidence") walk(v, row, path ? `${path}.${k}` : k, assertion);
-  }
-}
-
-for (const w of workouts) walk(w, w.id, "", "");
-// A system's claim sits beside its evidence rather than inside it, so seed the
-// walk with it - otherwise the row's own proposition never reaches its cite.
-for (const s of systems) walk(s, s.id, "", s.claim?.proposition ? pick(s.claim.proposition) : "");
 
 const cites = Object.keys(byCite).sort();
 const tierCount: Record<string, number> = {};
@@ -132,13 +122,13 @@ const consensus = cites.filter((c) => byCite[c].some((u) => u.tier === "consensu
 const unobservable: string[] = [];
 for (const c of cites)
   for (const u of byCite[c])
-    if (u.assertion.startsWith("(unobservable test)") && u.tier !== "tradition")
+    if (u.kind === "unobservable-test" && u.tier !== "tradition")
       unobservable.push(`\`${u.row}\` (${u.tier}) — ${c}`);
 
 // `source` entries are provenance, not evidence, so they are deliberately absent
 // from everything above - there is no claim to check them against. Listing them
 // keeps that a stated choice rather than a silent omission.
-const sourced = [...workouts, ...systems].filter((r: Row) => r.source?.length);
+const sourced = rows.filter((r: Row) => r.source?.length);
 lines.push("---", "", "## Not in scope: provenance", "");
 lines.push(
   "These references are `source`, not `cite`: they record what a system *prescribes*,",
@@ -200,30 +190,22 @@ writeFileSync(resolve(root, "docs/verification.md"), lines.join("\n"));
 // into it. Hand-written totals had already gone stale once - the README described
 // two undetectable tests when there were thirteen - and prose that has to be
 // re-counted by hand after every tier change will go stale again.
-const usage = j("data/usage.json");
-const anchors = j("data/anchors.json");
-const adaptations = j("data/adaptations.json");
-
-const tally = (rows: Row[], of: (r: Row) => string | undefined): Record<string, number> => {
+const tally = (list: Row[], of: (r: Row) => string | undefined): Record<string, number> => {
   const out: Record<string, number> = {};
-  for (const r of rows) {
+  for (const r of list) {
     const k = of(r);
     if (k) out[k] = (out[k] ?? 0) + 1;
   }
   return out;
 };
-const evidenceObjects = (o: Row): Row[] => {
-  const out: Row[] = [];
-  if (o && typeof o === "object") {
-    if (o.tier) out.push(o);
-    for (const v of Object.values(o)) out.push(...evidenceObjects(v));
-  }
-  return out;
-};
+const tiersOf = (list: Row[]): Record<string, number> =>
+  tally(
+    list.flatMap((r: Row) => assertions(r)),
+    (a) => a.evidence.tier,
+  );
 
-const allEvidence = [...workouts, ...systems].flatMap(evidenceObjects);
 const order = ["consensus", "plausible", "tradition"];
-const tiers = tally(allEvidence, (e) => e.tier);
+const tiers = tiersOf(rows);
 const row = (label: string, counts: Record<string, number>, keys: string[]): string =>
   `| ${label} | ${keys.map((k) => counts[k] ?? 0).join(" | ")} | ${keys.reduce((a, k) => a + (counts[k] ?? 0), 0)} |`;
 
@@ -250,16 +232,8 @@ const counts: string[] = [
   `| | ${order.join(" | ")} | total |`,
   `| --- | ${order.map(() => "---").join(" | ")} | --- |`,
   row("all", tiers, order),
-  row(
-    "workouts",
-    tally(workouts.flatMap(evidenceObjects), (e) => e.tier),
-    order,
-  ),
-  row(
-    "systems",
-    tally(systems.flatMap(evidenceObjects), (e) => e.tier),
-    order,
-  ),
+  row("workouts", tiersOf(workouts), order),
+  row("systems", tiersOf(systems), order),
   "",
   `\`consensus\` requires \`status: verified\`, and no row is verified, so an empty top`,
   `tier is the bar holding rather than a gap. \`tradition\` dominating is the honest`,

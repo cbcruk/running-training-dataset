@@ -86,7 +86,10 @@ So rows are hypotheses. `claim.proposition` is one falsifiable sentence; `test` 
 
 **Every count lives in [`docs/counts.md`](docs/counts.md), generated from the data.** Tier distribution, provenance, falsifiability. Nothing here quotes a number, because the hand-written ones had already gone stale — this file once described two undetectable tests when there were thirteen. What is worth saying in prose is the shape rather than the totals: `tradition` dominates, and forcing the ratio the other way kills the project.
 
-Enforced at the schema/CI layer, not in a contributor guideline:
+Enforced at the schema/CI layer, not in a contributor guideline. Each rule below is
+one `add(...)` in [`scripts/rules.ts`](scripts/rules.ts) carrying a stable id, and
+the ones argued into existence are named by a test that breaks the data in exactly
+the way they exist to catch:
 
 - `tier: tradition` + `cite` → violation. If you have a citation, it is not tradition.
 - `cite` without a `(year)` → violation. A URL is not a citation.
@@ -154,7 +157,10 @@ data/
   adaptations.json   # 15 - taxonomy over target_adaptation: coarse category + definition
   schema/*.json      # JSON Schema 2020-12
 scripts/
-  validate.ts        # schema + referential integrity + discipline
+  rules.ts           # check(data) -> Finding[]. Every rule, no I/O. Tests name rule ids
+  evidence.ts        # the one walker over a row's evidence graph (pure)
+  dataset.ts         # load(root) -> Dataset, and patch() for breaking one row in a test
+  validate.ts        # CLI over rules.ts: read, check, print, exit code
   types.ts           # data/schema/*.json -> src/types/ (generated, committed, CI-verified)
   verify.ts          # data -> docs/verification.md (the §1b worksheet) + docs/counts.md
   svg.ts             # structure -> schematic SVG (pure; the single source of the visual)
