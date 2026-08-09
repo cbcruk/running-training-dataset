@@ -8,10 +8,10 @@ const run = (script: string): string =>
 const workouts = JSON.parse(readFileSync("data/workouts.json", "utf8")) as unknown[];
 
 test("dataset passes schema, referential integrity and discipline checks", () => {
-  expect(run("validate.mjs")).toContain("OK");
+  expect(run("validate.ts")).toContain("OK");
 });
 
 test("every workout renders to a schematic svg", () => {
   // Data-driven: one SVG line per workout, so adding rows never breaks this.
-  expect(run("render.mjs").trim().split("\n")).toHaveLength(workouts.length);
+  expect(run("render.ts").trim().split("\n")).toHaveLength(workouts.length);
 });

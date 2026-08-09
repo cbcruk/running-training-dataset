@@ -210,11 +210,14 @@ for (const w of [...workouts, ...systems])
         fail(`[discipline] ${w.id}${path}: cite lacks a (year): "${c.slice(0, 50)}"`);
 
 // A `source` is provenance, not evidence, but it is still a citation and is held
-// to the same bar.
-for (const sys of systems)
-  for (const src of sys.source ?? [])
+// to the same bar. Workouts carry the field on the same terms as systems: removing
+// a canonical text as *efficacy* evidence must not also erase the record of what
+// the text *prescribes*, which is the split `source` exists to keep.
+const sourced = [...workouts, ...systems];
+for (const row of sourced)
+  for (const src of row.source ?? [])
     if (!/\(\d{4}\)/.test(src))
-      fail(`[discipline] ${sys.id}: source lacks a (year): "${src.slice(0, 50)}"`);
+      fail(`[discipline] ${row.id}: source lacks a (year): "${src.slice(0, 50)}"`);
 
 // An empty `source` says nothing on its own, and silence reads as "fine". A row
 // with no recorded text and a row for which no text can exist are different
@@ -222,32 +225,43 @@ for (const sys of systems)
 // the two together makes the field a checked statement rather than a label
 // anyone can set: `recorded` has to produce the source it claims, and the other
 // two have to be empty, so the badge can never disagree with the row under it.
-for (const s of systems) {
-  const has = !!s.source?.length;
-  if (s.provenance === "recorded" && !has)
-    fail(`[discipline] ${s.id}: provenance="recorded" but no source - nothing was recorded`);
-  if (s.provenance !== "recorded" && has)
+for (const row of sourced) {
+  const has = !!row.source?.length;
+  if (row.provenance === "recorded" && !has)
+    fail(`[discipline] ${row.id}: provenance="recorded" but no source - nothing was recorded`);
+  if (row.provenance !== "recorded" && has)
     fail(
-      `[discipline] ${s.id}: provenance="${s.provenance}" but a source is present - ` +
+      `[discipline] ${row.id}: provenance="${row.provenance}" but a source is present - ` +
         `a recorded text makes the row "recorded"`,
     );
 }
 
+// A workout nobody formalized cannot have an authoritative text describing it, so
+// its blank `source` is "cannot be done", never "not yet done". Deriving the label
+// from `attribution` keeps the two from disagreeing: a folk workout marked
+// `unrecorded` would put a permanently unfillable row on someone's worklist.
+for (const w of workouts)
+  if (w.attribution === null && w.provenance !== "uncitable")
+    fail(
+      `[discipline] ${w.id}: attribution=null but provenance="${w.provenance}" - ` +
+        `a workout formalized by nobody has no authoritative text to record`,
+    );
+
 // The distinction only holds if the two never collapse. A row citing the same work
 // as both its description and its proof is asserting that a method describing
 // itself demonstrates itself - the conflation `source` was introduced to separate.
-for (const sys of systems) {
+for (const row of sourced) {
   const cites = new Set<string>();
   const collect = (o: Row) => {
     if (!o || typeof o !== "object") return;
     for (const c of o.evidence?.cite ?? []) cites.add(c);
     for (const [k, v] of Object.entries(o)) if (k !== "source") collect(v);
   };
-  collect(sys);
-  for (const src of sys.source ?? [])
+  collect(row);
+  for (const src of row.source ?? [])
     if (cites.has(src))
       fail(
-        `[discipline] ${sys.id}: "${src.slice(0, 45)}..." is both a source and an evidence cite - ` +
+        `[discipline] ${row.id}: "${src.slice(0, 45)}..." is both a source and an evidence cite - ` +
           `provenance and efficacy are different claims and must not share a reference on one row`,
       );
 }
@@ -266,7 +280,7 @@ const noteForm = (c: string) => {
 };
 // A source is a reference like any other: one work, one string, whether it appears
 // as provenance or as evidence.
-for (const sys of systems) for (const src of sys.source ?? []) noteForm(src);
+for (const row of sourced) for (const src of row.source ?? []) noteForm(src);
 for (const w of [...workouts, ...systems])
   for (const [, ev] of collectEvidence(w))
     for (const c of ev.cite ?? []) {
@@ -289,6 +303,50 @@ for (const s of systems)
       `[discipline] ${s.id}: evidence.tier="${s.evidence.tier}" needs a claim.proposition - ` +
         `evidence with nothing to be evidence for cannot be checked or falsified`,
     );
+
+// A test is a procedure derived from the claim, so a source that establishes the
+// claim cannot independently establish the test - reusing it double-counts one
+// reading as two assertions and inflates every tier count. Every cited test in the
+// seed data reused its claim's cite verbatim, all eight of them, which is what a
+// slot carrying no information of its own looks like. The bar is disjointness, not
+// non-containment: the objection is per reference, so a test citing [A, B] against
+// a claim citing [A] still double-counts A. What a test *may* cite is a source
+// about measurement - that one is disjoint by construction.
+for (const w of workouts) {
+  const claimCites = new Set<string>(w.claim?.evidence?.cite ?? []);
+  for (const c of w.test?.evidence?.cite ?? [])
+    if (claimCites.has(c))
+      fail(
+        `[discipline] ${w.id}: test cites "${c.slice(0, 45)}..." which its claim already cites - ` +
+          `a test's evidence must stand on its own or not exist`,
+      );
+}
+
+// A test is a field-observation heuristic, not a physiological finding, and the
+// dataset says so itself: `confounds` requires at least one, and the worst kind
+// acts through the claim's own mechanism and is inseparable by observation. A
+// signal a row declares mechanistically indistinguishable cannot simultaneously be
+// what the field has settled. `consensus` belongs to claims only.
+for (const w of workouts)
+  if (w.test?.evidence?.tier === "consensus")
+    fail(
+      `[discipline] ${w.id}: test.evidence.tier=consensus - a test is an observation ` +
+        `heuristic carrying its own confounds, and the top tier is for claims`,
+    );
+
+// `consensus` asserts that the field agrees, which no single source states and no
+// generator can read off a bibliography. It is the one tier whose bar requires
+// someone to have opened the paper, so it inherits the human-sign-off gate instead
+// of duplicating it: status answers "has a human read this", tier answers "how well
+// is it supported", and only the top tier makes the first a precondition of the
+// second.
+for (const row of [...workouts, ...systems])
+  for (const [path, ev] of collectEvidence(row))
+    if (ev.tier === "consensus" && row.status !== "verified")
+      fail(
+        `[discipline] ${row.id}${path}: tier=consensus on a status="${row.status}" row - ` +
+          `the top tier requires the human read that status records`,
+      );
 
 // Nothing ships verified while its citations are unchecked.
 for (const w of [...workouts, ...systems])

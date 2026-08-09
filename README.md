@@ -68,17 +68,23 @@ So rows are hypotheses. `claim.proposition` is one falsifiable sentence; `test` 
 
 ### The evidence tier is machine-enforced
 
-| tier        | meaning                        | `cite`        |
-| ----------- | ------------------------------ | ------------- |
-| `consensus` | textbook                       | **required**  |
-| `plausible` | studied, contested             | **required**  |
-| `tradition` | everyone does it, nobody knows | **forbidden** |
+| tier        | meaning                        | `cite`        | also                            |
+| ----------- | ------------------------------ | ------------- | ------------------------------- |
+| `consensus` | the field agrees               | **≥2**        | `status: verified`, claims only |
+| `plausible` | studied, contested             | **required**  |                                 |
+| `tradition` | everyone does it, nobody knows | **forbidden** |                                 |
 
-**`source` is provenance; `cite` is efficacy.** These are different claims and the schema keeps them apart. A canonical text — Daniels' _Running Formula_, Lydiard's _Running to the Top_ — is the authoritative record of what a system **prescribes**; that it **works** is a separate question, and a method describing itself does not answer it. So `source` sits beside `attribution`, is allowed at any tier including `tradition`, and never justifies one. `validate.ts` holds it to the same citation bar as `cite`, folds it into the one-reference-one-string rule, and rejects a row that lists the same work as both — that collapse is exactly what the split exists to prevent.
+**`consensus` is the one tier a generator cannot reach.** The others describe how well a source supports a sentence, which is checkable against the sources in hand. `consensus` asserts something no single source states — that the field agrees — so it takes at least two independent references, one of them a review or textbook reporting that agreement, and it is gated behind the human read that `status: verified` records. That interlock is deliberate: `status` answers _has a human read this_, tier answers _how well is it supported_, and only the top tier makes the first a precondition of the second. It is also closed to `test` slots, for the reason in the next section.
 
-**An empty `source` has to say which kind of empty it is.** `source` renders when present and says nothing when absent, so a documented system and an undocumented one looked the same while browsing — and one blank covered two unlike facts: a text nobody has recorded yet, versus a system for which no citable text exists at all. A required **`provenance`** enum states it instead: `recorded` (the text is in `source`), `unrecorded` (a text exists, not recorded here), `uncitable` (there is none, so the slot will stay empty). `validate.ts` ties it to `source` — `recorded` must produce one, the other two must not have one — so the label cannot disagree with the row beneath it. It is rendered as a badge beside the tier, deliberately unlike one: sharing a colour scale would merge two independent questions into a single verdict. Current state: **recorded 3 / unrecorded 9 / uncitable 2** — the majority of systems are described by nobody in particular, which is worth seeing before comparing them.
+"Textbook" used to be the whole definition, which was too loose in both directions: it admitted a coach's book describing that coach's own method, and it invited a tier to be read off a bibliography without opening anything. The bar now names what has to be true rather than what the reference looks like.
 
-Current distribution: **consensus 3 / plausible 17 / tradition 62.** Tradition dominates. That is the honest shape of running knowledge; forcing the ratio the other way kills the project.
+**`source` is provenance; `cite` is efficacy.** These are different claims and the schema keeps them apart. A canonical text — Daniels' _Running Formula_, Lydiard's _Running to the Top_ — is the authoritative record of what a method **prescribes**; that it **works** is a separate question, and a method describing itself does not answer it. So `source` sits beside `attribution`, is allowed at any tier including `tradition`, and never justifies one. Systems and workouts both carry it: stripping a book's efficacy cite off a workout must not also erase the record of who defined that workout and where. `validate.ts` holds `source` to the same citation bar as `cite`, folds it into the one-reference-one-string rule, and rejects a row that lists the same work as both — that collapse is exactly what the split exists to prevent.
+
+**Self-description is judged per proposition, not per source.** A book is not disqualified as evidence because its author has a method; it is disqualified where the sentence it is backing cannot be asked without adopting that method. The test is whether the proposition survives the author's vocabulary. _Sustained running near lactate steady state shifts the steady state upward_ does — lactate steady state is not Daniels' concept, and the claim can be false. _Splitting threshold volume into cruise intervals accumulates more time at threshold_ does not: it presupposes the very structure being recommended, so the book cannot be evidence for it and becomes its `source` instead.
+
+**An empty `source` has to say which kind of empty it is.** `source` renders when present and says nothing when absent, so a documented system and an undocumented one looked the same while browsing — and one blank covered two unlike facts: a text nobody has recorded yet, versus a system for which no citable text exists at all. A required **`provenance`** enum states it instead: `recorded` (the text is in `source`), `unrecorded` (a text exists, not recorded here), `uncitable` (there is none, so the slot will stay empty). `validate.ts` ties it to `source` — `recorded` must produce one, the other two must not have one — so the label cannot disagree with the row beneath it. It is rendered as a badge beside the tier, deliberately unlike one: sharing a colour scale would merge two independent questions into a single verdict. On a workout the label is partly derivable and therefore checked: `attribution: null` means nobody formalized it, so no authoritative text can exist and the row must be `uncitable` — marking it `unrecorded` would put a permanently unfillable job on someone's worklist.
+
+**Every count lives in [`docs/counts.md`](docs/counts.md), generated from the data.** Tier distribution, provenance, falsifiability. Nothing here quotes a number, because the hand-written ones had already gone stale — this file once described two undetectable tests when there were thirteen. What is worth saying in prose is the shape rather than the totals: `tradition` dominates, and forcing the ratio the other way kills the project.
 
 Enforced at the schema/CI layer, not in a contributor guideline:
 
@@ -87,6 +93,10 @@ Enforced at the schema/CI layer, not in a contributor guideline:
 - one reference written two ways → violation. A source must read identically in every row, or a verifier checking it once cannot tell it is the same source.
 - a system claiming more than `tradition` without a `claim.proposition` → violation. Evidence with nothing to be evidence _for_ cannot be checked or falsified, so the cite would sit there unfalsifiable.
 - the same reference as both `source` and `cite` on one row → violation. Provenance and efficacy are different claims.
+- a `test` citing a reference its own `claim` already cites → violation. A test is a procedure derived from the claim, so reusing the claim's source counts one reading as two assertions. The bar is disjointness, not non-containment — the objection is per reference.
+- `tier: consensus` on a `test` → violation. A test is a field-observation heuristic carrying its own confounds, not a settled finding.
+- `tier: consensus` on a row that is not `status: verified` → violation. The top tier requires the human read that `status` records.
+- a workout with `attribution: null` not marked `provenance: uncitable` → violation. Formalized by nobody means no authoritative text can exist.
 - `status: verified` from a generator → violation. Requires human sign-off.
 - colloquial term in `id`/`canonical_name` → violation. It belongs in `usage.json`.
 - `bet` longer than one sentence → violation.
@@ -109,7 +119,7 @@ Instead, each row carries a falsification procedure:
   "confounds":   [ { "factor": "heat-acclimation", "severity": "high",
                      "shares_mechanism": true, "note": {} } ],
   "if_absent":   { "ko": "4주 무변화는 실패가 아니다...", "en": "..." },
-  "evidence":    { "tier": "consensus", "cite": ["..."] }
+  "evidence":    { "tier": "tradition" }
 }
 ```
 
@@ -119,7 +129,9 @@ Instead, each row carries a falsification procedure:
 
 `shares_mechanism: true` with `severity` below `high` is a violation — mechanistic indistinguishability is severe by definition. _(This rule caught the seed data's own inconsistency on first run, which is the point.)_
 
-`detectable: false` rows (`strides`, `marathon-pace-run`) **cannot** carry `what`, `when_weeks`, `confounds`, or `if_absent`. An unobservable null cannot be interpreted. All the dataset can offer there is: this is a belief — decide how many weekly minutes to spend on it.
+**A `test` slot has to earn its own evidence.** In the seed data not one of them did: every cited test reused its claim's reference verbatim, all eight, so the tier said nothing the claim had not already said and every count came out doubled. A test is a procedure _derived_ from the claim — its standing is the claim's standing, minus whatever `confounds` already subtracts. What a test may cite is a source about **measurement**, which is disjoint from the claim's source by construction, and `validate.ts` now requires that disjointness. The top tier is closed to tests outright: a signal a row itself declares mechanistically indistinguishable from a confound cannot also be what the field has settled.
+
+`detectable: false` rows — **13 of 22**, see [`docs/counts.md`](docs/counts.md) — **cannot** carry `what`, `when_weeks`, `confounds`, or `if_absent`. An unobservable null cannot be interpreted. They carry a `mechanism` saying why no field observation would settle the question, and all the dataset can offer there is: this is a belief — decide how many weekly minutes to spend on it.
 
 ---
 
@@ -144,7 +156,7 @@ data/
 scripts/
   validate.ts        # schema + referential integrity + discipline
   types.ts           # data/schema/*.json -> src/types/ (generated, committed, CI-verified)
-  verify.ts          # data -> docs/verification.md, the §1b source-checking worksheet
+  verify.ts          # data -> docs/verification.md (the §1b worksheet) + docs/counts.md
   svg.ts             # structure -> schematic SVG (pure; the single source of the visual)
   render.ts          # writes the SVGs to out/ using svg.ts
   prerender.tsx      # writes one real HTML file per entry into dist/, via the router
@@ -161,6 +173,7 @@ src/
 docs/
   TODO.md            # the worklist: verification, symmetry, depth
   verification.md    # GENERATED - what each source has to support, per row
+  counts.md          # GENERATED - tiers, provenance, falsifiability. Prose links here
   adr/               # architecture decisions, with the reasoning that produced them
 ```
 

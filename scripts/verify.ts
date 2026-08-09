@@ -138,7 +138,7 @@ for (const c of cites)
 // `source` entries are provenance, not evidence, so they are deliberately absent
 // from everything above - there is no claim to check them against. Listing them
 // keeps that a stated choice rather than a silent omission.
-const sourced = systems.filter((s: Row) => s.source?.length);
+const sourced = [...workouts, ...systems].filter((r: Row) => r.source?.length);
 lines.push("---", "", "## Not in scope: provenance", "");
 lines.push(
   "These references are `source`, not `cite`: they record what a system *prescribes*,",
@@ -152,63 +152,153 @@ if (sourced.length)
 else lines.push("- _(none)_");
 lines.push("");
 
-lines.push("---", "", "## Triage: three questions to settle first", "");
-
+// The three questions this worksheet opened with are settled, and each became a
+// rule in validate.ts rather than a paragraph asking someone to remember. Kept as
+// a live guard: a regression here fails the build before it reaches this file, so
+// these lists staying empty is the check passing, not the check being skipped.
+lines.push("---", "", "## Triage: settled and now machine-enforced", "");
 lines.push(
-  "### 1. Sources never attached to a falsifiable sentence",
-  "",
-  "`plausible` means *studied, contested* and requires a cite. These sources sit on",
-  "system rows and distributions only — they never back a `claim.proposition`",
-  "anywhere in the data, so nothing states what they are supposed to have shown:",
+  "These three were the questions answerable without opening a source. Each is now a",
+  "`validate.ts` rule, so the lists below cannot fill up without the build failing",
+  "first — they are printed as a live check, not as a worklist.",
   "",
 );
-if (methodOnly.length) {
-  for (const c of methodOnly)
-    lines.push(`- [ ] ${c}\n      _rows: ${byCite[c].map((u) => `\`${u.row}\``).join(", ")}_`);
-} else lines.push("- _(none)_");
-lines.push(
-  "",
-  "They split into two kinds, and the fix differs:",
-  "",
-  "- **Canonical texts** (a method describing itself) are not evidence that the",
-  "  method works. If the tier convention deliberately admits them, the README should",
-  "  say so — the tier table currently does not.",
-  "- **Review papers** may well support something; the row just never says what.",
-  "  Give the row a `claim.proposition` the source can be checked against, or drop",
-  "  the tier to `tradition` and remove the cite.",
-  "",
-  "This is the largest single question in §1b: it covers " +
-    `${methodOnly.length} of the ${cites.length} sources.`,
-  "",
+const guard = (heading: string, why: string, items: string[]) => {
+  lines.push(`### ${heading}`, "", why, "");
+  if (items.length) for (const i of items) lines.push(`- [ ] ${i}`);
+  else lines.push("- _(none — rule holding)_");
+  lines.push("");
+};
+guard(
+  "1. Sources never attached to a falsifiable sentence",
+  "A source backing no `claim.proposition` has nothing stated for it to be evidence *of*. " +
+    "Reviews were given a proposition to be checked against; canonical texts dropped to " +
+    "`tradition` and moved to `source`.",
+  methodOnly.map((c) => `${c}\n      _rows: ${byCite[c].map((u) => `\`${u.row}\``).join(", ")}_`),
 );
-
-lines.push(
-  "### 2. `consensus` rows",
-  "",
-  "The highest bar in the tier table. Fewest assertions, strongest claim:",
-  "",
+guard(
+  "2. `consensus` rows",
+  "`consensus` asserts that the field agrees, which no single source states and no generator " +
+    "can read off a bibliography. It now requires `status: verified` — the human read — and is " +
+    "closed to `test` slots entirely.",
+  consensus.flatMap((c) =>
+    byCite[c].filter((u) => u.tier === "consensus").map((u) => `\`${u.row}\`.${u.where} — ${c}`),
+  ),
 );
-for (const c of consensus) {
-  const rows = byCite[c].filter((u) => u.tier === "consensus");
-  lines.push(`- [ ] ${c}\n      _${rows.map((u) => `\`${u.row}\`.${u.where}`).join(", ")}_`);
-}
-lines.push("");
-
-lines.push(
-  "### 3. Unobservable tests above `tradition`",
-  "",
-  "The row states its own test cannot be observed, yet the evidence tier claims",
-  "more than tradition. Confirm the tier is about the *mechanism* rather than the",
-  "test, or lower it:",
-  "",
+guard(
+  "3. Unobservable tests above `tradition`",
+  "Every cited test in the seed data reused its claim's reference verbatim, all eight of them. " +
+    "A test's evidence must now be disjoint from its claim's — what a test may cite is a source " +
+    "about *measurement*.",
+  unobservable,
 );
-if (unobservable.length) for (const u of unobservable) lines.push(`- [ ] ${u}`);
-else lines.push("- _(none)_");
-lines.push("");
 
 writeFileSync(resolve(root, "docs/verification.md"), lines.join("\n"));
-execFileSync("./node_modules/.bin/vp", ["fmt", "docs/verification.md"], {
+
+// ---- counts --------------------------------------------------------------
+// Every count the prose wants to quote, derived from the data instead of typed
+// into it. Hand-written totals had already gone stale once - the README described
+// two undetectable tests when there were thirteen - and prose that has to be
+// re-counted by hand after every tier change will go stale again.
+const usage = j("data/usage.json");
+const anchors = j("data/anchors.json");
+const adaptations = j("data/adaptations.json");
+
+const tally = (rows: Row[], of: (r: Row) => string | undefined): Record<string, number> => {
+  const out: Record<string, number> = {};
+  for (const r of rows) {
+    const k = of(r);
+    if (k) out[k] = (out[k] ?? 0) + 1;
+  }
+  return out;
+};
+const evidenceObjects = (o: Row): Row[] => {
+  const out: Row[] = [];
+  if (o && typeof o === "object") {
+    if (o.tier) out.push(o);
+    for (const v of Object.values(o)) out.push(...evidenceObjects(v));
+  }
+  return out;
+};
+
+const allEvidence = [...workouts, ...systems].flatMap(evidenceObjects);
+const order = ["consensus", "plausible", "tradition"];
+const tiers = tally(allEvidence, (e) => e.tier);
+const row = (label: string, counts: Record<string, number>, keys: string[]): string =>
+  `| ${label} | ${keys.map((k) => counts[k] ?? 0).join(" | ")} | ${keys.reduce((a, k) => a + (counts[k] ?? 0), 0)} |`;
+
+const provKeys = ["recorded", "unrecorded", "uncitable"];
+const counts: string[] = [
+  "<!-- GENERATED by scripts/verify.ts - do not edit. Run `vp run verify`. -->",
+  "",
+  "# Counts",
+  "",
+  "Derived from `data/*.json`. The prose elsewhere links here instead of quoting",
+  "numbers, so a tier change cannot leave a stale total behind it.",
+  "",
+  "## Rows",
+  "",
+  `| systems | workouts | usage | anchors | adaptations |`,
+  `| --- | --- | --- | --- | --- |`,
+  `| ${systems.length} | ${workouts.length} | ${usage.length} | ${anchors.length} | ${adaptations.length} |`,
+  "",
+  "## Evidence tiers",
+  "",
+  "Counted per evidence object, wherever one hangs — a row's own `evidence`, a",
+  "`claim`, a `test`, a `distribution`, a `volume_cap`.",
+  "",
+  `| | ${order.join(" | ")} | total |`,
+  `| --- | ${order.map(() => "---").join(" | ")} | --- |`,
+  row("all", tiers, order),
+  row(
+    "workouts",
+    tally(workouts.flatMap(evidenceObjects), (e) => e.tier),
+    order,
+  ),
+  row(
+    "systems",
+    tally(systems.flatMap(evidenceObjects), (e) => e.tier),
+    order,
+  ),
+  "",
+  `\`consensus\` requires \`status: verified\`, and no row is verified, so an empty top`,
+  `tier is the bar holding rather than a gap. \`tradition\` dominating is the honest`,
+  `shape of running knowledge; forcing the ratio the other way kills the project.`,
+  "",
+  "## Provenance",
+  "",
+  "The state of `source` — whether a defining text is recorded, exists but is not",
+  "recorded here, or cannot exist at all.",
+  "",
+  `| | ${provKeys.join(" | ")} | total |`,
+  `| --- | ${provKeys.map(() => "---").join(" | ")} | --- |`,
+  row(
+    "systems",
+    tally(systems, (s) => s.provenance),
+    provKeys,
+  ),
+  row(
+    "workouts",
+    tally(workouts, (w) => w.provenance),
+    provKeys,
+  ),
+  "",
+  "## Falsifiability",
+  "",
+  `| detectable tests | undetectable tests |`,
+  `| --- | --- |`,
+  `| ${workouts.filter((w: Row) => w.test.detectable).length} | ${workouts.filter((w: Row) => !w.test.detectable).length} |`,
+  "",
+  "An undetectable test carries a `mechanism` saying why no field observation would",
+  "settle it, and cannot carry `what`, `when_weeks`, `confounds`, or `if_absent` —",
+  "an unobservable null cannot be interpreted.",
+  "",
+];
+writeFileSync(resolve(root, "docs/counts.md"), counts.join("\n"));
+
+execFileSync("./node_modules/.bin/vp", ["fmt", "docs/verification.md", "docs/counts.md"], {
   cwd: root,
   stdio: "ignore",
 });
 console.log(`docs/verification.md <- ${cites.length} sources`);
+console.log(`docs/counts.md <- tiers ${JSON.stringify(tiers)}`);

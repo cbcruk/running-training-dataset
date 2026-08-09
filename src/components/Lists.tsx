@@ -8,9 +8,10 @@ import type { WithCtx } from "../types/view.ts";
 
 // Tier goes on the card, never only in the detail view - the README's one hard UI
 // rule, so browsing ten systems cannot make `tradition` look like `consensus`.
-// Provenance rides beside it for the same reason: 11 of 14 systems have no
-// recorded source, and a blank one made an undocumented row indistinguishable
-// from a documented one while browsing.
+// Provenance rides beside it for the same reason: most rows have no recorded
+// source, and a blank one made an undocumented row indistinguishable from a
+// documented one while browsing. Both entities carry the pair, so a reader never
+// has to know which kind of card they are looking at to read the badges.
 export function SystemCard({
   ctx,
   system: s,
@@ -59,7 +60,10 @@ export function WorkoutCard({
     <EntryLink className="card wk-card" to={`workout/${w.id}`}>
       <div className="card-head">
         <h2>{w.canonical_name}</h2>
-        <TierBadge ctx={ctx} tier={w.claim?.evidence?.tier} />
+        <span className="badges">
+          <TierBadge ctx={ctx} tier={w.claim?.evidence?.tier} />
+          <ProvenanceBadge ctx={ctx} provenance={w.provenance} />
+        </span>
       </div>
       {!brief && (
         <p className="family">
