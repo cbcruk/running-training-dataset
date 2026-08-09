@@ -71,10 +71,12 @@ export function WChip({ to, children }: { to: string; children?: ReactNode }) {
   )
 }
 
-// Tier is deliberately given distinct visual weight: consensus reads as settled,
-// tradition reads as unproven. Flattening these is the failure the README bans -
-// which is also why this stays bespoke rather than becoming a design-system
-// status badge (ADR 0002): the tiers are not success/warning/danger.
+/**
+ * Tier is deliberately given distinct visual weight: consensus reads as settled,
+ * tradition reads as unproven. Flattening these is the failure the README bans -
+ * which is also why this stays bespoke rather than becoming a design-system
+ * status badge (ADR 0002): the tiers are not success/warning/danger.
+ */
 const TIER_LABEL: Record<string, Translatable> = {
   consensus: { ko: '정설', en: 'consensus' },
   plausible: { ko: '유력', en: 'plausible' },
@@ -91,18 +93,20 @@ export function TierBadge({ ctx, tier }: WithCtx & { tier?: string }) {
   )
 }
 
-// Provenance answers a different question from the tier, and the two must never
-// read as one scale. The tier says how well established it is that a system
-// works; this says whether we have any record of what it prescribes in the first
-// place. So it shares no colour with the tiers and leads with a mark instead of a
-// verdict word: a reader scanning the list should see two independent facts, not
-// one stronger or weaker rating.
-//
-// It exists because absence was invisible. Most rows carry no `source`, and a
-// blank read as "fine" - which made the well-documented rows and the undocumented
-// ones look identical at exactly the moment a reader is deciding how much to trust
-// one. Workouts carry the same pair as systems and say it the same way: the whole
-// point is that a reader never has to know which kind of entity they are on.
+/**
+ * Provenance answers a different question from the tier, and the two must never
+ * read as one scale. The tier says how well established it is that a system
+ * works; this says whether we have any record of what it prescribes in the first
+ * place. So it shares no colour with the tiers and leads with a mark instead of a
+ * verdict word: a reader scanning the list should see two independent facts, not
+ * one stronger or weaker rating.
+ *
+ * It exists because absence was invisible. Most rows carry no `source`, and a
+ * blank read as "fine" - which made the well-documented rows and the undocumented
+ * ones look identical at exactly the moment a reader is deciding how much to trust
+ * one. Workouts carry the same pair as systems and say it the same way: the whole
+ * point is that a reader never has to know which kind of entity they are on.
+ */
 const PROVENANCE: Record<string, { mark: string; label: Translatable; tip: Translatable }> = {
   recorded: {
     mark: '◆',
@@ -190,9 +194,11 @@ export function SourceBlock({
   )
 }
 
-// A raw intensity_model / anchor.model code, made hoverable and clickable: the
-// tooltip pulls label + construct + what-it-takes-to-measure from anchors.json so
-// a slug like "lactate_mmol" explains itself in place.
+/**
+ * A raw intensity_model / anchor.model code, made hoverable and clickable: the
+ * tooltip pulls label + construct + what-it-takes-to-measure from anchors.json so
+ * a slug like "lactate_mmol" explains itself in place.
+ */
 export function AnchorCode({ ctx, model }: WithCtx & { model: string }) {
   const { t, byAnchor, constructLabel } = ctx
   const a = byAnchor[model]
@@ -207,8 +213,10 @@ export function AnchorCode({ ctx, model }: WithCtx & { model: string }) {
   )
 }
 
-// A commitment chip that explains its dimension on hover - the terse "9-13x/wk"
-// says what, the tooltip says what it means.
+/**
+ * A commitment chip that explains its dimension on hover - the terse "9-13x/wk"
+ * says what, the tooltip says what it means.
+ */
 export function InfoChip({
   ctx,
   tip,
@@ -232,9 +240,11 @@ export function CiteList({ evidence }: { evidence?: { cite?: string[] } }) {
   )
 }
 
-// The measurement layer (data/anchors.json): what each anchor takes to measure,
-// and the honest floor when you cannot. It points down to RPE and names what is
-// lost - never a numeric conversion, because anchors do not convert cleanly.
+/**
+ * The measurement layer (data/anchors.json): what each anchor takes to measure,
+ * and the honest floor when you cannot. It points down to RPE and names what is
+ * lost - never a numeric conversion, because anchors do not convert cleanly.
+ */
 export function MeasurementBlock({
   ctx,
   models,
@@ -292,10 +302,12 @@ export function MeasurementBlock({
   )
 }
 
-// The adaptation taxonomy (data/adaptations.json): group a workout's flat
-// target_adaptation slugs under their coarse physiological category, with the
-// definition on hover. Descriptive - it names what the workout targets, not what
-// it produces.
+/**
+ * The adaptation taxonomy (data/adaptations.json): group a workout's flat
+ * target_adaptation slugs under their coarse physiological category, with the
+ * definition on hover. Descriptive - it names what the workout targets, not what
+ * it produces.
+ */
 export function AdaptationsBlock({ ctx, ids }: WithCtx & { ids: string[] }) {
   const { t, lang, byAdaptation, adaptCategories } = ctx
   const groups = adaptCategories

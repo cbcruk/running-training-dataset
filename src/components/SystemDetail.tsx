@@ -111,8 +111,10 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
   )
 }
 
-// `silent` marks the dangerous case: a term survives the switch while its meaning
-// changes. `anchor_change` is derived from intensity_model, so it is machine-verified.
+/**
+ * `silent` marks the dangerous case: a term survives the switch while its meaning
+ * changes. `anchor_change` is derived from intensity_model, so it is machine-verified.
+ */
 function SwitchingCost({ ctx, system }: WithCtx & { system: System }) {
   const { t, lang, bySystem } = ctx
   const entries = system.switching_cost || []

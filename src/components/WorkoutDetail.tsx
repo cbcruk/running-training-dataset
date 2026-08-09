@@ -140,8 +140,10 @@ export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
   )
 }
 
-// An undetectable claim is not a weaker claim - it is a belief. The copy says so
-// rather than letting an unobservable null read as evidence of nothing.
+/**
+ * An undetectable claim is not a weaker claim - it is a belief. The copy says so
+ * rather than letting an unobservable null read as evidence of nothing.
+ */
 function FalsificationTest({ ctx, test }: WithCtx & { test: Workout['test'] }) {
   const { t, lang } = ctx
 
@@ -214,8 +216,10 @@ function FalsificationTest({ ctx, test }: WithCtx & { test: Workout['test'] }) {
   )
 }
 
-// The collision table, from the workout's side: naming is a join, not a field,
-// so one colloquial term can point at several rows.
+/**
+ * The collision table, from the workout's side: naming is a join, not a field,
+ * so one colloquial term can point at several rows.
+ */
 function CollisionTable({ ctx, id }: WithCtx & { id: string }) {
   const { t, lang, bySystem, usage } = ctx
   const uses = usage.filter((u) => u.workout === id)

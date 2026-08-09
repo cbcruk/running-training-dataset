@@ -27,9 +27,11 @@ import type {
   ViewContext,
 } from './types/view.ts'
 
-// The schemas are the source of truth for these shapes; the types next to this
-// file are generated from them (scripts/types.mjs). The JSON is asserted into
-// them rather than inferred, so a schema change surfaces here as a type error.
+/**
+ * The schemas are the source of truth for these shapes; the types next to this
+ * file are generated from them (scripts/types.mjs). The JSON is asserted into
+ * them rather than inferred, so a schema change surfaces here as a type error.
+ */
 const systems = systemsRaw as unknown as System[]
 const workouts = workoutsRaw as unknown as Workout[]
 const usage = usageRaw as unknown as Usage[]
@@ -43,9 +45,11 @@ const byAdaptation: Record<string, Adaptation> = Object.fromEntries(
   adaptations.map((a) => [a.id, a]),
 )
 
-// Reverse indexes so an anchor page can show everything that references it:
-// which systems anchor on it, which workouts list it (and where it is primary),
-// and every switching_cost whose anchor_change touches it on either side.
+/**
+ * Reverse indexes so an anchor page can show everything that references it:
+ * which systems anchor on it, which workouts list it (and where it is primary),
+ * and every switching_cost whose anchor_change touches it on either side.
+ */
 const systemsByAnchor: Record<string, System[]> = {}
 for (const s of systems) (systemsByAnchor[s.intensity_model] ??= []).push(s)
 const workoutsByAnchor: Record<string, AnchorUse[]> = {}
@@ -65,8 +69,10 @@ for (const s of systems)
         (switchesByAnchor[m] ??= []).push({ ...entry, side: m === to ? 'in' : 'out' })
   }
 
-// Anchor constructs: the physical quantity each anchor reads. Grouping shows the
-// axes; the notes state that sharing a construct does NOT make anchors convert.
+/**
+ * Anchor constructs: the physical quantity each anchor reads. Grouping shows the
+ * axes; the notes state that sharing a construct does NOT make anchors convert.
+ */
 const ANCHOR_CONSTRUCTS: Construct[] = [
   {
     id: 'perception',
@@ -102,7 +108,7 @@ const ANCHOR_CONSTRUCTS: Construct[] = [
   },
 ]
 
-// Fixed display order for the adaptation taxonomy's coarse categories.
+/** Fixed display order for the adaptation taxonomy's coarse categories. */
 const ADAPT_CATEGORIES: AdaptCategory[] = [
   { id: 'central-cardiovascular', label: { ko: '중심 심혈관', en: 'Central cardiovascular' } },
   { id: 'peripheral-aerobic', label: { ko: '말초 유산소', en: 'Peripheral aerobic' } },
@@ -113,9 +119,11 @@ const ADAPT_CATEGORIES: AdaptCategory[] = [
 ]
 
 // ---- language / base --------------------------------------------------------
-// Module state, set by whichever host is driving: the browser shell (main.js) or
-// the prerenderer (scripts/prerender.mjs). Rendering one language at a time keeps
-// every view function below unchanged from when they lived in the browser.
+/**
+ * Module state, set by whichever host is driving: the browser shell (main.js) or
+ * the prerenderer (scripts/prerender.mjs). Rendering one language at a time keeps
+ * every view function below unchanged from when they lived in the browser.
+ */
 let lang: Lang = 'ko'
 let BASE = '/'
 
@@ -129,7 +137,7 @@ export function currentLang(): Lang {
   return lang
 }
 
-// bilingual field -> current-language string, falling back to the other language.
+/** bilingual field -> current-language string, falling back to the other language. */
 function t(obj: Translatable): string {
   if (obj == null) return ''
   if (typeof obj === 'string') return obj
@@ -141,13 +149,17 @@ export const PLACEHOLDER = {
   en: 'search: "tempo run", daniels, easy…',
 }
 
-// A raw intensity_model / anchor.model code, made hoverable: the tooltip pulls
-// label + construct + what-it-takes-to-measure from anchors.json so a slug like
-// "lactate_mmol" explains itself in place.
+/**
+ * A raw intensity_model / anchor.model code, made hoverable: the tooltip pulls
+ * label + construct + what-it-takes-to-measure from anchors.json so a slug like
+ * "lactate_mmol" explains itself in place.
+ */
 const CONSTRUCT_LABEL = Object.fromEntries(ANCHOR_CONSTRUCTS.map((c) => [c.id, c.label]))
 
-// A commitment chip that explains its dimension on hover - the terse
-// "9-13x/wk" / "≥120km" say what, the tooltip says what it means.
+/**
+ * A commitment chip that explains its dimension on hover - the terse
+ * "9-13x/wk" / "≥120km" say what, the tooltip says what it means.
+ */
 const COMMIT_TIPS = {
   sessions: {
     ko: '주당 훈련 세션 수 — 이 체계를 실행하는 데 필요한 주간 빈도다. 더블(하루 2회)이면 세션 수가 훈련일 수보다 많다.',
@@ -180,9 +192,11 @@ function weeksText(pl?: { value?: number; min?: number; max?: number }) {
 }
 
 // ---- route metadata ---------------------------------------------------------
-// The route tree lives in src/router.tsx now. What stays here is what the router
-// does not own: which nav tab a path belongs to, the per-entry <title> and
-// description the prerenderer writes, and the list of routes to emit.
+/**
+ * The route tree lives in src/router.tsx now. What stays here is what the router
+ * does not own: which nav tab a path belongs to, the per-entry <title> and
+ * description the prerenderer writes, and the list of routes to emit.
+ */
 export function currentView(path: string): string {
   const p = path || '/'
   if (p.startsWith('/anchor')) return 'anchors'
@@ -191,8 +205,10 @@ export function currentView(path: string): string {
   return 'systems'
 }
 
-// Per-entry <title> and description. This is the half of the dictionary that hash
-// routing could never serve: a crawler or link preview reads only these.
+/**
+ * Per-entry <title> and description. This is the half of the dictionary that hash
+ * routing could never serve: a crawler or link preview reads only these.
+ */
 const SITE = 'Running Training Dataset'
 export function metaFor(path: string): { title: string; description: string } {
   const parts = (path || '/').split('/').filter(Boolean)
@@ -248,9 +264,11 @@ export function metaFor(path: string): { title: string; description: string } {
   }
 }
 
-// Name an entry from its path. Used by the browser shell's recently-viewed strip,
-// which is per-reader and therefore never prerendered - the files on disk have to
-// stay identical for everyone.
+/**
+ * Name an entry from its path. Used by the browser shell's recently-viewed strip,
+ * which is per-reader and therefore never prerendered - the files on disk have to
+ * stay identical for everyone.
+ */
 export function entryLabel(path: string): { kind: string; label: string } | null {
   const parts = (path || '/').split('/').filter(Boolean)
   if (parts[0] === 'system' && bySystem[parts[1]])
@@ -267,7 +285,7 @@ export const RECENT_LABEL = {
   en: 'Recently viewed',
 }
 
-// Every route the prerenderer emits - one file per dictionary entry.
+/** Every route the prerenderer emits - one file per dictionary entry. */
 export function allRoutes() {
   return [
     '/',
@@ -289,10 +307,15 @@ export function allRoutes() {
 // point is visible at a glance, and each card counts its real references.
 
 // ---- anchor detail ----------------------------------------------------------
-// Migrated to components (src/components/AnchorDetail.jsx). It still returns a
-// string, so the router, the browser shell, and the prerenderer are unchanged -
-// which is what lets the migration run one view at a time instead of as a
-// big-bang rewrite. `ctx` carries what the module-level closure used to supply.
+/**
+ * Everything a view needs that it should not go and fetch for itself: the rows,
+ * the reverse indexes, the display vocabularies and the language-bound `t`.
+ *
+ * It exists because the views used to be template literals in this file and read
+ * all of that off the module-level closure. Once they became components they had
+ * to be handed it instead, and passing one `ctx` is what let the migration run a
+ * view at a time rather than as a big-bang rewrite.
+ */
 export function viewContext(): ViewContext {
   return {
     t,

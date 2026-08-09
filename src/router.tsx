@@ -50,8 +50,10 @@ const rootRoute = createRootRouteWithContext<RouterContext>()({
   notFoundComponent: () => <NotFound ctx={viewContext()} id="" />,
 })
 
-// A list route shows its list, or search results when `?q=` is present - the same
-// rule the hand-rolled router had, now attached to the route that owns it.
+/**
+ * A list route shows its list, or search results when `?q=` is present - the same
+ * rule the hand-rolled router had, now attached to the route that owns it.
+ */
 function listRoute(path: string, List: (p: { ctx: ViewContext }) => ReactNode) {
   const route = createRoute({
     getParentRoute: () => rootRoute,

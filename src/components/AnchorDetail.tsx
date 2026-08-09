@@ -67,8 +67,10 @@ export function AnchorDetail({ ctx, model }: WithCtx & { model: string }) {
   )
 }
 
-// rpe_10 carries `note` (why it is the floor); every other anchor carries
-// `fallback` (what you lose when the equipment is gone).
+/**
+ * rpe_10 carries `note` (why it is the floor); every other anchor carries
+ * `fallback` (what you lose when the equipment is gone).
+ */
 function Descent({ ctx, anchor }: WithCtx & { anchor: Anchor }) {
   const { t, lang } = ctx
   if (anchor.equipment_free) {

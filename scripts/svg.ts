@@ -19,11 +19,13 @@ const rpe = (w: Workout): number => {
 const resolveRpe = (ref: string, self: Workout, byId: ById): number =>
   ref === 'self' ? rpe(self) : rpe(byId[ref])
 
-// Layout only. NOT a pace model. Distance segments need a runner to become time; we fake one.
+/** Layout only. NOT a pace model. Distance segments need a runner to become time; we fake one. */
 const NOMINAL_MPS = (r: number) => 2.4 + (r / 10) * 2.6
-// The schema requires either `value` or a `min`/`max` pair (oneOf), and
-// validate.mjs enforces it, so the generated optional types are wider than the
-// data can actually be.
+/**
+ * The schema requires either `value` or a `min`/`max` pair (oneOf), and
+ * validate.mjs enforces it, so the generated optional types are wider than the
+ * data can actually be.
+ */
 const mid = (q: Quantity): number => (q.value != null ? q.value : (q.min! + q.max!) / 2)
 
 const flatten = (segs: Segment[], self: Workout, byId: ById): Flat[] =>
@@ -56,7 +58,7 @@ const COLOR: Record<string, string> = {
   work: 'var(--accent)',
 }
 
-// Render one workout to a schematic SVG string. `byId` resolves intensity_ref -> workout.
+/** Render one workout to a schematic SVG string. `byId` resolves intensity_ref -> workout. */
 export function renderWorkout(w: Workout, byId: ById): string {
   const segs = flatten(w.structure.segments, w, byId)
   const total = segs.reduce((a: number, s: Flat) => a + s.secs, 0)

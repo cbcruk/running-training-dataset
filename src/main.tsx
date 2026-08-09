@@ -28,8 +28,10 @@ function required<T extends HTMLElement>(id: string): T {
 }
 
 // ---- recently viewed --------------------------------------------------------
-// Per-reader, so it is never prerendered: the files on disk must read the same
-// for everyone.
+/**
+ * Per-reader, so it is never prerendered: the files on disk must read the same
+ * for everyone.
+ */
 const RECENT_KEY = 'recent'
 const RECENT_MAX = 8
 interface RecentItem {
@@ -82,10 +84,12 @@ function RecentStrip({ lang }: { lang: Lang }) {
 }
 
 // ---- chrome -----------------------------------------------------------------
-// The header, search box and language toggle live outside the router outlet, so
-// they are wired here against router state rather than re-rendered per route.
-// The chrome sits outside the router outlet, so it reads router state through a
-// subscription rather than the hooks - those require the provider's context.
+/**
+ * The header, search box and language toggle live outside the router outlet, so
+ * they are wired here against router state rather than re-rendered per route.
+ * The chrome sits outside the router outlet, so it reads router state through a
+ * subscription rather than the hooks - those require the provider's context.
+ */
 function useRouterLocation() {
   const [loc, setLoc] = useState(() => router.state.location)
   useEffect(() => router.subscribe('onResolved', () => setLoc(router.state.location)), [])
@@ -150,8 +154,10 @@ function Chrome({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
 }
 
 // ---- keyboard-first lookup --------------------------------------------------
-//   /  or  s   focus the search box        ArrowUp/Down   walk the results
-//   Enter      open the highlighted hit    Esc            clear, then blur
+/**
+ *   /  or  s   focus the search box        ArrowUp/Down   walk the results
+ *   Enter      open the highlighted hit    Esc            clear, then blur
+ */
 function useKeyboardLookup() {
   const location = useRouterLocation()
   useEffect(() => {

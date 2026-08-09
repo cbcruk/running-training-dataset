@@ -34,8 +34,10 @@ const BASE = process.env.BASE_PATH || '/running-training-dataset/'
 setBase(BASE)
 setLang('ko')
 
-// The built shell: Vite has already injected the hashed asset tags into it. Reuse
-// it verbatim so prerendered pages load exactly the same bundle.
+/**
+ * The built shell: Vite has already injected the hashed asset tags into it. Reuse
+ * it verbatim so prerendered pages load exactly the same bundle.
+ */
 const shellPath = resolve(dist, 'index.html')
 let shell: string
 try {
@@ -45,8 +47,10 @@ try {
   process.exit(1)
 }
 
-// Vite is configured with a relative base, so asset URLs come out as "./assets/…".
-// A page at /anchor/rpe_10/ needs them resolved from the site root instead.
+/**
+ * Vite is configured with a relative base, so asset URLs come out as "./assets/…".
+ * A page at /anchor/rpe_10/ needs them resolved from the site root instead.
+ */
 function absolutizeAssets(html: string): string {
   return html.replace(
     /(src|href)="\.\/([^"]*)"/g,

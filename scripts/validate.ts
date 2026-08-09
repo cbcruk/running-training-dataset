@@ -31,8 +31,10 @@ for (const row of [...workouts, ...systems])
   for (const a of assertions(row)) tiers[a.evidence.tier] = (tiers[a.evidence.tier] ?? 0) + 1
 console.log(`evidence tiers:`, tiers)
 
-// The naming join, surfaced: one colloquial name reaching two different workouts
-// is the dataset's headline finding, so a run says so out loud.
+/**
+ * The naming join, surfaced: one colloquial name reaching two different workouts
+ * is the dataset's headline finding, so a run says so out loud.
+ */
 const collisions: Record<string, Set<string>> = {}
 for (const u of usage) (collisions[u.calls_it] ??= new Set()).add(u.workout)
 for (const [name, set] of Object.entries(collisions).filter(([, v]) => v.size > 1))

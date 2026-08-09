@@ -41,10 +41,12 @@ const byCite: Record<string, Use[]> = {}
 
 const pick = (v: Row): string => (typeof v === 'string' ? v : (v?.en ?? v?.ko ?? ''))
 
-// The nearest falsifiable sentence, marked with what kind of sentence it is. A
-// test's is not a physiological finding and an undetectable test's is a statement
-// about why nothing would settle it, so a verifier needs to know which they are
-// reading before they open the source.
+/**
+ * The nearest falsifiable sentence, marked with what kind of sentence it is. A
+ * test's is not a physiological finding and an undetectable test's is a statement
+ * about why nothing would settle it, so a verifier needs to know which they are
+ * reading before they open the source.
+ */
 const label = (a: Assertion): string => {
   const text = pick(a.proposition)
   if (!text) return ''
@@ -113,23 +115,29 @@ for (const cite of cites) {
 // Three questions answerable from the data alone, before anyone opens a source.
 // They are the ones most likely to change a tier, so they come first.
 
-// A source cited only on system rows and distributions is never attached to a
-// falsifiable sentence. That is usually a canonical text being used as if it were
-// efficacy evidence - a category error the tier system exists to catch.
+/**
+ * A source cited only on system rows and distributions is never attached to a
+ * falsifiable sentence. That is usually a canonical text being used as if it were
+ * efficacy evidence - a category error the tier system exists to catch.
+ */
 const methodOnly = cites.filter((c) => byCite[c].every((u) => !u.assertion))
-// `consensus` is the highest bar in the tier table: textbook-settled. Fewest rows,
-// biggest claim, so check these first.
+/**
+ * `consensus` is the highest bar in the tier table: textbook-settled. Fewest rows,
+ * biggest claim, so check these first.
+ */
 const consensus = cites.filter((c) => byCite[c].some((u) => u.tier === 'consensus'))
-// A test the row itself calls unobservable, carrying a tier above `tradition`.
+/** A test the row itself calls unobservable, carrying a tier above `tradition`. */
 const unobservable: string[] = []
 for (const c of cites)
   for (const u of byCite[c])
     if (u.kind === 'unobservable-test' && u.tier !== 'tradition')
       unobservable.push(`\`${u.row}\` (${u.tier}) — ${c}`)
 
-// `source` entries are provenance, not evidence, so they are deliberately absent
-// from everything above - there is no claim to check them against. Listing them
-// keeps that a stated choice rather than a silent omission.
+/**
+ * `source` entries are provenance, not evidence, so they are deliberately absent
+ * from everything above - there is no claim to check them against. Listing them
+ * keeps that a stated choice rather than a silent omission.
+ */
 const sourced = rows.filter((r: Row) => r.source?.length)
 lines.push('---', '', '## Not in scope: provenance', '')
 lines.push(
@@ -188,10 +196,12 @@ guard(
 writeFileSync(resolve(root, 'docs/verification.md'), lines.join('\n'))
 
 // ---- counts --------------------------------------------------------------
-// Every count the prose wants to quote, derived from the data instead of typed
-// into it. Hand-written totals had already gone stale once - the README described
-// two undetectable tests when there were thirteen - and prose that has to be
-// re-counted by hand after every tier change will go stale again.
+/**
+ * Every count the prose wants to quote, derived from the data instead of typed
+ * into it. Hand-written totals had already gone stale once - the README described
+ * two undetectable tests when there were thirteen - and prose that has to be
+ * re-counted by hand after every tier change will go stale again.
+ */
 const tally = (list: Row[], of: (r: Row) => string | undefined): Record<string, number> => {
   const out: Record<string, number> = {}
   for (const r of list) {

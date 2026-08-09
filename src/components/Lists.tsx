@@ -8,12 +8,14 @@ import { EntryLink, ProvenanceBadge, TierBadge } from './primitives.tsx'
 import type { Anchor, System, Workout } from '../types/index.d.ts'
 import type { WithCtx } from '../types/view.ts'
 
-// Tier goes on the card, never only in the detail view - the README's one hard UI
-// rule, so browsing ten systems cannot make `tradition` look like `consensus`.
-// Provenance rides beside it for the same reason: most rows have no recorded
-// source, and a blank one made an undocumented row indistinguishable from a
-// documented one while browsing. Both entities carry the pair, so a reader never
-// has to know which kind of card they are looking at to read the badges.
+/**
+ * Tier goes on the card, never only in the detail view - the README's one hard UI
+ * rule, so browsing ten systems cannot make `tradition` look like `consensus`.
+ * Provenance rides beside it for the same reason: most rows have no recorded
+ * source, and a blank one made an undocumented row indistinguishable from a
+ * documented one while browsing. Both entities carry the pair, so a reader never
+ * has to know which kind of card they are looking at to read the badges.
+ */
 export function SystemCard({
   ctx,
   system: s,
@@ -207,8 +209,10 @@ export function AnchorList({ ctx }: WithCtx) {
   )
 }
 
-// The naming-join headline: one colloquial term ("tempo run") resolving to more
-// than one workout is the collision the dataset exists to make visible.
+/**
+ * The naming-join headline: one colloquial term ("tempo run") resolving to more
+ * than one workout is the collision the dataset exists to make visible.
+ */
 export function SearchResults({ ctx, rawQ }: WithCtx & { rawQ: string }) {
   const { t, lang, systems, workouts, anchors, usage, byWorkout, bySystem } = ctx
   const q = rawQ.trim().toLowerCase()
