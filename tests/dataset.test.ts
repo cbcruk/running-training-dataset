@@ -71,6 +71,15 @@ test('one work cannot be both the description and the proof', () => {
   expect(rules(broken)).toContain('source-and-cite')
 })
 
+// `주기` is one vocabulary spoken from both ends, and until this rule nothing made
+// the two ends agree - the emphasised id only had to exist.
+test('a phase cannot emphasise a workout placed somewhere else', () => {
+  const broken = patch(data, 'workouts', 'easy-run', (w) => {
+    w.placement = ['peak']
+  })
+  expect(rules(broken)).toContain('phase-placement-mismatch')
+})
+
 // The failure this one exists for is real and recent: a Faude cite that dropped
 // its subtitle read as a different work from the same paper written in full.
 test('one reference written two ways is caught', () => {

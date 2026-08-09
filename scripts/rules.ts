@@ -196,16 +196,35 @@ export function check(data: Dataset): Finding[] {
     for (const d of dupes(w.intensity.anchors.map((a: Row) => a.model)))
       add('discipline', 'duplicate-anchor-model', w.id, `${w.id}: duplicate anchor model "${d}"`)
   }
+  // `base`/`build`/`peak`/`taper`/`offseason` is one vocabulary spoken from both
+  // ends: a system says which workouts it emphasises in a phase, and a workout says
+  // which phases it belongs in. Nothing made the two agree, so a system could
+  // emphasise a workout in `taper` that the workout itself places only in `base` -
+  // and the page would render both statements without noticing. Checking the
+  // emphasised id exists was never the whole referential question.
+  const byWorkoutId = Object.fromEntries(workouts.map((w: Row) => [w.id, w]))
   for (const s of systems)
     for (const p of s.phases ?? [])
-      for (const e of p.emphasis)
-        if (!wIds.has(e))
+      for (const e of p.emphasis) {
+        if (!wIds.has(e)) {
           add(
             'ref',
             'unknown-workout-ref',
             s.id,
             `system ${s.id} phase ${p.name}: unknown workout "${e}"`,
           )
+          continue
+        }
+        const placement: string[] = byWorkoutId[e].placement ?? []
+        if (!placement.includes(p.name))
+          add(
+            'ref',
+            'phase-placement-mismatch',
+            s.id,
+            `system ${s.id} phase ${p.name}: emphasises "${e}", but that workout is placed in [${placement.join(', ')}]`,
+            `phases.${p.name}`,
+          )
+      }
 
   for (const u of usage) {
     if (!wIds.has(u.workout))

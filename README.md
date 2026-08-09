@@ -99,6 +99,7 @@
 - `test`에 `tier: consensus` → 위반. test는 자기 교란을 달고 있는 현장 관측 휴리스틱이지 정착된 발견이 아니다.
 - `status: verified`가 아닌 행에 `tier: consensus` → 위반. 최상위 등급은 `status`가 기록하는 사람의 읽기를 요구한다.
 - `attribution: null`인데 `provenance: uncitable`이 아닌 워크아웃 → 위반. 아무도 정식화하지 않았다면 권위 있는 텍스트가 존재할 수 없다.
+- 어떤 주기에서 강조하는 워크아웃이 그 주기에 배치돼 있지 않으면 → 위반. `base`·`build`·`peak`·`taper`·`offseason`은 훈련법과 워크아웃이 양쪽에서 쓰는 한 어휘이고, 둘이 어긋나면 페이지가 서로 모순되는 두 문장을 아무 표시 없이 렌더한다.
 - 존재하지 않는 파일을 가리키는 주석 → 위반. 산문은 아무것도 검사하지 않던 유일한 부분이었고, 두 번의 이름 변경을 거치며 참조 열여섯 개가 낡은 뒤에야 발견됐다. 의도적인 예외는 `scripts/comment-refs.ts`에 적혀 있다.
 - 생성기가 쓴 `status: verified` → 위반. 사람의 서명이 필요하다.
 - `id`/`canonical_name`의 통칭 → 위반. 그건 `usage.json`에 속한다.
