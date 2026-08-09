@@ -80,6 +80,53 @@ test('a phase cannot emphasise a workout placed somewhere else', () => {
   expect(rules(broken)).toContain('phase-placement-mismatch')
 })
 
+// A human read had nowhere durable to live: the worksheet's boxes are rewritten on
+// every regeneration and `status: verified` was rejected outright, which left the
+// top tier closed rather than empty. The ledger is that place, and it is checked
+// against the data in both directions.
+const CONVERTINO =
+  'Convertino VA (1991). Blood volume: its adaptation to endurance training. Med Sci Sports Exerc 23(12).'
+const reading = (o: Record<string, unknown> = {}) => ({
+  cite: CONVERTINO,
+  row: 'easy-run',
+  path: 'claim',
+  supports: true,
+  by: '테스터',
+  on: '2026-08-10',
+  note: '무엇을 확인했는지',
+  ...o,
+})
+
+test('a reading has to name a row that exists', () => {
+  expect(rules({ ...data, verified: [reading({ row: 'nope' })] })).toContain('ledger-unknown-row')
+})
+
+test('a reading has to name an assertion that exists', () => {
+  expect(rules({ ...data, verified: [reading({ path: 'nope' })] })).toContain(
+    'ledger-unknown-assertion',
+  )
+})
+
+// The direction that earns its keep: a rejected reference must be gone from the
+// data, so a cite someone has already ruled out cannot quietly come back.
+test('a rejected reading must have removed its cite', () => {
+  expect(rules({ ...data, verified: [reading({ supports: false })] })).toContain(
+    'ledger-contradicts-data',
+  )
+})
+
+test('verified needs a reading behind every citation on the row', () => {
+  const claimed = {
+    ...data,
+    workouts: data.workouts.map((w) => (w.id === 'easy-run' ? { ...w, status: 'verified' } : w)),
+  }
+  expect(rules(claimed)).toContain('verified-without-ledger')
+  const readings = (
+    claimed.workouts.find((w) => w.id === 'easy-run')!.claim.evidence.cite as string[]
+  ).map((c) => reading({ cite: c }))
+  expect(rules({ ...claimed, verified: readings })).not.toContain('verified-without-ledger')
+})
+
 // The failure this one exists for is real and recent: a Faude cite that dropped
 // its subtitle read as a different work from the same paper written in full.
 test('one reference written two ways is caught', () => {

@@ -27,7 +27,7 @@ type Row = any
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const data = load(root)
-const { workouts, systems, usage, anchors, adaptations } = data
+const { workouts, systems, usage, anchors, adaptations, verified } = data
 const rows = [...workouts, ...systems]
 
 interface Use {
@@ -66,6 +66,13 @@ for (const row of rows)
         kind: a.kind,
       })
 
+/**
+ * 읽은 기록. `data/verified.json`은 생성되지 않으므로, 이 파일이 매번 새로 쓰여도
+ * 체크는 살아남는다 — 체크박스가 소스가 아니라 원장의 그림자이기 때문이다.
+ */
+const readings = new Map<string, Row>()
+for (const v of verified) readings.set(`${v.row} ${v.path} ${v.cite}`, v)
+
 const cites = Object.keys(byCite).sort()
 const tierCount: Record<string, number> = {}
 for (const uses of Object.values(byCite))
@@ -102,12 +109,14 @@ for (const cite of cites) {
   lines.push(`## ${cite}`, '')
   lines.push(`주장 ${uses.length}개를 떠받친다:`, '')
   for (const u of uses) {
-    const head = `- [ ] \`${u.row}\` · \`${u.where}\` · **${u.tier}**`
+    const r = readings.get(`${u.row} ${u.where === '(row itself)' ? '' : u.where} ${cite}`)
+    const head = `- [${r ? (r.supports ? 'x' : '-') : ' '}] \`${u.row}\` · \`${u.where}\` · **${u.tier}**`
     lines.push(
       u.assertion
         ? `${head} — "${u.assertion}"`
         : `${head} — _(반증 가능한 문장이 붙어 있지 않음)_`,
     )
+    if (r) lines.push(`      _${r.supports ? '확인' : '기각'} · ${r.by} · ${r.on}_ — ${r.note}`)
   }
   lines.push('')
 }

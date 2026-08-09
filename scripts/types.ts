@@ -40,6 +40,7 @@ const ROOTS: Record<string, string> = {
   'usage.schema.json': 'Usage',
   'anchor-model.schema.json': 'Anchor',
   'adaptation.schema.json': 'Adaptation',
+  'verified.schema.json': 'Verified',
 }
 
 const files = readdirSync(schemaDir)

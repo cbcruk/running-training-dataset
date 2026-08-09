@@ -101,7 +101,8 @@
 - `attribution: null`인데 `provenance: uncitable`이 아닌 워크아웃 → 위반. 아무도 정식화하지 않았다면 권위 있는 텍스트가 존재할 수 없다.
 - 어떤 주기에서 강조하는 워크아웃이 그 주기에 배치돼 있지 않으면 → 위반. `base`·`build`·`peak`·`taper`·`offseason`은 훈련법과 워크아웃이 양쪽에서 쓰는 한 어휘이고, 둘이 어긋나면 페이지가 서로 모순되는 두 문장을 아무 표시 없이 렌더한다.
 - 존재하지 않는 파일을 가리키는 주석 → 위반. 산문은 아무것도 검사하지 않던 유일한 부분이었고, 두 번의 이름 변경을 거치며 참조 열여섯 개가 낡은 뒤에야 발견됐다. 의도적인 예외는 `scripts/comment-refs.ts`에 적혀 있다.
-- 생성기가 쓴 `status: verified` → 위반. 사람의 서명이 필요하다.
+- 검증 원장에 읽은 기록이 없는 인용을 가진 행이 `status: verified` → 위반. 무엇이 확인됐는지 말하지 않는 서명은 서명이 아니다.
+- 원장 항목이 없는 행·경로를 가리키거나, 확인했다는 인용이 데이터에 없거나, 기각한 인용이 데이터에 남아 있으면 → 위반. 원장과 데이터는 양방향으로 맞아야 한다.
 - `id`/`canonical_name`의 통칭 → 위반. 그건 `usage.json`에 속한다.
 - 한 문장을 넘는 `bet` → 위반.
 - `intensity_model`과 모순되는 `switching_cost.anchor_change` → 위반.
@@ -156,6 +157,7 @@ data/
   usage.json         # (system, workout) -> calls_it. 충돌 표
   anchors.json       # 측정 계층. intensity_model별 requires + fallback (-> RPE)
   adaptations.json   # target_adaptation 분류: 거친 범주 + 정의
+  verified.json      # 검증 원장. 손으로 쓰고 생성되지 않는다 — 사람이 읽었다는 유일한 기록
   schema/*.json      # JSON Schema 2020-12
 scripts/
   rules.ts           # check(data) -> Finding[]. 모든 규칙, I/O 없음. 테스트가 rule id를 가리킨다
@@ -204,6 +206,7 @@ vp run build                       # dist/에 정적 번들, 엔트리당 HTML �
 가까운 작업 목록 — 검증(`draft` → `verified`), `switching_cost` 대칭성, 얕은 필드의 깊이 — 은 [`docs/TODO.md`](docs/TODO.md)에 구체적으로 추적된다.
 
 아키텍처 결정과 그 추론은 [`docs/adr/`](docs/adr/)에 있다.
+[ADR 0008](docs/adr/0008-verification-ledger.md)은 사람이 소스를 읽었다는 사실에 자리를 준다 — 검증 원장.
 [ADR 0007](docs/adr/0007-korean-repo-prose.md)은 저장소 산문을 한국어로 쓰기로 하고 그 경계를 긋는다.
 [ADR 0006](docs/adr/0006-korean-only-dataset.md)은 데이터셋에서 영어를 제거한 이유를 기록한다.
 [ADR 0005](docs/adr/0005-comments-as-agent-context.md)는 파일 상단 주석을 에이전트 대면 컨텍스트로 다루고 검사 가능하게 만든다.

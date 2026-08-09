@@ -28,9 +28,12 @@ const Ajv2020 = Ajv2020Module as unknown as new (opts: Row) => any
 /**
  * The three layers a machine can check, in the order they are worth failing on:
  * L1 `schema` (shape), L2 `ref` (does what it points at exist), L3 `discipline`
- * (the project's own rules, the ones no generic validator would know). L4 is the
- * human read, which is not a layer here because no rule can perform it - it is
- * recorded as `status: verified` and gated accordingly.
+ * (the project's own rules, the ones no generic validator would know).
+ *
+ * L4 is the human read. No rule can perform it, but since ADR 0008 the rules can
+ * check its *record*: an entry in `data/verified.json` has to name a real
+ * assertion, agree with whether the data still carries that cite, and exist for
+ * every citation on a row before that row may call itself `verified`.
  */
 export type Layer = 'schema' | 'ref' | 'discipline'
 
@@ -54,7 +57,7 @@ const citeKey = (c: string): string | null => {
 }
 
 export function check(data: Dataset): Finding[] {
-  const { workouts, systems, usage, anchors, adaptations, schemas } = data
+  const { workouts, systems, usage, anchors, adaptations, verified, schemas } = data
   const found: Finding[] = []
   const add = (layer: Layer, rule: string, row: string, message: string, path?: string) =>
     found.push(path ? { layer, rule, row, path, message } : { layer, rule, row, message })
@@ -68,6 +71,7 @@ export function check(data: Dataset): Finding[] {
     ['usage', usage, 'usage.schema.json'],
     ['anchor', anchors, 'anchor-model.schema.json'],
     ['adaptation', adaptations, 'adaptation.schema.json'],
+    ['verified', verified, 'verified.schema.json'],
   ] as [string, Row[], string][]) {
     const validate = ajv.getSchema(key)
     list.forEach((row: Row, i: number) => {
@@ -424,6 +428,9 @@ export function check(data: Dataset): Finding[] {
     for (const src of row.source ?? []) noteForm(src)
     for (const a of assertions(row)) for (const c of a.evidence.cite ?? []) noteForm(c)
   }
+  // A ledger entry names a reference too, and a verifier who wrote it a third way
+  // would be recording a reading of something the data cannot be matched against.
+  for (const v of verified) noteForm(v.cite)
   for (const [key, forms] of Object.entries(citeForms))
     if (forms.size > 1)
       add(
@@ -500,15 +507,81 @@ export function check(data: Dataset): Finding[] {
           a.path,
         )
 
-  // Nothing ships verified while its citations are unchecked.
+  // ---- the verification ledger ----
+  // A human read used to have nowhere to live. The worksheet's checkboxes are
+  // rewritten every time it regenerates, and `status: verified` was rejected
+  // outright because no rule can tell who typed it - so the top tier, which
+  // requires that read, was not empty but closed. The ledger makes the claim
+  // explicit instead of forbidding it: an entry names the source, the assertion,
+  // the person, the date and what was found, and is read in review rather than
+  // inferred from a one-word diff.
+  const byId = Object.fromEntries(rows.map((r: Row) => [r.id, r]))
+  const assertionKey = (row: string, path: string) => `${row} ${path}`
+  const citesAt = new Map<string, Set<string>>()
   for (const row of rows)
-    if (row.status === 'verified')
+    for (const a of assertions(row))
+      citesAt.set(assertionKey(row.id, a.path), new Set(a.evidence.cite ?? []))
+
+  for (const v of verified) {
+    if (!byId[v.row]) {
+      add('ref', 'ledger-unknown-row', v.row, `verified: "${v.row}" is not a workout or system id`)
+      continue
+    }
+    const at = citesAt.get(assertionKey(v.row, v.path))
+    if (!at) {
+      add(
+        'ref',
+        'ledger-unknown-assertion',
+        v.row,
+        `verified: ${v.row} has no evidence at path "${v.path}"`,
+        v.path,
+      )
+      continue
+    }
+    // The entry and the data have to say the same thing. A confirmed reading whose
+    // cite has since been removed is a stale record; a rejected one whose cite is
+    // still there means the rejection was never applied - and that second case is
+    // what stops a reference someone has already ruled out from quietly returning.
+    const present = at.has(v.cite)
+    if (v.supports && !present)
       add(
         'discipline',
-        'generator-verified',
-        row.id,
-        `${row.id}: status=verified requires L4 human sign-off, not a generator`,
+        'ledger-contradicts-data',
+        v.row,
+        `verified: ${v.row}.${v.path} was confirmed against "${v.cite.slice(0, 40)}..." but no longer cites it`,
+        v.path,
       )
+    if (!v.supports && present)
+      add(
+        'discipline',
+        'ledger-contradicts-data',
+        v.row,
+        `verified: ${v.row}.${v.path} still cites "${v.cite.slice(0, 40)}..." which a reading rejected - drop the cite`,
+        v.path,
+      )
+  }
+
+  // Nothing ships verified while its citations are unchecked. What counts as
+  // checked is now statable: every reference the row cites has a confirming entry.
+  const confirmed = new Set(
+    verified.filter((v: Row) => v.supports).map((v: Row) => `${v.row} ${v.path} ${v.cite}`),
+  )
+  for (const row of rows) {
+    if (row.status !== 'verified') continue
+    const missing: string[] = []
+    for (const a of assertions(row))
+      for (const c of a.evidence.cite ?? [])
+        if (!confirmed.has(`${row.id} ${a.path} ${c}`))
+          missing.push(`${a.path || '(row)'} ← ${c.slice(0, 40)}...`)
+    if (missing.length)
+      add(
+        'discipline',
+        'verified-without-ledger',
+        row.id,
+        `${row.id}: status=verified but ${missing.length} citation(s) have no reading in data/verified.json:\n` +
+          missing.map((m) => `      - ${m}`).join('\n'),
+      )
+  }
 
   return found
 }
