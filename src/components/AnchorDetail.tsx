@@ -1,24 +1,16 @@
-/**
- * The anchor entry, as components.
- *
- * Spike for the component-model migration. Two things to notice against the
- * template-literal original in views.jsx:
- *
- *   1. No esc(). JSX escapes text children and attribute values itself, so the
- *      manual-escaping footgun - one forgotten call is a hole - is gone
- *      structurally rather than by discipline.
- *   2. The page reads as its sections. `descent`, `siblings`, `sysHtml`,
- *      `wkHtml`, `switchHtml` were locals holding HTML strings; they are now
- *      components that either render or return null.
- *
- * The hard constraint from ADR 0001 still holds: these render to a string in
- * Node via react-dom/server, so the prerenderer and the browser keep producing
- * the same markup from one source.
- */
 import { Block, Chip, EntryLink, TierBadge, WChip } from './primitives.tsx'
 import type { Anchor, System } from '../types/index.d.ts'
 import type { AnchorSwitch, AnchorUse, WithCtx } from '../types/view.ts'
 
+/**
+ * The anchor entry: what this way of naming an intensity takes to measure, what
+ * it degrades to without the equipment, and everything that references it.
+ *
+ * This was the spike that settled the component model - ADR 0002 records the
+ * comparison. ADR 0001's constraint is the one that still binds every day: it
+ * renders to a string in Node via react-dom/server, so the prerenderer and the
+ * browser produce the same markup from one source.
+ */
 export function AnchorDetail({ ctx, model }: WithCtx & { model: string }) {
   const { t, lang, byAnchor, anchors, bySystem, constructs, indexes } = ctx
   const a = byAnchor[model]

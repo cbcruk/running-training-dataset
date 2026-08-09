@@ -1,17 +1,14 @@
-/**
- * structure -> schematic SVG. The point: media is a derivative of data, not a licensed asset.
- * Pure module: no filesystem, no globals. Imported by both the CLI (render.ts) and the browser UI,
- * so the visual stays a single function of the data in both places.
- */
-
-// rpe_10 is schema-mandated (contains/minContains/maxContains), so this cannot miss.
-// The cost: RPE is the LEAST precise anchor, so the y-axis is subjective by construction.
-// The chart looks precise on both axes and is schematic on both. Label accordingly.
 import type { Workout } from '../src/types/index.d.ts'
 import type { Anchor, Quantity, Segment } from '../src/types/workout.d.ts'
 
 type ById = Record<string, Workout>
 
+/**
+ * The y-axis. `rpe_10` is schema-mandated (contains/minContains/maxContains), so
+ * this cannot miss - and it is the LEAST precise anchor the data has, which makes
+ * the vertical axis subjective by construction. The chart looks precise on both
+ * axes and is schematic on both; label it accordingly.
+ */
 const rpe = (w: Workout): number => {
   const a = w.intensity.anchors.find((x: Anchor) => x.model === 'rpe_10')!
   return a.range ? (a.range[0] + a.range[1]) / 2 : a.value!
@@ -58,7 +55,14 @@ const COLOR: Record<string, string> = {
   work: 'var(--accent)',
 }
 
-/** Render one workout to a schematic SVG string. `byId` resolves intensity_ref -> workout. */
+/**
+ * `structure` -> a schematic SVG string. `byId` resolves `intensity_ref` -> workout.
+ *
+ * The media this project ships is a derivative of its data, not a licensed asset,
+ * which is what makes it free to keep. Pure - no filesystem, no globals - so the
+ * CLI (render.ts) and the browser UI can both call it and the visual stays one
+ * function of the data in both places.
+ */
 export function renderWorkout(w: Workout, byId: ById): string {
   const segs = flatten(w.structure.segments, w, byId)
   const total = segs.reduce((a: number, s: Flat) => a + s.secs, 0)

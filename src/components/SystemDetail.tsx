@@ -1,8 +1,3 @@
-/**
- * The system entry - the browsing unit. Leads with the bet and the evidence
- * tier, because the README's one hard UI rule is that browsing ten systems must
- * never make a `tradition` system look as settled as a `consensus` one.
- */
 import {
   AnchorCode,
   Block,
@@ -19,6 +14,11 @@ import type { System } from '../types/index.d.ts'
 import type { Distribution, Phase, SwitchingCost, VolumeCap } from '../types/system.d.ts'
 import type { Translatable, WithCtx } from '../types/view.ts'
 
+/**
+ * The system entry - the browsing unit. Leads with the bet and the evidence
+ * tier, because the README's one hard UI rule is that browsing ten systems must
+ * never make a `tradition` system look as settled as a `consensus` one.
+ */
 export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
   const { t, lang, bySystem, fmt } = ctx
   const s = bySystem[id]

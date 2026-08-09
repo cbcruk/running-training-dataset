@@ -1,8 +1,3 @@
-/**
- * The workout entry - the detail view. Each row carries a falsifiable claim and
- * the procedure that would falsify it. There is deliberately no
- * expected-improvement number; see the README's non-goals.
- */
 import { renderWorkout } from '../../scripts/svg.ts'
 import {
   AdaptationsBlock,
@@ -19,6 +14,11 @@ import type { Usage, Workout } from '../types/index.d.ts'
 import type { Anchor as WorkoutAnchor, Confound } from '../types/workout.d.ts'
 import type { Translatable, WithCtx } from '../types/view.ts'
 
+/**
+ * The workout entry - the detail view. Each row carries a falsifiable claim and
+ * the procedure that would falsify it. There is deliberately no
+ * expected-improvement number; see the README's non-goals.
+ */
 export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
   const { t, lang, byWorkout } = ctx
   const w = byWorkout[id]
