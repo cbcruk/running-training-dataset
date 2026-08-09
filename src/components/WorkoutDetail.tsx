@@ -8,6 +8,8 @@ import {
   Block,
   CiteList,
   MeasurementBlock,
+  ProvenanceBadge,
+  SourceBlock,
   TierBadge,
   EntryLink,
 } from "./primitives.tsx";
@@ -28,7 +30,10 @@ export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
       <article className="detail">
         <div className="detail-head">
           <h1>{w.canonical_name}</h1>
-          <TierBadge ctx={ctx} tier={w.claim?.evidence?.tier} />
+          <span className="badges">
+            <TierBadge ctx={ctx} tier={w.claim?.evidence?.tier} />
+            <ProvenanceBadge ctx={ctx} provenance={w.provenance} />
+          </span>
         </div>
         <div className="chips">
           {w.family && (
@@ -110,6 +115,8 @@ export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
           {w.claim?.mechanism && <p>{t(w.claim.mechanism)}</p>}
           <CiteList evidence={w.claim?.evidence} />
         </Block>
+
+        <SourceBlock ctx={ctx} source={w.source} provenance={w.provenance} />
 
         <Block className="test" title={lang === "ko" ? "반증 절차" : "Falsification test"}>
           <FalsificationTest ctx={ctx} test={w.test} />

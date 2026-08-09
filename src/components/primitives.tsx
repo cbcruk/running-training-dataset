@@ -97,17 +97,18 @@ export function TierBadge({ ctx, tier }: WithCtx & { tier?: string }) {
 // verdict word: a reader scanning the list should see two independent facts, not
 // one stronger or weaker rating.
 //
-// It exists because absence was invisible. 11 of 14 systems carry no `source`,
-// and a blank read as "fine" - which made the well-documented rows and the
-// undocumented ones look identical at exactly the moment a reader is deciding
-// how much to trust one.
+// It exists because absence was invisible. Most rows carry no `source`, and a
+// blank read as "fine" - which made the well-documented rows and the undocumented
+// ones look identical at exactly the moment a reader is deciding how much to trust
+// one. Workouts carry the same pair as systems and say it the same way: the whole
+// point is that a reader never has to know which kind of entity they are on.
 const PROVENANCE: Record<string, { mark: string; label: Translatable; tip: Translatable }> = {
   recorded: {
     mark: "◆",
     label: { ko: "정본", en: "sourced" },
     tip: {
-      ko: "이 체계가 무엇을 처방하는지의 정본이 기록되어 있다. 그 처방이 효과가 있다는 뜻은 아니다 — 그건 등급이 따로 답한다.",
-      en: "The text recording what this system prescribes is on file. It does not say the prescription works; the tier answers that separately.",
+      ko: "이 항목이 무엇을 처방하는지의 정본이 기록되어 있다. 그 처방이 효과가 있다는 뜻은 아니다 — 그건 등급이 따로 답한다.",
+      en: "The text recording what this row prescribes is on file. It does not say the prescription works; the tier answers that separately.",
     },
   },
   unrecorded: {
@@ -139,6 +140,52 @@ export function ProvenanceBadge({ ctx, provenance }: WithCtx & { provenance?: st
       </span>
       {ctx.t(p.label)}
     </span>
+  );
+}
+
+const UNRECORDED_NOTE: Translatable = {
+  ko: "정본은 존재하지만 아직 여기 기록되지 않았다. 이 페이지의 서술이 그 정본과 일치하는지 확인된 바 없으므로, 처방의 세부는 원전으로 확인할 것.",
+  en: "A defining text exists but has not been recorded here. Nothing has checked this page's description against it, so confirm the details of the prescription against the original.",
+};
+const UNCITABLE_NOTE: Translatable = {
+  ko: "인용할 정본이 아예 없다. 이 항목의 서술은 인용 형태로 쓸 수 없는 자료 — 저자·연도가 없는 글이거나, 커뮤니티에서 형식화된 관행이거나, 아무도 특정할 수 없는 통념 — 에서 왔고, 따라서 이 칸은 앞으로도 채워지지 않는다. 정본이 있는 항목과 같은 무게로 읽지 말 것.",
+  en: "There is no citable text at all. This row's description comes from material that cannot be written in citation form - writing with no author or year, a practice formalised in a community, or a convention nobody in particular set down - so this slot will stay empty. Do not read it with the same weight as a row that has one.",
+};
+
+/**
+ * The provenance block, rendered even with nothing to show.
+ *
+ * It used to disappear when `source` was empty, which is how an unrecorded row
+ * came to look identical to a recorded one: the reader saw no claim rather than a
+ * missing one. An empty slot now has to say which kind of empty it is.
+ */
+export function SourceBlock({
+  ctx,
+  source,
+  provenance,
+}: WithCtx & { source?: string[]; provenance?: string }) {
+  const { t, lang } = ctx;
+  return (
+    <Block
+      title={lang === "ko" ? "출처 (서술)" : "Source (description)"}
+      sub={
+        lang === "ko"
+          ? "이 항목이 무엇을 처방하는지의 기록이다. 작동한다는 증거가 아니다 — 그건 등급과 인용이 따로 답한다."
+          : "The record of what this row prescribes. Not evidence that it works — the tier and its cites answer that separately."
+      }
+    >
+      {source?.length ? (
+        <ul className="cites">
+          {source.map((c: string) => (
+            <li key={c}>{c}</li>
+          ))}
+        </ul>
+      ) : (
+        <p className={`note prov-empty prov-empty-${provenance}`}>
+          {t(provenance === "uncitable" ? UNCITABLE_NOTE : UNRECORDED_NOTE)}
+        </p>
+      )}
+    </Block>
   );
 }
 

@@ -229,9 +229,19 @@ export interface RunningWorkout {
   common_errors?: I18N[];
   instructions: I18N;
   /**
-   * Who formalized it. null = folk/unattributable.
+   * Who formalized it. null = folk/unattributable. Names a person, not a text - the text is `source`.
    */
   attribution?: string | null;
+  /**
+   * Provenance: the text that defines this workout. Same split as on a system - a canonical text records what is prescribed, which is a different question from whether it works, and that one is answered (or not) by `evidence`. A `source` never justifies a tier and is allowed at any tier, including `tradition`.
+   *
+   * @minItems 1
+   */
+  source?: [string, ...string[]];
+  /**
+   * The state of `source`, stated rather than inferred from its absence. recorded = the defining text is cited in `source`. unrecorded = such a text exists but is not cited here yet. uncitable = no authoritative defining text exists at all. A workout with `attribution: null` was formalized by nobody in particular, so no authoritative text can exist for it - validate.ts requires those rows to be `uncitable`.
+   */
+  provenance: "recorded" | "unrecorded" | "uncitable";
 }
 export interface Structure {
   /**

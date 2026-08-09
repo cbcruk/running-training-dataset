@@ -9,7 +9,7 @@ It is generated from the data, so it cannot drift from the rows it describes.
 `status: verified`; that flip is a human act, done per row, after reading the
 source. This file only says what to read and what to check it against.
 
-**11 sources** carry **23 assertions** (5 consensus, 18 plausible).
+**11 sources** carry **13 assertions** (13 plausible).
 
 How to use it: take one source, read it once, then walk its rows below. For
 each, the question is not _is this true_ but **does this source say it**. If it
@@ -20,49 +20,40 @@ does not, the row drops to `tradition` — which means removing the cite, becaus
 
 ## Billat LV (2001). Interval training for performance: a scientific and empirical practice. Part I: aerobic interval training. Sports Med 31(1).
 
-Carries 4 assertions:
+Carries 2 assertions:
 
 - [ ] `vo2max-intervals` · `claim` · **plausible** — "Total dwell time at or near VO2max determines the magnitude of VO2max improvement."
-- [ ] `vo2max-intervals` · `test` · **plausible** — "(test) The last repetition degrades less at the same pace. Fade across repetitions is a more sensitive indicator than the pace itself."
 - [ ] `vo2max-30-30` · `claim` · **plausible** — "Short (~30s) reps accumulate more time near VO2max at a lower blood-lactate cost than long reps."
-- [ ] `vo2max-30-30` · `test` · **plausible** — "(unobservable test) Time near VO2max is unmeasurable without gas exchange, and rep completion is contaminated by pacing and motivation."
 
 ## Convertino VA (1991). Blood volume: its adaptation to endurance training. Med Sci Sports Exerc 23(12).
 
-Carries 2 assertions:
+Carries 1 assertion:
 
-- [ ] `easy-run` · `claim` · **consensus** — "Accumulated time at low intensity produces plasma volume, capillary, and mitochondrial adaptation. Time is the variable, not intensity."
-- [ ] `easy-run` · `test` · **consensus** — "(test) Average HR at the same pace drops 5-10bpm. The fastest and most reliable change a novice will actually feel."
+- [ ] `easy-run` · `claim` · **plausible** — "Accumulated time at low intensity produces plasma volume, capillary, and mitochondrial adaptation. Time is the variable, not intensity."
 
 ## Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
 
-Carries 6 assertions:
+Carries 1 assertion:
 
-- [ ] `threshold-continuous` · `claim` · **consensus** — "Sustained running near lactate steady state shifts the steady-state intensity itself upward."
-- [ ] `threshold-continuous` · `test` · **plausible** — "(test) The pace that feels comfortably hard shifts faster at the same RPE. Unlike the easy run, this is slow and noisy."
-- [ ] `cruise-intervals` · `claim` · **plausible** — "Splitting threshold volume into intervals with short recovery accumulates more total time at threshold, under a controlled lactate state, than a single continuous run."
-- [ ] `cruise-intervals` · `test` · **plausible** — "(test) Sustainable total time at the same T pace increases without blow-up, or the same total time is held at a lower RPE."
-- [ ] `rep-intervals` · `claim` · **plausible** — "Fast, relaxed reps with full recovery improve running economy and neuromuscular recruitment without significant anaerobic stress."
-- [ ] `rep-intervals` · `test` · **plausible** — "(unobservable test) Economy is only reliably measured in a lab; the field sense of 'lighter' legs is inseparable from neural learning and placebo."
+- [ ] `threshold-continuous` · `claim` · **plausible** — "Sustained running near lactate steady state shifts the steady-state intensity itself upward."
 
 ## Egan B, Zierath JR (2013). Exercise metabolism and the molecular regulation of skeletal muscle adaptation. Cell Metab 17(2).
 
-Carries 2 assertions:
+Carries 1 assertion:
 
 - [ ] `long-run` · `claim` · **plausible** — "The longer the continuous duration, the deeper the glycogen depletion and the greater the fat-oxidation and mitochondrial adaptation it drives."
-- [ ] `long-run` · `test` · **plausible** — "(unobservable test) The metabolic adaptation is not field-observable (needs gas exchange or biopsy), and improved completion is inseparable from pacing and fuelling. Any field observation is circular."
 
-## Faude O, Kindermann W, Meyer T (2009). Lactate threshold concepts. Sports Med 39(6).
+## Faude O, Kindermann W, Meyer T (2009). Lactate threshold concepts: how valid are they? Sports Med 39(6).
 
 Carries 1 assertion:
 
-- [ ] `threshold-continuous` · `claim` · **consensus** — "Sustained running near lactate steady state shifts the steady-state intensity itself upward."
+- [ ] `threshold-continuous` · `claim` · **plausible** — "Sustained running near lactate steady state shifts the steady-state intensity itself upward."
 
 ## Holloszy JO, Coyle EF (1984). Adaptations of skeletal muscle to endurance exercise. J Appl Physiol 56(4).
 
 Carries 1 assertion:
 
-- [ ] `easy-run` · `claim` · **consensus** — "Accumulated time at low intensity produces plasma volume, capillary, and mitochondrial adaptation. Time is the variable, not intensity."
+- [ ] `easy-run` · `claim` · **plausible** — "Accumulated time at low intensity produces plasma volume, capillary, and mitochondrial adaptation. Time is the variable, not intensity."
 
 ## Jones AM, Vanhatalo A (2017). The 'Critical Power' Concept: Applications to Sports Performance. Sports Med 47(Suppl 1).
 
@@ -78,10 +69,9 @@ Carries 1 assertion:
 
 ## McHugh MP (2003). Recent advances in the understanding of the repeated bout effect. Scand J Med Sci Sports 13(2).
 
-Carries 2 assertions:
+Carries 1 assertion:
 
 - [ ] `downhill-repeats` · `claim` · **plausible** — "A single downhill session confers protection (the repeated-bout effect) so a later downhill session causes markedly less muscle damage and soreness."
-- [ ] `downhill-repeats` · `test` · **plausible** — "(test) Delayed-onset soreness at 24-48h after a second downhill session (1-3 weeks later) is clearly less than after the first."
 
 ## Midgley AW, McNaughton LR (2006). Time at VO2max during intermittent treadmill running. J Sports Med Phys Fitness 46(1).
 
@@ -105,52 +95,34 @@ which is a different question from whether it works. Nothing here needs verifyin
 against a claim, because none is offered as evidence. `validate.ts` keeps the two
 apart — a reference cannot be both on one row.
 
+- `cruise-intervals` — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
+- `rep-intervals` — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
 - `daniels` — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
 - `lydiard` — Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport.
 - `pfitzinger` — Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics.
 
 ---
 
-## Triage: three questions to settle first
+## Triage: settled and now machine-enforced
+
+These three were the questions answerable without opening a source. Each is now a
+`validate.ts` rule, so the lists below cannot fill up without the build failing
+first — they are printed as a live check, not as a worklist.
 
 ### 1. Sources never attached to a falsifiable sentence
 
-`plausible` means _studied, contested_ and requires a cite. These sources sit on
-system rows and distributions only — they never back a `claim.proposition`
-anywhere in the data, so nothing states what they are supposed to have shown:
+A source backing no `claim.proposition` has nothing stated for it to be evidence _of_. Reviews were given a proposition to be checked against; canonical texts dropped to `tradition` and moved to `source`.
 
-- _(none)_
-
-They split into two kinds, and the fix differs:
-
-- **Canonical texts** (a method describing itself) are not evidence that the
-  method works. If the tier convention deliberately admits them, the README should
-  say so — the tier table currently does not.
-- **Review papers** may well support something; the row just never says what.
-  Give the row a `claim.proposition` the source can be checked against, or drop
-  the tier to `tradition` and remove the cite.
-
-This is the largest single question in §1b: it covers 0 of the 11 sources.
+- _(none — rule holding)_
 
 ### 2. `consensus` rows
 
-The highest bar in the tier table. Fewest assertions, strongest claim:
+`consensus` asserts that the field agrees, which no single source states and no generator can read off a bibliography. It now requires `status: verified` — the human read — and is closed to `test` slots entirely.
 
-- [ ] Convertino VA (1991). Blood volume: its adaptation to endurance training. Med Sci Sports Exerc 23(12).
-      _`easy-run`.claim, `easy-run`.test_
-- [ ] Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
-      _`threshold-continuous`.claim_
-- [ ] Faude O, Kindermann W, Meyer T (2009). Lactate threshold concepts. Sports Med 39(6).
-      _`threshold-continuous`.claim_
-- [ ] Holloszy JO, Coyle EF (1984). Adaptations of skeletal muscle to endurance exercise. J Appl Physiol 56(4).
-      _`easy-run`.claim_
+- _(none — rule holding)_
 
 ### 3. Unobservable tests above `tradition`
 
-The row states its own test cannot be observed, yet the evidence tier claims
-more than tradition. Confirm the tier is about the _mechanism_ rather than the
-test, or lower it:
+Every cited test in the seed data reused its claim's reference verbatim, all eight of them. A test's evidence must now be disjoint from its claim's — what a test may cite is a source about _measurement_.
 
-- [ ] `vo2max-30-30` (plausible) — Billat LV (2001). Interval training for performance: a scientific and empirical practice. Part I: aerobic interval training. Sports Med 31(1).
-- [ ] `rep-intervals` (plausible) — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
-- [ ] `long-run` (plausible) — Egan B, Zierath JR (2013). Exercise metabolism and the molecular regulation of skeletal muscle adaptation. Cell Metab 17(2).
+- _(none — rule holding)_
