@@ -51,7 +51,7 @@ export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
           )}
         </div>
 
-        {/* Our own SVG, generated from `structure` by the same scripts/svg.mjs the
+        {/* Our own SVG, generated from `structure` by the same scripts/svg.ts the
             CLI uses - so the visual can never drift from the data. */}
         <figure
           className="chart"

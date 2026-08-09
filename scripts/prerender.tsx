@@ -10,10 +10,10 @@
  * Markup comes from the views the browser renders from, so a prerendered page and
  * a client-rendered one cannot drift.
  *
- * It imports the SSR *build* (.ssr/views.js), not src/views.jsx directly: the
- * views are components now, and Node cannot parse JSX. `vp run pages` runs the
- * SSR build first. That extra step is the price of the component model - see
- * ADR 0002.
+ * It imports src/data.tsx and src/router.tsx directly. That used to be impossible
+ * - Node cannot parse JSX, so ADR 0002 paid for the component model with an
+ * intermediate SSR build this file imported instead. ADR 0003 put the scripts
+ * under nub, which transpiles on the fly, and the extra build step went away.
  *
  * Run it as `vp run pages`, not `prerender`: pnpm matches script names as
  * substrings, so a script called `prerender` would also fire on `vp run render`

@@ -27,7 +27,6 @@ function required<T extends HTMLElement>(id: string): T {
   return el as T
 }
 
-// ---- recently viewed --------------------------------------------------------
 /**
  * Per-reader, so it is never prerendered: the files on disk must read the same
  * for everyone.
@@ -83,7 +82,6 @@ function RecentStrip({ lang }: { lang: Lang }) {
   )
 }
 
-// ---- chrome -----------------------------------------------------------------
 /**
  * The header, search box and language toggle live outside the router outlet, so
  * they are wired here against router state rather than re-rendered per route.
@@ -153,7 +151,6 @@ function Chrome({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
   return path === '/' && !q ? <RecentStrip lang={lang} /> : null
 }
 
-// ---- keyboard-first lookup --------------------------------------------------
 /**
  *   /  or  s   focus the search box        ArrowUp/Down   walk the results
  *   Enter      open the highlighted hit    Esc            clear, then blur
@@ -235,7 +232,6 @@ createRoot(required<HTMLElement>('app')).render(
   </StrictMode>,
 )
 
-// ---- offline ----------------------------------------------------------------
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register(`${BASE}sw.js`, { scope: BASE }).catch(() => {

@@ -30,7 +30,7 @@ export type IntensityAnchorModel = {
   label: I18N
   requires: I18N1
   /**
-   * true only for the universal floor (rpe_10). Enforced in validate.mjs.
+   * true only for the universal floor (rpe_10). Enforced in validate.ts.
    */
   equipment_free: boolean
   fallback?: I18N2

@@ -191,12 +191,12 @@ vp run build                       # static bundle in dist/, one HTML file per e
 ```
 
 The browse UI reads the JSON directly and renders the schematic chart through the
-same `scripts/svg.mjs` the CLI uses, so the visual can never drift from the data.
+same `scripts/svg.ts` the CLI uses, so the visual can never drift from the data.
 Bilingual (ko/en) via the header toggle.
 
-Every entry is also a real document. `scripts/prerender.mjs` writes one HTML file
+Every entry is also a real document. `scripts/prerender.tsx` writes one HTML file
 per system, workout, and anchor — with its own `<title>`, description, canonical
-URL, and the entry's content in the markup — from the same `src/views.mjs` the
+URL, and the entry's content in the markup — from the same `src/components/` the
 browser renders. So a cold hit on `/anchor/rpe_10` is readable with no JavaScript
 and needs no server rewrites, while the client bundle upgrades navigation to
 instant, no-reload lookups. That split is the subject of

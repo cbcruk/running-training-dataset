@@ -25,6 +25,13 @@ import type { Dataset } from './dataset.ts'
 type Row = any
 const Ajv2020 = Ajv2020Module as unknown as new (opts: Row) => any
 
+/**
+ * The three layers a machine can check, in the order they are worth failing on:
+ * L1 `schema` (shape), L2 `ref` (does what it points at exist), L3 `discipline`
+ * (the project's own rules, the ones no generic validator would know). L4 is the
+ * human read, which is not a layer here because no rule can perform it - it is
+ * recorded as `status: verified` and gated accordingly.
+ */
 export type Layer = 'schema' | 'ref' | 'discipline'
 
 export interface Finding {
@@ -52,7 +59,6 @@ export function check(data: Dataset): Finding[] {
   const add = (layer: Layer, rule: string, row: string, message: string, path?: string) =>
     found.push(path ? { layer, rule, row, path, message } : { layer, rule, row, message })
 
-  // ---- L1: schema ----
   const ajv = new Ajv2020({ allErrors: true, strict: false })
   for (const [name, schema] of Object.entries(schemas)) ajv.addSchema(schema, name)
 
@@ -79,7 +85,6 @@ export function check(data: Dataset): Finding[] {
     })
   }
 
-  // ---- L2: referential integrity ----
   const wIds = new Set(workouts.map((w: Row) => w.id))
   const sIds = new Set(systems.map((s: Row) => s.id))
 
@@ -219,7 +224,6 @@ export function check(data: Dataset): Finding[] {
       )
   }
 
-  // ---- L3: project-specific discipline ----
   // Colloquial names must never leak into the workout row. They belong in usage.json.
   const BANNED_IN_ID = ['tempo', 'easy-pace', 'lt-run', 'pickup']
   for (const w of workouts)

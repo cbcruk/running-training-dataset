@@ -303,13 +303,13 @@ link) wrapped in a client-side index for **use** (looking up, cross-referencing,
 comparing). **Both modes are now served — this section is done.**
 
 - [x] **Real URLs (prerender + History API routing).** Done. Routing moved from
-      hash to the History API, and `scripts/prerender.mjs` writes one HTML file per
+      hash to the History API, and `scripts/prerender.tsx` writes one HTML file per
       entry (44 routes + `404.html`) into `dist/`, each with its own title,
       description, canonical URL, OG tags, and the entry's content in the markup.
-      Markup comes from `src/views.mjs` — pure and DOM-free, the same module the
-      browser renders from, so prerendered and client-rendered output cannot drift
-      (the arrangement `svg.mjs` already uses for charts). CI asserts the route
-      count against the data, so a silent regression cannot ship.
+      Markup comes from `src/components/` — the same components the browser renders
+      from, so prerendered and client-rendered output cannot drift (the arrangement
+      `svg.ts` already uses for charts). CI asserts the route count against the
+      data, so a silent regression cannot ship.
 - [x] **Keyboard-first search.** Done. `/` (or `s`) focuses the box, `↑`/`↓` walk
       the hits, `Enter` opens the highlighted one, `Esc` clears then blurs. The
       shortcuts are printed under the search box so they are discoverable.

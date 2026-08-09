@@ -29,7 +29,7 @@ import type {
 
 /**
  * The schemas are the source of truth for these shapes; the types next to this
- * file are generated from them (scripts/types.mjs). The JSON is asserted into
+ * file are generated from them (scripts/types.ts). The JSON is asserted into
  * them rather than inferred, so a schema change surfaces here as a type error.
  */
 const systems = systemsRaw as unknown as System[]
@@ -118,10 +118,9 @@ const ADAPT_CATEGORIES: AdaptCategory[] = [
   { id: 'skill', label: { ko: '기술', en: 'Skill' } },
 ]
 
-// ---- language / base --------------------------------------------------------
 /**
- * Module state, set by whichever host is driving: the browser shell (main.js) or
- * the prerenderer (scripts/prerender.mjs). Rendering one language at a time keeps
+ * Module state, set by whichever host is driving: the browser shell (src/main.tsx) or
+ * the prerenderer (scripts/prerender.tsx). Rendering one language at a time keeps
  * every view function below unchanged from when they lived in the browser.
  */
 let lang: Lang = 'ko'
@@ -191,7 +190,6 @@ function weeksText(pl?: { value?: number; min?: number; max?: number }) {
   return `${pl.min}–${pl.max}w`
 }
 
-// ---- route metadata ---------------------------------------------------------
 /**
  * The route tree lives in src/router.tsx now. What stays here is what the router
  * does not own: which nav tab a path belongs to, the per-entry <title> and
@@ -297,16 +295,6 @@ export function allRoutes() {
   ]
 }
 
-// ---- system list (the browse entry point) -----------------------------------
-
-// ---- system detail ----------------------------------------------------------
-
-// ---- anchor (measurement model) list ----------------------------------------
-// Anchors are first-class: the axis every workout and system is pinned to. The
-// list groups them by construct so the "same construct != interconvertible"
-// point is visible at a glance, and each card counts its real references.
-
-// ---- anchor detail ----------------------------------------------------------
 /**
  * Everything a view needs that it should not go and fetch for itself: the rows,
  * the reverse indexes, the display vocabularies and the language-bound `t`.
@@ -338,20 +326,3 @@ export function viewContext(): ViewContext {
     indexes: { systemsByAnchor, workoutsByAnchor, switchesByAnchor },
   }
 }
-
-// ---- workout list -----------------------------------------------------------
-
-// ---- workout detail ---------------------------------------------------------
-
-// The measurement layer (data/anchors.json): what each anchor takes to measure,
-// and the honest floor when you cannot. It points down to RPE and names what is
-// lost - never a numeric conversion, because anchors do not convert cleanly.
-
-// The adaptation taxonomy (data/adaptations.json): group a workout's flat
-// target_adaptation slugs under their coarse physiological category, with the
-// definition on hover. Descriptive - it names what the workout targets, not what
-// it produces.
-
-// ---- search (the naming-join headline: "tempo run" -> two workouts) ---------
-
-// ---- misc -------------------------------------------------------------------

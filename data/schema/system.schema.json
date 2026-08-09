@@ -59,7 +59,7 @@
     },
     "bet": {
       "$ref": "#/$defs/i18n",
-      "description": "One sentence, what it wagers that others do not. Length and sentence count are enforced in validate.mjs. Longer than a sentence is philosophy, and there is a field for that."
+      "description": "One sentence, what it wagers that others do not. Length and sentence count are enforced in validate.ts. Longer than a sentence is philosophy, and there is a field for that."
     },
     "philosophy": {
       "$ref": "#/$defs/i18n"
@@ -219,7 +219,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["from", "anchor_change", "silent", "note"],
-      "description": "What breaks when you arrive here from another system. anchor_change is derivable from both systems' intensity_model and is checked in validate.mjs.",
+      "description": "What breaks when you arrive here from another system. anchor_change is derivable from both systems' intensity_model and is checked in validate.ts.",
       "properties": {
         "from": {
           "type": "string",
@@ -311,7 +311,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Workout ids. Referential integrity checked in validate.mjs."
+          "description": "Workout ids. Referential integrity checked in validate.ts."
         },
         "note": {
           "$ref": "#/$defs/i18n"

@@ -23,7 +23,7 @@ const resolveRpe = (ref: string, self: Workout, byId: ById): number =>
 const NOMINAL_MPS = (r: number) => 2.4 + (r / 10) * 2.6
 /**
  * The schema requires either `value` or a `min`/`max` pair (oneOf), and
- * validate.mjs enforces it, so the generated optional types are wider than the
+ * validate.ts enforces it, so the generated optional types are wider than the
  * data can actually be.
  */
 const mid = (q: Quantity): number => (q.value != null ? q.value : (q.min! + q.max!) / 2)

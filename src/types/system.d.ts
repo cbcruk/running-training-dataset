@@ -72,7 +72,7 @@ export interface TrainingSystem {
   caveats?: I18N1[]
 }
 /**
- * One sentence, what it wagers that others do not. Length and sentence count are enforced in validate.mjs. Longer than a sentence is philosophy, and there is a field for that.
+ * One sentence, what it wagers that others do not. Length and sentence count are enforced in validate.ts. Longer than a sentence is philosophy, and there is a field for that.
  */
 export interface I18N {
   ko: string
@@ -93,7 +93,7 @@ export interface Commitment {
   note?: I18N1
 }
 /**
- * What breaks when you arrive here from another system. anchor_change is derivable from both systems' intensity_model and is checked in validate.mjs.
+ * What breaks when you arrive here from another system. anchor_change is derivable from both systems' intensity_model and is checked in validate.ts.
  */
 export interface SwitchingCost {
   /**
@@ -143,7 +143,7 @@ export interface VolumeCap {
 export interface Phase {
   name: 'base' | 'build' | 'peak' | 'taper' | 'offseason'
   /**
-   * Workout ids. Referential integrity checked in validate.mjs.
+   * Workout ids. Referential integrity checked in validate.ts.
    *
    * @minItems 1
    */

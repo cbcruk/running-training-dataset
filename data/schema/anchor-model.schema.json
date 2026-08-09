@@ -31,7 +31,7 @@
     },
     "equipment_free": {
       "type": "boolean",
-      "description": "true only for the universal floor (rpe_10). Enforced in validate.mjs."
+      "description": "true only for the universal floor (rpe_10). Enforced in validate.ts."
     },
     "fallback": {
       "$ref": "#/$defs/i18n",

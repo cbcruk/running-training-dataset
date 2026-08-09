@@ -2,7 +2,7 @@
 /**
  * Generate TypeScript types from the JSON Schemas.
  *
- * The schemas are already the source of truth - `validate.mjs` enforces them and
+ * The schemas are already the source of truth - `validate.ts` enforces them and
  * nothing ships that violates one. Hand-writing interfaces alongside them would
  * create a second source that drifts silently, which is the same failure the
  * citation policy exists to prevent (docs/TODO.md #1a). So the types are derived,

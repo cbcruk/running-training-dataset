@@ -111,10 +111,6 @@ for (const cite of cites) {
   lines.push('')
 }
 
-// ---- triage --------------------------------------------------------------
-// Three questions answerable from the data alone, before anyone opens a source.
-// They are the ones most likely to change a tier, so they come first.
-
 /**
  * A source cited only on system rows and distributions is never attached to a
  * falsifiable sentence. That is usually a canonical text being used as if it were
@@ -195,7 +191,6 @@ guard(
 
 writeFileSync(resolve(root, 'docs/verification.md'), lines.join('\n'))
 
-// ---- counts --------------------------------------------------------------
 /**
  * Every count the prose wants to quote, derived from the data instead of typed
  * into it. Hand-written totals had already gone stale once - the README described
