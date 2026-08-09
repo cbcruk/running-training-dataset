@@ -38,19 +38,18 @@
       ],
       "description": "A coarse physiological grouping (the taxonomy's broader term). Deliberately broad, not a claim of mechanistic isolation."
     },
-    "label": { "$ref": "#/$defs/i18n" },
+    "label": {
+      "$ref": "#/$defs/i18n"
+    },
     "definition": {
       "$ref": "#/$defs/i18n",
       "description": "What the adaptation is - descriptive, not an efficacy claim."
     }
   },
-
   "$defs": {
     "i18n": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["ko", "en"],
-      "properties": { "ko": { "type": "string" }, "en": { "type": "string" } }
+      "type": "string",
+      "description": "Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations."
     }
   }
 }

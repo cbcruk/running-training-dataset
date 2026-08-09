@@ -39,7 +39,7 @@ interface Use {
 }
 const byCite: Record<string, Use[]> = {}
 
-const pick = (v: Row): string => (typeof v === 'string' ? v : (v?.en ?? v?.ko ?? ''))
+const pick = (v: Row): string => (typeof v === 'string' ? v : '')
 
 /**
  * The nearest falsifiable sentence, marked with what kind of sentence it is. A

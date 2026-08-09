@@ -246,27 +246,29 @@ export function check(data: Dataset): Finding[] {
         `${w.id}: no usage row - unnameable, therefore unfindable`,
       )
 
-  // A bet is one sentence. If it needs a paragraph it is philosophy, and there is a field for that.
-  for (const s of systems)
-    for (const lang of ['ko', 'en']) {
-      const b = s.bet[lang]
-      if (b.length > 90)
-        add(
-          'discipline',
-          'bet-too-long',
-          s.id,
-          `system ${s.id}: bet.${lang} is ${b.length} chars - not a bet, that is philosophy`,
-          `bet.${lang}`,
-        )
-      if ((b.match(/[.!?。]/g) ?? []).length > 1)
-        add(
-          'discipline',
-          'bet-multi-sentence',
-          s.id,
-          `system ${s.id}: bet.${lang} is more than one sentence`,
-          `bet.${lang}`,
-        )
-    }
+  // A bet is one sentence. If it needs a paragraph it is philosophy, and there is a
+  // field for that. The 90-char bound was set against the English rendering; Korean
+  // says the same thing in fewer characters, so the bound is now slack rather than
+  // wrong - tighten it only with a row that argues for the new number.
+  for (const s of systems) {
+    const b: string = s.bet
+    if (b.length > 90)
+      add(
+        'discipline',
+        'bet-too-long',
+        s.id,
+        `system ${s.id}: bet is ${b.length} chars - not a bet, that is philosophy`,
+        'bet',
+      )
+    if ((b.match(/[.!?。]/g) ?? []).length > 1)
+      add(
+        'discipline',
+        'bet-multi-sentence',
+        s.id,
+        `system ${s.id}: bet is more than one sentence`,
+        'bet',
+      )
+  }
 
   // switching_cost.anchor_change is derivable from intensity_model, therefore verifiable.
   const sysById = Object.fromEntries(systems.map((s: Row) => [s.id, s]))

@@ -22,69 +22,69 @@ does not, the row drops to `tradition` — which means removing the cite, becaus
 
 Carries 2 assertions:
 
-- [ ] `vo2max-intervals` · `claim` · **plausible** — "Total dwell time at or near VO2max determines the magnitude of VO2max improvement."
-- [ ] `vo2max-30-30` · `claim` · **plausible** — "Short (~30s) reps accumulate more time near VO2max at a lower blood-lactate cost than long reps."
+- [ ] `vo2max-intervals` · `claim` · **plausible** — "VO2max 부근 체류시간(time at VO2max)의 총량이 VO2max 향상을 결정한다."
+- [ ] `vo2max-30-30` · `claim` · **plausible** — "짧은 반복(약 30초)은 긴 반복보다 낮은 혈중 젖산으로 VO2max 부근 누적 시간을 늘린다."
 
 ## Convertino VA (1991). Blood volume: its adaptation to endurance training. Med Sci Sports Exerc 23(12).
 
 Carries 1 assertion:
 
-- [ ] `easy-run` · `claim` · **plausible** — "Accumulated time at low intensity produces plasma volume, capillary, and mitochondrial adaptation. Time is the variable, not intensity."
+- [ ] `easy-run` · `claim` · **plausible** — "낮은 강도의 누적 시간이 혈장량·모세혈관·미토콘드리아 적응을 만든다. 강도가 아니라 시간이 변수다."
 
 ## Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
 
 Carries 1 assertion:
 
-- [ ] `threshold-continuous` · `claim` · **plausible** — "Sustained running near lactate steady state shifts the steady-state intensity itself upward."
+- [ ] `threshold-continuous` · `claim` · **plausible** — "젖산 정상상태 부근의 지속 주행이 그 정상상태 강도 자체를 위로 민다."
 
 ## Egan B, Zierath JR (2013). Exercise metabolism and the molecular regulation of skeletal muscle adaptation. Cell Metab 17(2).
 
 Carries 1 assertion:
 
-- [ ] `long-run` · `claim` · **plausible** — "The longer the continuous duration, the deeper the glycogen depletion and the greater the fat-oxidation and mitochondrial adaptation it drives."
+- [ ] `long-run` · `claim` · **plausible** — "지속 시간이 길어질수록 글리코겐 고갈이 깊어지고 지방 산화·미토콘드리아 적응이 그에 비례해 유도된다."
 
 ## Faude O, Kindermann W, Meyer T (2009). Lactate threshold concepts: how valid are they? Sports Med 39(6).
 
 Carries 1 assertion:
 
-- [ ] `threshold-continuous` · `claim` · **plausible** — "Sustained running near lactate steady state shifts the steady-state intensity itself upward."
+- [ ] `threshold-continuous` · `claim` · **plausible** — "젖산 정상상태 부근의 지속 주행이 그 정상상태 강도 자체를 위로 민다."
 
 ## Holloszy JO, Coyle EF (1984). Adaptations of skeletal muscle to endurance exercise. J Appl Physiol 56(4).
 
 Carries 1 assertion:
 
-- [ ] `easy-run` · `claim` · **plausible** — "Accumulated time at low intensity produces plasma volume, capillary, and mitochondrial adaptation. Time is the variable, not intensity."
+- [ ] `easy-run` · `claim` · **plausible** — "낮은 강도의 누적 시간이 혈장량·모세혈관·미토콘드리아 적응을 만든다. 강도가 아니라 시간이 변수다."
 
 ## Jones AM, Vanhatalo A (2017). The 'Critical Power' Concept: Applications to Sports Performance. Sports Med 47(Suppl 1).
 
 Carries 1 assertion:
 
-- [ ] `critical-speed` · `(row itself)` · **plausible** — "Critical speed marks a real physiological boundary: below it metabolism settles into a steady state, above it the finite reserve (W') depletes and time to exhaustion is predictable."
+- [ ] `critical-speed` · `(row itself)` · **plausible** — "임계속도는 실재하는 생리적 경계다: 그 아래에서는 대사가 정상상태에 머물고, 위에서는 유한한 여력(W′)이 소모되며 소진 시점이 예측 가능하다."
 
 ## Karvonen MJ, Kentala E, Mustala O (1957). The effects of training on heart rate. Ann Med Exp Biol Fenn 35(3).
 
 Carries 1 assertion:
 
-- [ ] `hrr-karvonen` · `(row itself)` · **plausible** — "Prescribing intensity as a percentage of heart-rate reserve rather than of maximum heart rate absorbs individual differences in resting heart rate and so targets a more consistent physiological load."
+- [ ] `hrr-karvonen` · `(row itself)` · **plausible** — "강도를 최대심박수 비율이 아니라 심박수 예비량 비율로 처방하면, 안정시 심박수의 개인차를 흡수해 더 일관된 생리적 부하를 겨냥한다."
 
 ## McHugh MP (2003). Recent advances in the understanding of the repeated bout effect. Scand J Med Sci Sports 13(2).
 
 Carries 1 assertion:
 
-- [ ] `downhill-repeats` · `claim` · **plausible** — "A single downhill session confers protection (the repeated-bout effect) so a later downhill session causes markedly less muscle damage and soreness."
+- [ ] `downhill-repeats` · `claim` · **plausible** — "한 번의 내리막 주행이 보호 효과(반복-부하 효과)를 만들어, 이후의 내리막 세션은 훨씬 적은 근손상과 통증을 일으킨다."
 
 ## Midgley AW, McNaughton LR (2006). Time at VO2max during intermittent treadmill running. J Sports Med Phys Fitness 46(1).
 
 Carries 1 assertion:
 
-- [ ] `vo2max-intervals` · `claim` · **plausible** — "Total dwell time at or near VO2max determines the magnitude of VO2max improvement."
+- [ ] `vo2max-intervals` · `claim` · **plausible** — "VO2max 부근 체류시간(time at VO2max)의 총량이 VO2max 향상을 결정한다."
 
 ## Seiler S (2010). What is best practice for training intensity and duration distribution? Int J Sports Physiol Perform 5(3).
 
 Carries 2 assertions:
 
-- [ ] `polarized-80-20` · `(row itself)` · **plausible** — "Elite endurance athletes place roughly 80% of sessions below the first threshold and roughly 20% above the second, spending little time at moderate intensity."
-- [ ] `polarized-80-20` · `distribution` · **plausible** — "Elite endurance athletes place roughly 80% of sessions below the first threshold and roughly 20% above the second, spending little time at moderate intensity."
+- [ ] `polarized-80-20` · `(row itself)` · **plausible** — "엘리트 지구력 선수는 세션의 약 80%를 첫 역치 아래에서, 약 20%를 두 번째 역치 위에서 수행하며 중간 강도에는 거의 시간을 쓰지 않는다."
+- [ ] `polarized-80-20` · `distribution` · **plausible** — "엘리트 지구력 선수는 세션의 약 80%를 첫 역치 아래에서, 약 20%를 두 번째 역치 위에서 수행하며 중간 강도에는 거의 시간을 쓰지 않는다."
 
 ---
 

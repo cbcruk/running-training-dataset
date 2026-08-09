@@ -6,6 +6,11 @@
 /* eslint-disable */
 
 /**
+ * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+ */
+export type I18N = string
+
+/**
  * (system, workout) -> what that system calls it. Naming is a join, not a field: putting name='tempo run' on a workout row makes the dataset wrong on arrival, because Daniels' tempo is threshold and Hansons' tempo is marathon pace.
  */
 export interface NamingUsage {
@@ -30,8 +35,4 @@ export interface NamingUsage {
    */
   collides?: boolean
   note?: I18N
-}
-export interface I18N {
-  ko: string
-  en: string
 }

@@ -28,30 +28,21 @@ export type IntensityAnchorModel = {
    */
   construct: 'perception' | 'pace' | 'heart-rate' | 'metabolic'
   label: I18N
-  requires: I18N1
+  /**
+   * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+   */
+  requires: string
   /**
    * true only for the universal floor (rpe_10). Enforced in validate.ts.
    */
   equipment_free: boolean
-  fallback?: I18N2
+  /**
+   * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+   */
+  fallback?: string
   note?: I18N
 }
-
-export interface I18N {
-  ko: string
-  en: string
-}
 /**
- * What a runner needs to actually use this anchor - equipment and/or a test.
+ * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
  */
-export interface I18N1 {
-  ko: string
-  en: string
-}
-/**
- * The honest degraded path when the requirement is unmet: drop toward rpe_10 and what you lose. Required unless equipment_free.
- */
-export interface I18N2 {
-  ko: string
-  en: string
-}
+export type I18N = string
