@@ -100,6 +100,7 @@ the way they exist to catch:
 - `tier: consensus` on a `test` → violation. A test is a field-observation heuristic carrying its own confounds, not a settled finding.
 - `tier: consensus` on a row that is not `status: verified` → violation. The top tier requires the human read that `status` records.
 - a workout with `attribution: null` not marked `provenance: uncitable` → violation. Formalized by nobody means no authoritative text can exist.
+- a comment naming a file that is not there → violation. The prose was the one thing nothing checked, and sixteen references had gone stale across two renames before anyone looked; deliberate exceptions are written down in `scripts/comment-refs.ts`.
 - `status: verified` from a generator → violation. Requires human sign-off.
 - colloquial term in `id`/`canonical_name` → violation. It belongs in `usage.json`.
 - `bet` longer than one sentence → violation.
@@ -163,6 +164,7 @@ scripts/
   validate.ts        # CLI over rules.ts: read, check, print, exit code
   types.ts           # data/schema/*.json -> src/types/ (generated, committed, CI-verified)
   verify.ts          # data -> docs/verification.md (the §1b worksheet) + docs/counts.md
+  comment-refs.ts    # every file a comment names, and whether it is still there
   svg.ts             # structure -> schematic SVG (pure; the single source of the visual)
   render.ts          # writes the SVGs to out/ using svg.ts
   prerender.tsx      # writes one real HTML file per entry into dist/, via the router

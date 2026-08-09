@@ -1,4 +1,5 @@
 import { expect, test } from 'vite-plus/test'
+import { brokenRefs } from '../scripts/comment-refs.ts'
 import { load, patch } from '../scripts/dataset.ts'
 import { check } from '../scripts/rules.ts'
 import { renderWorkout } from '../scripts/svg.ts'
@@ -17,6 +18,13 @@ test('the dataset passes every rule', () => {
 
 test('every workout renders to a schematic svg', () => {
   for (const w of data.workouts) expect(renderWorkout(w, byId)).toContain('<svg')
+})
+
+// Sixteen comments named files that had been renamed out from under them, and
+// nothing noticed for two ADRs. Deliberate exceptions live in comment-refs.ts's
+// ALLOWED, so "gone on purpose" has to be written down rather than assumed.
+test('no comment names a file that is not there', () => {
+  expect(brokenRefs(process.cwd())).toEqual([])
 })
 
 // Each rule below was argued into existence, so each gets the break it was written
