@@ -96,7 +96,7 @@ function Siblings({ siblings }: { siblings: Anchor[] }) {
 function AnchoredSystems({ systems }: { systems: System[] }) {
   if (!systems.length) return null
   return (
-    <Block title={'이 앵커를 쓰는 체계'}>
+    <Block title={'이 앵커를 쓰는 훈련법'}>
       <div className="grid">
         {systems.map((s) => (
           <EntryLink key={s.id} className="card sys-card" to={`system/${s.id}`}>
@@ -145,7 +145,7 @@ function InSwitches({
     <Block
       title={'전환에서의 이 앵커'}
       sub={
-        '이 앵커가 나가거나 들어오는 체계 전환. 조용함은 용어는 살아남고 뜻만 바뀌는 위험한 경우.'
+        '이 앵커가 나가거나 들어오는 훈련법 전환. 조용함은 용어는 살아남고 뜻만 바뀌는 위험한 경우.'
       }
     >
       <div className="switch-list">

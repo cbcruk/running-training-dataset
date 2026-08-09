@@ -28,7 +28,7 @@ export function SystemDetail({ ctx, id }: WithCtx & { id: string }) {
   return (
     <>
       <EntryLink className="back" to="">
-        ← {'체계 목록'}
+        ← {'훈련법 목록'}
       </EntryLink>
       <article className="detail">
         <div className="detail-head">
@@ -123,7 +123,7 @@ function SwitchingCost({ ctx, system }: WithCtx & { system: System }) {
     <Block
       title={'전환 비용'}
       sub={
-        '다른 체계를 하다 이리로 넘어올 때 무엇이 어긋나는지. 체계를 바꾸면 강도를 재는 기준이 함께 바뀌는데, 그게 조용히 바뀔 때가 위험하다 — 쓰던 말은 그대로인데 뜻만 달라지기 때문이다.'
+        "다른 훈련법을 하다 이리로 넘어올 때 무엇이 어긋나는지. 위험한 건 쓰던 단어가 그대로 남는 경우다 — '템포'라는 말은 똑같은데 가리키는 강도가 달라져서, 바뀐 줄도 모르고 계속하게 된다."
       }
     >
       {entries.map((x: SwitchingCost, i: number) => {

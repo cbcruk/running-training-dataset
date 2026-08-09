@@ -138,7 +138,7 @@ for (const c of cites)
 const sourced = rows.filter((r: Row) => r.source?.length)
 lines.push('---', '', '## 범위 밖: 출처', '')
 lines.push(
-  '이 참조들은 `cite`가 아니라 `source`다. 체계가 무엇을 *처방하는지*를 기록할 뿐이고,',
+  '이 참조들은 `cite`가 아니라 `source`다. 훈련법이 무엇을 *처방하는지*를 기록할 뿐이고,',
   '그것이 작동하는지는 별개의 질문이다. 근거로 제시된 것이 없으므로 주장과 대조할 것도',
   '없다. `validate.ts`가 둘을 갈라놓는다 — 한 행에서 같은 참조가 둘 다일 수는 없다.',
   '',
@@ -226,7 +226,7 @@ const counts: string[] = [
   '',
   '## 행 수',
   '',
-  '| 체계 | 워크아웃 | 용례 | 앵커 | 적응 |',
+  '| 훈련법 | 워크아웃 | 용례 | 앵커 | 적응 |',
   `| --- | --- | --- | --- | --- |`,
   `| ${systems.length} | ${workouts.length} | ${usage.length} | ${anchors.length} | ${adaptations.length} |`,
   '',
@@ -239,7 +239,7 @@ const counts: string[] = [
   `| --- | ${order.map(() => '---').join(' | ')} | --- |`,
   row('전체', tiers, order),
   row('워크아웃', tiersOf(workouts), order),
-  row('체계', tiersOf(systems), order),
+  row('훈련법', tiersOf(systems), order),
   '',
   '`consensus`는 `status: verified`를 요구하고 검증된 행은 아직 없으므로, 비어 있는 최상위',
   '등급은 구멍이 아니라 바가 지켜지고 있다는 뜻이다. `tradition`이 지배하는 것이 러닝 지식의',
@@ -253,7 +253,7 @@ const counts: string[] = [
   `| | ${provKeys.join(' | ')} | 합계 |`,
   `| --- | ${provKeys.map(() => '---').join(' | ')} | --- |`,
   row(
-    '체계',
+    '훈련법',
     tally(systems, (s) => s.provenance),
     provKeys,
   ),
