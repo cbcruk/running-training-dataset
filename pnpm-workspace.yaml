@@ -1,3 +1,19 @@
+# 비어 있는 게 아니라 false다. 이 구분이 이 파일에서 유일하게 중요한 지점이다.
+#
+# `prepare` 스크립트인 `vp config`가 설치할 때마다 이 키를 다시 쓴다. 답이 없으면
+# `esbuild: set this to true or false`라는 자리표시자를 심고, pnpm 11은 승인도
+# 명시적 거부도 없는 빌드 스크립트를 만나면 exit 1로 죽는다. 즉 이 키를 비워두면
+# `pnpm install`이 실패하고 CI는 검사 하나 돌기 전에 끝난다.
+#
+# false가 안전하다는 것은 가정이 아니라 확인된 사실이다. package.json의 모든
+# 스크립트가 타고 도는 `remix/node-tsx`는 oxc-transform으로 트랜스파일하고,
+# `vp check`는 oxfmt·oxlint·tsc다. 저장소 안에서 `remix/test`나 esbuild를 import하는
+# 곳은 없다. esbuild는 @remix-run/cli와 vite의 전이 의존으로 딸려올 뿐이다.
+# 게다가 빌드 스크립트를 건너뛰어도 esbuild 자체는 동작한다 - pnpm이
+# @esbuild/<platform>을 실제 의존으로 설치하고 바이너리가 그 안에 들어 있어서,
+# 건너뛴 postinstall은 npm 설치 경로용 링커일 뿐이다.
+allowBuilds:
+  esbuild: false
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vitest: npm:@voidzero-dev/vite-plus-test@latest
@@ -12,7 +28,3 @@ peerDependencyRules:
   allowedVersions:
     vite: '*'
     vitest: '*'
-
-# allowBuilds는 비어 있다. pnpm이 기본으로 막는 postinstall 중 이 저장소가 실제로 필요한
-# 것이 없다 - remix가 끌고 오는 esbuild가 하나 있지만 그 바이너리를 부르는 코드가 없어서
-# (빌드는 Remix의 컴파일러가, 검사는 oxc가 한다) 무시된 채로 두 파이프라인이 모두 통과한다.
