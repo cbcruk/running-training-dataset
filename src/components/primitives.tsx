@@ -1,7 +1,6 @@
 /**
- * Shared primitives. These are the repeated shapes the template-literal views
- * open-coded at every call site - a `<section className="block">` with an
- * uppercase h3 and an optional sub-line appeared a dozen times.
+ * 공유 프리미티브. 템플릿 리터럴 뷰가 호출부마다 직접 펼쳐 쓰던 반복 형태들이다 —
+ * 대문자 h3와 선택적 부제를 가진 `<section className="block">`이 열두 번쯤 나왔다.
  */
 import type { ReactNode } from 'react'
 import { Link } from '@tanstack/react-router'
@@ -37,13 +36,12 @@ export function Chip({ title, className: cls, children }: ChipProps) {
 }
 
 /**
- * An internal link.
+ * 내부 링크.
  *
- * The one adapter between the components and the router: it takes the same
- * base-relative path the views already speak (`anchor/rpe_10`) and hands it to
- * TanStack's Link, which owns navigation and the basepath. Without this the
- * components would render plain anchors and every click would be a full page
- * load - the "app for use" half of ADR 0001, lost.
+ * 컴포넌트와 라우터 사이의 유일한 어댑터. 뷰가 이미 쓰는 base 상대 경로(`anchor/rpe_10`)를
+ * 그대로 받아 TanStack의 Link에 넘긴다. 내비게이션과 basepath는 그쪽이 소유한다. 이것이
+ * 없으면 컴포넌트는 평범한 앵커를 렌더하고 클릭마다 전체 페이지가 다시 로드된다 —
+ * ADR 0001의 "쓰기 위한 앱" 절반을 잃는 것이다.
  */
 export function EntryLink({
   to,
@@ -72,10 +70,10 @@ export function WChip({ to, children }: { to: string; children?: ReactNode }) {
 }
 
 /**
- * Tier is deliberately given distinct visual weight: consensus reads as settled,
- * tradition reads as unproven. Flattening these is the failure the README bans -
- * which is also why this stays bespoke rather than becoming a design-system
- * status badge (ADR 0002): the tiers are not success/warning/danger.
+ * 등급에는 의도적으로 서로 다른 시각 무게를 준다. 정설은 정착된 것으로, 관행은 입증되지
+ * 않은 것으로 읽혀야 한다. 이것을 평평하게 만드는 것이 README가 금지하는 실패이고, 이
+ * 컴포넌트가 디자인 시스템의 상태 배지가 되지 않고 맞춤으로 남는 이유이기도 하다
+ * (ADR 0002). 등급은 success/warning/danger가 아니다.
  */
 const TIER_LABEL: Record<string, string> = {
   consensus: '정설',
@@ -94,18 +92,16 @@ export function TierBadge({ tier }: { tier?: string }) {
 }
 
 /**
- * Provenance answers a different question from the tier, and the two must never
- * read as one scale. The tier says how well established it is that a system
- * works; this says whether we have any record of what it prescribes in the first
- * place. So it shares no colour with the tiers and leads with a mark instead of a
- * verdict word: a reader scanning the list should see two independent facts, not
- * one stronger or weaker rating.
+ * 출처 상태는 등급과 다른 질문에 답하고, 둘이 하나의 척도로 읽혀서는 안 된다. 등급은 그
+ * 훈련법이 작동한다는 것이 얼마나 확립됐는지를 말하고, 이것은 애초에 그것이 무엇을
+ * 처방하는지의 기록이 있기는 한지를 말한다. 그래서 등급과 색을 공유하지 않고 평결 단어
+ * 대신 기호로 시작한다. 목록을 훑는 사람은 독립된 두 사실을 봐야지 하나의 강약 평점을
+ * 봐서는 안 된다.
  *
- * It exists because absence was invisible. Most rows carry no `source`, and a
- * blank read as "fine" - which made the well-documented rows and the undocumented
- * ones look identical at exactly the moment a reader is deciding how much to trust
- * one. Workouts carry the same pair as systems and say it the same way: the whole
- * point is that a reader never has to know which kind of entity they are on.
+ * 이것이 있는 이유는 부재가 보이지 않았기 때문이다. 대부분의 행에 `source`가 없고, 빈칸은
+ * "괜찮음"으로 읽혔다 — 그래서 잘 문서화된 행과 그렇지 않은 행이, 독자가 무엇을 얼마나
+ * 믿을지 정하는 바로 그 순간에 똑같아 보였다. 워크아웃도 훈련법과 같은 쌍을 같은 방식으로
+ * 말한다. 읽는 사람이 자기가 어떤 종류의 항목을 보고 있는지 알 필요가 없다는 것이 요점이다.
  */
 const PROVENANCE: Record<string, { mark: string; label: string; tip: string }> = {
   recorded: {
@@ -145,11 +141,11 @@ const UNCITABLE_NOTE =
   '인용할 정본이 아예 없다. 이 항목의 서술은 인용 형태로 쓸 수 없는 자료 — 저자·연도가 없는 글이거나, 커뮤니티에서 형식화된 관행이거나, 아무도 특정할 수 없는 통념 — 에서 왔고, 따라서 이 칸은 앞으로도 채워지지 않는다. 정본이 있는 항목과 같은 무게로 읽지 말 것.'
 
 /**
- * The provenance block, rendered even with nothing to show.
+ * 출처 블록. 보여줄 것이 없어도 렌더한다.
  *
- * It used to disappear when `source` was empty, which is how an unrecorded row
- * came to look identical to a recorded one: the reader saw no claim rather than a
- * missing one. An empty slot now has to say which kind of empty it is.
+ * 예전에는 `source`가 비면 사라졌고, 그래서 기록되지 않은 행이 기록된 행과 똑같아 보였다.
+ * 독자는 빠진 주장이 아니라 아무 주장도 없는 것으로 봤다. 이제 빈칸은 어떤 종류의 빈칸인지
+ * 말해야 한다.
  */
 export function SourceBlock({ source, provenance }: { source?: string[]; provenance?: string }) {
   return (
@@ -175,9 +171,9 @@ export function SourceBlock({ source, provenance }: { source?: string[]; provena
 }
 
 /**
- * A raw intensity_model / anchor.model code, made hoverable and clickable: the
- * tooltip pulls label + construct + what-it-takes-to-measure from anchors.json so
- * a slug like "lactate_mmol" explains itself in place.
+ * 날것의 intensity_model / anchor.model 코드를 호버·클릭 가능하게 만든다. 툴팁이
+ * anchors.json에서 라벨 + 구성개념 + 측정에 필요한 것을 끌어오므로 `lactate_mmol` 같은
+ * 슬러그가 그 자리에서 스스로를 설명한다.
  */
 export function AnchorCode({ ctx, model }: WithCtx & { model: string }) {
   const { byAnchor, constructLabel } = ctx
@@ -192,8 +188,8 @@ export function AnchorCode({ ctx, model }: WithCtx & { model: string }) {
 }
 
 /**
- * A commitment chip that explains its dimension on hover - the terse "9-13x/wk"
- * says what, the tooltip says what it means.
+ * 호버하면 자기 차원을 설명하는 실행 조건 칩. 짧은 "9-13x/wk"는 무엇인지를 말하고,
+ * 툴팁은 그것이 무슨 뜻인지를 말한다.
  */
 export function InfoChip({ tip, children }: { tip: string; children?: ReactNode }) {
   return (
@@ -215,9 +211,9 @@ export function CiteList({ evidence }: { evidence?: { cite?: string[] } }) {
 }
 
 /**
- * The measurement layer (data/anchors.json): what each anchor takes to measure,
- * and the honest floor when you cannot. It points down to RPE and names what is
- * lost - never a numeric conversion, because anchors do not convert cleanly.
+ * 측정 계층(data/anchors.json). 각 앵커를 재려면 무엇이 필요한지, 그리고 그것이 없을 때의
+ * 정직한 바닥. RPE 쪽을 가리키면서 무엇을 잃는지 명시한다. 숫자로 변환하는 일은 결코
+ * 없다. 앵커는 깔끔하게 환산되지 않기 때문이다.
  */
 export function MeasurementBlock({
   ctx,
@@ -271,10 +267,9 @@ export function MeasurementBlock({
 }
 
 /**
- * The adaptation taxonomy (data/adaptations.json): group a workout's flat
- * target_adaptation slugs under their coarse physiological category, with the
- * definition on hover. Descriptive - it names what the workout targets, not what
- * it produces.
+ * 적응 분류(data/adaptations.json). 워크아웃의 평평한 target_adaptation 슬러그를 거친 생리
+ * 범주로 묶고 정의를 호버에 붙인다. 서술적이다 — 워크아웃이 무엇을 표적으로 삼는지를
+ * 이름 붙일 뿐, 무엇을 만들어내는지를 말하지 않는다.
  */
 export function AdaptationsBlock({ ctx, ids }: WithCtx & { ids: string[] }) {
   const { byAdaptation, adaptCategories } = ctx

@@ -3,13 +3,12 @@ import type { Anchor, System } from '../types/index.d.ts'
 import type { AnchorSwitch, AnchorUse, WithCtx } from '../types/view.ts'
 
 /**
- * The anchor entry: what this way of naming an intensity takes to measure, what
- * it degrades to without the equipment, and everything that references it.
+ * 앵커 엔트리. 이 방식으로 강도를 부르려면 무엇을 재야 하는지, 장비가 없을 때 무엇으로
+ * 내려가는지, 그리고 그것을 참조하는 모든 것.
  *
- * This was the spike that settled the component model - ADR 0002 records the
- * comparison. ADR 0001's constraint is the one that still binds every day: it
- * renders to a string in Node via react-dom/server, so the prerenderer and the
- * browser produce the same markup from one source.
+ * 이것이 컴포넌트 모델을 확정한 스파이크였다 — 비교는 ADR 0002가 기록한다. 매일 구속하는
+ * 것은 ADR 0001의 제약 쪽이다. react-dom/server를 통해 Node에서 문자열로 렌더되므로
+ * 프리렌더러와 브라우저가 하나의 원천에서 같은 마크업을 만든다.
  */
 export function AnchorDetail({ ctx, model }: WithCtx & { model: string }) {
   const { byAnchor, anchors, bySystem, constructs, indexes } = ctx
@@ -58,8 +57,8 @@ export function AnchorDetail({ ctx, model }: WithCtx & { model: string }) {
 }
 
 /**
- * rpe_10 carries `note` (why it is the floor); every other anchor carries
- * `fallback` (what you lose when the equipment is gone).
+ * rpe_10은 `note`를 단다(왜 그것이 바닥인지). 나머지 앵커는 `fallback`을 단다(장비가
+ * 없어졌을 때 무엇을 잃는지).
  */
 function Descent({ anchor }: { anchor: Anchor }) {
   if (anchor.equipment_free) {

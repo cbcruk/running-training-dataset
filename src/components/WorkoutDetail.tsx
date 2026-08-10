@@ -15,9 +15,8 @@ import type { Anchor as WorkoutAnchor, Confound } from '../types/workout.d.ts'
 import type { WithCtx } from '../types/view.ts'
 
 /**
- * The workout entry - the detail view. Each row carries a falsifiable claim and
- * the procedure that would falsify it. There is deliberately no
- * expected-improvement number; see the README's non-goals.
+ * 워크아웃 엔트리. 상세 뷰다. 각 행은 반증 가능한 주장과 그것을 반증할 절차를 싣는다.
+ * 개선 수치는 의도적으로 없다. README의 "하지 않을 것" 참조.
  */
 export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
   const { byWorkout } = ctx
@@ -136,8 +135,8 @@ export function WorkoutDetail({ ctx, id }: WithCtx & { id: string }) {
 }
 
 /**
- * An undetectable claim is not a weaker claim - it is a belief. The copy says so
- * rather than letting an unobservable null read as evidence of nothing.
+ * 관찰 불가능한 주장은 약한 주장이 아니라 믿음이다. 관찰 불가능한 영가설이 아무것도 아닌
+ * 것의 근거처럼 읽히게 두는 대신, 문구가 그렇게 말한다.
  */
 function FalsificationTest({ test }: { test: Workout['test'] }) {
   if (!test.detectable) {
@@ -209,8 +208,8 @@ function FalsificationTest({ test }: { test: Workout['test'] }) {
 }
 
 /**
- * The collision table, from the workout's side: naming is a join, not a field,
- * so one colloquial term can point at several rows.
+ * 충돌 표를 워크아웃 쪽에서 본 것. 이름은 필드가 아니라 조인이므로 통칭 하나가 여러 행을
+ * 가리킬 수 있다.
  */
 function CollisionTable({ ctx, id }: WithCtx & { id: string }) {
   const { bySystem, usage } = ctx

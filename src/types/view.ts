@@ -1,11 +1,10 @@
 /**
- * The view layer's own types. The data types next to this file are generated from
- * the JSON Schemas; these are not - they describe how views are called, which the
- * schemas have nothing to say about.
+ * 뷰 계층 자신의 타입. 이 파일 옆의 데이터 타입은 JSON Schema에서 생성되지만 이것들은
+ * 아니다. 뷰가 어떻게 호출되는지를 서술하고, 그건 스키마가 말할 바가 아니다.
  */
 import type { Adaptation, Anchor, System, Usage, Workout } from './index.d.ts'
 
-/** The physical quantity an anchor reads. Grouping shows the axes without bridging them. */
+/** 앵커가 읽는 물리량. 묶음은 축을 보여줄 뿐 다리를 놓지 않는다. */
 export interface Construct {
   id: string
   label: string
@@ -17,13 +16,13 @@ export interface AdaptCategory {
   label: string
 }
 
-/** A workout that lists a given anchor, and whether it is that workout's primary. */
+/** 어떤 앵커를 싣는 워크아웃과, 그것이 그 워크아웃의 주앵커인지. */
 export interface AnchorUse {
   w: Workout
   primary: boolean
 }
 
-/** One side of a switching_cost, indexed by the anchor it touches. */
+/** switching_cost의 한쪽. 그것이 닿는 앵커로 인덱싱된다. */
 export interface AnchorSwitch {
   to: string
   from: string
@@ -34,15 +33,14 @@ export interface AnchorSwitch {
 }
 
 /**
- * Everything a view needs, assembled once per render.
+ * 뷰가 필요로 하는 전부를 렌더마다 한 번 모아둔 것.
  *
- * Views are pure and DOM-free (ADR 0001) so the prerenderer and the browser render
- * from one source; `ctx` is what replaced the module-level closure they used to
- * read from. Passing it explicitly is what makes a component renderable in a test
- * without booting the app.
+ * 뷰는 순수하고 DOM이 없으므로(ADR 0001) 프리렌더러와 브라우저가 하나의 원천에서
+ * 렌더한다. `ctx`는 그들이 읽던 모듈 수준 클로저를 대체한 것이다. 그것을 명시적으로
+ * 넘기기 때문에 컴포넌트를 앱을 띄우지 않고 테스트에서 렌더할 수 있다.
  */
 export interface ViewContext {
-  /** Base-prefixed href for an internal path, e.g. `url("anchor/rpe_10")`. */
+  /** 내부 경로에 base를 붙인 href. 예: `url("anchor/rpe_10")`. */
   url: (path: string) => string
 
   byWorkout: Record<string, Workout>
@@ -67,7 +65,7 @@ export interface ViewContext {
     weeks: (pl: { value?: number; min?: number; max?: number } | undefined) => string
   }
 
-  /** Reverse indexes, so an anchor page can show everything that references it. */
+  /** 역인덱스. 앵커 페이지가 자기를 참조하는 모든 것을 보여줄 수 있도록. */
   indexes: {
     systemsByAnchor: Record<string, System[]>
     workoutsByAnchor: Record<string, AnchorUse[]>
@@ -75,7 +73,7 @@ export interface ViewContext {
   }
 }
 
-/** Every component in this app takes the context; most take one more thing. */
+/** 이 앱의 모든 컴포넌트가 컨텍스트를 받는다. 대부분은 하나를 더 받는다. */
 export interface WithCtx {
   ctx: ViewContext
 }

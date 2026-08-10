@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * structure -> schematic SVG. The point: media is a derivative of data, not a licensed asset.
- * The actual drawing lives in svg.ts so the browser UI renders the identical visual.
+ * structure -> 도식 SVG. 요점은 미디어가 라이선스한 자산이 아니라 데이터의 파생물이라는
+ * 것이다. 실제로 그리는 일은 svg.ts에 있고, 그래서 브라우저 UI가 동일한 시각물을 렌더한다.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'

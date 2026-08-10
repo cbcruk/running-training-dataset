@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 /**
- * Generate the source-verification worksheet (docs/verification.md).
+ * 소스 검증 작업지(docs/verification.md)를 생성한다.
  *
- * docs/TODO.md #1b is human work by design - validate.ts forbids a generator
- * from setting `status: verified`, because a machine asserting that a source
- * supports a claim is the exact failure this dataset exists to avoid.
+ * docs/TODO.md §1b는 설계상 사람의 일이다. 소스가 주장을 뒷받침한다고 기계가 단언하는
+ * 것이 이 데이터셋이 피하려는 바로 그 실패이기 때문이다.
  *
- * What a script *can* do is lay the work out: for each citation, every row that
- * leans on it, the exact sentence that row asserts, and the tier that sentence is
- * claiming. A verifier then reads one source and checks every claim hanging off
- * it at once, instead of rediscovering the mapping by grep.
+ * 스크립트가 *할 수 있는* 일은 작업을 펼쳐놓는 것이다. 인용마다, 그것에 기대는 모든 행,
+ * 그 행이 주장하는 정확한 문장, 그리고 그 문장이 내걸고 있는 등급. 그러면 검증자는 소스
+ * 하나를 읽고 거기 달린 모든 주장을 한 번에 확인한다. grep으로 매핑을 다시 찾아내는
+ * 대신에.
  *
- * Generated and committed, like src/types/, so it cannot silently go stale as
- * rows are added. Regenerate with `vp run verify`.
+ * src/types/처럼 생성되고 커밋된다. 행이 늘어도 조용히 낡을 수 없게. `vp run verify`로
+ * 다시 만든다.
  */
 import { execFileSync } from 'node:child_process'
 import { writeFileSync } from 'node:fs'
@@ -42,10 +41,9 @@ const byCite: Record<string, Use[]> = {}
 const pick = (v: Row): string => (typeof v === 'string' ? v : '')
 
 /**
- * The nearest falsifiable sentence, marked with what kind of sentence it is. A
- * test's is not a physiological finding and an undetectable test's is a statement
- * about why nothing would settle it, so a verifier needs to know which they are
- * reading before they open the source.
+ * 가장 가까운 반증 가능한 문장에, 그것이 어떤 종류인지를 표시한다. test의 것은 생리학적
+ * 발견이 아니고, 관찰 불가능한 test의 것은 왜 아무것도 그것을 해결하지 못하는지에 대한
+ * 진술이다. 검증자는 소스를 열기 전에 자기가 무엇을 읽고 있는지 알아야 한다.
  */
 const label = (a: Assertion): string => {
   const text = pick(a.proposition)
@@ -122,17 +120,17 @@ for (const cite of cites) {
 }
 
 /**
- * A source cited only on system rows and distributions is never attached to a
- * falsifiable sentence. That is usually a canonical text being used as if it were
- * efficacy evidence - a category error the tier system exists to catch.
+ * 훈련법 행과 distribution에만 인용된 소스는 반증 가능한 문장에 한 번도 붙지 않는다.
+ * 대개 정경 텍스트가 효능 근거인 양 쓰이고 있는 경우이고, 등급 체계가 잡으려고 존재하는
+ * 범주 오류다.
  */
 const methodOnly = cites.filter((c) => byCite[c].every((u) => !u.assertion))
 /**
- * `consensus` is the highest bar in the tier table: textbook-settled. Fewest rows,
- * biggest claim, so check these first.
+ * `consensus`는 등급표에서 가장 높은 바다. 행은 가장 적고 주장은 가장 크므로 먼저
+ * 확인한다.
  */
 const consensus = cites.filter((c) => byCite[c].some((u) => u.tier === 'consensus'))
-/** A test the row itself calls unobservable, carrying a tier above `tradition`. */
+/** 행 스스로 관찰 불가능하다고 말하면서 `tradition`을 넘는 등급을 단 test. */
 const unobservable: string[] = []
 for (const c of cites)
   for (const u of byCite[c])
@@ -140,9 +138,8 @@ for (const c of cites)
       unobservable.push(`\`${u.row}\` (${u.tier}) — ${c}`)
 
 /**
- * `source` entries are provenance, not evidence, so they are deliberately absent
- * from everything above - there is no claim to check them against. Listing them
- * keeps that a stated choice rather than a silent omission.
+ * `source` 항목은 근거가 아니라 출처이므로 위의 모든 것에서 의도적으로 빠져 있다 —
+ * 대조할 주장이 없다. 그래도 나열해두면 그것이 조용한 누락이 아니라 진술된 선택으로 남는다.
  */
 const sourced = rows.filter((r: Row) => r.source?.length)
 lines.push('---', '', '## 범위 밖: 출처', '')
@@ -157,10 +154,10 @@ if (sourced.length)
 else lines.push('- _(없음)_')
 lines.push('')
 
-// The three questions this worksheet opened with are settled, and each became a
-// rule in validate.ts rather than a paragraph asking someone to remember. Kept as
-// a live guard: a regression here fails the build before it reaches this file, so
-// these lists staying empty is the check passing, not the check being skipped.
+// 이 작업지가 열었던 세 질문은 해결됐고, 각각은 누군가 기억하기를 바라는 문단이 아니라
+// validate.ts의 규칙이 됐다. 살아 있는 가드로 남겨둔다. 여기서 회귀가 생기면 이 파일에
+// 닿기 전에 빌드가 실패하므로, 아래 목록이 비어 있다는 것은 검사가 건너뛰어진 것이
+// 아니라 통과했다는 뜻이다.
 lines.push('---', '', '## 트리아지: 해결됐고 이제 기계가 강제한다', '')
 lines.push(
   '소스를 열지 않고 답할 수 있던 질문 셋이다. 각각은 이제 `validate.ts` 규칙이므로,',
@@ -200,10 +197,9 @@ guard(
 writeFileSync(resolve(root, 'docs/verification.md'), lines.join('\n'))
 
 /**
- * Every count the prose wants to quote, derived from the data instead of typed
- * into it. Hand-written totals had already gone stale once - the README described
- * two undetectable tests when there were thirteen - and prose that has to be
- * re-counted by hand after every tier change will go stale again.
+ * 산문이 인용하고 싶어 하는 모든 수치를, 손으로 적는 대신 데이터에서 유도한다. 손으로 쓴
+ * 총계는 이미 한 번 낡았다 — README가 관찰 불가능한 test를 열셋일 때 둘이라고 적고
+ * 있었다 — 그리고 등급이 바뀔 때마다 사람이 다시 세야 하는 산문은 또 낡는다.
  */
 const tally = (list: Row[], of: (r: Row) => string | undefined): Record<string, number> => {
   const out: Record<string, number> = {}

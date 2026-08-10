@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 /**
- * The CLI over the ruleset: read the data, run every rule, print, set an exit code.
+ * 규칙 묶음 위의 CLI. 데이터를 읽고, 모든 규칙을 돌리고, 찍고, exit code를 세운다.
  *
- * The rules themselves live in rules.ts and know nothing about processes or the
- * filesystem, so a test can ask "does this rule fire on this break" without going
- * through here. What is left in this file is the part that genuinely belongs to a
- * command line: where the repo root is, how a finding reads to a person, and the
- * summary a human wants after a green run.
+ * 규칙 자체는 rules.ts에 살고 프로세스도 파일시스템도 모른다. 그래서 "이 규칙이 이
+ * 파손에 발동하는가"를 여기를 거치지 않고 테스트할 수 있다. 이 파일에 남은 것은 정말로
+ * 명령줄에 속하는 부분이다: 저장소 루트가 어디인지, 발견 하나가 사람에게 어떻게 읽히는지,
+ * 그리고 초록불 뒤에 사람이 보고 싶어 하는 요약.
  */
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -32,8 +31,8 @@ for (const row of [...workouts, ...systems])
 console.log(`evidence tiers:`, tiers)
 
 /**
- * The naming join, surfaced: one colloquial name reaching two different workouts
- * is the dataset's headline finding, so a run says so out loud.
+ * 네이밍 조인을 드러낸다. 통칭 하나가 서로 다른 워크아웃 둘에 닿는 것이 이 데이터셋의
+ * 헤드라인 발견이므로, 실행할 때마다 소리 내어 말한다.
  */
 const collisions: Record<string, Set<string>> = {}
 for (const u of usage) (collisions[u.calls_it] ??= new Set()).add(u.workout)

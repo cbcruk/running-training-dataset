@@ -1,27 +1,25 @@
 /**
- * Every file a comment names, and whether it is still there.
+ * 주석이 이름을 부르는 모든 파일과, 그것이 아직 있는지.
  *
- * Prose is the one part of this repo nothing checked. Sixteen comments turned out
- * to name files that no longer existed, left behind by the module-extension and
- * views-to-components moves, and one was worse than stale: the prerenderer
- * described importing a build artefact four lines above the import of the source.
- * There are 100+ such references and no version of "remember to update them"
- * survives that many.
+ * 산문은 이 저장소에서 아무것도 검사하지 않던 유일한 부분이었다. 확장자 전환과 뷰의
+ * 컴포넌트화가 남기고 간 결과로, 주석 열여섯 개가 더 이상 존재하지 않는 파일을 부르고
+ * 있었다. 그중 하나는 낡은 것보다 나빴다. 프리렌더러가 빌드 산출물을 임포트한다고
+ * 서술하고 있었는데, 네 줄 아래에서 소스를 임포트하고 있었다. 이런 참조가 100개가 넘고,
+ * "업데이트하는 걸 기억하자"의 어떤 판본도 그 수를 견디지 못한다.
  *
- * The same move the data already gets: state it, then make it checkable. A
- * reference that is deliberately not resolvable goes in ALLOWED below, which turns
- * "is this a mistake or the point?" into a question answered once, in code.
+ * 데이터가 이미 받는 것과 같은 처방. 진술하고, 검사 가능하게 만든다. 의도적으로 풀리지
+ * 않는 참조는 아래 ALLOWED로 가고, 그러면 "이건 실수인가 요점인가"가 코드 안에서 한 번
+ * 답해진 질문이 된다.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { resolve, dirname, join, basename } from 'node:path'
 
 /**
- * References that name something the repo does not contain, on purpose.
+ * 저장소에 없는 것을 의도적으로 부르는 참조들.
  *
- * `views.jsx` - a comment comparing a file to the template-literal original it
- * replaced has to name that original; the sentence is about it being gone.
- * `404.html` - written into dist/ by the prerenderer, so it exists only after a
- * build.
+ * `views.jsx` — 어떤 파일을 그것이 대체한 템플릿 리터럴 원본과 비교하는 주석은 그 원본을
+ * 부를 수밖에 없다. 그 문장 자체가 원본이 사라졌다는 이야기다.
+ * `404.html` — 프리렌더러가 dist/에 쓰므로 빌드 후에만 존재한다.
  */
 const ALLOWED = new Set(['views.jsx', '404.html'])
 
@@ -29,7 +27,7 @@ const SKIP = new Set(['node_modules', 'dist', 'out', '.git', '.ssr', '.claude', 
 const SCAN = /\.(ts|tsx|js|jsx|css)$/
 const NAMED = /\.(ts|tsx|js|jsx|mjs|cjs|json|css|html|md)$/
 
-/** A path-shaped token: a name with a short lowercase extension, no spaces. */
+/** 경로처럼 생긴 토큰: 짧은 소문자 확장자를 가진 이름, 공백 없음. */
 const TOKEN = /(?:\.{0,2}\/)?[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*\.[a-z]{2,4}\b/g
 
 export interface BrokenRef {
@@ -49,8 +47,8 @@ function walk(dir: string, root: string, all: string[] = []): string[] {
 }
 
 /**
- * Comment lines only. A path inside a string literal is code - the import that
- * would break loudly if it were wrong - and needs no help from this.
+ * 주석 줄만 본다. 문자열 리터럴 안의 경로는 코드다 — 틀리면 요란하게 깨지는 임포트 —
+ * 이 검사의 도움이 필요 없다.
  */
 function commentLines(src: string): [number, string][] {
   const out: [number, string][] = []
@@ -70,9 +68,9 @@ function commentLines(src: string): [number, string][] {
 }
 
 /**
- * A reference resolves if it names a real file: relative to the repo root,
- * relative to the commenting file, or - for a bare name like `anchors.json` -
- * anywhere in the repo, since that is what a reader would go looking for.
+ * 참조가 실재하는 파일을 부르면 풀린 것으로 본다. 저장소 루트 기준, 주석이 있는 파일
+ * 기준, 또는 `anchors.json` 같은 맨 이름이면 저장소 어디에서든 — 읽는 사람이 찾아갈 곳이
+ * 거기이기 때문이다.
  */
 export function brokenRefs(root: string): BrokenRef[] {
   const all = walk(root, root)

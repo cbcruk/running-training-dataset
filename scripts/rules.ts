@@ -1,22 +1,21 @@
 /**
- * Every rule the dataset is held to, behind one function.
+ * 이 데이터셋이 지켜야 하는 모든 규칙을, 함수 하나 뒤에.
  *
- * The rules were a 375-line script with no exports, whose only interface was
- * "spawn a process and grep stdout for OK". That made a whole class of question
- * unaskable in a test - does *this* rule fire on *this* break - and proving a new
- * rule worked meant copying the JSON aside, editing it on disk, running the
- * binary, grepping stderr and restoring the file.
+ * 규칙들은 export가 하나도 없는 375줄짜리 스크립트였고, 유일한 인터페이스가 "프로세스를
+ * 띄우고 stdout에서 OK를 grep한다"였다. 그래서 한 부류의 질문 자체를 테스트로 물을 수
+ * 없었다 — *이* 규칙이 *이* 파손에 발동하는가. 새 규칙이 동작하는지 확인하려면 JSON을
+ * 옆으로 복사하고, 디스크에서 고치고, 바이너리를 돌리고, stderr를 grep하고, 파일을
+ * 복원해야 했다.
  *
- * So: one entry point, structured findings, no I/O. scripts/validate.ts is now
- * the CLI adapter over it, the same arrangement svg.ts already has with
- * render.ts and WorkoutDetail.tsx.
+ * 그래서 진입점 하나, 구조화된 발견, I/O 없음. scripts/validate.ts는 그 위의 CLI
+ * 어댑터가 됐고, svg.ts가 render.ts·WorkoutDetail.tsx와 이미 맺고 있던 것과 같은 배치다.
  *
- * Adding a rule means adding one `add(...)` with an id. The id is the contract:
- * tests name it, and it is what lets the README's list of violations be checked
- * against the code rather than drifting beside it.
+ * 규칙을 더한다는 건 id를 가진 `add(...)` 하나를 더한다는 뜻이다. id가 계약이다.
+ * 테스트가 그것을 가리키고, README의 위반 목록이 코드 옆에서 표류하는 대신 코드와
+ * 대조될 수 있게 하는 것도 그것이다.
  */
 
-// ajv ships its 2020 entry as CJS; the default export is the constructor.
+// ajv는 2020 진입점을 CJS로 배포한다. default export가 생성자다.
 import Ajv2020Module from 'ajv/dist/2020.js'
 import { assertions, citedWorks } from './evidence.ts'
 import type { Dataset } from './dataset.ts'
@@ -26,31 +25,31 @@ type Row = any
 const Ajv2020 = Ajv2020Module as unknown as new (opts: Row) => any
 
 /**
- * The three layers a machine can check, in the order they are worth failing on:
- * L1 `schema` (shape), L2 `ref` (does what it points at exist), L3 `discipline`
- * (the project's own rules, the ones no generic validator would know).
+ * 기계가 검사할 수 있는 세 층. 실패시킬 값이 있는 순서대로: L1 `schema`(모양),
+ * L2 `ref`(가리키는 것이 존재하는가), L3 `discipline`(이 프로젝트 고유의 규칙, 범용
+ * 검증기라면 알 리 없는 것들).
  *
- * L4 is the human read. No rule can perform it, but since ADR 0008 the rules can
- * check its *record*: an entry in `data/verified.json` has to name a real
- * assertion, agree with whether the data still carries that cite, and exist for
- * every citation on a row before that row may call itself `verified`.
+ * L4는 사람의 읽기다. 어떤 규칙도 그것을 수행할 수 없지만, ADR 0008 이후로 규칙은 그
+ * *기록*을 검사할 수 있다. `data/verified.json`의 항목은 실재하는 주장을 가리켜야 하고,
+ * 데이터가 그 인용을 아직 들고 있는지와 맞아야 하며, 한 행이 스스로를 `verified`라
+ * 부르려면 그 행의 모든 인용에 대해 존재해야 한다.
  */
 export type Layer = 'schema' | 'ref' | 'discipline'
 
 export interface Finding {
   layer: Layer
-  /** Stable kebab-case id. Tests assert on this; the message is for humans. */
+  /** 안정된 kebab-case id. 테스트가 이것을 단언한다. 메시지는 사람이 읽는 것. */
   rule: string
-  /** The row the finding is about, or the file when it is about a whole list. */
+  /** 이 발견이 가리키는 행. 목록 전체에 대한 것이면 파일 이름. */
   row: string
-  /** Dotted path within the row, when the finding is narrower than the row. */
+  /** 행 안의 점 표기 경로. 발견이 행보다 좁을 때. */
   path?: string
   message: string
 }
 
 const dupes = (arr: Row[]): Row[] => arr.filter((v: Row, i: number) => arr.indexOf(v) !== i)
 
-/** Group a reference by first author + year, the key the one-string rule uses. */
+/** 참조를 제1저자 + 연도로 묶는다. 하나의 문자열 규칙이 쓰는 키. */
 const citeKey = (c: string): string | null => {
   const m = c.match(/^([A-Za-z][^(]*?)\s*\((\d{4})\)/)
   return m ? `${m[1].trim().split(/[\s,&]+/)[0]} ${m[2]}` : null
@@ -76,8 +75,8 @@ export function check(data: Dataset): Finding[] {
     const validate = ajv.getSchema(key)
     list.forEach((row: Row, i: number) => {
       if (validate(row)) return
-      // ajv reports every non-matching item of a `contains` as its own error. Noise.
-      // Keep the `contains` verdict itself and drop the per-item fallout.
+      // ajv는 `contains`에 맞지 않는 항목마다 별개의 오류로 보고한다. 노이즈다.
+      // `contains` 자체의 판정만 남기고 항목별 잔해는 버린다.
       for (const e of validate.errors.filter((e: Row) => !/\/contains\//.test(e.schemaPath)))
         add(
           'schema',
@@ -97,9 +96,9 @@ export function check(data: Dataset): Finding[] {
   for (const d of dupes(systems.map((s: Row) => s.id)))
     add('ref', 'duplicate-id', d, `duplicate system id: ${d}`)
 
-  // The measurement layer must cover every anchor the data actually uses, so a
-  // system's intensity_model or a workout's anchor can never lack a "what does it
-  // take to measure this" answer.
+  // 측정 계층은 데이터가 실제로 쓰는 모든 앵커를 덮어야 한다. 그래야 훈련법의
+  // intensity_model이나 워크아웃의 앵커가 "이걸 재려면 무엇이 필요한가"에 대한 답을
+  // 갖지 못하는 일이 생기지 않는다.
   const anchorModels = new Set(anchors.map((a: Row) => a.model))
   for (const d of dupes(anchors.map((a: Row) => a.model)))
     add('ref', 'duplicate-id', d, `duplicate anchor model: ${d}`)
@@ -121,9 +120,9 @@ export function check(data: Dataset): Finding[] {
           `${w.id}: anchor model "${a.model}" has no anchors.json entry`,
         )
 
-  // Exactly one equipment-free anchor, and it must be rpe_10 - the same principle
-  // the workout schema enforces per row (exactly one rpe_10). The universal floor
-  // is singular by definition; two would mean the fallback is ambiguous.
+  // 장비 없는 앵커는 정확히 하나이고 그것은 rpe_10이어야 한다 — 워크아웃 스키마가 행
+  // 단위로 강제하는 것과 같은 원칙(rpe_10이 정확히 하나). 보편 바닥은 정의상 하나뿐이고,
+  // 둘이면 하강의 목적지가 모호해진다.
   const free = anchors.filter((a: Row) => a.equipment_free).map((a: Row) => a.model)
   if (free.length !== 1 || free[0] !== 'rpe_10')
     add(
@@ -132,8 +131,8 @@ export function check(data: Dataset): Finding[] {
       'anchors.json',
       `anchors.json: the sole equipment_free anchor must be rpe_10, got [${free.join(', ')}]`,
     )
-  // The perception construct is the subjective axis - the same one that is the
-  // equipment-free floor. Exactly rpe_10, and nothing else, may claim it.
+  // perception 구성개념은 주관 축이고, 그것이 곧 장비 없는 바닥이다. rpe_10만이,
+  // 그리고 그 외에는 아무것도 그 자리를 주장할 수 없다.
   const perception = anchors
     .filter((a: Row) => a.construct === 'perception')
     .map((a: Row) => a.model)
@@ -145,8 +144,8 @@ export function check(data: Dataset): Finding[] {
       `anchors.json: the sole 'perception' construct must be rpe_10, got [${perception.join(', ')}]`,
     )
 
-  // The adaptation taxonomy must cover every target_adaptation the data uses, so a
-  // workout can never target an adaptation the taxonomy does not define/group.
+  // 적응 분류는 데이터가 쓰는 모든 target_adaptation을 덮어야 한다. 그래야 워크아웃이
+  // 분류가 정의하지도 묶지도 않은 적응을 표적으로 삼는 일이 생기지 않는다.
   const adaptationIds = new Set(adaptations.map((a: Row) => a.id))
   for (const d of dupes(adaptations.map((a: Row) => a.id)))
     add('ref', 'duplicate-id', d, `duplicate adaptation id: ${d}`)
@@ -196,16 +195,16 @@ export function check(data: Dataset): Finding[] {
         w.id,
         `${w.id}: primary_anchor "${w.intensity.primary_anchor}" not in anchors`,
       )
-    // One reading per model. Two pct_hrmax anchors is not nuance, it is an unresolved disagreement with itself.
+    // 모델당 값 하나. pct_hrmax 앵커가 둘인 것은 뉘앙스가 아니라 행이 자기 자신과 불일치하는 것이다.
     for (const d of dupes(w.intensity.anchors.map((a: Row) => a.model)))
       add('discipline', 'duplicate-anchor-model', w.id, `${w.id}: duplicate anchor model "${d}"`)
   }
-  // `base`/`build`/`peak`/`taper`/`offseason` is one vocabulary spoken from both
-  // ends: a system says which workouts it emphasises in a phase, and a workout says
-  // which phases it belongs in. Nothing made the two agree, so a system could
-  // emphasise a workout in `taper` that the workout itself places only in `base` -
-  // and the page would render both statements without noticing. Checking the
-  // emphasised id exists was never the whole referential question.
+  // `base`/`build`/`peak`/`taper`/`offseason`은 양쪽에서 쓰는 한 어휘다. 훈련법은 어떤
+  // 주기에서 어떤 워크아웃을 강조하는지 말하고, 워크아웃은 자기가 어느 주기에 놓이는지
+  // 말한다. 둘을 맞추는 것이 없어서, 훈련법이 `taper`에서 강조하는 워크아웃이 정작
+  // 자기는 `base`에만 놓인다고 말할 수 있었고, 페이지는 그 두 진술을 아무 표시 없이
+  // 나란히 렌더했다. 강조된 id가 존재하는지 보는 것은 이 필드의 참조 무결성 전부가
+  // 아니었다.
   const byWorkoutId = Object.fromEntries(workouts.map((w: Row) => [w.id, w]))
   for (const s of systems)
     for (const p of s.phases ?? [])
@@ -247,7 +246,7 @@ export function check(data: Dataset): Finding[] {
       )
   }
 
-  // Colloquial names must never leak into the workout row. They belong in usage.json.
+  // 통칭은 워크아웃 행으로 새어 들어와서는 안 된다. 그건 usage.json의 몫이다.
   const BANNED_IN_ID = ['tempo', 'easy-pace', 'lt-run', 'pickup']
   for (const w of workouts)
     for (const b of BANNED_IN_ID)
@@ -259,7 +258,7 @@ export function check(data: Dataset): Finding[] {
           `${w.id}: overloaded colloquial term "${b}" in id/canonical_name. Put it in usage.json.`,
         )
 
-  // Every workout must be reachable by at least one name, else it is undiscoverable.
+  // 모든 워크아웃은 최소 하나의 이름으로 도달 가능해야 한다. 아니면 찾을 수 없다.
   for (const w of workouts)
     if (!usage.some((u: Row) => u.workout === w.id))
       add(
@@ -269,10 +268,9 @@ export function check(data: Dataset): Finding[] {
         `${w.id}: no usage row - unnameable, therefore unfindable`,
       )
 
-  // A bet is one sentence. If it needs a paragraph it is philosophy, and there is a
-  // field for that. The 90-char bound was set against the English rendering; Korean
-  // says the same thing in fewer characters, so the bound is now slack rather than
-  // wrong - tighten it only with a row that argues for the new number.
+  // bet은 한 문장이다. 문단이 필요하면 그건 philosophy이고, 그 필드가 따로 있다. 90자
+  // 한도는 영어 표기를 기준으로 정해졌다. 한국어는 같은 말을 더 적은 글자로 하므로 이
+  // 한도는 틀린 것이 아니라 느슨해졌다 — 조이려면 새 숫자를 논증하는 변경으로 할 것.
   for (const s of systems) {
     const b: string = s.bet
     if (b.length > 90)
@@ -293,7 +291,7 @@ export function check(data: Dataset): Finding[] {
       )
   }
 
-  // switching_cost.anchor_change is derivable from intensity_model, therefore verifiable.
+  // switching_cost.anchor_change는 intensity_model에서 유도되므로 검증 가능하다.
   const sysById = Object.fromEntries(systems.map((s: Row) => [s.id, s]))
   for (const s of systems)
     for (const sc of s.switching_cost ?? []) {
@@ -319,7 +317,7 @@ export function check(data: Dataset): Finding[] {
         )
     }
 
-  // A confound acting through the claim's own mechanism is severe by definition.
+  // 주장 자신의 기전을 통해 작용하는 교란은 정의상 심각하다.
   for (const w of workouts)
     for (const c of w.test.confounds ?? [])
       if (c.shares_mechanism === true && c.severity !== 'high')
@@ -333,7 +331,7 @@ export function check(data: Dataset): Finding[] {
 
   const rows = [...workouts, ...systems]
 
-  // A cite must look like a citation, not a URL or a vibe.
+  // cite는 인용처럼 생겨야 한다. URL이나 분위기가 아니라.
   for (const row of rows)
     for (const a of assertions(row))
       for (const c of a.evidence.cite ?? [])
@@ -346,10 +344,10 @@ export function check(data: Dataset): Finding[] {
             a.path,
           )
 
-  // A `source` is provenance, not evidence, but it is still a citation and is held
-  // to the same bar. Workouts carry the field on the same terms as systems: removing
-  // a canonical text as *efficacy* evidence must not also erase the record of what
-  // the text *prescribes*, which is the split `source` exists to keep.
+  // `source`는 근거가 아니라 출처지만 여전히 인용이고 같은 기준으로 검사된다. 워크아웃도
+  // 훈련법과 같은 조건으로 이 필드를 갖는다. 정경 텍스트를 *효능* 근거에서 떼어내는 일이
+  // 그 텍스트가 무엇을 *처방하는지*의 기록까지 지워서는 안 되고, 그것이 `source`가
+  // 지키려고 존재하는 분리다.
   for (const row of rows)
     for (const src of row.source ?? [])
       if (!/\(\d{4}\)/.test(src))
@@ -360,12 +358,11 @@ export function check(data: Dataset): Finding[] {
           `${row.id}: source lacks a (year): "${src.slice(0, 50)}"`,
         )
 
-  // An empty `source` says nothing on its own, and silence reads as "fine". A row
-  // with no recorded text and a row for which no text can exist are different
-  // facts, and until `provenance` existed both rendered as the same blank. Tying
-  // the two together makes the field a checked statement rather than a label
-  // anyone can set: `recorded` has to produce the source it claims, and the other
-  // two have to be empty, so the badge can never disagree with the row under it.
+  // 빈 `source`는 혼자서는 아무 말도 하지 않고, 침묵은 "괜찮음"으로 읽힌다. 기록된
+  // 텍스트가 없는 행과 텍스트가 존재할 수 없는 행은 다른 사실인데, `provenance`가 생기기
+  // 전까지 둘 다 같은 빈칸으로 렌더됐다. 둘을 묶으면 이 필드가 아무나 붙일 수 있는
+  // 라벨이 아니라 검사되는 진술이 된다. `recorded`는 자기가 주장하는 source를 내놓아야
+  // 하고 나머지 둘은 비어 있어야 하므로, 배지가 그 아래 행과 어긋날 수 없다.
   for (const row of rows) {
     const has = !!row.source?.length
     if (row.provenance === 'recorded' && !has)
@@ -384,10 +381,10 @@ export function check(data: Dataset): Finding[] {
       )
   }
 
-  // A workout nobody formalized cannot have an authoritative text describing it, so
-  // its blank `source` is "cannot be done", never "not yet done". Deriving the label
-  // from `attribution` keeps the two from disagreeing: a folk workout marked
-  // `unrecorded` would put a permanently unfillable row on someone's worklist.
+  // 아무도 정식화하지 않은 워크아웃에는 그것을 서술하는 권위 있는 텍스트가 있을 수
+  // 없으므로, 빈 `source`는 "아직 못 함"이 아니라 "할 수 없음"이다. 라벨을
+  // `attribution`에서 유도하면 둘이 어긋나지 않는다. 통칭 워크아웃을 `unrecorded`로
+  // 표시하면 영원히 채울 수 없는 행이 누군가의 작업 목록에 올라간다.
   for (const w of workouts)
     if (w.attribution === null && w.provenance !== 'uncitable')
       add(
@@ -397,9 +394,9 @@ export function check(data: Dataset): Finding[] {
         `${w.id}: attribution=null but provenance="${w.provenance}" - a workout formalized by nobody has no authoritative text to record`,
       )
 
-  // The distinction only holds if the two never collapse. A row citing the same work
-  // as both its description and its proof is asserting that a method describing
-  // itself demonstrates itself - the conflation `source` was introduced to separate.
+  // 이 구분은 둘이 결코 합쳐지지 않을 때만 유지된다. 같은 저작을 서술이자 증명으로
+  // 인용하는 행은 방법이 자기를 서술하는 것으로 자기를 입증한다고 주장하는 것이고,
+  // `source`는 바로 그 혼동을 가르려고 도입됐다.
   for (const row of rows) {
     const cites = citedWorks(row)
     for (const src of row.source ?? [])
@@ -412,13 +409,12 @@ export function check(data: Dataset): Finding[] {
         )
   }
 
-  // One reference, one string. The verification pass (docs/TODO.md #1) asks a human
-  // to check each source once - which only works if a source reads the same
-  // everywhere. Two renderings of one reference (a short form in a test, the full
-  // form in a claim) look like two sources and cannot be grepped as one. Billat 2001
-  // had drifted into three forms, one with the wrong initials, before this ran.
-  // A source is a reference like any other: one work, one string, whether it appears
-  // as provenance or as evidence.
+  // 하나의 참조, 하나의 문자열. 검증 패스(docs/TODO.md §1)는 사람에게 각 소스를 한 번씩
+  // 확인하라고 하는데, 그건 소스가 어디서나 같게 읽힐 때만 성립한다. 한 참조의 두 표기는
+  // (test에는 축약형, claim에는 전체형) 두 소스로 보이고 하나로 grep되지 않는다. 이
+  // 규칙이 돌기 전 Billat 2001은 세 가지 형태로 갈라져 있었고 그중 하나는 이니셜이
+  // 틀렸다. source도 다른 것과 같은 참조다. 출처로 나오든 근거로 나오든 한 저작, 한
+  // 문자열.
   const citeForms: Record<string, Set<string>> = {}
   const noteForm = (c: string) => {
     const key = citeKey(c)
@@ -428,8 +424,8 @@ export function check(data: Dataset): Finding[] {
     for (const src of row.source ?? []) noteForm(src)
     for (const a of assertions(row)) for (const c of a.evidence.cite ?? []) noteForm(c)
   }
-  // A ledger entry names a reference too, and a verifier who wrote it a third way
-  // would be recording a reading of something the data cannot be matched against.
+  // 원장 항목도 참조를 부른다. 검증자가 그것을 세 번째 방식으로 적었다면, 데이터와
+  // 맞춰볼 수 없는 무언가에 대한 읽기를 기록하는 셈이다.
   for (const v of verified) noteForm(v.cite)
   for (const [key, forms] of Object.entries(citeForms))
     if (forms.size > 1)
@@ -441,10 +437,10 @@ export function check(data: Dataset): Finding[] {
           [...forms].map((f) => `      - ${f}`).join('\n'),
       )
 
-  // Evidence needs something to be evidence *for*. A system row claiming more than
-  // tradition without a claim.proposition is unfalsifiable by construction - the
-  // cite sits there with nothing stating what it is supposed to have shown. Found
-  // in 6 of 13 rows during the TODO #1b pass; this keeps it from coming back.
+  // 근거는 무엇의 근거인지가 있어야 한다. claim.proposition 없이 tradition 이상을
+  // 주장하는 훈련법 행은 구조적으로 반증 불가능하다 — 인용이 무엇을 보였어야 하는지
+  // 아무것도 진술되지 않은 채 놓여 있다. TODO §1b 작업에서 13행 중 6행이 그랬고, 이
+  // 규칙이 그것이 돌아오지 못하게 한다.
   for (const s of systems)
     if (s.evidence && s.evidence.tier !== 'tradition' && !s.claim?.proposition)
       add(
@@ -454,14 +450,13 @@ export function check(data: Dataset): Finding[] {
         `${s.id}: evidence.tier="${s.evidence.tier}" needs a claim.proposition - evidence with nothing to be evidence for cannot be checked or falsified`,
       )
 
-  // A test is a procedure derived from the claim, so a source that establishes the
-  // claim cannot independently establish the test - reusing it double-counts one
-  // reading as two assertions and inflates every tier count. Every cited test in the
-  // seed data reused its claim's cite verbatim, all eight of them, which is what a
-  // slot carrying no information of its own looks like. The bar is disjointness, not
-  // non-containment: the objection is per reference, so a test citing [A, B] against
-  // a claim citing [A] still double-counts A. What a test *may* cite is a source
-  // about measurement - that one is disjoint by construction.
+  // test는 claim에서 파생된 절차이므로, claim을 확립하는 소스가 test를 독립적으로
+  // 확립할 수는 없다 — 재사용하면 한 번의 읽기가 두 개의 주장으로 계산되어 모든 등급
+  // 카운트가 부풀어 오른다. 시드 데이터에서 인용을 가진 test 여덟 개 전부가 자기 claim의
+  // 인용을 글자 그대로 재사용했는데, 그것이 자기 정보가 없는 슬롯의 모습이다. 기준은
+  // 비포함이 아니라 서로소다. 반론은 참조 하나하나에 걸리므로, claim이 [A]를 인용할 때
+  // test가 [A, B]를 인용해도 A는 여전히 두 번 세어진다. test가 인용해도 *되는* 것은
+  // 측정에 관한 소스이고, 그건 구조적으로 서로소다.
   for (const w of workouts) {
     const claimCites = new Set<string>(w.claim?.evidence?.cite ?? [])
     for (const c of w.test?.evidence?.cite ?? [])
@@ -475,11 +470,10 @@ export function check(data: Dataset): Finding[] {
         )
   }
 
-  // A test is a field-observation heuristic, not a physiological finding, and the
-  // dataset says so itself: `confounds` requires at least one, and the worst kind
-  // acts through the claim's own mechanism and is inseparable by observation. A
-  // signal a row declares mechanistically indistinguishable cannot simultaneously be
-  // what the field has settled. `consensus` belongs to claims only.
+  // test는 생리학적 발견이 아니라 현장 관측 휴리스틱이고, 데이터셋 스스로 그렇게 말한다.
+  // `confounds`는 최소 하나를 요구하고, 가장 나쁜 종류는 주장 자신의 기전을 통해 작용해
+  // 관찰로 분리되지 않는다. 행 스스로 기전적으로 구별 불가능하다고 선언한 신호가 동시에
+  // 분야가 정착시킨 것일 수는 없다. `consensus`는 claim의 것이다.
   for (const w of workouts)
     if (w.test?.evidence?.tier === 'consensus')
       add(
@@ -490,12 +484,11 @@ export function check(data: Dataset): Finding[] {
         'test.evidence',
       )
 
-  // `consensus` asserts that the field agrees, which no single source states and no
-  // generator can read off a bibliography. It is the one tier whose bar requires
-  // someone to have opened the paper, so it inherits the human-sign-off gate instead
-  // of duplicating it: status answers "has a human read this", tier answers "how well
-  // is it supported", and only the top tier makes the first a precondition of the
-  // second.
+  // `consensus`는 분야가 동의한다고 주장하는데, 그것은 어떤 단일 소스도 진술하지 않고
+  // 생성기가 서지에서 읽어낼 수도 없다. 논문을 실제로 열어봐야만 충족되는 바를 가진
+  // 유일한 등급이므로, 사람 서명 게이트를 복제하는 대신 물려받는다. status는 "사람이
+  // 읽었는가"에 답하고 tier는 "얼마나 뒷받침되는가"에 답하는데, 최상위 등급에서만
+  // 전자가 후자의 전제 조건이 된다.
   for (const row of rows)
     for (const a of assertions(row))
       if (a.evidence.tier === 'consensus' && row.status !== 'verified')
@@ -507,14 +500,11 @@ export function check(data: Dataset): Finding[] {
           a.path,
         )
 
-  // ---- the verification ledger ----
-  // A human read used to have nowhere to live. The worksheet's checkboxes are
-  // rewritten every time it regenerates, and `status: verified` was rejected
-  // outright because no rule can tell who typed it - so the top tier, which
-  // requires that read, was not empty but closed. The ledger makes the claim
-  // explicit instead of forbidding it: an entry names the source, the assertion,
-  // the person, the date and what was found, and is read in review rather than
-  // inferred from a one-word diff.
+  // 사람의 읽기는 살 자리가 없었다. 워크시트의 체크박스는 재생성될 때마다 다시 쓰이고,
+  // `status: verified`는 누가 썼는지 규칙이 알 수 없다는 이유로 통째로 거부됐다 — 그래서
+  // 그 읽기를 요구하는 최상위 등급은 비어 있는 것이 아니라 닫혀 있었다. 원장은 그 주장을
+  // 금지하는 대신 명시적으로 만든다. 항목이 소스와 주장과 사람과 날짜와 무엇을 찾았는지를
+  // 부르고, 한 단어 diff에서 추측되는 대신 리뷰에서 읽힌다.
   const byId = Object.fromEntries(rows.map((r: Row) => [r.id, r]))
   const assertionKey = (row: string, path: string) => `${row} ${path}`
   const citesAt = new Map<string, Set<string>>()
@@ -538,10 +528,10 @@ export function check(data: Dataset): Finding[] {
       )
       continue
     }
-    // The entry and the data have to say the same thing. A confirmed reading whose
-    // cite has since been removed is a stale record; a rejected one whose cite is
-    // still there means the rejection was never applied - and that second case is
-    // what stops a reference someone has already ruled out from quietly returning.
+    // 항목과 데이터가 같은 말을 해야 한다. 확인된 읽기인데 그 인용이 이후 제거됐다면
+    // 기록이 낡은 것이고, 기각된 읽기인데 인용이 아직 남아 있다면 기각이 적용되지 않은
+    // 것이다 — 그리고 두 번째 경우가, 누군가 이미 배제한 참조가 조용히 돌아오는 것을
+    // 막는다.
     const present = at.has(v.cite)
     if (v.supports && !present)
       add(
@@ -561,8 +551,8 @@ export function check(data: Dataset): Finding[] {
       )
   }
 
-  // Nothing ships verified while its citations are unchecked. What counts as
-  // checked is now statable: every reference the row cites has a confirming entry.
+  // 인용이 확인되지 않은 채로는 아무것도 verified로 나가지 않는다. 무엇이 확인된
+  // 것인지도 이제 진술 가능하다. 그 행이 인용하는 모든 참조에 확인 항목이 있다는 것.
   const confirmed = new Set(
     verified.filter((v: Row) => v.supports).map((v: Row) => `${v.row} ${v.path} ${v.cite}`),
   )

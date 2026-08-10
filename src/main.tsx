@@ -1,14 +1,12 @@
 /**
- * Browser entry.
+ * 브라우저 진입점.
  *
- * The shell is a React root now rather than an innerHTML assignment, and routing
- * is TanStack Router rather than a hand-rolled History-API switch. What is left
- * here is what a router does not own: the chrome (nav, search box),
- * keyboard-first lookup, recently-viewed, and the service worker.
+ * 셸은 이제 innerHTML 대입이 아니라 React 루트이고, 라우팅은 손으로 만든 History API
+ * 스위치가 아니라 TanStack Router다. 여기 남은 것은 라우터가 소유하지 않는 것들이다.
+ * 크롬(내비, 검색창), 키보드 우선 조회, 최근 본 항목, 그리고 서비스 워커.
  *
- * The dictionary shape from ADR 0001 is unchanged: prerendered documents for
- * discovery, this bundle for use. `scripts/prerender.tsx` drives the same route
- * tree, so the two cannot drift.
+ * ADR 0001의 사전 형태는 그대로다. 발견을 위한 프리렌더 문서, 사용을 위한 이 번들.
+ * `scripts/prerender.tsx`가 같은 라우트 트리를 구동하므로 둘이 갈라질 수 없다.
  */
 import './style.css'
 import { StrictMode, useEffect, useState } from 'react'
@@ -27,8 +25,8 @@ function required<T extends HTMLElement>(id: string): T {
 }
 
 /**
- * Per-reader, so it is never prerendered: the files on disk must read the same
- * for everyone.
+ * 읽는 사람마다 다르므로 절대 프리렌더되지 않는다. 디스크의 파일은 모두에게 같게 읽혀야
+ * 한다.
  */
 const RECENT_KEY = 'recent'
 const RECENT_MAX = 8
@@ -59,7 +57,7 @@ function recordVisit(path: string) {
   try {
     localStorage.setItem(RECENT_KEY, JSON.stringify(next))
   } catch {
-    /* private mode - the strip just stays empty */
+    /* 프라이빗 모드 — 띠가 비어 있을 뿐이다 */
   }
 }
 
@@ -82,10 +80,9 @@ function RecentStrip() {
 }
 
 /**
- * The header and search box live outside the router outlet, so
- * they are wired here against router state rather than re-rendered per route.
- * The chrome sits outside the router outlet, so it reads router state through a
- * subscription rather than the hooks - those require the provider's context.
+ * 헤더와 검색창은 라우터 아웃렛 바깥에 살기 때문에, 라우트마다 다시 렌더되는 대신 여기서
+ * 라우터 상태에 배선된다. 아웃렛 바깥이므로 훅이 아니라 구독으로 라우터 상태를 읽는다 —
+ * 훅은 프로바이더의 컨텍스트를 요구한다.
  */
 function useRouterLocation() {
   const [loc, setLoc] = useState(() => router.state.location)
@@ -101,14 +98,14 @@ function Chrome() {
 
   useEffect(() => setDraft(q), [q])
 
-  // Keep the tab title truthful across client-side navigation.
+  // 클라이언트 내비게이션 중에도 탭 제목이 사실을 유지하게 한다.
   useEffect(() => {
     document.title = metaFor(path).title
     recordVisit(path)
   }, [path])
 
-  // The chrome is server-rendered in index.html, so drive it imperatively rather
-  // than re-declaring it in React and fighting the prerendered markup.
+  // 크롬은 index.html에 서버 렌더되어 있으므로, React에서 다시 선언해 프리렌더된
+  // 마크업과 싸우는 대신 명령적으로 다룬다.
   useEffect(() => {
     const search = required<HTMLInputElement>('search')
     search.placeholder = PLACEHOLDER
@@ -145,8 +142,8 @@ function Chrome() {
 }
 
 /**
- *   /  or  s   focus the search box        ArrowUp/Down   walk the results
- *   Enter      open the highlighted hit    Esc            clear, then blur
+ *   /  또는 s   검색창에 포커스        ArrowUp/Down   결과를 훑는다
+ *   Enter       강조된 항목을 연다      Esc            지우고 포커스를 뗀다
  */
 function useKeyboardLookup() {
   const location = useRouterLocation()
@@ -227,7 +224,7 @@ createRoot(required<HTMLElement>('app')).render(
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register(`${BASE}sw.js`, { scope: BASE }).catch(() => {
-      /* offline is an enhancement; a refusal changes nothing */
+      /* 오프라인은 부가 기능이다. 거부되어도 달라지는 것은 없다 */
     })
   })
 }
