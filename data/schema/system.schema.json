@@ -13,14 +13,32 @@
     "bet",
     "philosophy",
     "commitment",
+    "provenance",
     "evidence"
   ],
   "properties": {
-    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
-    "name": { "type": "string" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string"
+    },
     "attribution": {
       "type": ["string", "null"],
       "description": "Who formalized it. null = folk/unattributable."
+    },
+    "source": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "description": "Provenance: where the description of this method comes from. A canonical text is the authoritative record of what a system prescribes - which is a different question from whether it works, and that one is answered (or not) by `evidence`. A `source` never justifies a tier, and unlike `cite` it is allowed at any tier, including `tradition`."
+    },
+    "provenance": {
+      "enum": ["recorded", "unrecorded", "uncitable"],
+      "description": "The state of `source`, stated rather than left to be inferred from its absence. recorded = the describing text is cited in `source`. unrecorded = such a text exists but is not cited here yet. uncitable = no citable describing text exists at all, so `source` can never be filled. The last two both render as an empty `source`, which is why the distinction has to be written down: 'not yet done' and 'cannot be done' are different facts about a row. Tied to `source` in validate.ts, so it cannot drift from it."
     },
     "status": {
       "enum": ["draft", "verified"],
@@ -41,82 +59,163 @@
     },
     "bet": {
       "$ref": "#/$defs/i18n",
-      "description": "One sentence, what it wagers that others do not. Length and sentence count are enforced in validate.mjs. Longer than a sentence is philosophy, and there is a field for that."
+      "description": "One sentence, what it wagers that others do not. Length and sentence count are enforced in validate.ts. Longer than a sentence is philosophy, and there is a field for that."
     },
-    "philosophy": { "$ref": "#/$defs/i18n" },
-    "commitment": { "$ref": "#/$defs/commitment" },
-    "switching_cost": { "type": "array", "items": { "$ref": "#/$defs/switching_cost" } },
-    "distribution": { "$ref": "#/$defs/distribution" },
-    "volume_caps": { "type": "array", "items": { "$ref": "#/$defs/volume_cap" } },
-    "phases": { "type": "array", "items": { "$ref": "#/$defs/phase" } },
-    "evidence": { "$ref": "#/$defs/evidence" },
-    "caveats": { "type": "array", "items": { "$ref": "#/$defs/i18n" } }
+    "philosophy": {
+      "$ref": "#/$defs/i18n"
+    },
+    "commitment": {
+      "$ref": "#/$defs/commitment"
+    },
+    "switching_cost": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/switching_cost"
+      }
+    },
+    "distribution": {
+      "$ref": "#/$defs/distribution"
+    },
+    "volume_caps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/volume_cap"
+      }
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/phase"
+      }
+    },
+    "claim": {
+      "$ref": "#/$defs/claim"
+    },
+    "evidence": {
+      "$ref": "#/$defs/evidence"
+    },
+    "caveats": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/i18n"
+      }
+    }
   },
-
   "$defs": {
     "i18n": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["ko", "en"],
-      "properties": { "ko": { "type": "string" }, "en": { "type": "string" } }
+      "type": "string",
+      "description": "Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations."
     },
-
     "count": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "value": { "type": "integer", "minimum": 1 },
-        "min": { "type": "integer", "minimum": 1 },
-        "max": { "type": "integer", "minimum": 1 }
+        "value": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "min": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 1
+        }
       },
-      "oneOf": [{ "required": ["value"] }, { "required": ["min", "max"] }]
+      "oneOf": [
+        {
+          "required": ["value"]
+        },
+        {
+          "required": ["min", "max"]
+        }
+      ]
     },
-
     "evidence": {
       "type": "object",
       "additionalProperties": false,
       "required": ["tier"],
       "properties": {
-        "tier": { "enum": ["consensus", "plausible", "tradition"] },
-        "cite": { "type": "array", "minItems": 1, "items": { "type": "string" } },
-        "note": { "$ref": "#/$defs/i18n" }
+        "tier": {
+          "enum": ["consensus", "plausible", "tradition"]
+        },
+        "cite": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "note": {
+          "$ref": "#/$defs/i18n"
+        }
       },
       "allOf": [
         {
           "if": {
             "required": ["tier"],
-            "properties": { "tier": { "enum": ["consensus", "plausible"] } }
+            "properties": {
+              "tier": {
+                "enum": ["consensus", "plausible"]
+              }
+            }
           },
-          "then": { "required": ["cite"] }
+          "then": {
+            "required": ["cite"]
+          }
         },
         {
-          "if": { "required": ["tier"], "properties": { "tier": { "const": "tradition" } } },
-          "then": { "not": { "required": ["cite"] } }
+          "if": {
+            "required": ["tier"],
+            "properties": {
+              "tier": {
+                "const": "tradition"
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "required": ["cite"]
+            }
+          }
         }
       ]
     },
-
     "commitment": {
       "type": "object",
       "additionalProperties": false,
       "required": ["sessions_per_week"],
       "description": "The first filter for someone shopping methods: can I even run this? Rarely stated by the systems themselves.",
       "properties": {
-        "sessions_per_week": { "$ref": "#/$defs/count" },
-        "min_weekly_km": { "type": "number", "exclusiveMinimum": 0 },
-        "plan_length_weeks": { "$ref": "#/$defs/count" },
-        "requires_track": { "type": "boolean" },
-        "note": { "$ref": "#/$defs/i18n" }
+        "sessions_per_week": {
+          "$ref": "#/$defs/count"
+        },
+        "min_weekly_km": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "plan_length_weeks": {
+          "$ref": "#/$defs/count"
+        },
+        "requires_track": {
+          "type": "boolean"
+        },
+        "note": {
+          "$ref": "#/$defs/i18n"
+        }
       }
     },
-
     "switching_cost": {
       "type": "object",
       "additionalProperties": false,
       "required": ["from", "anchor_change", "silent", "note"],
-      "description": "What breaks when you arrive here from another system. anchor_change is derivable from both systems' intensity_model and is checked in validate.mjs.",
+      "description": "What breaks when you arrive here from another system. anchor_change is derivable from both systems' intensity_model and is checked in validate.ts.",
       "properties": {
-        "from": { "type": "string", "description": "A system id. Never this system's own id." },
+        "from": {
+          "type": "string",
+          "description": "A system id. Never this system's own id."
+        },
         "anchor_change": {
           "type": "string",
           "pattern": "^[a-z0-9_-]+ -> [a-z0-9_-]+$",
@@ -126,16 +225,19 @@
           "type": "boolean",
           "description": "true = a term survives the switch while its meaning changes. The dangerous case, because nothing signals it."
         },
-        "note": { "$ref": "#/$defs/i18n" }
+        "note": {
+          "$ref": "#/$defs/i18n"
+        }
       }
     },
-
     "distribution": {
       "type": "object",
       "additionalProperties": false,
       "required": ["model", "evidence"],
       "properties": {
-        "model": { "enum": ["pyramidal", "polarized", "threshold", "unstructured"] },
+        "model": {
+          "enum": ["pyramidal", "polarized", "threshold", "unstructured"]
+        },
         "zones": {
           "type": "array",
           "minItems": 2,
@@ -144,42 +246,82 @@
             "additionalProperties": false,
             "required": ["label", "pct_sessions"],
             "properties": {
-              "label": { "type": "string" },
-              "pct_sessions": { "type": "number", "minimum": 0, "maximum": 100 }
+              "label": {
+                "type": "string"
+              },
+              "pct_sessions": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
             }
           },
           "description": "Percent of SESSIONS, not time. The confusion is common enough to name in the field description."
         },
-        "evidence": { "$ref": "#/$defs/evidence" }
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
       }
     },
-
     "volume_cap": {
       "type": "object",
       "additionalProperties": false,
       "required": ["zone", "rule", "evidence"],
       "properties": {
-        "zone": { "type": "string" },
-        "max_pct_weekly": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
-        "max_km": { "type": "number", "exclusiveMinimum": 0 },
-        "rule": { "$ref": "#/$defs/i18n" },
-        "evidence": { "$ref": "#/$defs/evidence" }
+        "zone": {
+          "type": "string"
+        },
+        "max_pct_weekly": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 100
+        },
+        "max_km": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "rule": {
+          "$ref": "#/$defs/i18n"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
       }
     },
-
     "phase": {
       "type": "object",
       "additionalProperties": false,
       "required": ["name", "emphasis"],
       "properties": {
-        "name": { "enum": ["base", "build", "peak", "taper", "offseason"] },
+        "name": {
+          "enum": ["base", "build", "peak", "taper", "offseason"]
+        },
         "emphasis": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string" },
-          "description": "Workout ids. Referential integrity checked in validate.mjs."
+          "items": {
+            "type": "string"
+          },
+          "description": "Workout ids. Referential integrity checked in validate.ts."
         },
-        "note": { "$ref": "#/$defs/i18n" }
+        "note": {
+          "$ref": "#/$defs/i18n"
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposition"],
+      "description": "What this system asserts that its evidence is supposed to support. Required whenever root evidence claims more than tradition - evidence with nothing to be evidence *for* is unfalsifiable.",
+      "properties": {
+        "proposition": {
+          "$ref": "#/$defs/i18n",
+          "description": "One falsifiable sentence."
+        },
+        "mechanism": {
+          "$ref": "#/$defs/i18n"
+        }
       }
     }
   }

@@ -1,12 +1,19 @@
-import { defineConfig } from "vite-plus";
+import { defineConfig } from 'vite-plus'
 
 export default defineConfig({
-  // Relative asset paths so the built site works under any base path -
-  // GitHub Pages serves a project repo from /<repo>/, and the hash router
-  // needs no server-side rewrites.
-  base: "./",
+  // A real base path, not "./": History-API routing has to know where the site
+  // root is in order to strip it off location.pathname. GitHub Pages serves this
+  // project repo from /<repo>/, and scripts/prerender.tsx writes a file at every
+  // route, so Pages needs no rewrite rules to serve them. Override with BASE_PATH
+  // when hosting elsewhere.
+  base: process.env.BASE_PATH || '/running-training-dataset/',
+  // JSX is transformed by oxc - Vite+ uses oxc, not esbuild, and tsconfig's jsx
+  // settings inform only the type checker, not the bundler.
+  oxc: {
+    jsx: { runtime: 'automatic' },
+  },
   staged: {
-    "*": "vp check --fix",
+    '*': 'vp check --fix',
   },
   lint: {
     options: {
@@ -14,5 +21,11 @@ export default defineConfig({
       typeCheck: true,
     },
   },
-  fmt: {},
-});
+  fmt: {
+    // Vendored agent skills are somebody else's prose. Formatting them buys
+    // nothing and makes every skill update arrive as a reformat conflict.
+    ignorePatterns: ['.claude/**'],
+    singleQuote: true,
+    semi: false,
+  },
+})

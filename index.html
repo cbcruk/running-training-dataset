@@ -12,23 +12,22 @@
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="#/">
+      <a class="brand" href="./">
         <span class="brand-mark">▮▮▮</span>
         <span class="brand-name">Running Training Dataset</span>
       </a>
       <nav class="nav">
-        <a href="#/" data-nav="systems">Systems</a>
-        <a href="#/workouts" data-nav="workouts">Workouts</a>
-        <button
-          id="lang-toggle"
-          class="lang-toggle"
-          type="button"
-          aria-label="Toggle language"
-        ></button>
+        <a href="./" data-nav="systems">Systems</a>
+        <a href="./workouts" data-nav="workouts">Workouts</a>
+        <a href="./anchors" data-nav="anchors">Anchors</a>
       </nav>
     </header>
     <div class="searchwrap">
       <input id="search" class="search" type="search" autocomplete="off" spellcheck="false" />
+      <p class="kbd-hint">
+        <kbd>/</kbd> search · <kbd>↑</kbd><kbd>↓</kbd> results · <kbd>↵</kbd> open ·
+        <kbd>esc</kbd> clear
+      </p>
     </div>
     <main id="app"></main>
     <footer class="foot">
@@ -41,6 +40,6 @@
         · MIT · schematic charts, both axes nominal
       </p>
     </footer>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

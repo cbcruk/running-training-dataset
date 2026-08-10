@@ -2,7 +2,7 @@
   "name": "running-training-dataset",
   "version": "0.0.0",
   "private": true,
-  "description": "A browsable catalog of running training systems: what each one bets, what it costs to run, and how much of it is actually known.",
+  "description": "러닝 훈련법의 브라우징 카탈로그: 각 훈련법이 무엇에 베팅하는지, 실행 비용은 얼마인지, 실제로 알려진 것은 어디까지인지.",
   "homepage": "https://github.com/cbcruk/running-training-dataset#readme",
   "bugs": {
     "url": "https://github.com/cbcruk/running-training-dataset/issues"
@@ -15,19 +15,31 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "vp build",
+    "build": "vp build && nub scripts/prerender.tsx",
     "preview": "vp preview",
-    "validate": "node scripts/validate.mjs",
-    "render": "node scripts/render.mjs",
+    "validate": "nub scripts/validate.ts",
+    "render": "nub scripts/render.ts",
+    "types": "nub scripts/types.ts",
+    "verify": "nub scripts/verify.ts",
+    "pages": "nub scripts/prerender.tsx",
     "test": "vp test",
     "check": "vp check",
     "prepare": "vp config"
   },
   "dependencies": {
-    "ajv": "^8.20.0"
+    "@astryxdesign/core": "^0.2.0",
+    "@astryxdesign/theme-neutral": "^0.2.0",
+    "@stylexjs/stylex": "^0.19.0",
+    "@tanstack/react-router": "^1.170.19",
+    "ajv": "^8.20.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "json-schema-to-typescript": "^15.0.4",
     "typescript": "^7.0.2",
     "vite-plus": "^0.2.4"
   },

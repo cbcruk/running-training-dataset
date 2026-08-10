@@ -21,6 +21,12 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      # nub runs the scripts/ TypeScript directly - no build step between the
+      # prerenderer and src/views.tsx. Installed from npm rather than the
+      # setup-nub action so the version comes from one place.
+      - name: Install nub
+        run: npm install -g @nubjs/nub
+
       - name: Install
         run: pnpm install --frozen-lockfile
 
@@ -30,8 +36,55 @@ jobs:
       - name: Render (every workout -> schematic svg)
         run: pnpm run render
 
+      # The data types are generated from data/schema/*.json and checked in, so a
+      # fresh clone type-checks without running the generator. Regenerate and
+      # assert nothing moved - otherwise a schema edit could ship with types that
+      # still describe the old shape, which is the drift the generation exists to
+      # prevent.
+      - name: Verify generated types match the schemas
+        run: |
+          pnpm run types
+          # --porcelain, not `git diff`: it reports untracked output too, so a
+          # generated file that was never committed cannot pass vacuously.
+          if [ -n "$(git status --porcelain -- src/types/)" ]; then
+            echo "src/types/ does not match data/schema/ - run 'vp run types' and commit the result"
+            git status --porcelain -- src/types/
+            git diff -- src/types/
+            exit 1
+          fi
+
+      # Same contract as the generated types: committed so a reader sees it without
+      # running anything, and re-generated here so it cannot describe rows that
+      # have since changed.
+      - name: Verify the source worksheet matches the data
+        run: |
+          pnpm run verify
+          if [ -n "$(git status --porcelain -- docs/verification.md)" ]; then
+            echo "docs/verification.md is stale - run 'vp run verify' and commit the result"
+            git diff -- docs/verification.md
+            exit 1
+          fi
+
       - name: Check (format + lint + types)
         run: pnpm run check
 
-      - name: Build (browse UI)
+      - name: Build (browse UI + prerender every entry)
         run: pnpm run build
+
+      # The discovery half of the dictionary (ADR 0001): every entry must exist as
+      # a real file with its own title, or the catalog is invisible to crawlers
+      # again. Assert the count matches the data rather than trusting the build.
+      - name: Verify prerendered entries
+        run: |
+          expected=$(node -e "
+            const r = ['/', '/workouts', '/anchors'].length;
+            const n = ['systems','workouts','anchors'].reduce((a,f) =>
+              a + JSON.parse(require('fs').readFileSync('data/'+f+'.json','utf8')).length, 0);
+            console.log(r + n);
+          ")
+          actual=$(find dist -name index.html | wc -l)
+          echo "expected $expected prerendered routes, found $actual"
+          test "$expected" -eq "$actual"
+          test -f dist/404.html
+          grep -q '<title>rpe_10' dist/anchor/rpe_10/index.html
+          grep -q 'RPE' dist/anchor/rpe_10/index.html

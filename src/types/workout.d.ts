@@ -1,0 +1,338 @@
+// data/schema/*.json에서 scripts/types.ts가 생성한 파일 - 고치지 말 것.
+// 스키마를 바꾼 뒤에는 `vp run types`를 실행한다.
+//
+// 여기서 lint를 끈 것은 의도적이다. 이 파일의 모양은 생성기의 몫이고, 경고를 손으로
+// 고쳐봐야 다음 실행에 되돌아간다.
+/* eslint-disable */
+
+export type Count = {
+  value?: number
+  min?: number
+  max?: number
+} & Count1
+export type Count1 = {
+  [k: string]: unknown
+}
+export type Quantity = {
+  value?: number
+  min?: number
+  max?: number
+  /**
+   * SI only. Renderers convert. Unit drift is the #1 bug class.
+   */
+  unit: 's' | 'm'
+} & Quantity1 & {
+    value?: number
+    min?: number
+    max?: number
+    /**
+     * SI only. Renderers convert. Unit drift is the #1 bug class.
+     */
+    unit: 's' | 'm'
+  } & Quantity1
+export type Quantity1 =
+  | {
+      [k: string]: unknown
+    }
+  | {
+      [k: string]: unknown
+    }
+/**
+ * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+ */
+export type I18N = string
+export type Anchor = {
+  model:
+    | 'daniels-vdot'
+    | 'pct_hrmax'
+    | 'pct_hrr'
+    | 'pct_vo2max'
+    | 'pct_cs'
+    | 'rpe_10'
+    | 'lactate_mmol'
+    | 'race_pace_ref'
+  zone?: string
+  value?: number | string
+  /**
+   * @minItems 2
+   * @maxItems 2
+   */
+  range?: [number, number]
+  /**
+   * exact = definitional within its model. approx/rough = loose cross-model mapping.
+   */
+  confidence: 'exact' | 'approx' | 'rough'
+  note?: I18N
+} & Anchor1 & {
+    model:
+      | 'daniels-vdot'
+      | 'pct_hrmax'
+      | 'pct_hrr'
+      | 'pct_vo2max'
+      | 'pct_cs'
+      | 'rpe_10'
+      | 'lactate_mmol'
+      | 'race_pace_ref'
+    zone?: string
+    value?: number | string
+    /**
+     * @minItems 2
+     * @maxItems 2
+     */
+    range?: [number, number]
+    /**
+     * exact = definitional within its model. approx/rough = loose cross-model mapping.
+     */
+    confidence: 'exact' | 'approx' | 'rough'
+    note?: I18N
+  } & Anchor1 & {
+    model:
+      | 'daniels-vdot'
+      | 'pct_hrmax'
+      | 'pct_hrr'
+      | 'pct_vo2max'
+      | 'pct_cs'
+      | 'rpe_10'
+      | 'lactate_mmol'
+      | 'race_pace_ref'
+    zone?: string
+    value?: number | string
+    /**
+     * @minItems 2
+     * @maxItems 2
+     */
+    range?: [number, number]
+    /**
+     * exact = definitional within its model. approx/rough = loose cross-model mapping.
+     */
+    confidence: 'exact' | 'approx' | 'rough'
+    note?: I18N
+  } & Anchor1
+export type Anchor1 =
+  | {
+      [k: string]: unknown
+    }
+  | {
+      [k: string]: unknown
+    }
+  | {
+      [k: string]: unknown
+    }
+export type Evidence = {
+  [k: string]: unknown
+} & {
+  /**
+   * consensus = textbook. plausible = studied, contested. tradition = everyone does it, nobody knows.
+   */
+  tier: 'consensus' | 'plausible' | 'tradition'
+  /**
+   * @minItems 1
+   */
+  cite?: [string, ...string[]]
+  note?: I18N
+}
+
+/**
+ * A normalized physiological workout entity. Naming is NOT stored here - see usage.schema.json.
+ */
+export interface RunningWorkout {
+  /**
+   * Descriptive, system-neutral. NEVER a colloquial name like 'tempo-run'.
+   */
+  id: string
+  /**
+   * Descriptive English. Not what any coach calls it.
+   */
+  canonical_name: string
+  family:
+    | 'easy'
+    | 'recovery'
+    | 'long'
+    | 'threshold'
+    | 'vo2max'
+    | 'speed'
+    | 'hill'
+    | 'fartlek'
+    | 'race-pace'
+  /**
+   * draft = citations unverified by a human. Nothing ships verified without L4 human commit.
+   */
+  status: 'draft' | 'verified'
+  /**
+   * Primary filter axis. Maps to exercises-dataset's body_part.
+   *
+   * @minItems 1
+   */
+  target_adaptation: [
+    (
+      | 'plasma-volume'
+      | 'capillarization'
+      | 'mitochondrial-density'
+      | 'stroke-volume'
+      | 'lactate-clearance'
+      | 'mlss-shift'
+      | 'vo2max'
+      | 'running-economy'
+      | 'neuromuscular-recruitment'
+      | 'glycogen-storage'
+      | 'fat-oxidation'
+      | 'tendon-stiffness'
+      | 'bone-density'
+      | 'musculoskeletal-durability'
+      | 'pacing-skill'
+    ),
+    ...(
+      | 'plasma-volume'
+      | 'capillarization'
+      | 'mitochondrial-density'
+      | 'stroke-volume'
+      | 'lactate-clearance'
+      | 'mlss-shift'
+      | 'vo2max'
+      | 'running-economy'
+      | 'neuromuscular-recruitment'
+      | 'glycogen-storage'
+      | 'fat-oxidation'
+      | 'tendon-stiffness'
+      | 'bone-density'
+      | 'musculoskeletal-durability'
+      | 'pacing-skill'
+    )[],
+  ]
+  /**
+   * Maps to exercises-dataset's equipment. 'No track' filters like 'no barbell'.
+   *
+   * @minItems 1
+   */
+  venue: [
+    'track' | 'road-flat' | 'road-rolling' | 'hill' | 'treadmill' | 'trail' | 'grass' | 'any',
+    ...(
+      | 'track'
+      | 'road-flat'
+      | 'road-rolling'
+      | 'hill'
+      | 'treadmill'
+      | 'trail'
+      | 'grass'
+      | 'any'
+    )[],
+  ]
+  /**
+   * @minItems 1
+   */
+  placement: [
+    'base' | 'build' | 'peak' | 'taper' | 'offseason',
+    ...('base' | 'build' | 'peak' | 'taper' | 'offseason')[],
+  ]
+  structure: Structure
+  intensity: Intensity
+  claim: Claim
+  test: Test
+  prerequisites?: Prerequisites
+  safety?: Safety
+  common_errors?: I18N[]
+  instructions: I18N
+  /**
+   * Who formalized it. null = folk/unattributable. Names a person, not a text - the text is `source`.
+   */
+  attribution?: string | null
+  /**
+   * Provenance: the text that defines this workout. Same split as on a system - a canonical text records what is prescribed, which is a different question from whether it works, and that one is answered (or not) by `evidence`. A `source` never justifies a tier and is allowed at any tier, including `tradition`.
+   *
+   * @minItems 1
+   */
+  source?: [string, ...string[]]
+  /**
+   * The state of `source`, stated rather than inferred from its absence. recorded = the defining text is cited in `source`. unrecorded = such a text exists but is not cited here yet. uncitable = no authoritative defining text exists at all. A workout with `attribution: null` was formalized by nobody in particular, so no authoritative text can exist for it - validate.ts requires those rows to be `uncitable`.
+   */
+  provenance: 'recorded' | 'unrecorded' | 'uncitable'
+}
+export interface Structure {
+  /**
+   * @minItems 1
+   */
+  segments: [Segment, ...Segment[]]
+  /**
+   * true = segments are illustrative only (fartlek). Renderer must not imply precision.
+   */
+  stochastic?: boolean
+}
+export interface Segment {
+  kind: 'warmup' | 'work' | 'recovery' | 'cooldown' | 'repeat'
+  count?: Count
+  /**
+   * @minItems 1
+   */
+  children?: [Segment, ...Segment[]]
+  duration?: Quantity
+  distance?: Quantity
+  /**
+   * 'self' = this workout's own intensity block. Otherwise a workout id (e.g. 'easy-run').
+   */
+  intensity_ref?: string
+  /**
+   * intensity_ref to progress toward across this segment
+   */
+  ramp_to?: string
+  note?: I18N
+}
+export interface Intensity {
+  primary_anchor?: string
+  /**
+   * minItems 2: a single anchor hides that anchors disagree. Exactly one rpe_10 is mandatory - it is the only anchor requiring no equipment, no test, no model, and no system membership, therefore the only universal exchange currency between systems and the only renderable axis. maxContains 1 keeps the renderer deterministic.
+   *
+   * @minItems 2
+   */
+  anchors: [Anchor, Anchor, ...Anchor[]]
+}
+/**
+ * A falsifiable proposition, not a guide. `test` is the procedure that would falsify `proposition`.
+ */
+export interface Claim {
+  /**
+   * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+   */
+  proposition: string
+  mechanism: I18N
+  evidence: Evidence
+}
+/**
+ * NOT effect size. A falsification procedure: what you would observe if the claim holds, when, what could fake it, and what a null means.
+ */
+export interface Test {
+  detectable: boolean
+  what?: I18N
+  when_weeks?: Count
+  mechanism?: I18N
+  /**
+   * minItems 1 is a forcing function. Every real-world signal has at least one confound; if you cannot name one you have not looked.
+   *
+   * @minItems 1
+   */
+  confounds?: [Confound, ...Confound[]]
+  /**
+   * Korean prose. The dataset is Korean-only; English survives only where it is data rather than translation - colloquial names, canonical names, attributions and citations.
+   */
+  if_absent?: string
+  evidence: Evidence
+}
+export interface Confound {
+  factor: string
+  severity: 'low' | 'moderate' | 'high'
+  /**
+   * true = acts through the SAME physiology as the claim, therefore inseparable by observation alone. The worst kind: not noise, but indistinguishable.
+   */
+  shares_mechanism?: boolean
+  note: I18N
+}
+export interface Prerequisites {
+  min_weekly_volume_km?: number
+  min_training_age_months?: number
+  requires_workouts?: string[]
+  evidence?: Evidence
+  note?: I18N
+}
+export interface Safety {
+  injury_risk: 'low' | 'moderate' | 'high'
+  note?: I18N
+}
