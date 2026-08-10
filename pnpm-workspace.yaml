@@ -13,9 +13,6 @@ peerDependencyRules:
     vite: '*'
     vitest: '*'
 
-# Astryx ships a postinstall that only prints a "run astryx init" nudge; it reads
-# agent-doc files (CLAUDE.md, AGENTS.md, .cursorrules) to check for a marker first.
-# Reviewed before allowlisting - pnpm blocks build scripts by default and fails the
-# install otherwise, which breaks `vp build`.
-allowBuilds:
-  '@astryxdesign/core': true
+# allowBuilds는 비어 있다. pnpm이 기본으로 막는 postinstall 중 이 저장소가 실제로 필요한
+# 것이 없다 - remix가 끌고 오는 esbuild가 하나 있지만 그 바이너리를 부르는 코드가 없어서
+# (빌드는 Remix의 컴파일러가, 검사는 oxc가 한다) 무시된 채로 두 파이프라인이 모두 통과한다.

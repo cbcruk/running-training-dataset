@@ -1,6 +1,6 @@
 # ADR 0003 — Run the scripts under nub
 
-**Status:** accepted · 2026-08-05
+**Status:** superseded by [ADR 0009](0009-remix-3.md) · 2026-08-05
 **Removes a cost introduced by:** [ADR 0002](0002-component-model.md)
 
 ---

@@ -1,8 +1,13 @@
-import { expect, test } from 'vite-plus/test'
+import { test as nodeTest } from 'node:test'
+import { expect } from 'remix/assert'
 import { brokenRefs } from '../scripts/comment-refs.ts'
 import { load, patch } from '../scripts/dataset.ts'
 import { check } from '../scripts/rules.ts'
-import { renderWorkout } from '../scripts/svg.ts'
+import { renderWorkout } from '../scripts/svg.tsx'
+
+// node:test의 `test()`는 프로미스를 돌려주고 러너가 그것을 기다린다. 호출부에서 매번
+// 버려주는 대신 한 번만 감싼다.
+const test = (name: string, fn: () => void | Promise<void>) => void nodeTest(name, fn)
 
 const data = load(process.cwd())
 const byId = Object.fromEntries(data.workouts.map((w) => [w.id, w]))
@@ -16,8 +21,8 @@ test('the dataset passes every rule', () => {
   expect(check(data)).toEqual([])
 })
 
-test('every workout renders to a schematic svg', () => {
-  for (const w of data.workouts) expect(renderWorkout(w, byId)).toContain('<svg')
+test('every workout renders to a schematic svg', async () => {
+  for (const w of data.workouts) expect(await renderWorkout(w, byId)).toContain('<svg')
 })
 
 // Sixteen comments named files that had been renamed out from under them, and

@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const schemaDir = resolve(root, 'data/schema')
-const outDir = resolve(root, 'src/types')
+const outDir = resolve(root, 'app/data/types')
 
 const banner = `// data/schema/*.json에서 scripts/types.ts가 생성한 파일 - 고치지 말 것.
 // 스키마를 바꾼 뒤에는 \`vp run types\`를 실행한다.
@@ -65,6 +65,6 @@ writeFileSync(resolve(outDir, 'index.d.ts'), `${banner}\n${reexports.join('\n')}
 
 // 저장소 자신의 포매터로 정리한다. 그래야 재생성이 멱등이다. 이게 없으면
 // `vp check --fix`가 출력을 다시 포맷하고 다음 실행이 diff를 보고한다.
-execFileSync('./node_modules/.bin/vp', ['fmt', 'src/types'], { cwd: root, stdio: 'ignore' })
+execFileSync('./node_modules/.bin/vp', ['fmt', 'app/data/types'], { cwd: root, stdio: 'ignore' })
 
-console.log(`src/types/ <- ${files.length} schemas (${files.map((f) => ROOTS[f]).join(', ')})`)
+console.log(`app/data/types/ <- ${files.length} schemas (${files.map((f) => ROOTS[f]).join(', ')})`)

@@ -164,22 +164,26 @@ scripts/
   evidence.ts        # 행의 근거 그래프를 걷는 유일한 워커 (순수)
   dataset.ts         # load(root) -> Dataset, 그리고 테스트에서 한 행을 깨는 patch()
   validate.ts        # rules.ts 위의 CLI: 읽고, 검사하고, 찍고, exit code
-  types.ts           # data/schema/*.json -> src/types/ (생성물, 커밋됨, CI 검증)
+  types.ts           # data/schema/*.json -> app/data/types/ (생성물, 커밋됨, CI 검증)
   verify.ts          # data -> docs/verification.md (§1b 작업지) + docs/counts.md
   comment-refs.ts    # 주석이 이름을 부르는 파일과, 그게 아직 있는지
-  svg.ts             # structure -> 도식 SVG (순수, 시각물의 유일한 원천)
-  render.ts          # svg.ts로 SVG를 out/에 쓴다
-  prerender.tsx      # 라우터를 통해 엔트리당 실제 HTML 파일 하나를 dist/에 쓴다
-index.html           # 브라우즈 UI 셸
+  svg.tsx            # 차트 컴포넌트 -> SVG 문자열 (out/*.svg가 쓰는 한 줄)
+  render.ts          # 워크아웃마다 SVG를 out/에 쓴다
+  prerender.ts       # 라우터를 통해 엔트리당 실제 HTML 파일 하나를 dist/에 쓴다
+server.ts            # 개발·미리보기 서버. 배포는 이걸 쓰지 않는다
 public/
-  sw.js              # 서비스 워커: 오프라인에서도 카탈로그를 볼 수 있게
-src/
-  types/             # 스키마에서 생성 + 손으로 쓴 뷰 계약
-  data.tsx           # JSON -> 타입 붙은 행, 역인덱스, 엔트리별 페이지 메타
-  router.tsx         # 라우트 트리, 브라우저와 프리렌더러가 함께 구동
-  components/        # React 컴포넌트 (ADR 0002), Node에서도 문자열로 렌더된다
-  main.tsx           # 브라우저 셸: 크롬, 키보드 조회, 최근 본 항목, SW
   style.css          # tier 배지는 시각적 무게를 갖는다. tradition이 consensus로 읽혀선 안 된다
+  sw.js              # 서비스 워커: 오프라인에서도 카탈로그를 볼 수 있게
+app/                 # Remix 3 앱 (ADR 0009)
+  routes.ts          # URL 계약. 모든 내부 링크가 여기서 나온다
+  router.ts          # 미들웨어 스택 + 라우트 맵 -> 컨트롤러
+  assets.ts          # 브라우저 모듈 서버 (요청 시 컴파일, 빌드 시 dist/로 구움)
+  actions/           # 컨트롤러: 행 하나를 찾아 그 행의 메타데이터와 함께 문서를 렌더
+  middleware/        # 요청 스코프 렌더러
+  data/              # JSON -> 타입 붙은 행, 역인덱스, 페이지 메타, 검색 색인
+  data/types/        # 스키마에서 생성 + 손으로 쓴 뷰 계약
+  ui/                # 서버 렌더 컴포넌트 + 배포 base를 붙이는 유일한 어댑터(href.ts)
+  assets/            # 브라우저로 나가는 것 전부: 런타임 부팅, 검색, 최근 본 항목
 CONTEXT.md           # 용어집: 이 프로젝트가 쓰는 말과 쓰지 않는 말
 docs/
   TODO.md            # 작업 목록: 검증, 대칭성, 얕은 필드
@@ -189,17 +193,18 @@ docs/
 ```
 
 ```
-vp install
-vp run validate && vp run render   # 검사 + SVG 쓰기
-vp dev                             # 브라우즈 UI (훈련법 -> 워크아웃 상세, "tempo run" 충돌 검색)
-vp run build                       # dist/에 정적 번들, 엔트리당 HTML 파일 하나
+pnpm install
+pnpm run validate && pnpm run render   # 검사 + SVG 쓰기
+pnpm run dev                           # 브라우즈 UI (훈련법 -> 워크아웃 상세, "tempo run" 충돌 검색)
+pnpm run build                         # dist/에 정적 사이트, 엔트리당 HTML 파일 하나
+pnpm run check && pnpm run test        # 포맷·린트·타입 검사, 그리고 데이터 규칙 테스트
 ```
 
-브라우즈 UI는 JSON을 직접 읽고 도식 차트를 CLI가 쓰는 것과 같은 `scripts/svg.ts`로 렌더하므로, 시각물이 데이터에서 벗어날 수 없다.
+브라우즈 UI는 JSON을 직접 읽고 도식 차트를 CLI가 쓰는 것과 같은 `app/ui/chart.tsx`로 렌더하므로, 시각물이 데이터에서 벗어날 수 없다.
 
-모든 엔트리는 실제 문서이기도 하다. `scripts/prerender.tsx`가 훈련법·워크아웃·앵커마다 HTML 파일 하나씩을 쓴다 — 각자의 `<title>`, description, canonical URL, 그리고 마크업 안에 엔트리의 내용까지 — 브라우저가 렌더하는 것과 같은 `src/components/`에서. 그래서 `/anchor/rpe_10`에 처음 들어와도 JavaScript 없이 읽히고 서버 재작성 규칙이 필요 없으며, 클라이언트 번들은 그 위에서 즉시·무리로드 조회로 업그레이드한다. 그 분리가 [ADR 0001](docs/adr/0001-dictionary-shape.md)의 주제다.
+모든 엔트리는 실제 문서이기도 하다. `scripts/prerender.ts`가 훈련법·워크아웃·앵커마다 HTML 파일 하나씩을 쓴다 — 각자의 `<title>`, description, canonical URL, 그리고 마크업 안에 엔트리의 내용까지 — 개발 서버가 답하는 것과 **같은 응답**을 파일로 받아서. 그래서 `/anchor/rpe_10`에 처음 들어와도 JavaScript 없이 읽히고 서버 재작성 규칙이 필요 없으며, 브라우저 런타임이 그 위에서 즉시·무리로드 조회로 업그레이드한다. 그 분리가 [ADR 0001](docs/adr/0001-dictionary-shape.md)의 주제다.
 
-한 번 로드되면 사전처럼 읽힌다: `/`(또는 `s`)로 검색창에 뛰고, `↑`/`↓`로 결과를 훑고, `Enter`로 열고, `Esc`로 지운다. 마지막에 연 여덟 개가 홈에 남는다. 그리고 전체 코퍼스가 번들에 실리므로 서비스 워커가 카탈로그를 오프라인에서도 볼 수 있게 만든다 — 한 번도 열지 않은 엔트리까지, 이미 기기에 있는 데이터로 클라이언트가 렌더할 수 있기 때문이다.
+한 번 로드되면 사전처럼 읽힌다: `/`(또는 `s`)로 검색창에 뛰고, `↑`/`↓`로 결과를 훑고, `Enter`로 열고, `Esc`로 지운다. 마지막에 연 여덟 개가 홈에 남는다. 검색은 브라우저에서 돌고, 검색이 읽는 필드만 담은 색인(`/search-index.json`)을 첫 키 입력에서 한 번 받는다. 서비스 워커가 그 색인과 이미 연 문서를 캐시하므로 오프라인에서도 카탈로그가 열린다.
 
 ## 알려진 미해결 문제
 
@@ -210,9 +215,10 @@ vp run build                       # dist/에 정적 번들, 엔트리당 HTML �
 [ADR 0007](docs/adr/0007-korean-repo-prose.md)은 저장소 산문을 한국어로 쓰기로 하고 그 경계를 긋는다.
 [ADR 0006](docs/adr/0006-korean-only-dataset.md)은 데이터셋에서 영어를 제거한 이유를 기록한다.
 [ADR 0005](docs/adr/0005-comments-as-agent-context.md)는 파일 상단 주석을 에이전트 대면 컨텍스트로 다루고 검사 가능하게 만든다.
-[ADR 0004](docs/adr/0004-tanstack-router.md)는 브라우즈 계층을 TanStack Router로 확정하고 툴체인 질문을 닫는다.
-[ADR 0003](docs/adr/0003-nub-runtime.md)은 스크립트를 nub에서 실행하기로 하고 중간 SSR 빌드를 없앤다.
-[ADR 0002](docs/adr/0002-component-model.md)는 React 컴포넌트로의 이동을 기록한다.
+[ADR 0009](docs/adr/0009-remix-3.md)는 브라우즈 계층을 Remix 3로 옮기고, 그 이동에서 무엇이 지켜졌고 무엇을 치렀는지 적는다 (ADR 0004·0003을, 그리고 ADR 0002의 React 부분을 대체한다).
+[ADR 0004](docs/adr/0004-tanstack-router.md)는 브라우즈 계층을 TanStack Router로 확정하고 툴체인 질문을 닫았다 — 대체됨.
+[ADR 0003](docs/adr/0003-nub-runtime.md)은 스크립트를 nub에서 실행하기로 하고 중간 SSR 빌드를 없앴다 — 대체됨.
+[ADR 0002](docs/adr/0002-component-model.md)는 컴포넌트 모델로의 이동을 기록한다 (React 부분은 대체됨).
 [ADR 0001](docs/adr/0001-dictionary-shape.md)은 왜 이것을 사전으로 다루는지 — 클라이언트 인덱스로 감싼 프리렌더 엔트리 — 그리고 따라서 왜 데이터가 JSON으로 남는지, 왜 전체 코퍼스를 의도적으로 앞에서 로드하는지, 왜 웹 프레임워크를 도입하지 않는지를 기록한다.
 
 - ~~**카드 뷰가 등급을 평평하게 만든다.**~~ 해결됨. 모든 훈련법·워크아웃 카드에 tier 배지가 붙고 `consensus`/`plausible`/`tradition`에 의도적으로 다른 시각 무게를 준다 — 각각 채운 배경, 외곽선, 흐린 점선 외곽선 — 그래서 브라우징이 `tradition`을 정착된 것으로 읽히게 만들 수 없다. 앞으로 추가되는 어떤 카드에도 이 제약이 유지된다.

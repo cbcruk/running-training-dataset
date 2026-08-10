@@ -150,6 +150,17 @@ a {
   border-color: var(--accent);
 }
 
+/* 검색 결과는 검색창이 소유하는 영역에 그려지고, 서버가 렌더한 문서 본문은 그동안 숨는다.
+   결과를 본문 자리로 옮기려면 페이지 전체를 클라이언트 엔트리의 prop으로 직렬화해야 하고,
+   그러면 모든 문서가 자기 내용을 두 번 싣게 된다 - app/assets/search.tsx 참조. */
+body.searching #app {
+  display: none;
+}
+.search-results {
+  margin: 0 auto;
+  padding: 1.5rem 0 4rem;
+}
+
 /* ---- layout ---- */
 main {
   margin: 0 auto;

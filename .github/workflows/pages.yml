@@ -26,13 +26,11 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
+      # Remix 3 asks for Node >= 24.3.
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
-
-      - name: Install nub
-        run: npm install -g @nubjs/nub
 
       - name: Install
         run: pnpm install --frozen-lockfile

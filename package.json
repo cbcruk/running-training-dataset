@@ -14,31 +14,24 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "vp dev",
-    "build": "vp build && nub scripts/prerender.tsx",
-    "preview": "vp preview",
-    "validate": "nub scripts/validate.ts",
-    "render": "nub scripts/render.ts",
-    "types": "nub scripts/types.ts",
-    "verify": "nub scripts/verify.ts",
-    "pages": "nub scripts/prerender.tsx",
-    "test": "vp test",
+    "dev": "node --watch --import remix/node-tsx server.ts",
+    "build": "NODE_ENV=production BASE_PATH=${BASE_PATH:-/running-training-dataset/} node --import remix/node-tsx scripts/prerender.ts",
+    "preview": "NODE_ENV=production node --import remix/node-tsx server.ts",
+    "validate": "node --import remix/node-tsx scripts/validate.ts",
+    "render": "node --import remix/node-tsx scripts/render.ts",
+    "types": "node --import remix/node-tsx scripts/types.ts",
+    "verify": "node --import remix/node-tsx scripts/verify.ts",
+    "pages": "pnpm run build",
+    "test": "NODE_ENV=test node --import remix/node-tsx --test \"tests/**/*.test.ts\"",
     "check": "vp check",
     "prepare": "vp config"
   },
   "dependencies": {
-    "@astryxdesign/core": "^0.2.0",
-    "@astryxdesign/theme-neutral": "^0.2.0",
-    "@stylexjs/stylex": "^0.19.0",
-    "@tanstack/react-router": "^1.170.19",
-    "ajv": "^8.20.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "remix": "3.0.0-beta.5"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
+    "ajv": "^8.20.0",
     "json-schema-to-typescript": "^15.0.4",
     "typescript": "^7.0.2",
     "vite-plus": "^0.2.4"
