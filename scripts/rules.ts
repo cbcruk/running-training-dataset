@@ -8,7 +8,7 @@
  * 복원해야 했다.
  *
  * 그래서 진입점 하나, 구조화된 발견, I/O 없음. scripts/validate.ts는 그 위의 CLI
- * 어댑터가 됐고, svg.ts가 render.ts·WorkoutDetail.tsx와 이미 맺고 있던 것과 같은 배치다.
+ * 어댑터가 됐고, chart.tsx가 render.ts·workout-detail.tsx와 이미 맺고 있던 것과 같은 배치다.
  *
  * 규칙을 더한다는 건 id를 가진 `add(...)` 하나를 더한다는 뜻이다. id가 계약이다.
  * 테스트가 그것을 가리키고, README의 위반 목록이 코드 옆에서 표류하는 대신 코드와

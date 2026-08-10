@@ -6,7 +6,7 @@ on:
   pull_request:
 
 # Enforces the same discipline the data leans on: schema + referential
-# integrity + the project-specific rules in validate.mjs, plus format, lint,
+# integrity + the project-specific rules in rules.ts, plus format, lint,
 # type-check, and a production build. If it is not green, the data is not honest.
 jobs:
   check:
@@ -16,16 +16,13 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
+      # Remix 3 asks for Node >= 24.3. Its own loader (`remix/node-tsx`) runs the
+      # TypeScript in scripts/ and app/ directly, so there is no build step
+      # between the prerenderer and the components it renders.
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
-
-      # nub runs the scripts/ TypeScript directly - no build step between the
-      # prerenderer and src/views.tsx. Installed from npm rather than the
-      # setup-nub action so the version comes from one place.
-      - name: Install nub
-        run: npm install -g @nubjs/nub
 
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -46,10 +43,10 @@ jobs:
           pnpm run types
           # --porcelain, not `git diff`: it reports untracked output too, so a
           # generated file that was never committed cannot pass vacuously.
-          if [ -n "$(git status --porcelain -- src/types/)" ]; then
-            echo "src/types/ does not match data/schema/ - run 'vp run types' and commit the result"
-            git status --porcelain -- src/types/
-            git diff -- src/types/
+          if [ -n "$(git status --porcelain -- app/data/types/)" ]; then
+            echo "app/data/types/ does not match data/schema/ - run 'pnpm run types' and commit the result"
+            git status --porcelain -- app/data/types/
+            git diff -- app/data/types/
             exit 1
           fi
 
@@ -60,7 +57,7 @@ jobs:
         run: |
           pnpm run verify
           if [ -n "$(git status --porcelain -- docs/verification.md)" ]; then
-            echo "docs/verification.md is stale - run 'vp run verify' and commit the result"
+            echo "docs/verification.md is stale - run 'pnpm run verify' and commit the result"
             git diff -- docs/verification.md
             exit 1
           fi
@@ -68,7 +65,10 @@ jobs:
       - name: Check (format + lint + types)
         run: pnpm run check
 
-      - name: Build (browse UI + prerender every entry)
+      - name: Test
+        run: pnpm run test
+
+      - name: Build (prerender every entry into dist/)
         run: pnpm run build
 
       # The discovery half of the dictionary (ADR 0001): every entry must exist as
@@ -86,5 +86,9 @@ jobs:
           echo "expected $expected prerendered routes, found $actual"
           test "$expected" -eq "$actual"
           test -f dist/404.html
+          test -f dist/search-index.json
           grep -q '<title>rpe_10' dist/anchor/rpe_10/index.html
           grep -q 'RPE' dist/anchor/rpe_10/index.html
+          # Every internal link has to carry the deployment base, or the site is
+          # broken everywhere except a root-hosted dev server (app/ui/href.ts).
+          grep -q 'href="/running-training-dataset/workouts"' dist/index.html

@@ -19,9 +19,11 @@ import { resolve, dirname, join, basename } from 'node:path'
  *
  * `views.jsx` — 어떤 파일을 그것이 대체한 템플릿 리터럴 원본과 비교하는 주석은 그 원본을
  * 부를 수밖에 없다. 그 문장 자체가 원본이 사라졌다는 이야기다.
+ * `index.html` — 같은 경우. 문서 셸이 무엇을 대체했는지 말하는 주석이고, Remix 3로
+ * 옮기면서 그 파일은 사라졌다(ADR 0009).
  * `404.html` — 프리렌더러가 dist/에 쓰므로 빌드 후에만 존재한다.
  */
-const ALLOWED = new Set(['views.jsx', '404.html'])
+const ALLOWED = new Set(['views.jsx', 'index.html', '404.html'])
 
 const SKIP = new Set(['node_modules', 'dist', 'out', '.git', '.ssr', '.claude', 'types'])
 const SCAN = /\.(ts|tsx|js|jsx|css)$/

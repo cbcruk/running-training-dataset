@@ -1,6 +1,6 @@
 # ADR 0002 — Move the view layer to a component model (React + TypeScript + Astryx)
 
-**Status:** accepted · 2026-08-05
+**Status:** superseded in part by [ADR 0009](0009-remix-3.md) (the React half; the case for a component model stands) · 2026-08-05
 **Amends:** [ADR 0001](0001-dictionary-shape.md), which rejected adopting a web
 framework. That decision stands on its own terms; this one adds an axis it did
 not weigh.

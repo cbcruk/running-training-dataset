@@ -15,6 +15,21 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 
 <!--VITE PLUS END-->
 
+## 툴체인 (위 블록에 대한 단서)
+
+위의 Vite+ 블록은 `vp config`가 생성한다. 이 저장소에서 Vite+는 **더 이상 앱을 빌드하지
+않는다** — 번들과 개발 서버는 Remix 3가 가져갔다([ADR 0009](docs/adr/0009-remix-3.md)).
+실제로 도는 것은 이것들이다:
+
+- `pnpm install` — `vp install`이 아니다.
+- `pnpm run check` — 포맷·린트·타입 검사. 이것만 Vite+(`vp check`)가 한다.
+- `pnpm run test` — Node 내장 테스트 러너. `vp test`는 쓰지 않는다.
+- `pnpm run dev` / `pnpm run build` — Remix 3 서버와 정적 내보내기.
+- `pnpm run validate` / `render` / `types` / `verify` — 데이터 쪽 스크립트.
+
+JSX 파일은 첫 줄에 `/** @jsxImportSource remix/ui */`가 있어야 한다. 이유와 함정은
+ADR 0009의 "치른 것" 절에 있다.
+
 ## 프로젝트 언어
 
 이 저장소의 산문은 한국어다 — README, TODO, ADR 0006부터, 생성 문서, 코드 주석.

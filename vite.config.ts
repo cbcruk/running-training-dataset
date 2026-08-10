@@ -1,16 +1,15 @@
 import { defineConfig } from 'vite-plus'
 
+/**
+ * Vite+는 더 이상 이 사이트를 빌드하지 않는다. 번들과 개발 서버는 Remix 3가 가져갔고
+ * (ADR 0009), 여기 남은 것은 포맷·린트·타입 검사·테스트다 — CLAUDE.md의 체크리스트가
+ * 부르는 `vp check`와 `vp test`가 그것이다.
+ */
 export default defineConfig({
-  // A real base path, not "./": History-API routing has to know where the site
-  // root is in order to strip it off location.pathname. GitHub Pages serves this
-  // project repo from /<repo>/, and scripts/prerender.tsx writes a file at every
-  // route, so Pages needs no rewrite rules to serve them. Override with BASE_PATH
-  // when hosting elsewhere.
-  base: process.env.BASE_PATH || '/running-training-dataset/',
-  // JSX is transformed by oxc - Vite+ uses oxc, not esbuild, and tsconfig's jsx
-  // settings inform only the type checker, not the bundler.
+  // JSX는 oxc가 변환한다. tsconfig의 jsx 설정은 타입 검사기에만 알려주므로, 테스트가
+  // 컴파일하는 JSX도 같은 런타임을 가리키게 여기 한 번 더 적는다.
   oxc: {
-    jsx: { runtime: 'automatic' },
+    jsx: { runtime: 'automatic', importSource: 'remix/ui' },
   },
   staged: {
     '*': 'vp check --fix',
@@ -22,8 +21,8 @@ export default defineConfig({
     },
   },
   fmt: {
-    // Vendored agent skills are somebody else's prose. Formatting them buys
-    // nothing and makes every skill update arrive as a reformat conflict.
+    // 벤더링한 에이전트 스킬은 남의 산문이다. 포맷해봐야 얻는 것이 없고, 스킬을 갱신할
+    // 때마다 재포맷 충돌로 도착한다.
     ignorePatterns: ['.claude/**'],
     singleQuote: true,
     semi: false,
