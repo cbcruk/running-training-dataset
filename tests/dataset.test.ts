@@ -37,6 +37,51 @@ test('no comment names a file that is not there', () => {
 // which is how the seed data shipped with the confound inconsistency that the
 // severity rule was later written to find.
 
+test("a workout id may not borrow a coach or a coach's word for it", () => {
+  // The two the denylist let through: an eponym, and one system's coinage adopted
+  // as the neutral id while usage.json recorded that the other systems disagreed.
+  for (const [id, token] of [
+    ['mona-fartlek', 'mona'],
+    ['cruise-intervals', 'cruise'],
+    ['daniels-intervals', 'daniels'],
+  ] as const) {
+    const broken = patch(data, 'workouts', 'descending-intervals', (w) => {
+      w.id = id
+    })
+    expect(rules(broken)).toContain('id-outside-vocabulary')
+    expect(check(broken).some((f) => f.message.includes(token))).toBe(true)
+  }
+})
+
+// `tradition` covered both "nobody has looked" and "there is nothing fixed to look
+// at". The second is not a gap further study closes, and only `fartlek` is in it.
+test('a stochastic workout may not claim its dose is an open question', () => {
+  const broken = patch(data, 'workouts', 'fartlek', (w) => {
+    w.claim.evidence.dose_question = 'open'
+  })
+  expect(rules(broken)).toContain('stochastic-dose-question')
+})
+
+test('a fixed workout may not claim its dose is unaskable', () => {
+  // `strides`, not `easy-run`: the rule reads dose_question only where the tier is
+  // `tradition`, and above that the schema rejects the field outright.
+  const broken = patch(data, 'workouts', 'strides', (w) => {
+    w.claim.evidence.dose_question = 'unaskable'
+  })
+  expect(rules(broken)).toContain('unaskable-without-stochastic')
+})
+
+test('a tier above tradition has no dose question to answer', () => {
+  const broken = patch(data, 'workouts', 'easy-run', (w) => {
+    w.claim.evidence = {
+      tier: 'plausible',
+      cite: ['Someone X (1999). A paper. J Test 1(1).'],
+      dose_question: 'open',
+    }
+  })
+  expect(rules(broken)).toContain('schema')
+})
+
 test('a test may not lean on the reference its own claim already cites', () => {
   const broken = patch(data, 'workouts', 'easy-run', (w) => {
     w.test.evidence = { tier: 'plausible', cite: [...w.claim.evidence.cite] }

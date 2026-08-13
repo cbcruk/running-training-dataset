@@ -86,13 +86,40 @@ const TIER_LABEL: Record<string, string> = {
   tradition: '관행',
 }
 
-export function TierBadge(handle: Handle<{ tier?: string }>) {
+/**
+ * `tradition`은 서로 다른 두 가지를 한 낱말로 덮고 있었다. 아무도 아직 연구하지 않은 것과,
+ * 지금 서술된 형태로는 "얼마나"라는 질문 자체가 성립하지 않는 것. 앞의 것은 연구가 메울 수
+ * 있는 공백이지만 뒤의 것은 영구적인 성질이라, 같은 배지로 읽히면 읽는 사람이 기다릴 값이
+ * 없는 것을 기다리게 된다.
+ *
+ * `open`은 따로 표시하지 않는다. 등급 낱말이 이미 그 뜻이기 때문이다 — 45개 중 44개에
+ * 배지를 붙이면 나머지 하나가 묻힌다. 표시되는 것은 예외뿐이고, 어느 쪽인지는 두 경우 모두
+ * 툴팁이 말한다.
+ */
+const DOSE_TIP: Record<string, string> = {
+  open: '용량 질문은 열려 있다. 통제 연구를 돌릴 수 있는데 아무도 돌리지 않았다.',
+  unaskable:
+    '용량 질문이 성립하지 않는다. 구간이 예시일 뿐이라 "얼마나"에 가리킬 대상이 없다. 연구가 더 쌓여도 이 칸은 채워지지 않으며, 정책 단위 시험은 여전히 가능하다.',
+}
+
+export function TierBadge(handle: Handle<{ tier?: string; dose?: string }>) {
   return () => {
-    const { tier } = handle.props
+    const { tier, dose } = handle.props
     if (!tier) return null
+    const tip = dose
+      ? `evidence tier: ${tier} · ${DOSE_TIP[dose] ?? dose}`
+      : `evidence tier: ${tier}`
     return (
-      <span className={`tier tier-${tier}`} title={`evidence tier: ${tier}`}>
+      <span
+        className={`tier tier-${tier}${dose === 'unaskable' ? ' tier-unaskable' : ''}`}
+        title={tip}
+      >
         {TIER_LABEL[tier] || tier}
+        {dose === 'unaskable' && (
+          <span className="dose-mark" aria-label="용량 질문 성립 불가">
+            ∅
+          </span>
+        )}
       </span>
     )
   }

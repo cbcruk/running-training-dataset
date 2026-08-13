@@ -133,7 +133,7 @@ Net: **plausible 23 → 17, tradition 48 → 54**, 그리고 미부착 소스는
 같은 Daniels 책이 `daniels` 행에서는 자격을 잃고 `threshold-continuous`에서는 최상위 등급을
 떠받치고 있었다. 판별 기준: **저자의 방법을 채택하지 않고 그 명제를 물을 수 있는가?** 젖산
 정상상태는 Daniels의 개념이 아니므로 `threshold-continuous.claim`은 인용을 유지한다.
-`cruise-intervals`와 `rep-intervals`는 권장되는 구조 자체를 전제하므로 `tradition`으로
+`threshold-intervals`와 `rep-intervals`는 권장되는 구조 자체를 전제하므로 `tradition`으로
 내려갔고 책은 그들의 `source`가 됐다.
 
 전체 Net: **consensus 3 → 0, plausible 17 → 10, tradition 62 → 72**. 인용을 가진 주장이
@@ -181,7 +181,7 @@ Net: **plausible 23 → 17, tradition 48 → 54**, 그리고 미부착 소스는
 
 **워크아웃도 이제 같은 쌍을 갖는다.** 워크아웃 행에서 Daniels 인용 다섯 개를 떼어내는 일이
 그 워크아웃들을 누가 정의했는지의 기록까지 지울 뻔했다 — `attribution`은 텍스트가 아니라
-_이름_ 을 담는다. `cruise-intervals`와 `rep-intervals`는 책을 `source`로 삼아 `recorded`가
+_이름_ 을 담는다. `threshold-intervals`와 `rep-intervals`는 책을 `source`로 삼아 `recorded`가
 됐다. 워크아웃에서 라벨은 부분적으로 유도 가능하므로 검사된다: `attribution: null`은 아무도
 정식화하지 않았다는 뜻이라 권위 있는 텍스트가 존재할 수 없고 `validate.ts`가 `uncitable`을
 요구한다. 그런 행을 `unrecorded`로 표시하면 영원히 채울 수 없는 일이 이 목록에 올라간다.

@@ -210,6 +210,10 @@
         },
         "note": {
           "$ref": "#/$defs/i18n"
+        },
+        "dose_question": {
+          "enum": ["open", "unaskable"],
+          "description": "Why this sits at `tradition`, which the tier alone cannot say. `open` = a controlled dose-response study could be run and nobody has run one. `unaskable` = the protocol has no fixed dose, so the question cannot be posed at all - a policy-level trial is still possible, but 'how much of it' has no referent. Both render as an untested row, which is why the difference has to be written down: 'nobody has looked' and 'there is nothing fixed to look at' call for different things from a reader, and only the first is a gap that further study closes. Tied to `structure.stochastic` in rules.ts, in both directions, so it cannot be asserted freely."
         }
       },
       "allOf": [
@@ -239,7 +243,24 @@
             "not": {
               "required": ["cite"]
             },
-            "description": "A tradition-tier claim MUST NOT carry a citation. If you have one, it is not tradition."
+            "description": "A tradition-tier claim MUST NOT carry a citation. If you have one, it is not tradition.",
+            "required": ["dose_question"]
+          }
+        },
+        {
+          "if": {
+            "required": ["tier"],
+            "properties": {
+              "tier": {
+                "enum": ["consensus", "plausible"]
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "required": ["dose_question"]
+            },
+            "description": "A tier above tradition has been studied, so the question was asked and answered. `dose_question` describes an absence of study and is meaningless here."
           }
         }
       ]

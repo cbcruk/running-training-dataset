@@ -277,6 +277,17 @@ main {
   opacity: 0.85;
 }
 
+/* 용량 질문이 성립하지 않는 경우에만 붙는다. 새 색은 쓰지 않는다 — 등급 배지에 색을 더하면
+   등급 자체가 한 칸 움직인 것처럼 읽힌다. 자리를 표시하는 것이지 평가가 아니다. */
+.tier-unaskable {
+  border-style: dashed;
+}
+.dose-mark {
+  margin-left: 0.28em;
+  font-weight: 700;
+  opacity: 0.75;
+}
+
 /* Provenance answers "do we have a record of what this prescribes", which is a
    different question from the evidence tier. It must not read as a second tier,
    so it shares no colour with them: lower case, lighter weight, a leading mark
