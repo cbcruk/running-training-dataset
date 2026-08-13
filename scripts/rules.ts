@@ -286,6 +286,7 @@ export function check(data: Dataset): Finding[] {
     'time',
     'strides',
     'descending',
+    'uniform',
     'rep',
     '30',
     'marathon',

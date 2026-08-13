@@ -370,5 +370,12 @@
     "workout": "easy-run",
     "calls_it": "Easy run",
     "note": "이 훈련법에서 이지런은 중강도의 보조가 아니라 총 주행거리를 늘리는 유일한 수단이다. 마일리지를 강도로 늘릴 수 없다는 것이 명시적 규칙이다."
+  },
+  {
+    "system": "moderate-primary",
+    "workout": "uniform-intervals",
+    "calls_it": "Short fartlek",
+    "also_known_as": ["짧은 파틀렉"],
+    "note": "파틀렉이라 부르지만 시계로 고정된 세션이다. 구간을 감각과 지형에 맡기는 원래 뜻의 파틀렉과 같은 이름을 쓰면서 정반대의 성질을 갖는다 - 그래서 fartlek 행이 아니라 별도 행이다."
   }
 ]
