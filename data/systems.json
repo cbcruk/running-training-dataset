@@ -694,7 +694,10 @@
     "id": "hrr-karvonen",
     "name": "HRR Zone Training (Karvonen)",
     "attribution": "Martti Karvonen",
-    "provenance": "unrecorded",
+    "source": [
+      "Karvonen MJ, Kentala E, Mustala O (1957). The effects of training on heart rate. Ann Med Exp Biol Fenn 35(3)."
+    ],
+    "provenance": "recorded",
     "status": "draft",
     "intensity_model": "pct_hrr",
     "bet": "강도는 최대심박수가 아니라 심박수 예비량(HRR)에 맞춘다.",
@@ -726,10 +729,8 @@
       "proposition": "강도를 최대심박수 비율이 아니라 심박수 예비량 비율로 처방하면, 안정시 심박수의 개인차를 흡수해 더 일관된 생리적 부하를 겨냥한다."
     },
     "evidence": {
-      "tier": "plausible",
-      "cite": [
-        "Karvonen MJ, Kentala E, Mustala O (1957). The effects of training on heart rate. Ann Med Exp Biol Fenn 35(3)."
-      ]
+      "tier": "tradition",
+      "note": "Karvonen 1957은 이 훈련법의 근거가 아니라 정의다. 명제가 '심박수 예비량'이라는 구성개념 자체를 전제하므로, 그 개념을 도입한 논문이 그것의 근거가 될 수 없다 — README의 판별 기준(명제가 저자의 어휘 없이 살아남는가)에 걸린다. 논문은 이 행의 source로 옮겼고, 남은 근거가 없으므로 tradition이다. %HRR이 %HRmax보다 개인차를 잘 흡수한다는 비교 자체는 여전히 물을 수 있는 질문이지만, 그것을 물은 제3자 연구가 이 데이터셋에는 없다."
     },
     "phases": [
       {

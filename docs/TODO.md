@@ -188,13 +188,28 @@ _이름_ 을 담는다. `threshold-intervals`와 `rep-intervals`는 책을 `sour
 
 현재 상태: [`docs/counts.md`](counts.md) 참조.
 
-- [ ] `unrecorded` — 규정 텍스트는 존재하지만 여기 기록되지 않았다: `hansons`,
-      `polarized-80-20`, `maf`, `bakken-doubles`, `critical-speed`, `hrr-karvonen`,
-      `canova`, `galloway`, `first-furman`. 하나가 `recorded`로 옮겨질 때마다 그 행의
-      서술을 무언가와 대조할 수 있게 된다. `polarized-80-20`, `critical-speed`,
-      `hrr-karvonen`에서 혼동의 함정을 주의할 것: 방법을 _정의하는_ 논문이 이미 `cite`로
-      쓰인 논문과 같은 경우가 많고, `validate.ts`는 한 저작을 둘 다로 올린 행을 거부한다.
-      그것들은 별개의 서술 텍스트가 필요하며, 없으면 `unrecorded`로 남는다.
+- [ ] `unrecorded`, 책 여섯 — **이 환경에서는 막혔다.** `hansons`, `maf`, `canova`,
+      `galloway`, `first-furman`, `bakken-doubles`. 전부 책이거나 저자 본인의 웹 문서인데
+      서지를 확인할 경로가 없다: Open Library·Google Books·WorldCat·archive.org·doi.org가
+      모두 egress proxy에서 막힌다. 연도나 판이 틀린 인용은 사실로 실려 나가고 `(연도)`
+      검사도 그대로 통과하므로, 기억으로 쓰느니 비워두는 것이 옳다. 실물이나 확인 가능한
+      서지 레코드를 가진 사람이 채워야 한다.
+- [x] **논문 기반 세 행: 함정을 판정으로 해소했다.** 경고는 방법을 _정의하는_ 논문이 이미
+      `cite`로 쓰이고 있어 한 저작이 둘 다가 될 수 없다는 것이었다. README의 판별
+      기준(명제가 저자의 어휘 없이 살아남는가)을 적용하니 셋이 갈렸다. - `critical-speed` — Jones & Vanhatalo 2017은 남의 구성개념(Monod & Scherrer의
+      임계파워 모델)을 정리한 제3자 리뷰다. 자기 서술이 아니므로 `cite`로 남는다. 정본은
+      Monod & Scherrer (1965)인데 데이터에 없고 확인할 수 없어 `unrecorded`. - `polarized-80-20` — 명제가 "엘리트가 실제로 무엇을 하는가"라는 서술적 관찰이고
+      역치는 Seiler의 발명이 아니다. 누구든 세션을 세어 반박할 수 있으므로 저자의 어휘
+      없이 살아남는다. `cite`로 남고, 방법의 정본이 같은 논문과 분리되지 않아 `unrecorded`. - `hrr-karvonen` — **걸렸다. cite → source, `plausible` → `tradition`,
+      `recorded`.** 명제가 "심박수 예비량 비율로 처방하면 안정시 심박수의 개인차를
+      흡수한다"인데 심박수 예비량은 Karvonen 1957이 도입한 구성개념이고, 그것을 빼면
+      문장에 주어가 없다. `threshold-intervals`·`rep-intervals`에 이미 적용된 것과 같은
+      판정이며 그때 훈련법 층에서 빠졌다. 문자열은 옮기기만 했고 지어낸 것은 없다.
+      Net: **plausible 10 → 9, tradition 74 → 75.**
+- [ ] 규칙화 검토. 이 행이 두 번 놓인 방식에 규칙성이 있다: `attribution`의 인물과 유일한
+      `cite`의 제1저자가 같으면 자기 서술을 의심할 자리이고, 이건 기계로 셀 수 있다. 다만
+      `polarized-80-20`이 같은 모양이면서 위 판정으로는 정당하므로, 규칙에는 명시적 예외가
+      함께 필요하다 — 예외는 데이터가 아니라 판정에서 오므로 이유를 적게 하는 형태여야 한다.
 - [x] `uncitable` — `norwegian-singles`(아마추어 커뮤니티에서 형식화됐고 권위 있는 텍스트
       없음)와 `moderate-primary`(저자·연도 없는 코칭 에세이에서 옮김). 할 일이 없다. 이건
       대기 중이 아니라 진술된 상태다.
