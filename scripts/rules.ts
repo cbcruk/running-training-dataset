@@ -315,6 +315,48 @@ export function check(data: Dataset): Finding[] {
       )
   }
 
+  // `tradition`은 두 가지 서로 다른 사실을 한 낱말로 덮고 있었다. 아무도 아직 연구하지
+  // 않은 것과, 지금 서술된 형태로는 용량 질문 자체가 성립하지 않는 것. 앞의 것은 연구가
+  // 메울 수 있는 공백이고 뒤의 것은 영구적인 성질인데, 화면에서는 똑같이 "관행"으로
+  // 보였다. `provenance`의 `unrecorded` vs `uncitable`과 같은 구멍이다.
+  //
+  // `dose_question`은 자유 서술이 아니다. 행이 스스로 `structure.stochastic`으로 "내
+  // 구간은 예시일 뿐"이라고 선언하는 것이 곧 용량에 지시대상이 없다는 뜻이므로, 양방향으로
+  // 묶는다. 확률적인 행은 `unaskable`을 달아야 하고, `unaskable`을 단 행은 확률적이어야
+  // 한다. 어느 쪽도 혼자서는 선언될 수 없다.
+  const doseQuestions = (w: Row): string[] => {
+    const out: string[] = []
+    const walk = (node: Row) => {
+      if (Array.isArray(node)) return node.forEach(walk)
+      if (!node || typeof node !== 'object') return
+      if (node.tier === 'tradition' && node.dose_question) out.push(node.dose_question)
+      for (const v of Object.values(node)) walk(v)
+    }
+    walk(w)
+    return out
+  }
+  for (const w of workouts) {
+    const answers = doseQuestions(w)
+    if (w.structure.stochastic === true) {
+      if (answers.some((a) => a !== 'unaskable'))
+        add(
+          'discipline',
+          'stochastic-dose-question',
+          w.id,
+          `${w.id}: structure.stochastic is true, so its segments are illustrative and ` +
+            `there is no dose to ask about - every tradition evidence on it must be ` +
+            `dose_question "unaskable", got [${answers.join(', ')}]`,
+        )
+    } else if (answers.includes('unaskable'))
+      add(
+        'discipline',
+        'unaskable-without-stochastic',
+        w.id,
+        `${w.id}: dose_question "unaskable" claims the protocol has no fixed dose, but ` +
+          `structure.stochastic is not true - the structure says otherwise`,
+      )
+  }
+
   // 모든 워크아웃은 최소 하나의 이름으로 도달 가능해야 한다. 아니면 찾을 수 없다.
   for (const w of workouts)
     if (!usage.some((u: Row) => u.workout === w.id))

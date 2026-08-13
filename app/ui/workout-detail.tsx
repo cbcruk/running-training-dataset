@@ -34,7 +34,7 @@ export function WorkoutDetail(handle: Handle<{ workout: Workout }>) {
           <div className="detail-head">
             <h1>{w.canonical_name}</h1>
             <span className="badges">
-              <TierBadge tier={w.claim?.evidence?.tier} />
+              <TierBadge tier={w.claim?.evidence?.tier} dose={w.claim?.evidence?.dose_question} />
               <ProvenanceBadge provenance={w.provenance} />
             </span>
           </div>
@@ -101,7 +101,8 @@ export function WorkoutDetail(handle: Handle<{ workout: Workout }>) {
             className="claim"
             title={
               <>
-                주장 <TierBadge tier={w.claim?.evidence?.tier} />
+                주장{' '}
+                <TierBadge tier={w.claim?.evidence?.tier} dose={w.claim?.evidence?.dose_question} />
               </>
             }
           >
@@ -144,7 +145,7 @@ function FalsificationTest(handle: Handle<{ test: Workout['test'] }>) {
       return (
         <>
           <p className="detectable no">
-            관찰 불가 <TierBadge tier={test.evidence?.tier} />
+            관찰 불가 <TierBadge tier={test.evidence?.tier} dose={test.evidence?.dose_question} />
           </p>
           {test.mechanism ? <p>{test.mechanism}</p> : null}
           <p className="belief-note">

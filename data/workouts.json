@@ -75,7 +75,8 @@
       },
       "mechanism": "주로 혈장량 팽창. 심장이 좋아진 게 아니라 혈액이 늘어난 것.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       },
       "confounds": [
         {
@@ -195,7 +196,8 @@
         "max": 8
       },
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       },
       "confounds": [
         {
@@ -224,7 +226,8 @@
       "min_training_age_months": 6,
       "requires_workouts": ["easy-run"],
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       },
       "note": "구체적 문턱값은 관습이다. 근거 있는 컷오프가 아님."
     },
@@ -303,6 +306,7 @@
       "mechanism": "Hansons는 이걸 '누적 피로' 상태에서 수행해 레이스 후반 30~35km 지점을 시뮬레이션한다고 주장한다. 메커니즘 서사는 그럴듯하지만 이를 검증한 통제 연구는 사실상 없다. 실제로 작동한다면 페이싱 스킬과 연료 대사 쪽 기여일 가능성이 높다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "인기 있는 방법론이지만 이 특정 주장은 tradition tier다. 유명함은 근거가 아니다."
       }
     },
@@ -310,14 +314,16 @@
       "detectable": false,
       "mechanism": "레이스 전에는 측정 불가. 목표 페이스 자체가 가설이라 순환 논증이 된다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "prerequisites": {
       "min_weekly_volume_km": 50,
       "requires_workouts": ["easy-run", "threshold-continuous"],
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -429,7 +435,8 @@
         "max": 6
       },
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       },
       "confounds": [
         {
@@ -452,7 +459,8 @@
       "min_training_age_months": 12,
       "requires_workouts": ["easy-run", "threshold-continuous"],
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -525,6 +533,7 @@
       "mechanism": "빠른 신경근 동원 패턴을 낮은 대사 비용으로 노출시켜 러닝 이코노미를 개선한다고 여겨진다. 널리 처방되지만 스트라이드 단독의 통제 연구는 사실상 없고, 메커니즘 설명은 대체로 사후적이다. 그럼에도 위험이 낮고 비용이 거의 없어 관습적으로 유지된다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "이 행이 tradition tier를 정직하게 붙일 수 있는지 테스트하는 행이다. 인용을 붙이고 싶은 유혹이 강할수록 tradition이다."
       }
     },
@@ -532,7 +541,8 @@
       "detectable": false,
       "mechanism": "측정 가능한 신호가 없다. 그게 바로 tradition tier인 이유다. '느낌이 좋아진다'는 신호가 아니다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -613,14 +623,16 @@
       "detectable": false,
       "mechanism": "대사 적응 자체는 현장에서 관찰 불가(호흡가스/생검 필요)이고, 완주 능력 향상은 페이싱·연료 섭취와 분리되지 않는다. 무엇을 관찰하든 순환 논증이 된다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "prerequisites": {
       "min_weekly_volume_km": 30,
       "note": "롱런 하나가 주간 볼륨의 큰 비중을 차지하면 회복이 밀린다. 통상 주간의 25~30%를 넘기지 않는다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -681,6 +693,7 @@
       "mechanism": "'능동 회복이 혈류를 늘려 대사산물 제거를 돕는다'는 서사가 흔하지만, 지연성 근통증이나 다음 세션 수행에서 완전 휴식 대비 이점을 보인 통제 근거는 약하다. 실제 역할은 회복 촉진이 아니라 저비용 볼륨 축적일 가능성이 높다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "거의 모두가 하지만 완전 휴식 대비 우위는 검증되지 않았다. 인용을 붙일 수 있으면 그것은 tradition이 아니다."
       }
     },
@@ -688,7 +701,8 @@
       "detectable": false,
       "mechanism": "회복런의 효과를 '그냥 쉰 경우'와 관찰만으로 분리할 수 없다. 컨디션 변화는 수면·영양·전날 부하에 압도된다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -785,7 +799,8 @@
       "proposition": "역치 볼륨을 짧은 회복의 인터벌로 나누면 연속 주행보다 더 많은 총 역치 시간을 통제된 젖산 상태로 축적할 수 있다.",
       "mechanism": "짧은(약 1분) 회복은 젖산을 완전히 회복시키지 않으므로 세션 전체가 역치 부근에 머문다. 연속 역치주가 심리적·근육적으로 버거운 지점에서 총 자극량을 늘리는 것이 목적이다. MLSS 상향과 젖산 제거 능력 개선이 표적.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "test": {
@@ -812,14 +827,16 @@
       ],
       "if_absent": "무변화는 (1) 실제 강도가 T가 아니라 그 위였음 (2) 회복이 너무 길어 연속 자극이 사라짐 (3) 이미 역치가 잘 발달됨 순으로 의심한다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "prerequisites": {
       "requires_workouts": ["threshold-continuous"],
       "note": "연속 역치주로 T 페이스 감각을 먼저 확립한 뒤 인터벌로 볼륨을 늘리는 순서가 안전하다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -920,6 +937,7 @@
       "mechanism": "경사가 속도를 제한해 착지 충격을 낮추면서도 큰 근력 발현과 고빈도 신경근 동원을 요구한다. 이코노미 개선은 근-건 강성과 협응 변화로 설명되지만, 현장 이전 효과의 크기는 논쟁적이다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "언덕 훈련의 이코노미 이점은 널리 처방되지만 통제 근거는 혼재한다. 확신 가능한 인용이 없어 tradition으로 둔다."
       }
     },
@@ -927,7 +945,8 @@
       "detectable": false,
       "mechanism": "러닝 이코노미는 실험실(호흡가스)에서만 신뢰성 있게 측정되고, 현장에서 느껴지는 '더 가벼움'은 신경 학습·플라시보와 분리되지 않는다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -1016,6 +1035,7 @@
       "mechanism": "구조화된 인터벌과 달리 자극의 분포가 통제되지 않는다. 장점으로 서술되는 '자유로움'이 동시에 용량-반응을 불명확하게 만든다. 표적 적응보다 자기조절과 즐거움이 실제 기여일 수 있다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "unaskable",
         "note": "1930년대 코칭 전통에서 왔고 구조가 없어 용량-반응을 통제 연구로 다루기 어렵다."
       }
     },
@@ -1023,7 +1043,8 @@
       "detectable": false,
       "mechanism": "세션마다 강도 분포가 달라 반복 측정이 불가능하고, 어떤 향상도 특정 자극에 귀속시킬 수 없다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "unaskable"
       }
     },
     "safety": {
@@ -1082,6 +1103,7 @@
       "mechanism": "피로가 쌓인 상태에서 의도적으로 강도를 올려 후반 러닝 이코노미와 연료 대사를 자극한다고 본다. 다만 '점진'이라는 형식 자체가 효과를 낸다는 근거는 약하고, 실제 기여는 페이싱 학습일 수 있다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "널리 처방되지만 형식의 인과적 이점은 검증되지 않았다."
       }
     },
@@ -1089,7 +1111,8 @@
       "detectable": false,
       "mechanism": "후반 이코노미 향상은 현장에서 페이스 감각 학습과 분리되지 않고, 평균 페이스 지표는 점진 구조 때문에 왜곡된다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -1188,7 +1211,8 @@
       "detectable": false,
       "mechanism": "VO2max 부근 시간은 호흡가스 없이는 측정 불가하고, 반복 완수 능력은 페이싱과 의욕에 오염된다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -1281,21 +1305,24 @@
       "proposition": "완전 회복을 둔 빠르고 이완된 반복은 유의한 무산소 스트레스 없이 러닝 이코노미와 신경근 동원을 개선한다.",
       "mechanism": "짧은 R 반복은 고역치 운동단위를 동원하고 협응과 근-건 강성을 다듬는다. 완전 회복이 젖산 축적을 막아 자극이 신경근에 국한된다는 것이 설계 의도다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "test": {
       "detectable": false,
       "mechanism": "러닝 이코노미는 실험실에서만 신뢰성 있게 측정되고, 현장의 '더 가벼움'은 신경 학습·플라시보와 분리되지 않는다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "prerequisites": {
       "requires_workouts": ["strides"],
       "note": "스트라이드로 이완된 빠른 러닝에 먼저 익숙해진 뒤 볼륨을 늘리는 순서가 안전하다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -1418,7 +1445,8 @@
       ],
       "if_absent": "통증 감소가 없다면 (1) 첫 세션이 보호를 유도하기엔 너무 약했거나 (2) 간격이 너무 길어 보호가 소실됐거나 (3) 두 자극이 서로 다른 것이다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -1515,6 +1543,7 @@
       "mechanism": "회복을 두어 목표 페이스의 총 거리를 연속 주행보다 늘린다. 생리적 자극(젖산 제거·이코노미)과 함께 '그 페이스가 어떤 느낌인지'를 신경계에 새기는 특이성 학습이 핵심이다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "특이적 세션으로 널리 쓰이지만 '레이스 페이스 반복'의 인과적 우월성은 통제 검증이 없다."
       }
     },
@@ -1542,7 +1571,8 @@
       ],
       "if_absent": "향상이 없다면 (1) 목표 페이스가 비현실적이거나 (2) 회복이 너무 길어 자극이 약했거나 (3) 이미 그 페이스에 잘 적응된 것이다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -1631,6 +1661,7 @@
       "mechanism": "8~10초 최대 노력은 무산소 대사가 지배하기 전에 끝나므로 젖산 부담 없이 신경근 자극만 남는다. 경사가 속도를 제한해 평지 전력 스프린트보다 햄스트링 부상 위험이 낮다는 것이 이 워크아웃의 논거다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "코칭에서 널리 쓰이지만 이코노미·부상 이점의 통제 근거는 빈약하다."
       }
     },
@@ -1638,7 +1669,8 @@
       "detectable": false,
       "mechanism": "신경근·건 강성 변화는 현장 측정이 어렵고, 체감되는 '탄력'은 학습·플라시보와 분리되지 않는다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -1733,6 +1765,7 @@
       "mechanism": "짧고 매우 빠른 반복이 다량의 젖산과 수소이온을 생성하고, 불완전 회복이 그 상태를 누적시켜 완충·제거 기전을 자극한다고 본다. 중장거리 후반 스퍼트에 특이적인 자극이다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "트랙 전통에서 왔고, 내성 향상의 통제 근거는 제한적이다."
       }
     },
@@ -1760,7 +1793,8 @@
       ],
       "if_absent": "무변화는 (1) 반복 수가 과부하를 주기엔 적었거나 (2) 회복이 너무 완전해 젖산이 누적되지 않았거나 (3) 이미 무산소가 발달된 것이다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -1852,6 +1886,7 @@
       "mechanism": "플로트가 이지가 아니라 마라톤 페이스라 젖산이 완전히 회복되지 않고, 세션 전체가 역치 부근에 머문다. 연속 역치주보다 더 많은 유효 볼륨을 목표로 한다. Canova 방법의 특징적 세션이다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "엘리트 코칭 실무에서 왔고 통제 검증은 없다."
       }
     },
@@ -1859,14 +1894,16 @@
       "detectable": false,
       "mechanism": "역치 부근 유효 볼륨의 이점은 현장에서 페이싱·연료·컨디션과 분리되지 않는다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "prerequisites": {
       "requires_workouts": ["threshold-continuous", "marathon-pace-run"],
       "min_weekly_volume_km": 60,
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -1942,6 +1979,7 @@
       "mechanism": "타임트라이얼은 고강도 자극이자 측정이다. 결과가 VDOT나 CS를 갱신하고, 그러면 그로부터 파생된 모든 훈련 페이스가 함께 이동한다. 이 이중 역할이 다른 워크아웃과 다른 점이다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "보편적으로 쓰이지만 '자극으로서의' 최적 빈도·형식은 검증되지 않았다."
       }
     },
@@ -1975,7 +2013,8 @@
       ],
       "if_absent": "기록 정체가 곧 피트니스 정체는 아니다. 먼저 (1) 테스트 당일 신선도 (2) 조건 (3) 페이싱을 의심할 것.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -2138,6 +2177,7 @@
       "mechanism": "확률적 파틀렉과 달리 구조가 고정돼 있어 세션 간 비교가 가능하다. 구간이 짧아질수록 강도가 올라 유산소부터 신경근까지 훑는다. Moneghetti가 정형화한 20분 세션이다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "엘리트 사이에서 인기 있는 고정 세션이지만 통제 검증은 없다."
       }
     },
@@ -2145,7 +2185,8 @@
       "detectable": false,
       "mechanism": "혼합 자극이라 특정 적응을 분리해 관찰할 수 없고, 지형·컨디션이 세션 결과를 흔든다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {
@@ -2217,6 +2258,7 @@
       "mechanism": "첫 젖산 변곡점 바로 아래에서의 연속 주행은 이지 런보다 세션당 유산소 자극이 크면서도, 주 3~4회 반복해도 회복이 끊기지 않을 만큼 낮다. 자극의 크기가 아니라 '반복 가능한 크기'가 변수라는 주장이다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "단일 코칭 에세이의 지도 경험과 자기 기록에 근거한다. 통제 시험이 아니며, 출처 문서는 러닝 밖의 80/20 강도 배분 관찰을 원용하지만 확인 가능한 인용을 제시하지 않는다."
       }
     },
@@ -2229,7 +2271,8 @@
       },
       "mechanism": "말초 유산소 적응(모세혈관·미토콘드리아)과 젖산 제거 능력의 개선이 같은 심박에서 더 빠른 페이스로 나타난다고 본다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       },
       "confounds": [
         {
@@ -2321,6 +2364,7 @@
       "mechanism": "중강도 구간을 세션의 끝부분에만 두어 자극은 남기고 누적 시간은 줄인다는 발상이다. 유지에 필요한 자극이 획득에 필요한 자극보다 작다는 전제 위에 서 있고, 그 전제 자체는 이 데이터셋에서 검증되지 않았다.",
       "evidence": {
         "tier": "tradition",
+        "dose_question": "open",
         "note": "단일 코칭 에세이의 선호로 제시될 뿐, 유지 효과를 비교한 근거는 제시되지 않는다."
       }
     },
@@ -2328,7 +2372,8 @@
       "detectable": false,
       "mechanism": "'유지'는 정의상 변화가 없는 상태라 관찰할 신호가 없다. 게다가 이 세션은 하드 워크아웃 시기에만 쓰이므로, 유지된 능력이 이 주행 덕인지 함께 하는 하드 워크아웃 덕인지 현장에서 분리되지 않는다.",
       "evidence": {
-        "tier": "tradition"
+        "tier": "tradition",
+        "dose_question": "open"
       }
     },
     "safety": {

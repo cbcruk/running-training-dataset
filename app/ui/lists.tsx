@@ -72,7 +72,7 @@ export function WorkoutCard(handle: Handle<{ workout: Workout; brief?: boolean }
         <div className="card-head">
           <h2>{w.canonical_name}</h2>
           <span className="badges">
-            <TierBadge tier={w.claim?.evidence?.tier} />
+            <TierBadge tier={w.claim?.evidence?.tier} dose={w.claim?.evidence?.dose_question} />
             <ProvenanceBadge provenance={w.provenance} />
           </span>
         </div>

@@ -130,6 +130,10 @@ export type Evidence = {
    */
   cite?: [string, ...string[]]
   note?: I18N
+  /**
+   * Why this sits at `tradition`, which the tier alone cannot say. `open` = a controlled dose-response study could be run and nobody has run one. `unaskable` = the protocol has no fixed dose, so the question cannot be posed at all - a policy-level trial is still possible, but 'how much of it' has no referent. Both render as an untested row, which is why the difference has to be written down: 'nobody has looked' and 'there is nothing fixed to look at' call for different things from a reader, and only the first is a gap that further study closes. Tied to `structure.stochastic` in rules.ts, in both directions, so it cannot be asserted freely.
+   */
+  dose_question?: 'open' | 'unaskable'
 }
 
 /**
