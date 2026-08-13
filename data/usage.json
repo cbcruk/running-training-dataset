@@ -107,7 +107,7 @@
   },
   {
     "system": "daniels",
-    "workout": "cruise-intervals",
+    "workout": "threshold-intervals",
     "calls_it": "Cruise intervals",
     "also_known_as": ["T intervals"],
     "note": "Daniels가 만든 용어. threshold-continuous('Tempo')와 같은 T 페이스지만 짧은 회복으로 나눈 형태다."
@@ -177,7 +177,7 @@
   },
   {
     "system": "norwegian-singles",
-    "workout": "cruise-intervals",
+    "workout": "threshold-intervals",
     "calls_it": "Threshold intervals",
     "also_known_as": ["Double threshold", "Sub-threshold intervals"],
     "note": "Daniels의 'cruise intervals'와 같은 형태지만 젖산으로 통제하고, 엘리트는 이를 하루 두 번(더블 역치) 수행한다."
@@ -323,14 +323,14 @@
   },
   {
     "system": null,
-    "workout": "mona-fartlek",
+    "workout": "descending-intervals",
     "calls_it": "Mona fartlek",
     "also_known_as": ["Moneghetti fartlek", "20-minute fartlek"],
     "note": "Steve Moneghetti의 이름을 딴 고정 20분 세션. 확률적 파틀렉과 달리 구조가 정해져 있다."
   },
   {
     "system": "bakken-doubles",
-    "workout": "cruise-intervals",
+    "workout": "threshold-intervals",
     "calls_it": "Double threshold",
     "also_known_as": ["AM/PM threshold", "Sub-threshold doubles"],
     "note": "역치 인터벌을 하루 두 번(오전/오후)으로 나눠 수행하는 것이 이 훈련법의 서명이다. norwegian-singles는 같은 세션을 하루 한 번만 한다."

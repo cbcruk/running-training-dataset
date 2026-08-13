@@ -96,7 +96,7 @@
       },
       {
         "name": "build",
-        "emphasis": ["threshold-continuous", "vo2max-intervals", "cruise-intervals"]
+        "emphasis": ["threshold-continuous", "vo2max-intervals", "threshold-intervals"]
       },
       {
         "name": "peak",
@@ -539,11 +539,11 @@
       },
       {
         "name": "build",
-        "emphasis": ["threshold-continuous", "cruise-intervals", "easy-run"]
+        "emphasis": ["threshold-continuous", "threshold-intervals", "easy-run"]
       },
       {
         "name": "peak",
-        "emphasis": ["cruise-intervals", "vo2max-intervals"]
+        "emphasis": ["threshold-intervals", "vo2max-intervals"]
       }
     ],
     "evidence": {
@@ -600,11 +600,11 @@
       },
       {
         "name": "build",
-        "emphasis": ["threshold-continuous", "cruise-intervals", "easy-run"]
+        "emphasis": ["threshold-continuous", "threshold-intervals", "easy-run"]
       },
       {
         "name": "peak",
-        "emphasis": ["cruise-intervals", "vo2max-intervals"]
+        "emphasis": ["threshold-intervals", "vo2max-intervals"]
       }
     ],
     "evidence": {
@@ -668,7 +668,7 @@
       },
       {
         "name": "build",
-        "emphasis": ["threshold-continuous", "cruise-intervals"]
+        "emphasis": ["threshold-continuous", "threshold-intervals"]
       },
       {
         "name": "peak",

@@ -93,7 +93,7 @@
 그것이 작동하는지는 별개의 질문이다. 근거로 제시된 것이 없으므로 주장과 대조할 것도
 없다. `validate.ts`가 둘을 갈라놓는다 — 한 행에서 같은 참조가 둘 다일 수는 없다.
 
-- `cruise-intervals` — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
+- `threshold-intervals` — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
 - `rep-intervals` — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
 - `daniels` — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
 - `lydiard` — Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport.

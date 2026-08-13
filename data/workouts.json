@@ -698,7 +698,7 @@
     "instructions": "20~40분을 의식적으로 아주 느리게. 목적은 자극이 아니라 자극 없이 움직이는 것이다."
   },
   {
-    "id": "cruise-intervals",
+    "id": "threshold-intervals",
     "canonical_name": "Threshold Interval Set",
     "family": "threshold",
     "status": "draft",
@@ -1985,8 +1985,8 @@
     "instructions": "충분히 웜업하고 10~30분(또는 정해진 거리)을 통제된 최대 노력으로. 앵커 갱신이 목적이면 신선한 상태에서 수행한다."
   },
   {
-    "id": "mona-fartlek",
-    "canonical_name": "Structured Descending Fartlek",
+    "id": "descending-intervals",
+    "canonical_name": "Descending Interval Set",
     "family": "fartlek",
     "status": "draft",
     "target_adaptation": ["vo2max", "lactate-clearance", "running-economy", "pacing-skill"],

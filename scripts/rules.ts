@@ -258,6 +258,63 @@ export function check(data: Dataset): Finding[] {
           `${w.id}: overloaded colloquial term "${b}" in id/canonical_name. Put it in usage.json.`,
         )
 
+  // 위의 BANNED_IN_ID는 규칙이 아니라 *이미 걸린 위반자 목록*이다. 아무도 예견하지 않은
+  // 통칭은 그냥 통과하고, 실제로 둘이 그렇게 들어와 있었다: `mona-fartlek`(Steve
+  // Moneghetti의 별명)과 `cruise-intervals`(Jack Daniels의 고유 조어 — 같은 행을
+  // norwegian-singles는 "Threshold intervals", bakken-doubles는 "Double threshold"라고
+  // 부른다고 usage.json이 이미 적고 있었는데도 그중 하나를 중립 id로 앉혔다).
+  //
+  // 그래서 방향을 뒤집는다. 막을 낱말을 세는 대신, id의 각 토큰이 이 데이터셋이 이미
+  // 합의한 어휘에서 왔는지를 묻는다. 기본값이 거부이므로 다음 위반자를 미리 알 필요가 없다.
+  //
+  // 어휘의 대부분은 스키마와 데이터에서 그대로 끌어온다. 구조를 가리키는 낱말만 여기
+  // 적는데, 이 목록이 짧게 유지되는 것 자체가 강제 장치다 — 새 낱말을 쓰려면 그 낱말이
+  // 이 프로젝트의 어휘라고 명시적으로 선언해야 한다.
+  //
+  // 앵커 모델명은 일부러 어휘에서 뺐다. `daniels-vdot`이 거기 있어서, 어휘로 삼으면
+  // `daniels-intervals`가 통과해버린다 — 이 규칙이 잡으려는 바로 그 형태가.
+  const SHAPE_WORDS = [
+    'run',
+    'intervals',
+    'repeats',
+    'sprints',
+    'set',
+    'continuous',
+    'progression',
+    'alternations',
+    'trial',
+    'time',
+    'strides',
+    'descending',
+    'rep',
+    '30',
+    'marathon',
+    'aerobic',
+    'anaerobic',
+    'downhill',
+  ]
+  const workoutSchemaProps = schemas['workout.schema.json'].properties
+  const vocabulary = new Set<string>(SHAPE_WORDS)
+  const admit = (term: string) => term.split('-').forEach((t: string) => vocabulary.add(t))
+  for (const e of workoutSchemaProps.family.enum) admit(e)
+  for (const e of workoutSchemaProps.venue.items.enum) admit(e)
+  for (const e of workoutSchemaProps.placement.items.enum) admit(e)
+  for (const e of workoutSchemaProps.target_adaptation.items.enum) admit(e)
+  for (const a of adaptations) admit(a.id)
+
+  for (const w of workouts) {
+    const outside = w.id.split('-').filter((t: string) => !vocabulary.has(t))
+    if (outside.length)
+      add(
+        'discipline',
+        'id-outside-vocabulary',
+        w.id,
+        `${w.id}: "${outside.join('", "')}" is not in the dataset's vocabulary. ` +
+          `A workout id is descriptive and system-neutral - a coach's name for it, ` +
+          `or a coach's name, belongs in usage.json.`,
+      )
+  }
+
   // 모든 워크아웃은 최소 하나의 이름으로 도달 가능해야 한다. 아니면 찾을 수 없다.
   for (const w of workouts)
     if (!usage.some((u: Row) => u.workout === w.id))
