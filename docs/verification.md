@@ -9,7 +9,7 @@
 `status: verified`를 쓰는 것을 금지한다. 그 전환은 행 단위로, 소스를 읽은 뒤에
 사람이 하는 행위다. 이 파일은 무엇을 읽고 무엇과 대조할지만 말한다.
 
-**소스 11개**가 **주장 13개**를 떠받친다 (plausible 13).
+**소스 10개**가 **주장 12개**를 떠받친다 (plausible 12).
 
 쓰는 법: 소스 하나를 잡아 한 번 읽고, 아래에 달린 행들을 훑는다. 각 행에서 묻는 것은
 *이게 참인가*가 아니라 **이 소스가 그렇게 말하는가**다. 아니라면 그 행은 `tradition`으로
@@ -60,12 +60,6 @@
 
 - [ ] `critical-speed` · `(row itself)` · **plausible** — "임계속도는 실재하는 생리적 경계다: 그 아래에서는 대사가 정상상태에 머물고, 위에서는 유한한 여력(W′)이 소모되며 소진 시점이 예측 가능하다."
 
-## Karvonen MJ, Kentala E, Mustala O (1957). The effects of training on heart rate. Ann Med Exp Biol Fenn 35(3).
-
-주장 1개를 떠받친다:
-
-- [ ] `hrr-karvonen` · `(row itself)` · **plausible** — "강도를 최대심박수 비율이 아니라 심박수 예비량 비율로 처방하면, 안정시 심박수의 개인차를 흡수해 더 일관된 생리적 부하를 겨냥한다."
-
 ## McHugh MP (2003). Recent advances in the understanding of the repeated bout effect. Scand J Med Sci Sports 13(2).
 
 주장 1개를 떠받친다:
@@ -98,6 +92,7 @@
 - `daniels` — Daniels J (2013). Daniels' Running Formula, 3rd ed. Human Kinetics.
 - `lydiard` — Lydiard A, Gilmour G (2000). Running to the Top, 2nd ed. Meyer & Meyer Sport.
 - `pfitzinger` — Pfitzinger P, Douglas S (2009). Advanced Marathoning, 2nd ed. Human Kinetics.
+- `hrr-karvonen` — Karvonen MJ, Kentala E, Mustala O (1957). The effects of training on heart rate. Ann Med Exp Biol Fenn 35(3).
 
 ---
 
