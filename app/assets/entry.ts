@@ -18,8 +18,14 @@ const app = run({
    * 프리렌더된 문서를 그대로 쓰면서도 전체 리로드 없이 넘어간다 — ADR 0001이 말하는
    * "쓰기 위한 앱" 절반이, 라우터 없이 문서 교체로 돌아온 것이다.
    */
-  async resolveFrame(src, signal) {
-    const response = await fetch(src, { headers: { Accept: 'text/html' }, signal })
+  async resolveFrame(src, options) {
+    // beta.6에서 위치 인자(src, signal)가 옵션 객체로 바뀌었다. 옵션은 폼 제출도
+    // 실어 나르지만(`method`·`formData`·`encType`) 이 사이트에는 폼이 없다. 그것들을
+    // 조용히 버리는 대신 여기 적어둔다 - 폼이 생기면 이 함수가 GET으로 삼켜버린다.
+    const response = await fetch(src, {
+      headers: { Accept: 'text/html' },
+      signal: options?.signal,
+    })
     if (!response.ok) return `<pre>Frame error: ${response.status} ${response.statusText}</pre>`
     return response.body ?? (await response.text())
   },

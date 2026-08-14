@@ -17,7 +17,7 @@ export const assetServer = createAssetServer({
     'app/*path': 'app/*path',
     'node_modules/*path': 'node_modules/*path',
   },
-  allow: ['app/assets/**', 'app/routes.ts', 'app/ui/href.ts', 'node_modules/**'],
+  allowFiles: ['app/assets/**', 'app/routes.ts', 'app/ui/href.ts', 'node_modules/**'],
   sourceMaps: isDevelopment ? 'external' : undefined,
   minify: !isDevelopment,
   watch: false,

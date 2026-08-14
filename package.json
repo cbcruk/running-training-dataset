@@ -27,7 +27,7 @@
     "prepare": "vp config"
   },
   "dependencies": {
-    "remix": "3.0.0-beta.5"
+    "remix": "3.0.0-beta.6"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
