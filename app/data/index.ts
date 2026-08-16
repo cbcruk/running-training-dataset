@@ -222,15 +222,13 @@ export function anchorLabel(a: Anchor): EntryLabel {
 /**
  * 검색 색인. 검색이 실제로 읽는 필드만 담는다.
  *
- * ADR 0001은 코퍼스 전체를 번들에 싣는 것이 요점이라고 적었다 — 클라이언트가 아무것도
- * 가지러 가지 않고 검색할 수 있으니까. ADR 0009가 그것을 이 엔드포인트로 바꿨고
- * (당시 에셋 서버가 JSON 임포트를 컴파일하지 못했다), ADR 0010은 도구가 다시 할 수 있게
- * 된 뒤에도 그대로 두기로 했다. 이유가 제약에서 선택으로 바뀐 것뿐이다: 초기 페이로드가
- * 작고, 검색만이 이 데이터를 필요로 한다.
+ * 파일도 엔드포인트도 아니다. 검색 컴포넌트가 브라우저에서 이 함수를 부른다
+ * (app/client/search.tsx). ADR 0001이 세운 모양이고, 한 바퀴 돌아 제자리로 왔다: ADR 0009가
+ * `/search-index.json`으로 옮겼던 것은 프리렌더된 문서마다 코퍼스를 싣지 않으려던 것이었고,
+ * ADR 0011이 프리렌더를 포기하면서 그 이유가 사라졌다. 문서는 셸 하나뿐이고 코퍼스는 어차피
+ * 번들을 탄다.
  *
- * 대가는 남아 있다 — **한 번도 열지 않은 엔트리를 오프라인에서 검색하는 능력은 색인을
- * 한 번이라도 받아온 뒤로 미뤄진다.** 첫 키 입력에서 한 번 받고, 서비스 워커가 캐시한다.
- * 파일을 굽는 것은 scripts/search-index.ts다.
+ * 그래서 **한 번도 열지 않은 엔트리도 오프라인에서 검색된다.**
  */
 export interface SearchEntry {
   kind: 'system' | 'workout' | 'anchor'
@@ -297,16 +295,4 @@ export function searchIndex(): SearchIndex {
       system: u.system ? (bySystem[u.system]?.name ?? u.system) : null,
     })),
   }
-}
-
-/** 프리렌더러가 내보내는 모든 라우트. 사전 엔트리당 파일 하나. */
-export function allPaths(): string[] {
-  return [
-    '/',
-    '/workouts',
-    '/anchors',
-    ...systems.map((s) => `/system/${s.id}`),
-    ...workouts.map((w) => `/workout/${w.id}`),
-    ...anchors.map((a) => `/anchor/${a.model}`),
-  ]
 }

@@ -19,7 +19,7 @@ import type { ReactNode } from 'react'
 
 import { RecentStrip } from '../client/recent.tsx'
 import { SearchPanel } from '../client/search.tsx'
-import { PLACEHOLDER, type EntryLabel, type View } from '../data/index.ts'
+import { HOME_META, PLACEHOLDER, type EntryLabel, type View } from '../data/index.ts'
 import { NotFound } from '../ui/lists.tsx'
 
 /**
@@ -50,6 +50,18 @@ export const Route = createRootRoute({
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
       { property: 'og:type', content: 'article' },
       { name: 'twitter:card', content: 'summary' },
+      /**
+       * 사이트 기본값. 라우트가 자기 것으로 덮어쓴다.
+       *
+       * ADR 0011 전에는 이 넷이 없어도 됐다 — 프리렌더된 문서마다 자기 것을 들고 있었으니까.
+       * 지금은 디스크의 문서가 셸 하나뿐이고 그 셸이 모든 URL에 서빙되므로, 여기 없으면
+       * JavaScript가 돌기 전의 문서에 제목이 아예 없다. 엔트리별 값은 하이드레이션 뒤에야
+       * 붙고, 크롤러와 링크 프리뷰가 그때까지 기다려주지 않는다는 것이 이 이동의 대가다.
+       */
+      { title: HOME_META.title },
+      { name: 'description', content: HOME_META.description },
+      { property: 'og:title', content: HOME_META.title },
+      { property: 'og:description', content: HOME_META.description },
     ],
     links: [
       { rel: 'icon', href: 'data:,' },

@@ -1,6 +1,7 @@
 # ADR 0010 — 브라우즈 계층을 TanStack Start로 옮긴다
 
-**상태:** accepted · 2026-08-16
+**상태:** accepted · 2026-08-16 — 다만 **프리렌더 결정은
+[ADR 0011](0011-spa.md)이 대체했다.** 프레임워크 선택(TanStack Start)은 유효하다.
 **대체하는 것:** [ADR 0009](0009-remix-3.md)(Remix 3)
 **뒤집는 것:** [ADR 0004](0004-tanstack-router.md)의 "Router, not Start" 판단
 

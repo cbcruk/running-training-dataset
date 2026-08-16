@@ -2,8 +2,6 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import { defineConfig } from 'vite-plus'
 
-import { allPaths } from './app/data/index.ts'
-
 /**
  * 빌드는 다시 Vite가 소유한다(ADR 0010). `defineConfig`가 아직 `vite-plus`에서 오는 이유는
  * 아래 `fmt`·`lint`·`staged` 블록 때문이고, 그 셋은 `vp check`가 읽는다 — 포맷·린트·타입
@@ -34,47 +32,33 @@ export default defineConfig({
       },
 
       /**
-       * 정적 내보내기. ADR 0004가 Start를 거절한 이유는 SPA 셸이었고, 이 블록이 그 이유를
-       * 지운다 — 엔트리마다 진짜 HTML 파일이 하나씩 나온다(ADR 0001).
+       * SPA. 빌드가 내놓는 문서는 셸 **하나**뿐이다(ADR 0011).
        *
-       * 경로는 크롤링이 아니라 데이터에서 온다. `allPaths()`가 프리렌더 대상의 유일한
-       * 정의이고, CI가 같은 함수로 개수를 대조한다. 크롤링에 맡기면 어느 목록에서도
-       * 링크되지 않은 엔트리가 조용히 빠질 수 있다.
-       */
-      prerender: {
-        enabled: true,
-        autoStaticPathsDiscovery: false,
-        crawlLinks: false,
-        failOnError: true,
-      },
-      pages: allPaths().map((path) => ({ path })),
-
-      /**
-       * GitHub Pages가 파일 없는 경로에 주는 문서. SPA 셸이다.
+       * ADR 0010까지는 여기 `prerender` 블록이 있었고 엔트리마다 진짜 HTML 파일이 하나씩
+       * 나왔다. 그것이 ADR 0001의 "발견" 절반이었고, 지금 포기하는 것이 그것이다 — 무엇을
+       * 잃는지는 ADR 0011이 적는다. 프리렌더를 다시 켜는 것은 이 블록을 되살리는 일이므로,
+       * 그 문서와 `git log`가 필요한 전부다.
        *
-       * ADR 0004가 거절한 것이 SPA 셸이었고 그 판단은 유효하다 — 사전의 47개 라우트는
-       * 여전히 전부 프리렌더된 진짜 문서다. 셸은 **딱 하나의 URL**을 위해 존재한다:
-       * 어디에도 걸리지 않은 주소.
-       *
-       * 이유는 하이드레이션이다. 예전처럼 홈 문서를 404.html로 복사하면, 브라우저는
-       * `/system/오타`에서 홈의 마크업을 받아 라우터가 그리려는 not-found와 맞춰야 하고,
-       * React가 불일치로 죽는다(#418). 셸은 라우트 내용을 담지 않으므로 맞출 것이 없다.
+       * `spa.enabled`가 프리렌더러를 강제로 켜지만(`postBuild`), 굽는 페이지는 셸 하나다.
        */
       spa: {
         enabled: true,
         /**
          * 셸을 어느 URL에서 렌더할지. `app/routes/404.tsx`가 이것 하나 때문에 존재한다.
          *
-         * 두 조건을 동시에 만족해야 한다. **200이어야 하고**(프리렌더러가 실패로 보지
-         * 않게), **`allPaths()`에 없어야 한다**(셸은 프리렌더 목록에 한 항목으로 들어가고,
-         * 진짜 라우트와 경로가 겹치면 그 라우트에 밀려 아무것도 나오지 않는다). 게다가 이
-         * 경로에서는 내비게이션 탭이 하나도 활성이 아니라서, 어떤 URL에서 하이드레이트해도
-         * 셸의 마크업이 어긋나지 않는다.
+         * 셸은 **모든** URL에서 하이드레이트되므로, 어느 한 URL에 치우친 마크업을 담으면
+         * 안 된다. `/404`에서는 내비게이션 탭이 하나도 활성이 아니고 브랜드 링크도 활성이
+         * 아니라서, 그 치우침이 없는 유일한 주소다. 200이기도 해야 하는데(프리렌더러가
+         * 실패로 보지 않게) 그 200을 주는 것이 그 라우트다.
          */
         maskPath: '/404',
-        // 확장자를 붙이지 않는다. 셸로 인식되면 프리렌더러가 `.html`을 직접 붙여
-        // `dist/client/404.html`에 쓴다 — 디렉터리 안의 index.html이 아니라.
-        prerender: { outputPath: '/404' },
+        /**
+         * `/index`이지 `/404`가 아니다. 셸이 곧 사이트의 문서이므로 `index.html`로 나가야
+         * 하고, GitHub Pages가 파일 없는 경로에 주는 `404.html`은 그 복사본이다
+         * (`scripts/pages-404.ts`). 확장자를 붙이지 않는 이유는 프리렌더러가 셸로 인식하면
+         * `.html`을 직접 붙이기 때문이다.
+         */
+        prerender: { outputPath: '/index' },
       },
     }),
 

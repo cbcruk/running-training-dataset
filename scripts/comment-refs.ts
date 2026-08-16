@@ -19,13 +19,10 @@ import { resolve, dirname, join, basename } from 'node:path'
  *
  * `views.jsx` — 어떤 파일을 그것이 대체한 템플릿 리터럴 원본과 비교하는 주석은 그 원본을
  * 부를 수밖에 없다. 그 문장 자체가 원본이 사라졌다는 이야기다.
- * `index.html` — 같은 경우. 문서 셸이 무엇을 대체했는지 말하는 주석이고, Remix 3로
- * 옮기면서 그 파일은 사라졌다(ADR 0009).
- * `404.html` — 빌드 후에만 존재한다. 프리렌더러가 SPA 셸을 dist/client/에 쓴다
- * (vite.config.ts의 `spa`).
- * `search-index.json` — 같은 경우. scripts/search-index.ts가 public/에 굽고 커밋하지
- * 않으므로, 갓 클론한 저장소에는 없다. 주석이 부르는 것은 대개 파일이 아니라 브라우저가
- * 받는 URL(`/search-index.json`)이기도 하다.
+ * `index.html`·`404.html` — 빌드 후에만 존재한다. 이 사이트가 내놓는 문서 둘이고
+ * (ADR 0011), 둘 다 `dist/client/`에 있어서 갓 클론한 저장소에는 없다.
+ * `search-index.json` — `views.jsx`와 같은 경우다. 검색 코퍼스가 왜 번들로 돌아왔는지
+ * 말하는 주석은 그것이 잠시 살았던 엔드포인트를 부를 수밖에 없다(ADR 0009 -> 0011).
  */
 const ALLOWED = new Set(['views.jsx', 'index.html', '404.html', 'search-index.json'])
 

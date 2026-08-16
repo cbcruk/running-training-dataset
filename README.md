@@ -176,14 +176,14 @@ scripts/
   comment-refs.ts    # 주석이 이름을 부르는 파일과, 그게 아직 있는지
   svg.tsx            # 차트 컴포넌트 -> SVG 문자열 (out/*.svg가 쓰는 한 줄)
   render.ts          # 워크아웃마다 SVG를 out/에 쓴다
-  search-index.ts    # 검색이 읽는 필드만 public/search-index.json으로 (생성물)
-vite.config.ts       # 빌드·프리렌더 설정 + vp check가 읽는 포맷·린트 블록
+  pages-404.ts       # 셸을 404.html로도 둔다 (GitHub Pages의 SPA 폴백)
+vite.config.ts       # 빌드 설정 + vp check가 읽는 포맷·린트 블록
 public/
   style.css          # tier 배지는 시각적 무게를 갖는다. tradition이 consensus로 읽혀선 안 된다
   sw.js              # 서비스 워커: 오프라인에서도 카탈로그를 볼 수 있게
-app/                 # TanStack Start 앱 (ADR 0010)
+app/                 # TanStack Start 앱, SPA 모드 (ADR 0010, 0011)
   routes/            # URL 계약. 파일 이름이 곧 경로이고, 각 라우트가 자기 메타를 든다
-  routes/__root.tsx  # 문서 셸: <html>/head/내비/검색/푸터
+  routes/__root.tsx  # 문서 셸: <html>/head/내비/검색/푸터. 빌드가 내놓는 유일한 문서
   routeTree.gen.ts   # 생성물, 커밋됨, CI 검증. 포맷 검사에서만 빠진다
   router.tsx         # createRouter. 서버와 브라우저가 같은 이 함수를 부른다
   client.tsx         # 브라우저 진입점: 하이드레이션 + 키보드 조회 + 서비스 워커
@@ -203,15 +203,15 @@ docs/
 pnpm install
 pnpm run validate && pnpm run render   # 검사 + SVG 쓰기
 pnpm run dev                           # 브라우즈 UI (훈련법 -> 워크아웃 상세, "tempo run" 충돌 검색)
-pnpm run build                         # dist/client/에 정적 사이트, 엔트리당 HTML 파일 하나
+pnpm run build                         # dist/client/에 셸 하나 + 그 복사본인 404.html
 pnpm run check && pnpm run test        # 포맷·린트·타입 검사, 그리고 데이터 규칙 테스트
 ```
 
 브라우즈 UI는 JSON을 직접 읽고 도식 차트를 CLI가 쓰는 것과 같은 `app/ui/chart.tsx`로 렌더하므로, 시각물이 데이터에서 벗어날 수 없다.
 
-모든 엔트리는 실제 문서이기도 하다. 빌드가 훈련법·워크아웃·앵커마다 HTML 파일 하나씩을 쓴다 — 각자의 `<title>`, description, canonical URL, 그리고 마크업 안에 엔트리의 내용까지 — 개발 서버가 답하는 것과 **같은 라우트 트리**에서 받아서. 그래서 `/anchor/rpe_10`에 처음 들어와도 JavaScript 없이 읽히고 서버 재작성 규칙이 필요 없으며, 브라우저가 그 위에서 즉시·무리로드 조회로 업그레이드한다. 그 분리가 [ADR 0001](docs/adr/0001-dictionary-shape.md)의 주제다. 굽는 경로 목록은 크롤링이 아니라 데이터에서 나오고(`allPaths()`), CI가 그 개수를 데이터에서 직접 세어 대조한다.
+배포되는 문서는 셸 하나다. [ADR 0011](docs/adr/0011-spa.md)이 프리렌더를 포기했고, 그래서 `/anchor/rpe_10`으로 직접 들어오면 GitHub Pages가 `404.html`(셸의 복사본)을 주고 라우터가 그 위에서 엔트리를 그린다. 무엇을 포기한 것인지는 그 ADR이 재서 적는다 — 요약하면 속도가 아니라 **딥링크의 HTTP 404 상태와 빈 링크 프리뷰**다. 되돌리는 방법도 거기 있다.
 
-한 번 로드되면 사전처럼 읽힌다: `/`(또는 `s`)로 검색창에 뛰고, `↑`/`↓`로 결과를 훑고, `Enter`로 열고, `Esc`로 지운다. 마지막에 연 여덟 개가 홈에 남는다. 검색은 브라우저에서 돌고, 검색이 읽는 필드만 담은 색인(`/search-index.json`)을 첫 키 입력에서 한 번 받는다. 서비스 워커가 그 색인과 이미 연 문서를 캐시하므로 오프라인에서도 카탈로그가 열린다.
+한 번 로드되면 사전처럼 읽힌다: `/`(또는 `s`)로 검색창에 뛰고, `↑`/`↓`로 결과를 훑고, `Enter`로 열고, `Esc`로 지운다. 마지막에 연 여덟 개가 홈에 남는다. 검색은 브라우저에서 돌고 코퍼스가 번들에 있으므로 네트워크를 타지 않는다 — 한 번도 열지 않은 엔트리도 오프라인에서 검색된다. 서비스 워커가 셸과 에셋을 캐시하므로 오프라인에서도 카탈로그가 열린다.
 
 ## 알려진 미해결 문제
 
@@ -222,6 +222,7 @@ pnpm run check && pnpm run test        # 포맷·린트·타입 검사, 그리�
 [ADR 0007](docs/adr/0007-korean-repo-prose.md)은 저장소 산문을 한국어로 쓰기로 하고 그 경계를 긋는다.
 [ADR 0006](docs/adr/0006-korean-only-dataset.md)은 데이터셋에서 영어를 제거한 이유를 기록한다.
 [ADR 0005](docs/adr/0005-comments-as-agent-context.md)는 파일 상단 주석을 에이전트 대면 컨텍스트로 다루고 검사 가능하게 만든다.
+[ADR 0011](docs/adr/0011-spa.md)은 프리렌더를 포기하고 SPA로 가면서, 무엇을 포기하는 것인지를 두 상태를 같은 하니스로 다시 재서 적는다 — 비용은 속도가 아니라 딥링크의 HTTP 404와 빈 링크 프리뷰다 (ADR 0010의 프리렌더 결정과 ADR 0001의 "발견" 절반을 대체한다).
 [ADR 0010](docs/adr/0010-tanstack-start.md)은 브라우즈 계층을 TanStack Start로 옮기고, ADR 0004가 실측으로 거절했던 Start를 왜 지금은 받아들이는지 — 그리고 무엇을 치렀는지 적는다 (ADR 0009를 대체한다).
 [ADR 0009](docs/adr/0009-remix-3.md)는 브라우즈 계층을 Remix 3로 옮겼다 (ADR 0004·0003을, 그리고 ADR 0002의 React 부분을 대체했다) — 대체됨.
 [ADR 0004](docs/adr/0004-tanstack-router.md)는 브라우즈 계층을 TanStack Router로 확정하고 툴체인 질문을 닫았다 — 대체됨.

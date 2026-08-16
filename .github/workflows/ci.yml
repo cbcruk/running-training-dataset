@@ -80,42 +80,44 @@ jobs:
       - name: Test
         run: pnpm run test
 
-      - name: Build (prerender every entry into dist/client/)
+      - name: Build (one shell into dist/client/)
         run: pnpm run build
 
-      # The discovery half of the dictionary (ADR 0001): every entry must exist as
-      # a real file with its own title, or the catalog is invisible to crawlers
-      # again. Assert the count matches the data rather than trusting the build.
+      # The site is an SPA now (ADR 0011), so the build has exactly two documents
+      # and they are the same bytes: index.html, and the 404.html GitHub Pages
+      # serves for every path with no file. Both must be a *shell* - no route
+      # content - because one document hydrates at every URL.
       #
-      # `grep -a`: the hydration payload TanStack Start writes into each entry
-      # document contains NUL bytes, which makes grep call the file binary and
-      # stay silent about a match it did find.
-      - name: Verify prerendered entries
+      # `grep -a`: the hydration payload TanStack Start writes carries NUL bytes,
+      # which makes grep call the file binary and stay silent about a match it
+      # did find.
+      - name: Verify the shell
         run: |
-          expected=$(node -e "
-            const r = ['/', '/workouts', '/anchors'].length;
-            const n = ['systems','workouts','anchors'].reduce((a,f) =>
-              a + JSON.parse(require('fs').readFileSync('data/'+f+'.json','utf8')).length, 0);
-            console.log(r + n);
-          ")
-          actual=$(find dist/client -name index.html | wc -l)
-          echo "expected $expected prerendered routes, found $actual"
-          test "$expected" -eq "$actual"
-          test -f dist/client/search-index.json
-          grep -a -q '<title>rpe_10' dist/client/anchor/rpe_10/index.html
-          grep -a -q 'RPE' dist/client/anchor/rpe_10/index.html
+          actual=$(find dist/client -name '*.html' | wc -l)
+          echo "expected 2 documents, found $actual"
+          test "$actual" -eq 2
+          cmp dist/client/index.html dist/client/404.html
+          grep -a -q 'class="topbar"' dist/client/index.html
+          # Route content in the shell means it was rendered at one URL and will
+          # fail hydration at every other one - the failure ADR 0010 hit head-on.
+          if grep -a -q 'class="card sys-card"' dist/client/index.html; then
+            echo "dist/client/index.html rendered route content - see vite.config.ts's spa block"
+            exit 1
+          fi
+          # Nothing on disk carries an entry's title any more, so the shell has to
+          # carry the site's - otherwise a link preview of any URL is blank.
+          grep -a -q '<title>Running Training Dataset</title>' dist/client/index.html
+          grep -a -q 'name="description"' dist/client/index.html
           # Every internal link has to carry the deployment base, or the site is
           # broken everywhere except a root-hosted dev server (vite.config.ts's BASE).
           grep -a -q 'href="/running-training-dataset/workouts"' dist/client/index.html
 
-      # 404.html is the one document GitHub Pages serves for a path with no file,
-      # so it has to hydrate at *any* URL. That means it must carry no route
-      # content - a copy of the home page would fail hydration on every dead link.
-      - name: Verify the 404 fallback is a shell, not a page
+      # The corpus rides the bundle again (ADR 0011), which is what makes search
+      # work offline for an entry nobody has opened. If it ever stops being in
+      # there, search goes quietly empty rather than failing.
+      - name: Verify the corpus rides the bundle
         run: |
-          test -f dist/client/404.html
-          grep -a -q 'class="topbar"' dist/client/404.html
-          if grep -a -q 'class="card sys-card"' dist/client/404.html; then
-            echo "dist/client/404.html rendered route content - see vite.config.ts's spa block"
+          if ! grep -a -q -r "Daniels' Running Formula" dist/client/assets/; then
+            echo "the corpus is not in the client bundle - search cannot work offline"
             exit 1
           fi

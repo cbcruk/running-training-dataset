@@ -1,41 +1,25 @@
 /**
  * 검색.
  *
- * 서버에서 돌 수도 있었다 — `?q=`를 읽는 로더 하나면 된다 — 하지만 이 사이트는 GitHub
- * Pages에 정적 파일로 나가고 정적 파일은 질의 문자열을 볼 수 없다. 그래서 검색은 예전
- * 판본에서와 마찬가지로 브라우저에서 돈다. 코퍼스는 번들이 아니라
- * `/search-index.json`에서 한 번 받아온다(scripts/search-index.ts가 굽는다).
+ * 색인은 코퍼스에서 그 자리에서 만든다. 네트워크 요청이 없다 — ADR 0001이 세운 모양이고,
+ * ADR 0011이 SPA로 넘어오면서 되찾은 것이다. 그 사이(ADR 0009·0010)에는 `/search-index.json`
+ * 을 첫 키 입력에서 받아왔는데, 그건 문서가 프리렌더될 때 코퍼스를 초기 페이로드에서 빼려던
+ * 것이었다. 이제 문서가 하나뿐이고 코퍼스는 어차피 번들을 타므로, 왕복만 남는 비용이었다.
+ *
+ * 되찾은 것은 구체적으로 이것이다: **한 번도 열지 않은 엔트리도 오프라인에서 검색된다.**
+ *
+ * `useMemo`로 감싸는 것은 45개 엔트리의 문자열을 접는 일을 키 입력마다 다시 하지 않기
+ * 위해서다. 모듈 최상위에서 부르지 않는 이유는 검색을 열지 않은 사람이 그 비용을 내지 않게
+ * 하려는 것이고, 첫 키 입력에서 한 번 도는 것은 예전 fetch가 있던 자리와 같다.
  *
  * 결과가 나오면 `<body>`에 `searching` 클래스가 붙고 CSS가 `#app`을 숨긴다. 결과를 문서
- * 본문 자리로 옮기는 대신 이렇게 한 이유는, 그러려면 서버가 렌더한 페이지 전체를 이
- * 컴포넌트의 prop으로 직렬화해야 하고 그러면 모든 문서가 자기 내용을 두 번 싣게 되기
- * 때문이다.
+ * 본문 자리로 옮기는 대신 이렇게 한 이유는, 그러려면 라우트가 그린 페이지 전체를 이
+ * 컴포넌트가 다시 알아야 하기 때문이다.
  */
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
+import { searchIndex, type SearchEntry } from '../data/index.ts'
 import { AnchorLink, SystemLink, WorkoutLink } from '../ui/primitives.tsx'
-
-interface SearchEntry {
-  kind: 'system' | 'workout' | 'anchor'
-  id: string
-  title: string
-  sub: string
-  tier?: string
-  provenance?: string
-  haystack: string[]
-}
-
-interface UsageRow {
-  workout: string
-  calls_it: string
-  aka: string[]
-  system: string | null
-}
-
-interface SearchIndex {
-  entries: SearchEntry[]
-  usage: UsageRow[]
-}
 
 /**
  * 문서 수준 키보드 계층(app/client.tsx)이 검색을 지워달라고 부탁하는 방법.
@@ -101,22 +85,10 @@ function ResultCard({ entry: e }: { entry: SearchEntry }) {
 
 export function SearchPanel({ placeholder }: { placeholder: string }) {
   const [query, setQuery] = useState('')
-  const [index, setIndex] = useState<SearchIndex | null>(null)
+  const searching = query !== ''
 
-  /** 색인은 첫 키 입력에서 한 번만 받는다. 실패하면 검색이 조용히 비어 있을 뿐이다. */
-  const loading = useRef(false)
-  useEffect(() => {
-    if (!query || index || loading.current) return
-    loading.current = true
-    fetch(`${import.meta.env.BASE_URL}search-index.json`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((json: SearchIndex | null) => {
-        if (json) setIndex(json)
-      })
-      .catch(() => {
-        /* 오프라인이고 캐시에도 없다 — 결과가 비는 것 말고 달라지는 것은 없다 */
-      })
-  }, [query, index])
+  /** 접어둔 문자열을 키 입력마다 다시 만들지 않는다. 첫 질의에서 한 번 돈다. */
+  const index = useMemo(() => (searching ? searchIndex() : null), [searching])
 
   // `#app`을 숨기는 것은 CSS다. 클래스는 문서 수준에 있어야 하므로 React 트리 밖으로 나간다.
   useEffect(() => {

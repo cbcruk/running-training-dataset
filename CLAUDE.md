@@ -24,7 +24,7 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 - `pnpm install` — `vp install`이 아니다.
 - `pnpm run check` — 포맷·린트·타입 검사. 이것만 Vite+(`vp check`)가 한다.
 - `pnpm run test` — Node 내장 테스트 러너를 `vite-node`로 띄운다. `vp test`는 쓰지 않는다.
-- `pnpm run dev` / `pnpm run build` — Vite 개발 서버와 정적 내보내기(`dist/client/`).
+- `pnpm run dev` / `pnpm run build` — Vite 개발 서버와 SPA 셸 빌드(`dist/client/`).
 - `pnpm run validate` / `render` / `types` / `verify` — 데이터 쪽 스크립트. 전부 `vite-node`.
 
 기억해야 할 것 셋:
@@ -34,8 +34,11 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
   리로드를 한다(ADR 0004가 기록한 함정).
 - **`app/routeTree.gen.ts`는 생성물이다.** 손으로 고치지 말 것. Vite가 도는 모든 명령이 다시
   쓰고, 커밋된 내용이 `app/routes/`와 맞는지는 CI가 본다.
-- **프리렌더된 문서를 `grep`할 때는 `-a`를 붙일 것.** 하이드레이션 페이로드에 NUL 바이트가
+- **빌드 산출물을 `grep`할 때는 `-a`를 붙일 것.** 하이드레이션 페이로드에 NUL 바이트가
   있어서 grep이 바이너리로 보고 침묵한다.
+- **셸에 라우트 내용이 들어가면 안 된다.** 문서 하나가 모든 URL에서 하이드레이트되므로,
+  어느 한 URL에 치우친 마크업이 셸에 굳으면 나머지 전부에서 하이드레이션이 깨진다
+  ([ADR 0011](docs/adr/0011-spa.md)). CI가 이것을 본다.
 
 ## 프로젝트 언어
 

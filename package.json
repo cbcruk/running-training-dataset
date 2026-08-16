@@ -14,10 +14,9 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "pnpm run search-index && vite",
-    "build": "pnpm run search-index && NODE_ENV=production BASE_PATH=${BASE_PATH:-/running-training-dataset/} vite build",
+    "dev": "vite",
+    "build": "NODE_ENV=production BASE_PATH=${BASE_PATH:-/running-training-dataset/} vite build && vite-node scripts/pages-404.ts",
     "preview": "vite preview",
-    "search-index": "vite-node scripts/search-index.ts",
     "validate": "vite-node scripts/validate.ts",
     "render": "vite-node scripts/render.ts",
     "types": "vite-node scripts/types.ts",
