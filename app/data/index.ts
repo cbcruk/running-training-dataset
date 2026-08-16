@@ -1,19 +1,18 @@
 /**
  * 데이터 접근과 페이지 메타데이터.
  *
- * 마크업은 app/ui/에, URL 계약은 app/routes.ts에 있다. 여기 있는 것은 둘 다 필요로 하지만
- * 어느 쪽도 소유하지 않는 것들이다. 생성된 스키마 타입으로 단언해 읽은 JSON, 역인덱스,
- * 표시용 어휘, 그리고 엔트리별 <title>/description.
+ * 마크업은 app/ui/에, URL 계약은 app/routes/의 파일 이름에 있다. 여기 있는 것은 둘 다
+ * 필요로 하지만 어느 쪽도 소유하지 않는 것들이다. 생성된 스키마 타입으로 단언해 읽은 JSON,
+ * 역인덱스, 표시용 어휘, 그리고 엔트리별 <title>/description.
  *
  * 인식론은 JSON에 산다. 이 파일은 편의일 뿐이다. 다만 반드시 지켜야 하는 규칙 하나가
  * 있다(README "알려진 미해결 문제"): 근거 등급은 브라우즈 카드에 있어야지 상세 뷰에
  * 묻혀서는 안 된다 — 그래야 훈련법 열 개를 훑어도 `tradition`이 `consensus`처럼 정착된
  * 것으로 보이지 않는다.
  *
- * 예전 판본은 이 전부를 `ViewContext` 하나로 묶어 컴포넌트마다 넘겼다. 그 제약은 뷰가 두
- * 호스트(프리렌더러와 브라우저)에서 같은 원천으로 렌더되어야 한다는 데서 왔다. Remix 3에서
- * 뷰는 서버 전용이고 브라우저는 좁은 클라이언트 엔트리만 받으므로, 넘길 이유가 없어졌다 —
- * 컴포넌트가 이 모듈을 직접 임포트한다.
+ * 컴포넌트가 이 모듈을 직접 임포트한다. 예전 판본은 전부를 `ViewContext` 하나로 묶어
+ * 컴포넌트마다 넘겼는데, 그 제약은 뷰가 두 호스트에서 같은 원천으로 렌더되어야 한다는 데서
+ * 왔다. 지금은 프리렌더러와 브라우저가 같은 라우트 트리를 돌리므로 넘길 이유가 없다.
  */
 import systemsRaw from '../../data/systems.json' with { type: 'json' }
 import workoutsRaw from '../../data/workouts.json' with { type: 'json' }
@@ -197,32 +196,41 @@ export function anchorMeta(a: Anchor): PageMeta {
 
 /**
  * 최근 본 항목 띠가 쓰는 라벨. 그 목록은 읽는 사람마다 다르므로 절대 프리렌더되지 않지만,
- * 라벨은 코퍼스가 있어야 붙일 수 있으므로 서버가 지금 페이지의 것을 건네준다.
+ * 라벨은 코퍼스가 있어야 붙일 수 있으므로 라우트가 지금 페이지의 것을 건네준다.
+ *
+ * `kind`와 `id`가 함께 가는 이유는 링크 때문이다. 띠는 완성된 경로 문자열이 아니라 이
+ * 쌍을 저장하고, 라우터가 그것으로 타입 검사된 `<Link>`를 만든다(app/client/recent.tsx).
  */
 export interface EntryLabel {
-  kind: string
+  kind: 'system' | 'workout' | 'anchor'
+  id: string
   label: string
 }
 
 export function systemLabel(s: System): EntryLabel {
-  return { kind: 'system', label: s.name }
+  return { kind: 'system', id: s.id, label: s.name }
 }
 
 export function workoutLabel(w: Workout): EntryLabel {
-  return { kind: 'workout', label: w.canonical_name }
+  return { kind: 'workout', id: w.id, label: w.canonical_name }
 }
 
 export function anchorLabel(a: Anchor): EntryLabel {
-  return { kind: 'anchor', label: a.model }
+  return { kind: 'anchor', id: a.model, label: a.model }
 }
 
 /**
  * 검색 색인. 검색이 실제로 읽는 필드만 담는다.
  *
- * 예전에는 코퍼스 전체가 브라우저 번들 안에 있었고(ADR 0001은 그게 요점이라고 적었다),
- * 그래서 클라이언트가 아무것도 가지러 가지 않고 검색했다. Remix 3의 에셋 서버는 JSON
- * 임포트를 브라우저 모듈로 컴파일하지 않으므로, 코퍼스는 이 엔드포인트로 나간다 — 첫
- * 키 입력에서 한 번 받고, 서비스 워커가 캐시한다.
+ * ADR 0001은 코퍼스 전체를 번들에 싣는 것이 요점이라고 적었다 — 클라이언트가 아무것도
+ * 가지러 가지 않고 검색할 수 있으니까. ADR 0009가 그것을 이 엔드포인트로 바꿨고
+ * (당시 에셋 서버가 JSON 임포트를 컴파일하지 못했다), ADR 0010은 도구가 다시 할 수 있게
+ * 된 뒤에도 그대로 두기로 했다. 이유가 제약에서 선택으로 바뀐 것뿐이다: 초기 페이로드가
+ * 작고, 검색만이 이 데이터를 필요로 한다.
+ *
+ * 대가는 남아 있다 — **한 번도 열지 않은 엔트리를 오프라인에서 검색하는 능력은 색인을
+ * 한 번이라도 받아온 뒤로 미뤄진다.** 첫 키 입력에서 한 번 받고, 서비스 워커가 캐시한다.
+ * 파일을 굽는 것은 scripts/search-index.ts다.
  */
 export interface SearchEntry {
   kind: 'system' | 'workout' | 'anchor'

@@ -16,9 +16,9 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      # Remix 3 asks for Node >= 24.3. Its own loader (`remix/node-tsx`) runs the
-      # TypeScript in scripts/ and app/ directly, so there is no build step
-      # between the prerenderer and the components it renders.
+      # Vite 8 and TanStack Start ask for a current Node. `vite-node` runs the
+      # TypeScript in scripts/ and app/ directly through the same Vite config the
+      # app builds with, so there is no separate build step for the data scripts.
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -62,18 +62,34 @@ jobs:
             exit 1
           fi
 
+      # Third file under the same contract. The route tree is generated from the
+      # filenames in app/routes/ and committed so a fresh clone type-checks before
+      # anything runs; every Vite command rewrites it, so `validate` above has
+      # already regenerated it by the time this looks.
+      - name: Verify the generated route tree matches app/routes/
+        run: |
+          if [ -n "$(git status --porcelain -- app/routeTree.gen.ts)" ]; then
+            echo "app/routeTree.gen.ts is stale - run any vite command and commit the result"
+            git diff -- app/routeTree.gen.ts
+            exit 1
+          fi
+
       - name: Check (format + lint + types)
         run: pnpm run check
 
       - name: Test
         run: pnpm run test
 
-      - name: Build (prerender every entry into dist/)
+      - name: Build (prerender every entry into dist/client/)
         run: pnpm run build
 
       # The discovery half of the dictionary (ADR 0001): every entry must exist as
       # a real file with its own title, or the catalog is invisible to crawlers
       # again. Assert the count matches the data rather than trusting the build.
+      #
+      # `grep -a`: the hydration payload TanStack Start writes into each entry
+      # document contains NUL bytes, which makes grep call the file binary and
+      # stay silent about a match it did find.
       - name: Verify prerendered entries
         run: |
           expected=$(node -e "
@@ -82,13 +98,24 @@ jobs:
               a + JSON.parse(require('fs').readFileSync('data/'+f+'.json','utf8')).length, 0);
             console.log(r + n);
           ")
-          actual=$(find dist -name index.html | wc -l)
+          actual=$(find dist/client -name index.html | wc -l)
           echo "expected $expected prerendered routes, found $actual"
           test "$expected" -eq "$actual"
-          test -f dist/404.html
-          test -f dist/search-index.json
-          grep -q '<title>rpe_10' dist/anchor/rpe_10/index.html
-          grep -q 'RPE' dist/anchor/rpe_10/index.html
+          test -f dist/client/search-index.json
+          grep -a -q '<title>rpe_10' dist/client/anchor/rpe_10/index.html
+          grep -a -q 'RPE' dist/client/anchor/rpe_10/index.html
           # Every internal link has to carry the deployment base, or the site is
-          # broken everywhere except a root-hosted dev server (app/ui/href.ts).
-          grep -q 'href="/running-training-dataset/workouts"' dist/index.html
+          # broken everywhere except a root-hosted dev server (vite.config.ts's BASE).
+          grep -a -q 'href="/running-training-dataset/workouts"' dist/client/index.html
+
+      # 404.html is the one document GitHub Pages serves for a path with no file,
+      # so it has to hydrate at *any* URL. That means it must carry no route
+      # content - a copy of the home page would fail hydration on every dead link.
+      - name: Verify the 404 fallback is a shell, not a page
+        run: |
+          test -f dist/client/404.html
+          grep -a -q 'class="topbar"' dist/client/404.html
+          if grep -a -q 'class="card sys-card"' dist/client/404.html; then
+            echo "dist/client/404.html rendered route content - see vite.config.ts's spa block"
+            exit 1
+          fi

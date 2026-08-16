@@ -1,5 +1,5 @@
+import assert from 'node:assert/strict'
 import { test as nodeTest } from 'node:test'
-import { expect } from 'remix/assert'
 import { brokenRefs } from '../scripts/comment-refs.ts'
 import { load, patch } from '../scripts/dataset.ts'
 import { check } from '../scripts/rules.ts'
@@ -8,6 +8,35 @@ import { renderWorkout } from '../scripts/svg.tsx'
 // node:test의 `test()`는 프로미스를 돌려주고 러너가 그것을 기다린다. 호출부에서 매번
 // 버려주는 대신 한 번만 감싼다.
 const test = (name: string, fn: () => void | Promise<void>) => void nodeTest(name, fn)
+
+/**
+ * `remix/assert`가 나가면서(ADR 0010) 이 파일이 쓰던 네 가지 단언만 node:assert 위에 다시
+ * 얹는다. 어설션 라이브러리를 새로 들이지 않는 이유는, 검사할 것이 규칙 id 목록과 문자열
+ * 하나뿐이라 그 이상이 필요한 적이 없었기 때문이다.
+ */
+const includes = (actual: unknown, expected: unknown): boolean =>
+  typeof actual === 'string'
+    ? actual.includes(String(expected))
+    : Array.isArray(actual) && actual.includes(expected)
+
+function expect<T>(actual: T) {
+  return {
+    toEqual: (expected: unknown) => assert.deepStrictEqual(actual, expected),
+    toBe: (expected: unknown) => assert.strictEqual(actual, expected),
+    toContain: (expected: unknown) =>
+      assert.ok(
+        includes(actual, expected),
+        `${JSON.stringify(actual)}에 ${String(expected)}가 없다`,
+      ),
+    not: {
+      toContain: (expected: unknown) =>
+        assert.ok(
+          !includes(actual, expected),
+          `${JSON.stringify(actual)}에 ${String(expected)}가 있다`,
+        ),
+    },
+  }
+}
 
 const data = load(process.cwd())
 const byId = Object.fromEntries(data.workouts.map((w) => [w.id, w]))
@@ -21,8 +50,8 @@ test('the dataset passes every rule', () => {
   expect(check(data)).toEqual([])
 })
 
-test('every workout renders to a schematic svg', async () => {
-  for (const w of data.workouts) expect(await renderWorkout(w, byId)).toContain('<svg')
+test('every workout renders to a schematic svg', () => {
+  for (const w of data.workouts) expect(renderWorkout(w, byId)).toContain('<svg')
 })
 
 // Sixteen comments named files that had been renamed out from under them, and

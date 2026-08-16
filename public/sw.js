@@ -2,9 +2,9 @@
  * Offline for the dictionary.
  *
  * A reference work you cannot consult without a network is only half a reference
- * work. The whole corpus already ships inside the JS bundle (ADR 0001: that is the
- * feature, not the cost), so caching the shell and the hashed assets is enough to
- * make every entry readable offline.
+ * work. Caching the shell and the hashed assets is enough to make every entry a
+ * reader has already opened readable offline; an entry they have not opened needs
+ * its prerendered document, which is why navigations are cached as they happen.
  *
  * No build-time precache manifest: asset filenames are content-hashed, so the
  * worker learns them at runtime instead. Old caches are dropped on activate, and

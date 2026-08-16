@@ -1,9 +1,10 @@
-/** @jsxImportSource remix/ui */
 /**
  * 공유 프리미티브. 상세 뷰마다 반복되는 형태들이다 — 대문자 h3와 선택적 부제를 가진
  * `<section className="block">`이 열두 번쯤 나온다.
  */
-import type { Handle, RemixNode } from 'remix/ui'
+import { Link } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
+
 import {
   byAnchor,
   CONSTRUCT_LABEL,
@@ -11,67 +12,71 @@ import {
   ANCHOR_CONSTRUCTS,
   byAdaptation,
 } from '../data/index.ts'
-import { routes } from '../routes.ts'
-import { url } from './href.ts'
 
 export interface BlockProps {
-  title: RemixNode
-  sub?: RemixNode
+  title: ReactNode
+  sub?: ReactNode
   className?: string
-  children?: RemixNode
+  children?: ReactNode
 }
 
-export function Block(handle: Handle<BlockProps>) {
-  return () => {
-    const { title, sub, className: cls, children } = handle.props
-    return (
-      <section className={cls ? `block ${cls}` : 'block'}>
-        <h3>{title}</h3>
-        {sub ? <p className="sub">{sub}</p> : null}
-        {children}
-      </section>
-    )
-  }
+export function Block({ title, sub, className, children }: BlockProps) {
+  return (
+    <section className={className ? `block ${className}` : 'block'}>
+      <h3>{title}</h3>
+      {sub ? <p className="sub">{sub}</p> : null}
+      {children}
+    </section>
+  )
 }
 
-export function Chip(handle: Handle<{ title?: string; className?: string; children?: RemixNode }>) {
-  return () => {
-    const { title, className: cls, children } = handle.props
-    return (
-      <span className={cls ? `chip ${cls}` : 'chip'} title={title}>
-        {children}
-      </span>
-    )
-  }
+export function Chip({
+  title,
+  className,
+  children,
+}: {
+  title?: string
+  className?: string
+  children?: ReactNode
+}) {
+  return (
+    <span className={className ? `chip ${className}` : 'chip'} title={title}>
+      {children}
+    </span>
+  )
 }
 
 /**
- * 내부 링크.
+ * 엔트리 링크 셋.
  *
- * 평범한 `<a href>`다 — Remix 3에서 문서 내비게이션은 실제 내비게이션이고, 프리렌더된
- * 파일 하나하나가 진짜 문서라서 클릭이 그것을 그대로 연다. ADR 0004에서 이 어댑터가
- * 존재해야 했던 이유(라우터가 앵커를 가로채지 않는다)는 사라졌고, 남은 이유는 배포
- * base 하나뿐이다 — 그래서 href 계산은 app/ui/href.ts가 한다.
+ * **내부 링크는 전부 이것들이나 `<Link>`를 통과해야 한다. 날것의 `<a href>`를 쓰면 안 된다.**
+ * ADR 0004가 기록한 함정이 라우터와 함께 돌아왔다: TanStack Router는 평범한 앵커를
+ * 가로채지 않으므로, 날것의 `<a>`는 모든 기능 검사를 통과하면서 내비게이션마다 조용히
+ * 전체 리로드를 한다 — 오류 하나 없이, "쓰기 위한 앱" 절반만 사라진 채로.
+ *
+ * 배포 base(`/running-training-dataset/`)도 여기서 붙는다. 라우터의 `basepath`가
+ * vite.config.ts에서 한 번 설정되고 `<Link>`가 그것을 단다 — 예전처럼 링크마다 손으로
+ * 접두사를 붙이지 않는다.
+ *
+ * 얇은 감싸개인 이유는 파라미터 이름 때문이다. 이렇게 하면 호출부가
+ * `to`/`params` 쌍 대신 `id` 하나를 넘기면서도 타입 검사를 그대로 받는다.
  */
-export function EntryLink(
-  handle: Handle<{ to: string; className?: string; title?: string; children?: RemixNode }>,
-) {
-  return () => {
-    const { to, className, title, children } = handle.props
-    return (
-      <a href={url(to)} className={className} title={title}>
-        {children}
-      </a>
-    )
-  }
+export interface EntryLinkProps {
+  className?: string
+  title?: string
+  children?: ReactNode
 }
 
-export function WChip(handle: Handle<{ to: string; children?: RemixNode }>) {
-  return () => (
-    <EntryLink className="wchip" to={handle.props.to}>
-      {handle.props.children}
-    </EntryLink>
-  )
+export function SystemLink({ id, ...rest }: EntryLinkProps & { id: string }) {
+  return <Link to="/system/$id" params={{ id }} {...rest} />
+}
+
+export function WorkoutLink({ id, ...rest }: EntryLinkProps & { id: string }) {
+  return <Link to="/workout/$id" params={{ id }} {...rest} />
+}
+
+export function AnchorLink({ model, ...rest }: EntryLinkProps & { model: string }) {
+  return <Link to="/anchor/$model" params={{ model }} {...rest} />
 }
 
 /**
@@ -102,27 +107,22 @@ const DOSE_TIP: Record<string, string> = {
     '용량 질문이 성립하지 않는다. 구간이 예시일 뿐이라 "얼마나"에 가리킬 대상이 없다. 연구가 더 쌓여도 이 칸은 채워지지 않으며, 정책 단위 시험은 여전히 가능하다.',
 }
 
-export function TierBadge(handle: Handle<{ tier?: string; dose?: string }>) {
-  return () => {
-    const { tier, dose } = handle.props
-    if (!tier) return null
-    const tip = dose
-      ? `evidence tier: ${tier} · ${DOSE_TIP[dose] ?? dose}`
-      : `evidence tier: ${tier}`
-    return (
-      <span
-        className={`tier tier-${tier}${dose === 'unaskable' ? ' tier-unaskable' : ''}`}
-        title={tip}
-      >
-        {TIER_LABEL[tier] || tier}
-        {dose === 'unaskable' && (
-          <span className="dose-mark" aria-label="용량 질문 성립 불가">
-            ∅
-          </span>
-        )}
-      </span>
-    )
-  }
+export function TierBadge({ tier, dose }: { tier?: string; dose?: string }) {
+  if (!tier) return null
+  const tip = dose ? `evidence tier: ${tier} · ${DOSE_TIP[dose] ?? dose}` : `evidence tier: ${tier}`
+  return (
+    <span
+      className={`tier tier-${tier}${dose === 'unaskable' ? ' tier-unaskable' : ''}`}
+      title={tip}
+    >
+      {TIER_LABEL[tier] || tier}
+      {dose === 'unaskable' && (
+        <span className="dose-mark" aria-label="용량 질문 성립 불가">
+          ∅
+        </span>
+      )}
+    </span>
+  )
 }
 
 /**
@@ -155,20 +155,17 @@ const PROVENANCE: Record<string, { mark: string; label: string; tip: string }> =
   },
 }
 
-export function ProvenanceBadge(handle: Handle<{ provenance?: string }>) {
-  return () => {
-    const { provenance } = handle.props
-    const p = provenance ? PROVENANCE[provenance] : undefined
-    if (!p) return null
-    return (
-      <span className={`prov prov-${provenance}`} title={p.tip}>
-        <span className="prov-mark" aria-hidden="true">
-          {p.mark}
-        </span>
-        {p.label}
+export function ProvenanceBadge({ provenance }: { provenance?: string }) {
+  const p = provenance ? PROVENANCE[provenance] : undefined
+  if (!p) return null
+  return (
+    <span className={`prov prov-${provenance}`} title={p.tip}>
+      <span className="prov-mark" aria-hidden="true">
+        {p.mark}
       </span>
-    )
-  }
+      {p.label}
+    </span>
+  )
 }
 
 const UNRECORDED_NOTE =
@@ -183,28 +180,25 @@ const UNCITABLE_NOTE =
  * 독자는 빠진 주장이 아니라 아무 주장도 없는 것으로 봤다. 이제 빈칸은 어떤 종류의 빈칸인지
  * 말해야 한다.
  */
-export function SourceBlock(handle: Handle<{ source?: string[]; provenance?: string }>) {
-  return () => {
-    const { source, provenance } = handle.props
-    return (
-      <Block
-        title="출처 (서술)"
-        sub="이 항목이 무엇을 처방하는지의 기록이다. 작동한다는 증거가 아니다 — 그건 등급과 인용이 따로 답한다."
-      >
-        {source?.length ? (
-          <ul className="cites">
-            {source.map((c) => (
-              <li key={c}>{c}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className={`note prov-empty prov-empty-${provenance}`}>
-            {provenance === 'uncitable' ? UNCITABLE_NOTE : UNRECORDED_NOTE}
-          </p>
-        )}
-      </Block>
-    )
-  }
+export function SourceBlock({ source, provenance }: { source?: string[]; provenance?: string }) {
+  return (
+    <Block
+      title="출처 (서술)"
+      sub="이 항목이 무엇을 처방하는지의 기록이다. 작동한다는 증거가 아니다 — 그건 등급과 인용이 따로 답한다."
+    >
+      {source?.length ? (
+        <ul className="cites">
+          {source.map((c) => (
+            <li key={c}>{c}</li>
+          ))}
+        </ul>
+      ) : (
+        <p className={`note prov-empty prov-empty-${provenance}`}>
+          {provenance === 'uncitable' ? UNCITABLE_NOTE : UNRECORDED_NOTE}
+        </p>
+      )}
+    </Block>
+  )
 }
 
 /**
@@ -212,44 +206,39 @@ export function SourceBlock(handle: Handle<{ source?: string[]; provenance?: str
  * anchors.json에서 라벨 + 구성개념 + 측정에 필요한 것을 끌어오므로 `lactate_mmol` 같은
  * 슬러그가 그 자리에서 스스로를 설명한다.
  */
-export function AnchorCode(handle: Handle<{ model: string }>) {
-  return () => {
-    const { model } = handle.props
-    const a = byAnchor[model]
-    if (!a) return <code>{model}</code>
-    const tip = [a.label, CONSTRUCT_LABEL[a.construct], a.requires].filter(Boolean).join(' · ')
-    return (
-      <EntryLink className="anchor-code" to={routes.anchor.href({ model })} title={tip}>
-        <code>{model}</code>
-      </EntryLink>
-    )
-  }
+export function AnchorCode({ model }: { model: string }) {
+  const a = byAnchor[model]
+  if (!a) return <code>{model}</code>
+  const tip = [a.label, CONSTRUCT_LABEL[a.construct], a.requires].filter(Boolean).join(' · ')
+  return (
+    <AnchorLink className="anchor-code" model={model} title={tip}>
+      <code>{model}</code>
+    </AnchorLink>
+  )
 }
 
 /**
  * 호버하면 자기 차원을 설명하는 실행 조건 칩. 짧은 "9-13x/wk"는 무엇인지를 말하고,
  * 툴팁은 그것이 무슨 뜻인지를 말한다.
  */
-export function InfoChip(handle: Handle<{ tip: string; children?: RemixNode }>) {
-  return () => (
-    <span className="chip chip-info" title={handle.props.tip}>
-      {handle.props.children}
+export function InfoChip({ tip, children }: { tip: string; children?: ReactNode }) {
+  return (
+    <span className="chip chip-info" title={tip}>
+      {children}
     </span>
   )
 }
 
-export function CiteList(handle: Handle<{ evidence?: { cite?: string[] } }>) {
-  return () => {
-    const cites = handle.props.evidence?.cite
-    if (!cites?.length) return null
-    return (
-      <ul className="cites">
-        {cites.map((c) => (
-          <li key={c}>{c}</li>
-        ))}
-      </ul>
-    )
-  }
+export function CiteList({ evidence }: { evidence?: { cite?: string[] } }) {
+  const cites = evidence?.cite
+  if (!cites?.length) return null
+  return (
+    <ul className="cites">
+      {cites.map((c) => (
+        <li key={c}>{c}</li>
+      ))}
+    </ul>
+  )
 }
 
 /**
@@ -257,54 +246,55 @@ export function CiteList(handle: Handle<{ evidence?: { cite?: string[] } }>) {
  * 정직한 바닥. RPE 쪽을 가리키면서 무엇을 잃는지 명시한다. 숫자로 변환하는 일은 결코
  * 없다. 앵커는 깔끔하게 환산되지 않기 때문이다.
  */
-export function MeasurementBlock(
-  handle: Handle<{ models: string[]; fallbackFor?: string | null }>,
-) {
-  return () => {
-    const { models, fallbackFor = null } = handle.props
-    const uniq = [...new Set(models.filter((m) => byAnchor[m]))]
-    const groups = ANCHOR_CONSTRUCTS.map((c) => ({
-      c,
-      items: uniq.filter((m) => byAnchor[m].construct === c.id),
-    })).filter((g) => g.items.length)
-    const fa = fallbackFor ? byAnchor[fallbackFor] : undefined
+export function MeasurementBlock({
+  models,
+  fallbackFor = null,
+}: {
+  models: string[]
+  fallbackFor?: string | null
+}) {
+  const uniq = [...new Set(models.filter((m) => byAnchor[m]))]
+  const groups = ANCHOR_CONSTRUCTS.map((c) => ({
+    c,
+    items: uniq.filter((m) => byAnchor[m].construct === c.id),
+  })).filter((g) => g.items.length)
+  const fa = fallbackFor ? byAnchor[fallbackFor] : undefined
 
-    return (
-      <Block
-        title="측정 요건"
-        sub="앵커는 무엇을 읽는지(구성개념: 지각·페이스·심박·대사)로 묶인다. 같은 걸 읽어도 서로 환산되지 않고, 장비가 없으면 결국 RPE 하나로 내려온다. 장비 없이 누구나 쓸 수 있는 유일한 기준이기 때문이다 — 환산이 아니라 하강이다."
-      >
-        <div className="measure-groups">
-          {groups.map(({ c, items }) => (
-            <div className="measure-group" key={c.id}>
-              <span className="measure-construct" title={c.note}>
-                {c.label}
-              </span>
-              <ul className="measure">
-                {items.map((m) => {
-                  const a = byAnchor[m]
-                  return (
-                    <li key={m}>
-                      <code>{m}</code>
-                      <span className="req">{a.requires}</span>
-                      {a.equipment_free ? <span className="floor-badge">장비 불필요</span> : null}
-                      {a.note ? <span className="measure-note">{a.note}</span> : null}
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          ))}
-        </div>
-        {fa && !fa.equipment_free ? (
-          <p className="note fallback-note">
-            {'없으면 → '}
-            {fa.fallback}
-          </p>
-        ) : null}
-      </Block>
-    )
-  }
+  return (
+    <Block
+      title="측정 요건"
+      sub="앵커는 무엇을 읽는지(구성개념: 지각·페이스·심박·대사)로 묶인다. 같은 걸 읽어도 서로 환산되지 않고, 장비가 없으면 결국 RPE 하나로 내려온다. 장비 없이 누구나 쓸 수 있는 유일한 기준이기 때문이다 — 환산이 아니라 하강이다."
+    >
+      <div className="measure-groups">
+        {groups.map(({ c, items }) => (
+          <div className="measure-group" key={c.id}>
+            <span className="measure-construct" title={c.note}>
+              {c.label}
+            </span>
+            <ul className="measure">
+              {items.map((m) => {
+                const a = byAnchor[m]
+                return (
+                  <li key={m}>
+                    <code>{m}</code>
+                    <span className="req">{a.requires}</span>
+                    {a.equipment_free ? <span className="floor-badge">장비 불필요</span> : null}
+                    {a.note ? <span className="measure-note">{a.note}</span> : null}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))}
+      </div>
+      {fa && !fa.equipment_free ? (
+        <p className="note fallback-note">
+          {'없으면 → '}
+          {fa.fallback}
+        </p>
+      ) : null}
+    </Block>
+  )
 }
 
 /**
@@ -312,36 +302,32 @@ export function MeasurementBlock(
  * 범주로 묶고 정의를 호버에 붙인다. 서술적이다 — 워크아웃이 무엇을 표적으로 삼는지를
  * 이름 붙일 뿐, 무엇을 만들어내는지를 말하지 않는다.
  */
-export function AdaptationsBlock(handle: Handle<{ ids: string[] }>) {
-  return () => {
-    const groups = ADAPT_CATEGORIES.map((cat) => ({
-      cat,
-      items: handle.props.ids
-        .map((id) => byAdaptation[id])
-        .filter((a) => a && a.category === cat.id),
-    })).filter((g) => g.items.length)
-    if (!groups.length) return null
+export function AdaptationsBlock({ ids }: { ids: string[] }) {
+  const groups = ADAPT_CATEGORIES.map((cat) => ({
+    cat,
+    items: ids.map((id) => byAdaptation[id]).filter((a) => a && a.category === cat.id),
+  })).filter((g) => g.items.length)
+  if (!groups.length) return null
 
-    return (
-      <Block
-        title="표적 적응"
-        sub="이 워크아웃이 노린다고 주장하는 생리적 적응 — 결과가 아니라 표적이다. 정의는 마우스를 올리면 나온다."
-      >
-        <div className="adapt-groups">
-          {groups.map(({ cat, items }) => (
-            <div className="adapt-group" key={cat.id}>
-              <span className="adapt-cat">{cat.label}</span>
-              <div className="adapt-chips">
-                {items.map((a) => (
-                  <span className="adapt" title={a.definition} key={a.id}>
-                    {a.label}
-                  </span>
-                ))}
-              </div>
+  return (
+    <Block
+      title="표적 적응"
+      sub="이 워크아웃이 노린다고 주장하는 생리적 적응 — 결과가 아니라 표적이다. 정의는 마우스를 올리면 나온다."
+    >
+      <div className="adapt-groups">
+        {groups.map(({ cat, items }) => (
+          <div className="adapt-group" key={cat.id}>
+            <span className="adapt-cat">{cat.label}</span>
+            <div className="adapt-chips">
+              {items.map((a) => (
+                <span className="adapt" title={a.definition} key={a.id}>
+                  {a.label}
+                </span>
+              ))}
             </div>
-          ))}
-        </div>
-      </Block>
-    )
-  }
+          </div>
+        ))}
+      </div>
+    </Block>
+  )
 }

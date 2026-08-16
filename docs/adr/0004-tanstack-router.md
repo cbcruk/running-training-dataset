@@ -1,6 +1,7 @@
 # ADR 0004 — Settle the browse layer on TanStack Router
 
-**Status:** superseded by [ADR 0009](0009-remix-3.md) · 2026-08-06
+**Status:** superseded by [ADR 0009](0009-remix-3.md), and its "Router, not Start"
+call reversed by [ADR 0010](0010-tanstack-start.md) · 2026-08-06
 **Supersedes the routing parts of:** [ADR 0001](0001-dictionary-shape.md) (which
 rejected TanStack) and [ADR 0002](0002-component-model.md)
 

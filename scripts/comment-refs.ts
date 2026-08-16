@@ -21,16 +21,26 @@ import { resolve, dirname, join, basename } from 'node:path'
  * 부를 수밖에 없다. 그 문장 자체가 원본이 사라졌다는 이야기다.
  * `index.html` — 같은 경우. 문서 셸이 무엇을 대체했는지 말하는 주석이고, Remix 3로
  * 옮기면서 그 파일은 사라졌다(ADR 0009).
- * `404.html` — 프리렌더러가 dist/에 쓰므로 빌드 후에만 존재한다.
+ * `404.html` — 빌드 후에만 존재한다. 프리렌더러가 SPA 셸을 dist/client/에 쓴다
+ * (vite.config.ts의 `spa`).
+ * `search-index.json` — 같은 경우. scripts/search-index.ts가 public/에 굽고 커밋하지
+ * 않으므로, 갓 클론한 저장소에는 없다. 주석이 부르는 것은 대개 파일이 아니라 브라우저가
+ * 받는 URL(`/search-index.json`)이기도 하다.
  */
-const ALLOWED = new Set(['views.jsx', 'index.html', '404.html'])
+const ALLOWED = new Set(['views.jsx', 'index.html', '404.html', 'search-index.json'])
 
 const SKIP = new Set(['node_modules', 'dist', 'out', '.git', '.ssr', '.claude', 'types'])
 const SCAN = /\.(ts|tsx|js|jsx|css)$/
 const NAMED = /\.(ts|tsx|js|jsx|mjs|cjs|json|css|html|md)$/
 
-/** 경로처럼 생긴 토큰: 짧은 소문자 확장자를 가진 이름, 공백 없음. */
-const TOKEN = /(?:\.{0,2}\/)?[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*\.[a-z]{2,4}\b/g
+/**
+ * 경로처럼 생긴 토큰: 짧은 소문자 확장자를 가진 이름, 공백 없음.
+ *
+ * `$`가 문자 집합에 있는 이유는 파일 기반 라우트다. `app/routes/system.$id.tsx` 같은
+ * 이름에서 `$`가 빠지면 토큰이 파라미터 이름 중간에서 시작하고, 실재하는 파일을 부르는
+ * 주석이 깨진 참조로 보고된다.
+ */
+const TOKEN = /(?:\.{0,2}\/)?[A-Za-z0-9_.$-]+(?:\/[A-Za-z0-9_.$-]+)*\.[a-z]{2,4}\b/g
 
 export interface BrokenRef {
   file: string

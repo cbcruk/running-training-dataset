@@ -3,3 +3,9 @@ dist
 out
 *.log
 .DS_Store
+
+# TanStack Start의 빌드 임시 디렉터리.
+.tanstack
+
+# 생성물. scripts/search-index.ts가 dev/build 앞에서 굽는다.
+public/search-index.json
