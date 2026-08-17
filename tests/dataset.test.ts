@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { test as nodeTest } from 'node:test'
 import { brokenRefs } from '../scripts/comment-refs.ts'
 import { load, patch } from '../scripts/dataset.ts'
+import { nameCollisions, searchIndex } from '../app/data/index.ts'
 import { check } from '../scripts/rules.ts'
 import { renderWorkout } from '../scripts/svg.tsx'
 
@@ -213,4 +214,40 @@ test('one reference written two ways is caught', () => {
     w.claim.evidence.cite = ['Billat LV (2001). Interval training. Sports Med 31(1).']
   })
   expect(rules(broken)).toContain('one-reference-one-string')
+})
+
+// 검색의 충돌 배너는 "이 통칭이 서로 다른 워크아웃 N개를 가리킨다"는 헤드라인이고, 조건이
+// "충돌 2개 이상"뿐이던 판본은 `t` 한 글자로 워크아웃 23개를 가리킨다고 주장하면서 결과를
+// 접힘 아래로 밀어냈다. 조건을 데이터 계층으로 옮긴 이유가 이 두 검사다 - 상수가 코퍼스에서
+// 유도됐으므로, 코퍼스가 자라면 둘 중 하나가 먼저 깨져서 알려준다.
+const index = searchIndex()
+const terms = [...new Set(data.usage.flatMap((u) => [u.calls_it, ...(u.also_known_as ?? [])]))]
+
+test('every name that really collides still gets its headline', () => {
+  // 부분 문자열로 워크아웃 2개 이상을 가리키는 통칭이 "진짜 충돌"이고, 배너가 존재하는 이유다.
+  const suppressed = terms.filter((t) => {
+    const q = t.toLowerCase()
+    const reach = new Set(
+      data.usage
+        .filter(
+          (u) =>
+            u.calls_it.toLowerCase().includes(q) ||
+            (u.also_known_as ?? []).some((a: string) => a.toLowerCase().includes(q)),
+        )
+        .map((u) => u.workout),
+    )
+    return reach.size > 1 && nameCollisions(index, t).length === 0
+  })
+  expect(suppressed).toEqual([])
+})
+
+test('one or two characters is not a name, so it gets no headline', () => {
+  const letters = 'abcdefghijklmnopqrstuvwxyz'.split('')
+  const shorts = [...letters, ...letters.flatMap((a) => letters.map((b) => a + b))]
+  expect(shorts.filter((q) => nameCollisions(index, q).length > 0)).toEqual([])
+})
+
+// README가 검색의 예로 드는 바로 그 질의. 이것이 조용해지면 문서가 거짓이 된다.
+test('"tempo" splits into the two workouts the README promises', () => {
+  expect(nameCollisions(index, 'tempo').length).toBe(2)
 })

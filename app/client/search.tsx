@@ -18,7 +18,7 @@
  */
 import { useEffect, useMemo, useState } from 'react'
 
-import { searchIndex, type SearchEntry } from '../data/index.ts'
+import { nameCollisions, searchIndex, type SearchEntry } from '../data/index.ts'
 import { AnchorLink, SystemLink, WorkoutLink } from '../ui/primitives.tsx'
 
 /**
@@ -104,17 +104,25 @@ export function SearchPanel({ placeholder }: { placeholder: string }) {
   const q = query.toLowerCase()
   const hits = index && q ? index.entries.filter((e) => e.haystack.some((h) => h.includes(q))) : []
 
-  // 통칭 하나가 둘 이상의 워크아웃으로 풀리는 것이, 이 데이터셋이 보이게 만들려고
-  // 존재하는 충돌이다. 그래서 결과의 헤드라인이 된다.
-  const termHits =
-    index && q
-      ? index.usage.filter(
-          (u) =>
-            u.calls_it.toLowerCase().includes(q) || u.aka.some((a) => a.toLowerCase().includes(q)),
-        )
-      : []
-  const collisions = [...new Set(termHits.map((u) => u.workout))]
+  /**
+   * 통칭 하나가 둘 이상의 워크아웃으로 풀리는 것이, 이 데이터셋이 보이게 만들려고 존재하는
+   * 충돌이다. 그래서 결과의 헤드라인이 된다. 무엇이 헤드라인 자격인지는 데이터 계층이
+   * 정하고(`nameCollisions`), 그래서 검사가 가능하다 — 여기서는 그리기만 한다.
+   */
+  const collisions = index ? nameCollisions(index, q) : []
+  const showCollisions = collisions.length > 0
   const byId = new Map(index?.entries.map((e) => [`${e.kind}:${e.id}`, e]))
+  const systemsFor = (workout: string) =>
+    (index?.usage ?? [])
+      .filter(
+        (u) =>
+          u.workout === workout &&
+          (u.calls_it.toLowerCase().includes(q) || u.aka.some((a) => a.toLowerCase().includes(q))),
+      )
+      // `system`이 null인 행은 어느 훈련법에도 속하지 않는 통칭이다. 상세 뷰의 충돌 표와
+      // 같은 낱말을 쓴다 — 예전에는 `—`로 나와서 데이터가 빈 것처럼 읽혔다.
+      .map((u) => u.system ?? '훈련법 밖')
+      .join(', ')
 
   const groups = (['system', 'workout', 'anchor'] as const)
     .map((kind) => ({ kind, items: hits.filter((h) => h.kind === kind) }))
@@ -141,7 +149,7 @@ export function SearchPanel({ placeholder }: { placeholder: string }) {
 
       {query ? (
         <div className="search-results">
-          {collisions.length > 1 ? (
+          {showCollisions ? (
             <div className="collision-banner">
               <b>{`“${query}”`}</b>{' '}
               {`는 서로 다른 워크아웃 ${collisions.length}개를 가리킨다 — 이름은 필드가 아니라 조인이다.`}
@@ -149,12 +157,7 @@ export function SearchPanel({ placeholder }: { placeholder: string }) {
                 {collisions.map((id) => (
                   <WorkoutLink className="collision-item" id={id} key={id}>
                     <b>{byId.get(`workout:${id}`)?.title ?? id}</b>
-                    <span>
-                      {termHits
-                        .filter((u) => u.workout === id)
-                        .map((u) => u.system ?? '—')
-                        .join(', ')}
-                    </span>
+                    <span>{systemsFor(id)}</span>
                   </WorkoutLink>
                 ))}
               </div>
@@ -172,7 +175,10 @@ export function SearchPanel({ placeholder }: { placeholder: string }) {
             </div>
           ))}
 
-          {!collisions.length && !groups.length ? (
+          {/* 그린 것이 하나도 없으면 그렇게 말해야 한다. 예전 조건은 `collisions.length`를
+              봤는데, 충돌이 1개면 배너는 뜨지 않으면서 이 메시지도 막혀서 화면이 통째로 비었다
+              — `Easy run`처럼 실제 통칭 91개가 그 상태였다. */}
+          {!showCollisions && !groups.length ? (
             <p className="empty">{`결과 없음: “${query}”`}</p>
           ) : null}
         </div>

@@ -296,3 +296,37 @@ export function searchIndex(): SearchIndex {
     })),
   }
 }
+
+/**
+ * 질의가 헤드라인으로 삼을 만한 이름 충돌인가. 그렇다면 그 통칭이 가리키는 워크아웃 id들,
+ * 아니면 빈 배열.
+ *
+ * 이 판단이 마크업이 아니라 여기 있는 이유는 검사 가능해야 하기 때문이다. 아래 두 상수는
+ * 코퍼스에서 유도됐고, 코퍼스가 자라면 틀릴 수 있다 — 그것을 지키는 것이
+ * tests/dataset.test.ts의 두 검사다.
+ *
+ * 배너는 **이름 하나에 대한 헤드라인**이다. "이 통칭이 서로 다른 워크아웃 N개를 가리킨다"가
+ * 이 데이터셋이 보이게 만들려고 존재하는 사실이니까. 조건이 "충돌 2개 이상"뿐이던 판본은
+ * `t` 한 글자가 워크아웃 23개를 가리킨다고 주장했고, 배너가 화면을 다 먹어서 정작 결과가
+ * 접힘 아래로 밀렸다.
+ *
+ * - `MIN_QUERY`: 이름은 최소한 낱말이다. 1~2글자로는 아직 이름을 말한 것이 아니다. 이 바닥이
+ *   없으면 두 글자 질의 71개가 진짜 충돌과 똑같은 2~3개 범위로 배너를 띄운다.
+ * - `MAX`: 코퍼스의 큰 몫을 가리키는 것은 이름이 아니라 넓은 매치다. 지금 진짜 충돌은
+ *   워크아웃 2~3개를 가리키므로, 4는 하나만큼의 여유다 — 통칭 하나가 네 번째 워크아웃에
+ *   붙는 날 배너가 조용히 사라지지 않도록.
+ *
+ * 조건을 못 넘겨도 잃는 정보는 없다. 매치된 엔트리는 결과 그룹에 그대로 있고, 사라지는 것은
+ * 헤드라인뿐이다.
+ */
+export const COLLISION = { MIN_QUERY: 3, MAX: 4 }
+
+export function nameCollisions(index: SearchIndex, query: string): string[] {
+  const q = query.trim().toLowerCase()
+  if (q.length < COLLISION.MIN_QUERY) return []
+  const hits = index.usage.filter(
+    (u) => u.calls_it.toLowerCase().includes(q) || u.aka.some((a) => a.toLowerCase().includes(q)),
+  )
+  const workouts = [...new Set(hits.map((u) => u.workout))]
+  return workouts.length > 1 && workouts.length <= COLLISION.MAX ? workouts : []
+}
