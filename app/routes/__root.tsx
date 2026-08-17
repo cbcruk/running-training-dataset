@@ -15,7 +15,7 @@ import {
   useMatches,
   useRouterState,
 } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 
 import { RecentStrip } from '../client/recent.tsx'
 import { SearchPanel } from '../client/search.tsx'
@@ -93,10 +93,31 @@ function RootLayout() {
   const view = leaf?.staticData.view
   const entry = (leaf?.loaderData as EntryLoaderData | undefined)?.entry
 
+  /**
+   * 활성 탭은 마운트 뒤에 붙는다.
+   *
+   * 셸은 `/404`에서 한 번 렌더돼 모든 URL에 서빙되므로(ADR 0011) 그 마크업에는 어떤 탭도
+   * 활성이 아니다. 그리고 React는 하이드레이션에서 이런 속성 불일치를 조용히 넘기고 서버가
+   * 준 것을 유지한다 — 그래서 `/anchor/rpe_10`으로 직접 들어오면 앵커 탭이 끝까지 죽어
+   * 있었다. 클라이언트 내비게이션으로 들어올 때만 살아 있어서 눈에 늦게 띄었다.
+   *
+   * 마운트 뒤에 켜면 서버가 준 것과 첫 클라이언트 렌더가 같아지고(둘 다 비활성), 이어지는
+   * 렌더가 표시를 붙인다. ADR 0011이 "셸에 라우트 내용이 들어가면 안 된다"고 적은 규칙은
+   * **URL에 의존하는 속성에도** 그대로 적용된다 — 그것이 이 커밋이 배운 것이다.
+   */
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const activeView = mounted ? view : undefined
+
   return (
     <>
       <header className="topbar">
-        <Link className="brand" to="/">
+        {/*
+          `activeProps={{}}`로 라우터의 기본 활성 표시를 끈다. 이유가 둘이다. 라우터는 정확히
+          일치하는 경로만 활성으로 보므로 `/anchor/rpe_10`에서 앵커 탭을 켜지 못하고 — 그것이
+          `view`가 존재하는 이유다 — 켜는 경우에는 `class="active active"`처럼 겹쳤다.
+        */}
+        <Link className="brand" to="/" activeProps={{}}>
           <span className="brand-mark">▮▮▮</span>
           <span className="brand-name">Running Training Dataset</span>
         </Link>
@@ -106,7 +127,9 @@ function RootLayout() {
               key={n.view}
               to={n.to}
               data-nav={n.view}
-              className={n.view === view ? 'active' : undefined}
+              activeProps={{}}
+              className={n.view === activeView ? 'active' : undefined}
+              aria-current={n.view === activeView ? 'page' : undefined}
             >
               {n.label}
             </Link>
