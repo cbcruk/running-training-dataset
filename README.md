@@ -176,21 +176,21 @@ scripts/
   comment-refs.ts    # 주석이 이름을 부르는 파일과, 그게 아직 있는지
   svg.tsx            # 차트 컴포넌트 -> SVG 문자열 (out/*.svg가 쓰는 한 줄)
   render.ts          # 워크아웃마다 SVG를 out/에 쓴다
-  prerender.ts       # 라우터를 통해 엔트리당 실제 HTML 파일 하나를 dist/에 쓴다
-server.ts            # 개발·미리보기 서버. 배포는 이걸 쓰지 않는다
+  pages-404.ts       # 셸을 404.html로도 둔다 (GitHub Pages의 SPA 폴백)
+vite.config.ts       # 빌드 설정 + vp check가 읽는 포맷·린트 블록
 public/
   style.css          # tier 배지는 시각적 무게를 갖는다. tradition이 consensus로 읽혀선 안 된다
   sw.js              # 서비스 워커: 오프라인에서도 카탈로그를 볼 수 있게
-app/                 # Remix 3 앱 (ADR 0009)
-  routes.ts          # URL 계약. 모든 내부 링크가 여기서 나온다
-  router.ts          # 미들웨어 스택 + 라우트 맵 -> 컨트롤러
-  assets.ts          # 브라우저 모듈 서버 (요청 시 컴파일, 빌드 시 dist/로 구움)
-  actions/           # 컨트롤러: 행 하나를 찾아 그 행의 메타데이터와 함께 문서를 렌더
-  middleware/        # 요청 스코프 렌더러
+app/                 # TanStack Start 앱, SPA 모드 (ADR 0010, 0011)
+  routes/            # URL 계약. 파일 이름이 곧 경로이고, 각 라우트가 자기 메타를 든다
+  routes/__root.tsx  # 문서 셸: <html>/head/내비/검색/푸터. 빌드가 내놓는 유일한 문서
+  routeTree.gen.ts   # 생성물, 커밋됨, CI 검증. 포맷 검사에서만 빠진다
+  router.tsx         # createRouter. 서버와 브라우저가 같은 이 함수를 부른다
+  client.tsx         # 브라우저 진입점: 하이드레이션 + 키보드 조회 + 서비스 워커
+  client/            # 브라우저에서만 뜻이 있는 컴포넌트: 검색, 최근 본 항목
   data/              # JSON -> 타입 붙은 행, 역인덱스, 페이지 메타, 검색 색인
   data/types/        # 스키마에서 생성 + 손으로 쓴 뷰 계약
-  ui/                # 서버 렌더 컴포넌트 + 배포 base를 붙이는 유일한 어댑터(href.ts)
-  assets/            # 브라우저로 나가는 것 전부: 런타임 부팅, 검색, 최근 본 항목
+  ui/                # 컴포넌트. href.ts는 canonical/og:url의 절대 URL만 만든다
 CONTEXT.md           # 용어집: 이 프로젝트가 쓰는 말과 쓰지 않는 말
 docs/
   TODO.md            # 작업 목록: 검증, 대칭성, 얕은 필드
@@ -203,15 +203,15 @@ docs/
 pnpm install
 pnpm run validate && pnpm run render   # 검사 + SVG 쓰기
 pnpm run dev                           # 브라우즈 UI (훈련법 -> 워크아웃 상세, "tempo run" 충돌 검색)
-pnpm run build                         # dist/에 정적 사이트, 엔트리당 HTML 파일 하나
+pnpm run build                         # dist/client/에 셸 하나 + 그 복사본인 404.html
 pnpm run check && pnpm run test        # 포맷·린트·타입 검사, 그리고 데이터 규칙 테스트
 ```
 
 브라우즈 UI는 JSON을 직접 읽고 도식 차트를 CLI가 쓰는 것과 같은 `app/ui/chart.tsx`로 렌더하므로, 시각물이 데이터에서 벗어날 수 없다.
 
-모든 엔트리는 실제 문서이기도 하다. `scripts/prerender.ts`가 훈련법·워크아웃·앵커마다 HTML 파일 하나씩을 쓴다 — 각자의 `<title>`, description, canonical URL, 그리고 마크업 안에 엔트리의 내용까지 — 개발 서버가 답하는 것과 **같은 응답**을 파일로 받아서. 그래서 `/anchor/rpe_10`에 처음 들어와도 JavaScript 없이 읽히고 서버 재작성 규칙이 필요 없으며, 브라우저 런타임이 그 위에서 즉시·무리로드 조회로 업그레이드한다. 그 분리가 [ADR 0001](docs/adr/0001-dictionary-shape.md)의 주제다.
+배포되는 문서는 셸 하나다. [ADR 0011](docs/adr/0011-spa.md)이 프리렌더를 포기했고, 그래서 `/anchor/rpe_10`으로 직접 들어오면 GitHub Pages가 `404.html`(셸의 복사본)을 주고 라우터가 그 위에서 엔트리를 그린다. 무엇을 포기한 것인지는 그 ADR이 재서 적는다 — 요약하면 속도가 아니라 **딥링크의 HTTP 404 상태와 빈 링크 프리뷰**다. 되돌리는 방법도 거기 있다.
 
-한 번 로드되면 사전처럼 읽힌다: `/`(또는 `s`)로 검색창에 뛰고, `↑`/`↓`로 결과를 훑고, `Enter`로 열고, `Esc`로 지운다. 마지막에 연 여덟 개가 홈에 남는다. 검색은 브라우저에서 돌고, 검색이 읽는 필드만 담은 색인(`/search-index.json`)을 첫 키 입력에서 한 번 받는다. 서비스 워커가 그 색인과 이미 연 문서를 캐시하므로 오프라인에서도 카탈로그가 열린다.
+한 번 로드되면 사전처럼 읽힌다: `/`(또는 `s`)로 검색창에 뛰고, `↑`/`↓`로 결과를 훑고, `Enter`로 열고, `Esc`로 지운다. 마지막에 연 여덟 개가 홈에 남는다. 검색은 브라우저에서 돌고 코퍼스가 번들에 있으므로 네트워크를 타지 않는다 — 한 번도 열지 않은 엔트리도 오프라인에서 검색된다. 서비스 워커가 셸과 에셋을 캐시하므로 오프라인에서도 카탈로그가 열린다.
 
 ## 알려진 미해결 문제
 
@@ -222,7 +222,9 @@ pnpm run check && pnpm run test        # 포맷·린트·타입 검사, 그리�
 [ADR 0007](docs/adr/0007-korean-repo-prose.md)은 저장소 산문을 한국어로 쓰기로 하고 그 경계를 긋는다.
 [ADR 0006](docs/adr/0006-korean-only-dataset.md)은 데이터셋에서 영어를 제거한 이유를 기록한다.
 [ADR 0005](docs/adr/0005-comments-as-agent-context.md)는 파일 상단 주석을 에이전트 대면 컨텍스트로 다루고 검사 가능하게 만든다.
-[ADR 0009](docs/adr/0009-remix-3.md)는 브라우즈 계층을 Remix 3로 옮기고, 그 이동에서 무엇이 지켜졌고 무엇을 치렀는지 적는다 (ADR 0004·0003을, 그리고 ADR 0002의 React 부분을 대체한다).
+[ADR 0011](docs/adr/0011-spa.md)은 프리렌더를 포기하고 SPA로 가면서, 무엇을 포기하는 것인지를 두 상태를 같은 하니스로 다시 재서 적는다 — 비용은 속도가 아니라 딥링크의 HTTP 404와 빈 링크 프리뷰다 (ADR 0010의 프리렌더 결정과 ADR 0001의 "발견" 절반을 대체한다).
+[ADR 0010](docs/adr/0010-tanstack-start.md)은 브라우즈 계층을 TanStack Start로 옮기고, ADR 0004가 실측으로 거절했던 Start를 왜 지금은 받아들이는지 — 그리고 무엇을 치렀는지 적는다 (ADR 0009를 대체한다).
+[ADR 0009](docs/adr/0009-remix-3.md)는 브라우즈 계층을 Remix 3로 옮겼다 (ADR 0004·0003을, 그리고 ADR 0002의 React 부분을 대체했다) — 대체됨.
 [ADR 0004](docs/adr/0004-tanstack-router.md)는 브라우즈 계층을 TanStack Router로 확정하고 툴체인 질문을 닫았다 — 대체됨.
 [ADR 0003](docs/adr/0003-nub-runtime.md)은 스크립트를 nub에서 실행하기로 하고 중간 SSR 빌드를 없앴다 — 대체됨.
 [ADR 0002](docs/adr/0002-component-model.md)는 컴포넌트 모델로의 이동을 기록한다 (React 부분은 대체됨).

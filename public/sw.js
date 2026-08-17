@@ -2,9 +2,10 @@
  * Offline for the dictionary.
  *
  * A reference work you cannot consult without a network is only half a reference
- * work. The whole corpus already ships inside the JS bundle (ADR 0001: that is the
- * feature, not the cost), so caching the shell and the hashed assets is enough to
- * make every entry readable offline.
+ * work. Since ADR 0011 the site is one shell and the whole corpus rides the bundle,
+ * so caching the shell and the hashed assets makes *every* entry readable offline -
+ * including ones nobody has opened. That is the property ADR 0001 wanted and ADR
+ * 0009 had to give up.
  *
  * No build-time precache manifest: asset filenames are content-hashed, so the
  * worker learns them at runtime instead. Old caches are dropped on activate, and

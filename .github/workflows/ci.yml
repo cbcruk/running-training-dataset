@@ -16,9 +16,9 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      # Remix 3 asks for Node >= 24.3. Its own loader (`remix/node-tsx`) runs the
-      # TypeScript in scripts/ and app/ directly, so there is no build step
-      # between the prerenderer and the components it renders.
+      # Vite 8 and TanStack Start ask for a current Node. `vite-node` runs the
+      # TypeScript in scripts/ and app/ directly through the same Vite config the
+      # app builds with, so there is no separate build step for the data scripts.
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -62,33 +62,62 @@ jobs:
             exit 1
           fi
 
+      # Third file under the same contract. The route tree is generated from the
+      # filenames in app/routes/ and committed so a fresh clone type-checks before
+      # anything runs; every Vite command rewrites it, so `validate` above has
+      # already regenerated it by the time this looks.
+      - name: Verify the generated route tree matches app/routes/
+        run: |
+          if [ -n "$(git status --porcelain -- app/routeTree.gen.ts)" ]; then
+            echo "app/routeTree.gen.ts is stale - run any vite command and commit the result"
+            git diff -- app/routeTree.gen.ts
+            exit 1
+          fi
+
       - name: Check (format + lint + types)
         run: pnpm run check
 
       - name: Test
         run: pnpm run test
 
-      - name: Build (prerender every entry into dist/)
+      - name: Build (one shell into dist/client/)
         run: pnpm run build
 
-      # The discovery half of the dictionary (ADR 0001): every entry must exist as
-      # a real file with its own title, or the catalog is invisible to crawlers
-      # again. Assert the count matches the data rather than trusting the build.
-      - name: Verify prerendered entries
+      # The site is an SPA now (ADR 0011), so the build has exactly two documents
+      # and they are the same bytes: index.html, and the 404.html GitHub Pages
+      # serves for every path with no file. Both must be a *shell* - no route
+      # content - because one document hydrates at every URL.
+      #
+      # `grep -a`: the hydration payload TanStack Start writes carries NUL bytes,
+      # which makes grep call the file binary and stay silent about a match it
+      # did find.
+      - name: Verify the shell
         run: |
-          expected=$(node -e "
-            const r = ['/', '/workouts', '/anchors'].length;
-            const n = ['systems','workouts','anchors'].reduce((a,f) =>
-              a + JSON.parse(require('fs').readFileSync('data/'+f+'.json','utf8')).length, 0);
-            console.log(r + n);
-          ")
-          actual=$(find dist -name index.html | wc -l)
-          echo "expected $expected prerendered routes, found $actual"
-          test "$expected" -eq "$actual"
-          test -f dist/404.html
-          test -f dist/search-index.json
-          grep -q '<title>rpe_10' dist/anchor/rpe_10/index.html
-          grep -q 'RPE' dist/anchor/rpe_10/index.html
+          actual=$(find dist/client -name '*.html' | wc -l)
+          echo "expected 2 documents, found $actual"
+          test "$actual" -eq 2
+          cmp dist/client/index.html dist/client/404.html
+          grep -a -q 'class="topbar"' dist/client/index.html
+          # Route content in the shell means it was rendered at one URL and will
+          # fail hydration at every other one - the failure ADR 0010 hit head-on.
+          if grep -a -q 'class="card sys-card"' dist/client/index.html; then
+            echo "dist/client/index.html rendered route content - see vite.config.ts's spa block"
+            exit 1
+          fi
+          # Nothing on disk carries an entry's title any more, so the shell has to
+          # carry the site's - otherwise a link preview of any URL is blank.
+          grep -a -q '<title>Running Training Dataset</title>' dist/client/index.html
+          grep -a -q 'name="description"' dist/client/index.html
           # Every internal link has to carry the deployment base, or the site is
-          # broken everywhere except a root-hosted dev server (app/ui/href.ts).
-          grep -q 'href="/running-training-dataset/workouts"' dist/index.html
+          # broken everywhere except a root-hosted dev server (vite.config.ts's BASE).
+          grep -a -q 'href="/running-training-dataset/workouts"' dist/client/index.html
+
+      # The corpus rides the bundle again (ADR 0011), which is what makes search
+      # work offline for an entry nobody has opened. If it ever stops being in
+      # there, search goes quietly empty rather than failing.
+      - name: Verify the corpus rides the bundle
+        run: |
+          if ! grep -a -q -r "Daniels' Running Formula" dist/client/assets/; then
+            echo "the corpus is not in the client bundle - search cannot work offline"
+            exit 1
+          fi

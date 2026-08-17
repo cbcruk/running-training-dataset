@@ -1,19 +1,18 @@
 /**
  * 데이터 접근과 페이지 메타데이터.
  *
- * 마크업은 app/ui/에, URL 계약은 app/routes.ts에 있다. 여기 있는 것은 둘 다 필요로 하지만
- * 어느 쪽도 소유하지 않는 것들이다. 생성된 스키마 타입으로 단언해 읽은 JSON, 역인덱스,
- * 표시용 어휘, 그리고 엔트리별 <title>/description.
+ * 마크업은 app/ui/에, URL 계약은 app/routes/의 파일 이름에 있다. 여기 있는 것은 둘 다
+ * 필요로 하지만 어느 쪽도 소유하지 않는 것들이다. 생성된 스키마 타입으로 단언해 읽은 JSON,
+ * 역인덱스, 표시용 어휘, 그리고 엔트리별 <title>/description.
  *
  * 인식론은 JSON에 산다. 이 파일은 편의일 뿐이다. 다만 반드시 지켜야 하는 규칙 하나가
  * 있다(README "알려진 미해결 문제"): 근거 등급은 브라우즈 카드에 있어야지 상세 뷰에
  * 묻혀서는 안 된다 — 그래야 훈련법 열 개를 훑어도 `tradition`이 `consensus`처럼 정착된
  * 것으로 보이지 않는다.
  *
- * 예전 판본은 이 전부를 `ViewContext` 하나로 묶어 컴포넌트마다 넘겼다. 그 제약은 뷰가 두
- * 호스트(프리렌더러와 브라우저)에서 같은 원천으로 렌더되어야 한다는 데서 왔다. Remix 3에서
- * 뷰는 서버 전용이고 브라우저는 좁은 클라이언트 엔트리만 받으므로, 넘길 이유가 없어졌다 —
- * 컴포넌트가 이 모듈을 직접 임포트한다.
+ * 컴포넌트가 이 모듈을 직접 임포트한다. 예전 판본은 전부를 `ViewContext` 하나로 묶어
+ * 컴포넌트마다 넘겼는데, 그 제약은 뷰가 두 호스트에서 같은 원천으로 렌더되어야 한다는 데서
+ * 왔다. 지금은 프리렌더러와 브라우저가 같은 라우트 트리를 돌리므로 넘길 이유가 없다.
  */
 import systemsRaw from '../../data/systems.json' with { type: 'json' }
 import workoutsRaw from '../../data/workouts.json' with { type: 'json' }
@@ -197,32 +196,39 @@ export function anchorMeta(a: Anchor): PageMeta {
 
 /**
  * 최근 본 항목 띠가 쓰는 라벨. 그 목록은 읽는 사람마다 다르므로 절대 프리렌더되지 않지만,
- * 라벨은 코퍼스가 있어야 붙일 수 있으므로 서버가 지금 페이지의 것을 건네준다.
+ * 라벨은 코퍼스가 있어야 붙일 수 있으므로 라우트가 지금 페이지의 것을 건네준다.
+ *
+ * `kind`와 `id`가 함께 가는 이유는 링크 때문이다. 띠는 완성된 경로 문자열이 아니라 이
+ * 쌍을 저장하고, 라우터가 그것으로 타입 검사된 `<Link>`를 만든다(app/client/recent.tsx).
  */
 export interface EntryLabel {
-  kind: string
+  kind: 'system' | 'workout' | 'anchor'
+  id: string
   label: string
 }
 
 export function systemLabel(s: System): EntryLabel {
-  return { kind: 'system', label: s.name }
+  return { kind: 'system', id: s.id, label: s.name }
 }
 
 export function workoutLabel(w: Workout): EntryLabel {
-  return { kind: 'workout', label: w.canonical_name }
+  return { kind: 'workout', id: w.id, label: w.canonical_name }
 }
 
 export function anchorLabel(a: Anchor): EntryLabel {
-  return { kind: 'anchor', label: a.model }
+  return { kind: 'anchor', id: a.model, label: a.model }
 }
 
 /**
  * 검색 색인. 검색이 실제로 읽는 필드만 담는다.
  *
- * 예전에는 코퍼스 전체가 브라우저 번들 안에 있었고(ADR 0001은 그게 요점이라고 적었다),
- * 그래서 클라이언트가 아무것도 가지러 가지 않고 검색했다. Remix 3의 에셋 서버는 JSON
- * 임포트를 브라우저 모듈로 컴파일하지 않으므로, 코퍼스는 이 엔드포인트로 나간다 — 첫
- * 키 입력에서 한 번 받고, 서비스 워커가 캐시한다.
+ * 파일도 엔드포인트도 아니다. 검색 컴포넌트가 브라우저에서 이 함수를 부른다
+ * (app/client/search.tsx). ADR 0001이 세운 모양이고, 한 바퀴 돌아 제자리로 왔다: ADR 0009가
+ * `/search-index.json`으로 옮겼던 것은 프리렌더된 문서마다 코퍼스를 싣지 않으려던 것이었고,
+ * ADR 0011이 프리렌더를 포기하면서 그 이유가 사라졌다. 문서는 셸 하나뿐이고 코퍼스는 어차피
+ * 번들을 탄다.
+ *
+ * 그래서 **한 번도 열지 않은 엔트리도 오프라인에서 검색된다.**
  */
 export interface SearchEntry {
   kind: 'system' | 'workout' | 'anchor'
@@ -291,14 +297,36 @@ export function searchIndex(): SearchIndex {
   }
 }
 
-/** 프리렌더러가 내보내는 모든 라우트. 사전 엔트리당 파일 하나. */
-export function allPaths(): string[] {
-  return [
-    '/',
-    '/workouts',
-    '/anchors',
-    ...systems.map((s) => `/system/${s.id}`),
-    ...workouts.map((w) => `/workout/${w.id}`),
-    ...anchors.map((a) => `/anchor/${a.model}`),
-  ]
+/**
+ * 질의가 헤드라인으로 삼을 만한 이름 충돌인가. 그렇다면 그 통칭이 가리키는 워크아웃 id들,
+ * 아니면 빈 배열.
+ *
+ * 이 판단이 마크업이 아니라 여기 있는 이유는 검사 가능해야 하기 때문이다. 아래 두 상수는
+ * 코퍼스에서 유도됐고, 코퍼스가 자라면 틀릴 수 있다 — 그것을 지키는 것이
+ * tests/dataset.test.ts의 두 검사다.
+ *
+ * 배너는 **이름 하나에 대한 헤드라인**이다. "이 통칭이 서로 다른 워크아웃 N개를 가리킨다"가
+ * 이 데이터셋이 보이게 만들려고 존재하는 사실이니까. 조건이 "충돌 2개 이상"뿐이던 판본은
+ * `t` 한 글자가 워크아웃 23개를 가리킨다고 주장했고, 배너가 화면을 다 먹어서 정작 결과가
+ * 접힘 아래로 밀렸다.
+ *
+ * - `MIN_QUERY`: 이름은 최소한 낱말이다. 1~2글자로는 아직 이름을 말한 것이 아니다. 이 바닥이
+ *   없으면 두 글자 질의 71개가 진짜 충돌과 똑같은 2~3개 범위로 배너를 띄운다.
+ * - `MAX`: 코퍼스의 큰 몫을 가리키는 것은 이름이 아니라 넓은 매치다. 지금 진짜 충돌은
+ *   워크아웃 2~3개를 가리키므로, 4는 하나만큼의 여유다 — 통칭 하나가 네 번째 워크아웃에
+ *   붙는 날 배너가 조용히 사라지지 않도록.
+ *
+ * 조건을 못 넘겨도 잃는 정보는 없다. 매치된 엔트리는 결과 그룹에 그대로 있고, 사라지는 것은
+ * 헤드라인뿐이다.
+ */
+export const COLLISION = { MIN_QUERY: 3, MAX: 4 }
+
+export function nameCollisions(index: SearchIndex, query: string): string[] {
+  const q = query.trim().toLowerCase()
+  if (q.length < COLLISION.MIN_QUERY) return []
+  const hits = index.usage.filter(
+    (u) => u.calls_it.toLowerCase().includes(q) || u.aka.some((a) => a.toLowerCase().includes(q)),
+  )
+  const workouts = [...new Set(hits.map((u) => u.workout))]
+  return workouts.length > 1 && workouts.length <= COLLISION.MAX ? workouts : []
 }

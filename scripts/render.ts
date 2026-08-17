@@ -16,6 +16,6 @@ const byId = Object.fromEntries(workouts.map((w) => [w.id, w]))
 
 mkdirSync(resolve(root, 'out'), { recursive: true })
 for (const w of workouts) {
-  writeFileSync(resolve(root, `out/${w.id}.svg`), await renderWorkout(w, byId))
+  writeFileSync(resolve(root, `out/${w.id}.svg`), renderWorkout(w, byId))
   console.log(`out/${w.id}.svg`)
 }

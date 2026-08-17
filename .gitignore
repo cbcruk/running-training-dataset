@@ -3,3 +3,6 @@ dist
 out
 *.log
 .DS_Store
+
+# TanStack Start의 빌드 임시 디렉터리.
+.tanstack

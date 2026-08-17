@@ -19,18 +19,25 @@ import { resolve, dirname, join, basename } from 'node:path'
  *
  * `views.jsx` — 어떤 파일을 그것이 대체한 템플릿 리터럴 원본과 비교하는 주석은 그 원본을
  * 부를 수밖에 없다. 그 문장 자체가 원본이 사라졌다는 이야기다.
- * `index.html` — 같은 경우. 문서 셸이 무엇을 대체했는지 말하는 주석이고, Remix 3로
- * 옮기면서 그 파일은 사라졌다(ADR 0009).
- * `404.html` — 프리렌더러가 dist/에 쓰므로 빌드 후에만 존재한다.
+ * `index.html`·`404.html` — 빌드 후에만 존재한다. 이 사이트가 내놓는 문서 둘이고
+ * (ADR 0011), 둘 다 `dist/client/`에 있어서 갓 클론한 저장소에는 없다.
+ * `search-index.json` — `views.jsx`와 같은 경우다. 검색 코퍼스가 왜 번들로 돌아왔는지
+ * 말하는 주석은 그것이 잠시 살았던 엔드포인트를 부를 수밖에 없다(ADR 0009 -> 0011).
  */
-const ALLOWED = new Set(['views.jsx', 'index.html', '404.html'])
+const ALLOWED = new Set(['views.jsx', 'index.html', '404.html', 'search-index.json'])
 
 const SKIP = new Set(['node_modules', 'dist', 'out', '.git', '.ssr', '.claude', 'types'])
 const SCAN = /\.(ts|tsx|js|jsx|css)$/
 const NAMED = /\.(ts|tsx|js|jsx|mjs|cjs|json|css|html|md)$/
 
-/** 경로처럼 생긴 토큰: 짧은 소문자 확장자를 가진 이름, 공백 없음. */
-const TOKEN = /(?:\.{0,2}\/)?[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*\.[a-z]{2,4}\b/g
+/**
+ * 경로처럼 생긴 토큰: 짧은 소문자 확장자를 가진 이름, 공백 없음.
+ *
+ * `$`가 문자 집합에 있는 이유는 파일 기반 라우트다. `app/routes/system.$id.tsx` 같은
+ * 이름에서 `$`가 빠지면 토큰이 파라미터 이름 중간에서 시작하고, 실재하는 파일을 부르는
+ * 주석이 깨진 참조로 보고된다.
+ */
+const TOKEN = /(?:\.{0,2}\/)?[A-Za-z0-9_.$-]+(?:\/[A-Za-z0-9_.$-]+)*\.[a-z]{2,4}\b/g
 
 export interface BrokenRef {
   file: string

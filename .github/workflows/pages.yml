@@ -26,7 +26,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      # Remix 3 asks for Node >= 24.3.
+      # Vite 8 and TanStack Start ask for a current Node.
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -45,9 +45,11 @@ jobs:
         with:
           enablement: true
 
+      # dist/client only. TanStack Start also writes dist/server/, and this site
+      # never runs it - every route is prerendered to a file (vite.config.ts).
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: dist/client
 
   deploy:
     needs: build

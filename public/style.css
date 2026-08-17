@@ -151,14 +151,16 @@ a {
 }
 
 /* 검색 결과는 검색창이 소유하는 영역에 그려지고, 서버가 렌더한 문서 본문은 그동안 숨는다.
-   결과를 본문 자리로 옮기려면 페이지 전체를 클라이언트 엔트리의 prop으로 직렬화해야 하고,
-   그러면 모든 문서가 자기 내용을 두 번 싣게 된다 - app/assets/search.tsx 참조. */
+   결과를 본문 자리로 옮기려면 페이지 전체를 검색 컴포넌트의 prop으로 직렬화해야 하고,
+   그러면 모든 문서가 자기 내용을 두 번 싣게 된다 - app/client/search.tsx 참조. */
 body.searching #app {
   display: none;
 }
+/* 가로 여백은 `main`·`.searchwrap`·`.foot`와 같은 값이어야 한다. 여기만 `0`이었고, 그래서
+   검색 결과가 뷰포트 끝에서 끝까지 붙어 나오면서 검색창·내비·푸터와 왼쪽 선이 어긋났다. */
 .search-results {
   margin: 0 auto;
-  padding: 1.5rem 0 4rem;
+  padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 4rem;
 }
 
 /* ---- layout ---- */
@@ -824,20 +826,23 @@ tr.collides {
   border-radius: var(--radius);
   margin-bottom: 1.5rem;
 }
+/* 그리드다. flex-wrap일 때는 항목이 내용 길이대로 늘어나서 폭이 1082px과 192px 사이에서
+   들쭉날쭉했고, 바로 아래 결과 카드가 쓰는 격자와 나란히 놓이면 그 자체로 고장처럼 보였다.
+   `.grid`와 같은 방식이고 최소 폭만 작다 — 충돌 항목은 이름과 훈련법 목록뿐이다. */
 .collision-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   gap: 0.6rem;
   margin-top: 0.8rem;
 }
 .collision-item {
   display: flex;
   flex-direction: column;
+  gap: 0.15rem;
   padding: 0.6rem 0.9rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
-  min-width: 12rem;
 }
 .collision-item:hover {
   border-color: var(--accent);

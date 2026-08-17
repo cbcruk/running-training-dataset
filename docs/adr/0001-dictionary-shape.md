@@ -2,8 +2,12 @@
 
 **Status:** accepted · 2026-08-05 — amended by [ADR 0002](0002-component-model.md),
 which adopts a component model for the view layer on an axis this ADR did not weigh
-(how it is to work in the code). Everything below still holds; the framework
-rejection was about problem fit, and Astro/TanStack remain rejected.
+(how it is to work in the code).
+
+**The prerendered half below is no longer true.** [ADR 0011](0011-spa.md) gave it up
+and measured what that costs; the client-side index half is not only intact but more
+so, since the corpus rides the bundle again. Read this document for why the shape was
+chosen, and ADR 0011 for what was traded away.
 **Decides:** whether to keep the dataset in JSON; whether to adopt a web framework
 (Astro, TanStack). Both reduce to one prior judgment — what kind of thing this is —
 recorded here.

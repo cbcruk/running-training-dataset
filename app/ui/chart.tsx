@@ -1,4 +1,3 @@
-/** @jsxImportSource remix/ui */
 /**
  * `structure` -> 도식 SVG.
  *
@@ -7,11 +6,10 @@
  * (scripts/render.ts)와 브라우즈 UI가 둘 다 이 하나를 렌더하고, 시각물은 양쪽에서
  * 데이터의 한 함수로 남는다.
  *
- * 예전 판본은 SVG 문자열을 손으로 조립해 `dangerouslySetInnerHTML`로 넣었다. Remix 3의
- * UI에는 그 탈출구가 없고, 없는 편이 낫다 — 이제 도형이 JSX라서 하나의 정의를 두 호스트가
- * 공유한다. 문자열이 필요한 쪽(SVG 파일)은 scripts/svg.tsx가 이 컴포넌트를 렌더해서 얻는다.
+ * 도형이 JSX인 것은 그 성질을 강제하기 위해서다. 문자열로 조립해 `dangerouslySetInnerHTML`
+ * 로 넣던 예전 판본은 두 벌이 갈라질 수 있었다. 문자열이 필요한 쪽(SVG 파일)은
+ * scripts/svg.tsx가 이 컴포넌트를 `renderToStaticMarkup`으로 렌더해서 얻는다.
  */
-import type { Handle } from 'remix/ui'
 import type { Workout } from '../data/types/index.d.ts'
 import type { Anchor, Quantity, Segment } from '../data/types/workout.d.ts'
 
@@ -81,80 +79,62 @@ export interface WorkoutChartProps {
   byId: ById
 }
 
-export function WorkoutChart(handle: Handle<WorkoutChartProps>) {
-  return () => {
-    const { workout: w, byId } = handle.props
-    const segs = flatten(w.structure.segments, w, byId)
-    const total = segs.reduce((a: number, s: Flat) => a + s.secs, 0)
+export function WorkoutChart({ workout: w, byId }: WorkoutChartProps) {
+  const segs = flatten(w.structure.segments, w, byId)
+  const total = segs.reduce((a: number, s: Flat) => a + s.secs, 0)
 
-    let x = PAD
-    const bars = segs.map((s: Flat, i: number) => {
-      const bw = (s.secs / total) * PW
-      const bh = (s.rpe / 10) * PH
-      const bar = {
-        key: `${i}`,
-        x: x.toFixed(1),
-        y: (H - PAD - bh).toFixed(1),
-        width: Math.max(bw - 0.5, 0.5).toFixed(1),
-        height: bh.toFixed(1),
-        fill: COLOR[s.kind],
-      }
-      x += bw
-      return bar
-    })
+  let x = PAD
+  const bars = segs.map((s: Flat, i: number) => {
+    const bw = (s.secs / total) * PW
+    const bh = (s.rpe / 10) * PH
+    const bar = {
+      key: `${i}`,
+      x: x.toFixed(1),
+      y: (H - PAD - bh).toFixed(1),
+      width: Math.max(bw - 0.5, 0.5).toFixed(1),
+      height: bh.toFixed(1),
+      fill: COLOR[s.kind],
+    }
+    x += bw
+    return bar
+  })
 
-    const grid = [2, 4, 6, 8, 10].map((r: number) => ({
-      r,
-      y: (H - PAD - (r / 10) * PH).toFixed(1),
-    }))
+  const grid = [2, 4, 6, 8, 10].map((r: number) => ({
+    r,
+    y: (H - PAD - (r / 10) * PH).toFixed(1),
+  }))
 
-    return (
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        xmlns="http://www.w3.org/2000/svg"
-        font-family="ui-monospace, monospace"
-      >
-        <style>{'svg{--accent:#c94f2c;--muted:#a09a92;--border:#e4e0d8;--fg:#3a3630}'}</style>
-        <text x={PAD} y="18" font-size="11" fill="var(--fg)">
-          {w.canonical_name}
-        </text>
-        <text x={W - PAD} y="18" font-size="8" text-anchor="end" fill="var(--muted)">
-          schematic - x: nominal pace - y: perceived effort
-        </text>
-        {grid.map((g) => (
-          <g key={g.r}>
-            <line
-              x1={PAD}
-              y1={g.y}
-              x2={W - PAD}
-              y2={g.y}
-              stroke="var(--border)"
-              stroke-width="0.5"
-            />
-            <text
-              x={PAD - 6}
-              y={(Number(g.y) + 3).toFixed(1)}
-              text-anchor="end"
-              font-size="8"
-              fill="var(--muted)"
-            >
-              {g.r}
-            </text>
-          </g>
-        ))}
-        {bars.map((b) => (
-          <rect
-            key={b.key}
-            x={b.x}
-            y={b.y}
-            width={b.width}
-            height={b.height}
-            fill={b.fill}
-            rx="1"
-          />
-        ))}
-        <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="var(--fg)" stroke-width="1" />
-      </svg>
-    )
-  }
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      xmlns="http://www.w3.org/2000/svg"
+      fontFamily="ui-monospace, monospace"
+    >
+      <style>{'svg{--accent:#c94f2c;--muted:#a09a92;--border:#e4e0d8;--fg:#3a3630}'}</style>
+      <text x={PAD} y="18" fontSize="11" fill="var(--fg)">
+        {w.canonical_name}
+      </text>
+      <text x={W - PAD} y="18" fontSize="8" textAnchor="end" fill="var(--muted)">
+        schematic - x: nominal pace - y: perceived effort
+      </text>
+      {grid.map((g) => (
+        <g key={g.r}>
+          <line x1={PAD} y1={g.y} x2={W - PAD} y2={g.y} stroke="var(--border)" strokeWidth="0.5" />
+          <text
+            x={PAD - 6}
+            y={(Number(g.y) + 3).toFixed(1)}
+            textAnchor="end"
+            fontSize="8"
+            fill="var(--muted)"
+          >
+            {g.r}
+          </text>
+        </g>
+      ))}
+      {bars.map((b) => (
+        <rect key={b.key} x={b.x} y={b.y} width={b.width} height={b.height} fill={b.fill} rx="1" />
+      ))}
+      <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="var(--fg)" strokeWidth="1" />
+    </svg>
+  )
 }
