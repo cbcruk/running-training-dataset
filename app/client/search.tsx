@@ -16,6 +16,7 @@
  * 본문 자리로 옮기는 대신 이렇게 한 이유는, 그러려면 라우트가 그린 페이지 전체를 이
  * 컴포넌트가 다시 알아야 하기 때문이다.
  */
+import { useRouterState } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
 
 import { nameCollisions, searchIndex, type SearchEntry } from '../data/index.ts'
@@ -94,6 +95,20 @@ export function SearchPanel({ placeholder }: { placeholder: string }) {
   useEffect(() => {
     document.body.classList.toggle('searching', query !== '')
   }, [query])
+
+  /**
+   * 검색은 문서를 **가린다**(`body.searching`이 `#app`을 숨긴다). 그러니 독자가 결과를 눌러
+   * 문서로 떠나는 순간 그 가리기를 거둬야 한다. 이것이 없으면 URL과 `<title>`은 바뀌고
+   * 라우트도 제대로 렌더되는데 화면만 검색 결과에 머문다 — 아무 오류 없이, 클릭이 먹지
+   * 않은 것처럼.
+   *
+   * 클릭 핸들러가 아니라 위치를 보는 이유는 문서로 떠나는 길이 여럿이기 때문이다: 결과
+   * 클릭, 키보드 조회의 `↵`, 그리고 뒤로/앞으로.
+   */
+  const href = useRouterState({ select: (s) => s.location.href })
+  useEffect(() => {
+    setQuery('')
+  }, [href])
 
   useEffect(() => {
     const clear = () => setQuery('')
